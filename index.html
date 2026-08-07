@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowMe</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2310b981'/><text x='50%' y='52%' font-family='sans-serif' font-size='65' font-weight='bold' fill='white' dominant-baseline='middle' text-anchor='middle'>$</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        html.dark { color-scheme: dark; }
+        .dark body { background-color: #0f172a; color: #f8fafc; }
+        .dark .bg-white { background-color: #1e293b; border-color: #334155; color: #f8fafc; }
+        .dark .bg-slate-900 { background-color: #020617; }
+        .dark .bg-slate-800 { background-color: #0f172a; }
+        .dark .bg-slate-50, .dark .bg-slate-100 { background-color: #0f172a; border-color: #334155; color: #f8fafc; }
+        .dark .border-slate-200, .dark .border-slate-100, .dark .border-slate-300 { border-color: #334155; }
+        .dark .text-slate-800, .dark .text-slate-900, .dark .text-slate-700 { color: #f8fafc; }
+        .dark .text-slate-600, .dark .text-slate-500 { color: #cbd5e1; }
+        .dark input, .dark select, .dark textarea { background-color: #0f172a; color: #f8fafc; border-color: #475569; }
+        .dark td, .dark th { border-color: #334155; }
+        .dark tr:hover { background-color: #334155; }
+        .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]), .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
+
+    <div id="pwa-update-alert" class="hidden bg-indigo-600 text-white text-center py-2 text-xs font-semibold cursor-pointer hover:bg-indigo-700 transition" onclick="window.location.reload(true)">
+        Nova versão disponível! Clique aqui para atualizar.
+    </div>
+
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-500 p-2 rounded-lg text-white font-bold text-xl flex items-center justify-center w-10 h-10 shadow-sm">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">FlowMe</h1>
+                    <p class="text-xs text-slate-400" data-i18n="subtitle">Seu controle pessoal de fluxo financeiro</p>
+                </div>
+            </div>
+            
+            <nav class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 w-full sm:w-auto overflow-x-auto">
+                <button onclick="switchTab('transacoes')" id="tab-transacoes" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-emerald-500 text-slate-950 shadow-sm whitespace-nowrap">
+                    <i class="fa-solid fa-list-ul mr-1"></i> <span data-i18n="tab_transactions">Transações</span>
+                </button>
+                <button onclick="switchTab('faturas')" id="tab-faturas" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white whitespace-nowrap">
+                    <i class="fa-solid fa-credit-card mr-1"></i> <span data-i18n="tab_invoices">Faturas</span>
+                </button>
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white whitespace-nowrap">
+                    <i class="fa-solid fa-chart-pie mr-1"></i> <span data-i18n="tab_dashboard">Painel</span>
+                </button>
+                <button onclick="switchTab('backup')" id="tab-backup" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white whitespace-nowrap">
+                    <i class="fa-solid fa-gear mr-1"></i> <span data-i18n="tab_settings">Configurações</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section id="global-toolbar" class="bg-white border-b border-slate-200 py-3 px-4 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 w-full lg:w-auto overflow-x-auto">
+                <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2">
+                    <option value="month" data-i18n="opt_month">Mês:</option>
+                    <option value="range" data-i18n="opt_range">Período:</option>
+                </select>
+                
+                <div id="mode-month" class="flex items-center gap-1">
+                    <button onclick="changeMonthOffset(-1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Mês Anterior">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-sm focus:ring-0 font-semibold cursor-pointer outline-none w-max">
+                    <button onclick="changeMonthOffset(1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Próximo Mês">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div id="mode-range" class="hidden items-center gap-2">
+                    <input type="date" id="date-start" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
+                    <span class="text-slate-400 text-xs font-medium" data-i18n="str_to">até</span>
+                    <input type="date" id="date-end" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-between w-full lg:w-auto gap-4 overflow-hidden">
+                <!-- Zona de Alertas Responsiva -->
+                <div id="alert-zone" class="w-full sm:w-auto flex flex-row flex-nowrap overflow-hidden gap-2 text-xs items-center justify-start"></div>
+                <div class="flex items-center gap-4 shrink-0">
+                    <span id="last-save-time" class="text-[10px] text-slate-400 font-medium tracking-wide">
+                        <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
+                    </span>
+                    <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 font-medium shadow-sm">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> <span data-i18n="btn_save_data">Salvar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+        
+        <!-- ================= ABAS: TRANSAÇÕES ================= -->
+        <div id="content-transacoes" class="tab-content block">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_income">Receitas (Previsão)</p>
+                        <h3 id="summary-income" class="text-xl font-bold text-emerald-600 mt-1">0,00</h3>
+                        <p id="summary-income-paid" class="text-[10px] text-slate-500 mt-1">Já recebido: 0,00</p>
+                    </div>
+                    <div class="bg-emerald-50 h-10 w-10 flex items-center justify-center rounded-full text-emerald-600"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_expense">Despesas (Previsão)</p>
+                        <h3 id="summary-expense" class="text-xl font-bold text-rose-600 mt-1">0,00</h3>
+                        <p id="summary-expense-paid" class="text-[10px] text-slate-500 mt-1">Já pago: 0,00</p>
+                    </div>
+                    <div class="bg-rose-50 h-10 w-10 flex items-center justify-center rounded-full text-rose-600"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_balance">Balanço</p>
+                        <h3 id="summary-balance" class="text-xl font-bold mt-1 text-slate-800">0,00</h3>
+                        <p id="summary-balance-real" class="text-[10px] text-slate-500 mt-1">Saldo Real: 0,00</p>
+                    </div>
+                    <div class="bg-slate-100 h-10 w-10 flex items-center justify-center rounded-full text-slate-600"><i class="fa-solid fa-scale-balanced"></i></div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_splits">Rateios a Receber</p>
+                        <h3 id="summary-splits" class="text-xl font-bold text-amber-600 mt-1">0,00</h3>
+                        <p id="summary-splits-received" class="text-[10px] text-slate-500 mt-1">Recebido: 0,00</p>
+                    </div>
+                    <div class="bg-amber-50 h-10 w-10 flex items-center justify-center rounded-full text-amber-600"><i class="fa-solid fa-users"></i></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                
+                <!-- FORMULÁRIO -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:sticky lg:top-24 transition-colors overflow-hidden">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
+                        <h2 id="form-title" class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-plus-circle text-emerald-500"></i> <span data-i18n="form_title_new">Nova Movimentação</span>
+                        </h2>
+                        <button id="btn-cancel-edit" onclick="cancelEdit()" class="hidden text-xs text-rose-500 hover:text-rose-700 font-medium transition"><i class="fa-solid fa-xmark"></i> <span data-i18n="btn_cancel">Cancelar</span></button>
+                    </div>
+                    
+                    <form id="transaction-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <input type="hidden" id="edit-id">
+                        <input type="hidden" id="edit-group-id">
+                        
+                        <div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-emerald-50 border-emerald-500 text-emerald-700" id="label-type-income">
+                                    <input type="radio" name="type" value="receita" checked onchange="toggleTypeFields('receita')" class="sr-only">
+                                    <i class="fa-solid fa-arrow-up"></i> <span data-i18n="type_income">Receita</span>
+                                </label>
+                                <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 border-slate-200 cursor-pointer text-sm font-medium transition-all hover:bg-slate-50 text-slate-600 dark:hover:bg-slate-800" id="label-type-expense">
+                                    <input type="radio" name="type" value="despesa" onchange="toggleTypeFields('despesa')" class="sr-only">
+                                    <i class="fa-solid fa-arrow-down"></i> <span data-i18n="type_expense">Despesa</span>
+                                </label>
+                            </div>
+                            
+                            <div id="sub-type-section" class="hidden grid grid-cols-2 gap-2 mt-2">
+                                <label class="flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 transition-colors" id="label-exp-debito">
+                                    <input type="radio" name="expType" value="debito" checked onchange="toggleSubType('debito')" class="sr-only">
+                                    <i class="fa-solid fa-money-bill-transfer"></i> <span data-i18n="lbl_exp_deb">Débito/Pix</span>
+                                </label>
+                                <label class="flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 transition-colors" id="label-exp-credito">
+                                    <input type="radio" name="expType" value="credito" onchange="toggleSubType('credito')" class="sr-only">
+                                    <i class="fa-regular fa-credit-card"></i> <span data-i18n="lbl_exp_cred">Crédito</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="description" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_desc">Descrição</label>
+                            <div class="flex gap-1 w-full">
+                                <input type="text" id="description" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                <button type="button" onclick="openGlobalEdit('description')" class="shrink-0 px-2 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-500 rounded-lg transition" title="Gerenciar Nomes"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label id="label-value" for="value" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_value">Valor</label>
+                                <input type="number" id="value" step="0.01" required placeholder="0.00" class="w-full p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                            </div>
+                            <div>
+                                <label for="date" id="label-date" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_date_univ">Data</label>
+                                <input type="date" id="date" required class="w-full p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                            </div>
+                        </div>
+
+                        <div id="invoice-month-section" class="hidden">
+                            <label for="invoice-month" class="block text-xs font-semibold text-indigo-600 mb-1" data-i18n="lbl_inv_month">Mês da Fatura</label>
+                            <input type="month" id="invoice-month" class="w-full p-2 border border-indigo-300 rounded-lg text-sm outline-none focus:border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 dark:border-indigo-700 dark:text-indigo-200 transition-colors">
+                        </div>
+
+                        <div id="installment-section" class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2 transition-colors">
+                            <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
+                                <input type="checkbox" id="is-installment" onchange="toggleInstallmentOptions(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                <span id="label-installment-text" data-i18n="label_is_installment">Repetir recebimento?</span>
+                            </label>
+                            <div id="installment-options" class="hidden space-y-2 pt-1 border-t border-slate-200 dark:border-slate-700 mt-2">
+                                <div class="grid grid-cols-2 gap-2 mt-2">
+                                    <div>
+                                        <label class="block text-[10px] font-medium text-slate-500 uppercase" data-i18n="label_installments">Nº Vezes</label>
+                                        <input type="number" id="num-installments" min="2" value="2" class="w-full p-1.5 border border-slate-300 rounded-md text-xs bg-white outline-none transition-colors">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-medium text-slate-500 uppercase" data-i18n="label_logic">Lógica</label>
+                                        <select id="installment-logic" class="w-full p-1.5 border border-slate-300 rounded-md text-xs bg-white outline-none transition-colors">
+                                            <option value="per_month" data-i18n="logic_rep">Replicar Valor</option>
+                                            <option value="total" id="opt-logic-div" data-i18n="logic_div">Dividir Total</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 w-full">
+                            <div>
+                                <label for="category" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_category">Categoria</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="category" list="categories-list" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                    <button type="button" onclick="openGlobalEdit('category')" class="shrink-0 px-2 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-500 rounded-lg transition" title="Gerenciar Categorias"><i class="fa-solid fa-pen-to-square"></i></button>
+                                </div>
+                                <datalist id="categories-list"></datalist>
+                            </div>
+                            <div>
+                                <label for="payment-method" id="label-method" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_account">Conta</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="payment-method" list="methods-list" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                    <button type="button" onclick="openGlobalEdit('paymentMethod')" class="shrink-0 px-2 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-500 rounded-lg transition" title="Gerenciar Contas/Cartões"><i class="fa-solid fa-pen-to-square"></i></button>
+                                </div>
+                                <datalist id="methods-list"></datalist>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_status">Status Inicial</label>
+                            <select id="status" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white outline-none focus:border-emerald-500 transition-colors">
+                                <option value="pago" selected id="opt-status-paid">Recebido</option>
+                                <option value="pendente" id="opt-status-pending">Pendente (Previsão)</option>
+                            </select>
+                        </div>
+
+                        <!-- WRAPPER DO RATEIO -->
+                        <div id="split-section-wrapper" class="hidden bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2 transition-colors">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
+                                        <input type="checkbox" id="has-split" onchange="toggleSplitSection(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                        <span data-i18n="label_is_split">Dividir com alguém?</span>
+                                    </label>
+                                    <button type="button" onclick="openGlobalEdit('person')" class="px-2 py-0.5 bg-slate-200 hover:bg-slate-300 border border-slate-300 text-slate-500 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300 rounded transition" title="Gerenciar Pessoas"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>
+                                </div>
+                                <button type="button" id="btn-add-split-row" onclick="addSplitRow()" class="hidden text-[10px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 text-slate-700 dark:text-slate-300 px-2 py-1 rounded shadow-sm transition">
+                                    <i class="fa-solid fa-plus"></i> <span data-i18n="btn_add_person">Pessoa</span>
+                                </button>
+                            </div>
+                            
+                            <div id="split-container" class="hidden space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700 mt-2">
+                                <div id="split-rows" class="space-y-2">
+                                    <!-- JS injeta os inputs aqui -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BOTÃO ENVIAR -->
+                        <button type="submit" id="btn-submit" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg text-sm shadow-md transition-all flex items-center justify-center gap-2 mt-2">
+                            <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">Salvar Movimentação</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- TABELA TRANSAÇÕES -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
+                            <input type="text" id="search-input" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div class="flex items-center gap-2 overflow-x-auto">
+                            <select id="filter-type" onchange="render()" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none focus:border-emerald-500 transition-colors">
+                                <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
+                                <option value="receita" data-i18n="flt_income">Receitas</option>
+                                <option value="despesa" data-i18n="flt_expense">Despesas</option>
+                            </select>
+                            <select id="filter-status" onchange="render()" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none focus:border-emerald-500 transition-colors">
+                                <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
+                                <option value="pago" data-i18n="flt_paid">Pagos/Recebidos</option>
+                                <option value="pendente" data-i18n="flt_pending">Pendentes</option>
+                            </select>
+                            <select id="filter-split" onchange="render()" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none focus:border-emerald-500 transition-colors">
+                                <option value="todos" data-i18n="flt_all_splits">Todas</option>
+                                <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-colors">
+                        <div class="overflow-x-auto w-full">
+                            <table class="w-full text-left border-collapse min-w-[750px]">
+                                <thead class="bg-slate-50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 transition-colors">
+                                    <tr>
+                                        <th class="p-3" data-i18n="th_date">Data</th>
+                                        <th class="p-3" data-i18n="th_desc">Descrição & Categoria</th>
+                                        <th class="p-3" data-i18n="th_method">Conta/Cartão</th>
+                                        <th class="p-3" data-i18n="th_orig">Valor Orig.</th>
+                                        <th class="p-3" data-i18n="th_cost">Seu Custo</th>
+                                        <th class="p-3 text-center" data-i18n="th_status">Status</th>
+                                        <th class="p-3 text-right" data-i18n="th_actions">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactions-body" class="divide-y divide-slate-100 text-sm">
+                                    <!-- Injeção de dados via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="empty-state" class="hidden flex flex-col items-center justify-center p-10 text-slate-400">
+                            <i class="fa-solid fa-folder-open text-3xl mb-3 text-slate-300"></i>
+                            <p class="text-sm" data-i18n="empty_state">Nenhuma movimentação encontrada.</p>
+                        </div>
+                    </div>
+
+                    <!-- RESUMO DE PESSOAS -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-colors">
+                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1 border-b border-slate-100 pb-2">
+                            <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
+                        </h3>
+                        <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ABAS: FATURAS ================= -->
+        <div id="content-faturas" class="tab-content hidden max-w-5xl mx-auto space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-colors flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex-1 w-full">
+                    <label class="block text-xs font-semibold text-indigo-600 mb-1" data-i18n="lbl_select_card">Selecione o Cartão:</label>
+                    <select id="invoice-card-select" onchange="renderFaturas()" class="w-full md:w-64 p-2 border border-indigo-300 rounded-lg text-sm bg-indigo-50 dark:bg-indigo-900/20 outline-none focus:border-indigo-500 transition-colors">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold" data-i18n="lbl_invoice_total">Total da Fatura</p>
+                    <h2 id="invoice-total-value" class="text-3xl font-bold text-slate-800 dark:text-slate-100">0,00</h2>
+                    <div class="mt-1">
+                        <span id="invoice-due-date-display" class="text-xs text-slate-600 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Vencimento: --/--/----</span>
+                        <button onclick="openInvoiceDueModal()" class="text-xs text-indigo-500 hover:underline ml-2" data-i18n="btn_edit_due">Editar Vencimento</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-colors">
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left border-collapse min-w-[750px]">
+                        <thead class="bg-slate-50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 transition-colors">
+                            <tr>
+                                <th class="p-3" data-i18n="th_date_purchase">Data da Compra</th>
+                                <th class="p-3" data-i18n="th_desc">Descrição & Categoria</th>
+                                <th class="p-3" data-i18n="th_orig">Valor Orig.</th>
+                                <th class="p-3" data-i18n="th_cost">Seu Custo</th>
+                                <th class="p-3 text-center" data-i18n="th_status">Status</th>
+                                <th class="p-3 text-right" data-i18n="th_actions">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice-transactions-body" class="divide-y divide-slate-100 text-sm">
+                            <!-- JS Injected -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="invoice-empty-state" class="hidden flex flex-col items-center justify-center p-10 text-slate-400">
+                    <i class="fa-regular fa-credit-card text-3xl mb-3 text-slate-300"></i>
+                    <p class="text-sm" data-i18n="invoice_empty">Nenhuma compra no crédito para este cartão neste mês.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ABAS: DASHBOARD ================= -->
+        <div id="content-dashboard" class="tab-content hidden flex-col items-center justify-center min-h-[50vh] text-center">
+            <i class="fa-solid fa-person-digging text-6xl text-slate-300 dark:text-slate-600 mb-4"></i>
+            <h2 class="text-2xl font-bold text-slate-700 dark:text-slate-300" data-i18n="dash_wip_title">Em construção</h2>
+            <p class="text-slate-500 dark:text-slate-400 mt-2" data-i18n="dash_wip_desc">Esta seção estará disponível em breve.</p>
+        </div>
+
+        <!-- ================= ABAS: CONFIGURAÇÕES ================= -->
+        <div id="content-backup" class="tab-content hidden max-w-4xl mx-auto flex flex-col min-h-[70vh]">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+                
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between transition-colors">
+                    <div class="border-b border-slate-100 pb-4 mb-4">
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-brands fa-google text-blue-500 mr-2"></i> <span data-i18n="cfg_acc_title">Conta e Nuvem</span></h2>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4 opacity-50">
+                        <div class="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center text-slate-400">
+                            <i class="fa-solid fa-user text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-700" data-i18n="cfg_acc_user">Usuário Desconectado</p>
+                            <p class="text-[10px] text-slate-500"><span data-i18n="cfg_acc_sync">Última sincronização:</span> --</p>
+                        </div>
+                    </div>
+                    <button disabled class="w-full py-2 bg-slate-50 text-slate-400 font-medium text-xs rounded-lg border border-slate-200 cursor-not-allowed transition-colors">
+                        <i class="fa-brands fa-google mr-1"></i> <span data-i18n="cfg_acc_btn">Integração Google em breve</span>
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between transition-colors">
+                    <div class="border-b border-slate-100 pb-4 mb-4">
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-earth-americas text-emerald-500 mr-2"></i> <span data-i18n="cfg_lang_curr">Idioma e Moeda</span></h2>
+                    </div>
+                    <div class="mb-5">
+                        <label id="lbl-language" class="block text-xs font-semibold text-slate-600 mb-2">Idioma:</label>
+                        <div class="flex flex-wrap gap-2" id="lang-buttons">
+                            <button onclick="setLanguage('pt')" id="btn-lang-pt" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
+                                <span class="text-lg">🇧🇷</span> <span class="lang-text">Português</span>
+                            </button>
+                            <button onclick="setLanguage('en')" id="btn-lang-en" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
+                                <span class="text-lg">🇦🇺</span> <span class="lang-text">Inglês</span>
+                            </button>
+                            <button onclick="setLanguage('es')" id="btn-lang-es" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
+                                <span class="text-lg">🇪🇸</span> <span class="lang-text">Espanhol</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-2" data-i18n="cfg_currency">Moeda Padrão:</label>
+                        <select id="cfg-currency" onchange="setCurrency(this.value)" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 outline-none focus:border-emerald-500 transition-colors">
+                            <option value="BRL" data-i18n="curr_brl">Real Brasileiro (R$)</option>
+                            <option value="USD" data-i18n="curr_usd">Dólar Americano ($)</option>
+                            <option value="EUR" data-i18n="curr_eur">Euro (€)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- WRAPPER PARA OS DOIS BLOCOS MENORES NO LADO ESQUERDO -->
+                <div class="flex flex-col gap-6">
+                    <!-- BLOCO DE APARÊNCIA -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors">
+                        <div class="border-b border-slate-100 pb-4 mb-4">
+                            <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-palette text-amber-500 mr-2"></i> <span data-i18n="cfg_appearance_title">Aparência</span></h2>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-2" data-i18n="cfg_theme">Tema do Aplicativo:</label>
+                            <div class="flex flex-wrap gap-2" id="theme-buttons">
+                                <button onclick="setTheme('light')" id="btn-theme-light" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium">
+                                    <i class="fa-solid fa-sun text-amber-500"></i> <span data-i18n="cfg_theme_light">Claro</span>
+                                </button>
+                                <button onclick="setTheme('dark')" id="btn-theme-dark" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium">
+                                    <i class="fa-solid fa-moon text-indigo-400"></i> <span data-i18n="cfg_theme_dark">Escuro</span>
+                                </button>
+                                <button onclick="setTheme('system')" id="btn-theme-system" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium">
+                                    <i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOCO DE ALERTAS E LEMBRETES -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors">
+                        <div class="border-b border-slate-100 pb-4 mb-4">
+                            <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-bell text-rose-500 mr-2"></i> <span data-i18n="cfg_alerts_title">Alertas e Lembretes</span></h2>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
+                                <input type="checkbox" id="cfg-notif" onchange="toggleNotifications(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                <span data-i18n="cfg_notif">Ativar Notificações/Alertas</span>
+                            </label>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_pre">Avisar quando faltar</span>
+                                <input type="number" id="cfg-reminder" onchange="setReminderDays(this.value)" min="0" max="30" class="w-16 p-1.5 border border-slate-300 rounded-md text-xs text-center bg-white outline-none focus:border-amber-500 transition-colors">
+                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_pos">dia(s)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_overdue">Avisar quando passar</span>
+                                <input type="number" id="cfg-overdue" onchange="setOverdueDays(this.value)" min="0" max="90" class="w-16 p-1.5 border border-slate-300 rounded-md text-xs text-center bg-white outline-none focus:border-rose-500 transition-colors">
+                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_pos">dia(s)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors">
+                    <div class="border-b border-slate-100 pb-4 mb-4">
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-shield-halved text-indigo-500 mr-2"></i> <span data-i18n="cfg_title">Dados e Segurança</span></h2>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-800 flex justify-between items-center gap-2 transition-colors">
+                            <div><h3 class="text-[11px] font-bold text-emerald-900 dark:text-emerald-400" data-i18n="cfg_export_title">Exportar Planilha</h3></div>
+                            <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[10px] rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-download"></i> <span data-i18n="btn_export">Exportar</span>
+                            </button>
+                        </div>
+                        <div class="p-3 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-lg border border-indigo-100 dark:border-indigo-800 transition-colors">
+                            <h3 class="text-[11px] font-bold text-indigo-900 dark:text-indigo-400 mb-2" data-i18n="cfg_imp_title">Importar Backup (Estrito v1.3.5+)</h3>
+                            <div class="flex flex-col gap-2 w-full">
+                                <div class="flex items-center gap-2">
+                                    <label class="flex-1 flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md px-2 py-1 cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-700">
+                                        <span class="bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 px-2 py-1 rounded text-[10px] font-bold transition-colors" data-i18n="file_choose_btn">Escolher</span>
+                                        <span id="file-name-text" class="text-[10px] text-slate-500 truncate" data-i18n="file_no_file">Nenhum arquivo</span>
+                                        <input type="file" id="import-file" accept=".csv" class="hidden" onchange="const tNode=document.getElementById('file-name-text'); if(this.files[0]){ tNode.textContent=this.files[0].name; tNode.removeAttribute('data-i18n'); } else { tNode.setAttribute('data-i18n', 'file_no_file'); tNode.textContent=t('file_no_file'); }">
+                                    </label>
+                                    <button onclick="importFromCSV()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-[10px] rounded-lg shadow-sm transition" data-i18n="btn_import">Restaurar</button>
+                                </div>
+                                <p id="import-error-msg" class="text-[10px] text-rose-500 font-bold hidden"></p>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-rose-50/50 dark:bg-rose-900/20 rounded-lg border border-rose-100 dark:border-rose-800 flex justify-between items-center gap-2 transition-colors mt-2">
+                            <div><h3 class="text-[11px] font-bold text-rose-900 dark:text-rose-400" data-i18n="cfg_del_title">Apagar Banco de Dados</h3></div>
+                            <button onclick="clearAllData()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-[10px] rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-trash"></i> <span data-i18n="btn_delete">Apagar Tudo</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center text-xs text-slate-400 pb-4">
+                <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.3.8</span></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODALS -->
+    <!-- Modal Alertas -->
+    <div id="modal-alerts" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh]">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> Central de Alertas</h3>
+                <button onclick="closeModal('modal-alerts')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto space-y-2" id="alerts-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Modal Edição Global -->
+    <div id="modal-global-edit" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh]">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <h3 id="global-edit-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm">Gerenciar</h3>
+                <button onclick="closeModal('modal-global-edit')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[60vh] flex flex-col">
+                <input type="text" id="global-edit-search" oninput="filterGlobalEdit()" placeholder="Pesquisar..." class="w-full p-2 mb-3 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
+                <div id="global-edit-content" class="space-y-2 flex-1 overflow-y-auto"></div>
+            </div>
+            <input type="hidden" id="global-edit-field">
+        </div>
+    </div>
+
+    <!-- Modal Vencimento Fatura -->
+    <div id="modal-invoice-due" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Vencimento da Fatura</h3>
+                <button onclick="closeModal('modal-invoice-due')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-4 space-y-4">
+                <p id="invoice-due-card-name" class="text-xs font-semibold text-slate-500 uppercase"></p>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Dia do Vencimento</label>
+                    <input type="number" id="invoice-due-day" min="1" max="31" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-indigo-500">
+                </div>
+                <label class="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400 cursor-pointer">
+                    <input type="checkbox" id="invoice-due-apply-all" class="mt-0.5 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                    <span>Aplicar como padrão para todas as faturas futuras deste cartão.</span>
+                </label>
+                <button onclick="saveInvoiceDueDate()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition">Salvar Vencimento</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================= i18n =================
+        const translations = {
+            pt: {
+                subtitle: "Seu controle pessoal de fluxo financeiro", tab_transactions: "Transações", tab_invoices: "Faturas", tab_dashboard: "Painel", tab_settings: "Configurações",
+                period_label: "Período:", saved_time: "Salvo:", btn_save_data: "Salvar Dados",
+                card_income: "Receitas (Previsão)", card_expense: "Despesas (Previsão)", card_balance: "Balanço do Mês", card_splits: "Rateios a Receber",
+                form_title_new: "Nova Movimentação", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Receita", type_expense: "Despesa",
+                lbl_exp_deb: "Débito/Pix", lbl_exp_cred: "Crédito", lbl_inv_month: "Mês da Fatura",
+		label_desc: "Descrição / Nome", placeholder_desc: "Ex: Salário, Energia...", label_value: "Valor", label_date_univ: "Data",
+                lbl_inst_inc: "Repetir recebimento?", lbl_inst_exp: "Compra parcelada?",
+                label_is_installment: "Repetir / Parcelar?", label_installments: "Nº Vezes", label_logic: "Lógica", logic_rep: "Replicar Valor", logic_div: "Dividir Total",                
+                label_category: "Categoria", placeholder_cat: "Digite ou selecione...", label_account: "Conta/Cartão", placeholder_acc: "Ex: Nubank, Dinheiro...",
+                label_status: "Status Inicial", status_rec: "Recebido", status_pen_rec: "Pendente (Previsão)", status_pag: "Pago", status_pen_pag: "Pendente (Vencimento)",
+                label_is_split: "Dividir com alguém?", btn_add_person: "Pessoa", btn_submit: "Salvar Movimentação", btn_submit_edit: "Atualizar Conta",
+                placeholder_search: "Buscar...", flt_all_types: "Todos os Tipos", flt_income: "Receitas", flt_expense: "Despesas", flt_all_status: "Todos os Status", flt_paid: "Pagos/Recebidos", flt_pending: "Pendentes",
+                flt_all_splits: "Todas", flt_only_splits: "Apenas Rateios",
+                th_date: "Data", th_date_purchase: "Data da Compra", th_desc: "Descrição & Cat.", th_method: "Conta/Cartão", th_orig: "Valor Orig.", th_cost: "Seu Custo", th_status: "Status", th_actions: "Ações",
+                empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)",
+                dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
+                cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar",
+                cfg_imp_title: "Importar Backup (Estrito v1.3.5+)", btn_import: "Restaurar", cfg_del_title: "Apagar Banco de Dados", btn_delete: "Apagar Tudo",
+                cfg_acc_title: "Conta e Nuvem", cfg_acc_user: "Usuário Desconectado", cfg_acc_sync: "Última sincronização:", cfg_acc_btn: "Integração Google em breve",
+                cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
+                cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
+                cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.3.8",
+                curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
+                opt_month: "Mês:", opt_range: "Período:", str_to: "até",
+                str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
+                rem_inc_soon: "recebimento(s) próximo(s)", rem_inc_late: "recebimento(s) atrasado(s)", rem_exp_soon: "conta(s) vence(m) em breve", rem_exp_late: "conta(s) atrasada(s)",
+                confirm_del: "Excluir permanentemente?", confirm_clear: "ATENÇÃO: Apagar tudo do navegador?", confirm_cascade: "Deseja aplicar o novo nome para as parcelas seguintes desta conta?",
+                btn_edit: "Editar", btn_delete_action: "Excluir", placeholder_name: "Nome", file_choose_btn: "Escolher", file_no_file: "Nenhum arquivo",
+                lbl_select_card: "Selecione o Cartão:", lbl_invoice_total: "Total da Fatura", btn_edit_due: "Editar Vencimento",
+                title_manage: "Gerenciar", err_csv_invalid: "Arquivo incompatível ou versão antiga."
+            },
+            en: {
+                subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
+                period_label: "Period:", saved_time: "Saved:", btn_save_data: "Save Data",
+                card_income: "Income (Forecast)", card_expense: "Expenses (Forecast)", card_balance: "Monthly Balance", card_splits: "Splits to Receive",
+                form_title_new: "New Transaction", form_title_edit: "Editing", btn_cancel: "Cancel", type_income: "Income", type_expense: "Expense",
+                lbl_exp_deb: "Debit/Cash", lbl_exp_cred: "Credit", lbl_inv_month: "Invoice Month",
+		label_desc: "Description / Name", placeholder_desc: "Ex: Salary, Bill...", label_value: "Value", label_date_univ: "Date",
+                lbl_inst_inc: "Repeat income?", lbl_inst_exp: "Installments?",
+                label_is_installment: "Repeat / Installments?", label_installments: "Num", label_logic: "Logic", logic_rep: "Replicate", logic_div: "Divide Total",
+                label_category: "Category", placeholder_cat: "Type or select...", label_account: "Account/Card", placeholder_acc: "Ex: Cash, Bank...",
+                label_status: "Initial Status", status_rec: "Received", status_pen_rec: "Pending (Expected)", status_pag: "Paid", status_pen_pag: "Pending (Due)",
+                label_is_split: "Split with someone?", btn_add_person: "Person", btn_submit: "Save Transaction", btn_submit_edit: "Update Transaction",
+                placeholder_search: "Search...", flt_all_types: "All Types", flt_income: "Income", flt_expense: "Expenses", flt_all_status: "All Status", flt_paid: "Paid/Received", flt_pending: "Pending",
+                flt_all_splits: "All", flt_only_splits: "Only Splits",
+                th_date: "Date", th_date_purchase: "Purchase Date", th_desc: "Description & Cat.", th_method: "Account/Card", th_orig: "Orig. Value", th_cost: "Your Cost", th_status: "Status", th_actions: "Actions",
+                empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)",
+                dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
+                cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export",
+                cfg_imp_title: "Import Backup (Strict v1.3.5+)", btn_import: "Restore", cfg_del_title: "Wipe Database", btn_delete: "Wipe All",
+                cfg_acc_title: "Account & Cloud", cfg_acc_user: "Logged Out", cfg_acc_sync: "Last sync:", cfg_acc_btn: "Google Integration soon",
+                cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
+                cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
+                cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
+                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.3.8",
+                curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
+                opt_month: "Month:", opt_range: "Range:", str_to: "to",
+                str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
+                rem_inc_soon: "income(s) arriving soon", rem_inc_late: "late income(s)", rem_exp_soon: "expense(s) due soon", rem_exp_late: "late expense(s)",
+                confirm_del: "Delete permanently?", confirm_clear: "WARNING: Wipe all data from browser?", confirm_cascade: "Apply new name to subsequent installments of this bill?",
+                btn_edit: "Edit", btn_delete_action: "Delete", placeholder_name: "Name", file_choose_btn: "Choose file", file_no_file: "No file chosen",
+                lbl_select_card: "Select Card:", lbl_invoice_total: "Invoice Total", btn_edit_due: "Edit Due Date",
+                title_manage: "Manage", err_csv_invalid: "Incompatible file or old version."
+            },
+            es: {
+                subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
+                period_label: "Período:", saved_time: "Guardado:", btn_save_data: "Guardar Datos",
+                card_income: "Ingresos (Previstos)", card_expense: "Gastos (Previstos)", card_balance: "Balance del Mes", card_splits: "Divisiones a Recibir",
+                form_title_new: "Nueva Transacción", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Ingreso", type_expense: "Gasto",
+                lbl_exp_deb: "Débito/Efectivo", lbl_exp_cred: "Crédito", lbl_inv_month: "Mes de Factura",
+                label_desc: "Descripción / Nombre", placeholder_desc: "Ej: Salario, Luz...", label_value: "Valor", label_date_univ: "Fecha",
+                lbl_inst_inc: "¿Repetir ingreso?", lbl_inst_exp: "¿Compra en cuotas?",
+                label_is_installment: "¿Repetir / Cuotas?", label_installments: "Nº Veces", label_logic: "Lógica", logic_rep: "Replicar", logic_div: "Dividir Total",
+                label_category: "Categoría", placeholder_cat: "Escribe o elige...", label_account: "Cuenta/Tarjeta", placeholder_acc: "Ej: Efectivo, Banco...",
+                label_status: "Estado Inicial", status_rec: "Recibido", status_pen_rec: "Pendiente (Esperado)", status_pag: "Pagado", status_pen_pag: "Pendiente (Venc.)",
+                label_is_split: "¿Dividir gasto?", btn_add_person: "Persona", btn_submit: "Guardar Transacción", btn_submit_edit: "Actualizar Cuenta",
+                placeholder_search: "Buscar...", flt_all_types: "Todos los Tipos", flt_income: "Ingresos", flt_expense: "Gastos", flt_all_status: "Todos los Estados", flt_paid: "Pagados/Recibidos", flt_pending: "Pendientes",
+                flt_all_splits: "Todas", flt_only_splits: "Solo Divisiones",
+                th_date: "Fecha", th_date_purchase: "Fecha de Compra", th_desc: "Descripción y Cat.", th_method: "Cuenta/Tarjeta", th_orig: "Valor Orig.", th_cost: "Tu Costo", th_status: "Estado", th_actions: "Acciones",
+                empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)",
+                dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
+                cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar",
+                cfg_imp_title: "Importar Respaldo (Estricto v1.3.5+)", btn_import: "Restaurar", cfg_del_title: "Borrar Base de Datos", btn_delete: "Borrar Todo",
+                cfg_acc_title: "Cuenta y Nube", cfg_acc_user: "Usuario Desconectado", cfg_acc_sync: "Última sincro:", cfg_acc_btn: "Integración Google pronto",
+                cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
+                cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
+                cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
+                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.3.8",
+                curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
+                opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
+                str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
+                rem_inc_soon: "ingreso(s) cercano(s)", rem_inc_late: "ingreso(s) atrasado(s)", rem_exp_soon: "gasto(s) vence(n) pronto", rem_exp_late: "gasto(s) atrasado(s)",
+                confirm_del: "¿Borrar permanentemente?", confirm_clear: "ATENCIÓN: ¿Borrar todo del navegador?", confirm_cascade: "¿Aplicar nuevo nombre a las cuotas siguientes de esta cuenta?",
+                btn_edit: "Editar", btn_delete_action: "Eliminar", placeholder_name: "Nombre", file_choose_btn: "Elegir archivo", file_no_file: "Ningún archivo",
+                lbl_select_card: "Seleccionar Tarjeta:", lbl_invoice_total: "Total Factura", btn_edit_due: "Editar Vencimiento",
+                title_manage: "Administrar", err_csv_invalid: "Archivo incompatible o versión antigua."
+            }
+        };
+
+        let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
+        let userConfig = { 
+            lang: localStorage.getItem('flowme_lang') || 'pt', 
+            currency: localStorage.getItem('flowme_currency') || 'BRL', 
+            theme: localStorage.getItem('flowme_theme') || 'system', 
+            reminderDays: parseInt(localStorage.getItem('flowme_reminder_days') || '3'),
+            overdueDays: parseInt(localStorage.getItem('flowme_overdue_days') || '3'),
+            notificationsEnabled: localStorage.getItem('flowme_notif') !== 'false'
+        };
+
+        let resizeTimer;
+        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(render, 200); });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            state.currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+            document.getElementById('global-month').value = state.currentMonth;
+            
+            document.getElementById('cfg-currency').value = userConfig.currency;
+            document.getElementById('cfg-reminder').value = userConfig.reminderDays;
+            document.getElementById('cfg-overdue').value = userConfig.overdueDays;
+            document.getElementById('cfg-notif').checked = userConfig.notificationsEnabled;
+            
+            updateThemeUI(userConfig.theme);
+            applyTheme();
+            loadState();
+            setLanguage(userConfig.lang);
+            updateAutocompleteLists();
+            addSplitRow();
+        });
+
+        // ================= CONFIG & THEME =================
+        function updateLangUI(lang) {
+            const labels = { pt: 'Idioma:', en: 'Language:', es: 'Idioma:' };
+            document.getElementById('lbl-language').innerText = labels[lang] || 'Idioma:';
+            const actCls = "flex items-center gap-2 px-3 py-2 border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-lg transition text-sm font-bold shadow-sm";
+            const inactCls = "flex items-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition text-sm font-medium";
+            ['pt', 'en', 'es'].forEach(l => { document.getElementById('btn-lang-' + l).className = (l === lang) ? actCls : inactCls; });
+            const nms = { pt: { pt: 'Português', en: 'Inglês', es: 'Espanhol' }, en: { pt: 'Portuguese', en: 'English', es: 'Spanish' }, es: { pt: 'Portugués', en: 'Inglés', es: 'Español' } };
+            document.querySelector('#btn-lang-pt .lang-text').innerText = nms[lang].pt; document.querySelector('#btn-lang-en .lang-text').innerText = nms[lang].en; document.querySelector('#btn-lang-es .lang-text').innerText = nms[lang].es;
+        }
+
+        function setLanguage(lang) {
+            userConfig.lang = lang; localStorage.setItem('flowme_lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (translations[lang][key]) el.innerHTML = translations[lang][key]; });
+            document.getElementById('description').placeholder = t('placeholder_desc'); document.getElementById('category').placeholder = t('placeholder_cat'); document.getElementById('payment-method').placeholder = t('placeholder_acc'); document.getElementById('search-input').placeholder = t('placeholder_search');
+            document.querySelectorAll('.split-person').forEach(el => el.placeholder = t('placeholder_name'));
+            document.querySelectorAll('.split-status option[value="pendente"]').forEach(el => el.textContent = t('str_split_pen'));
+            document.querySelectorAll('.split-status option[value="pago"]').forEach(el => el.textContent = t('str_split_paid'));
+            const fileInput = document.getElementById('import-file'); if(!fileInput.files || fileInput.files.length === 0) document.getElementById('file-name-text').textContent = t('file_no_file');
+            
+            const isIncome = document.querySelector('input[name="type"]:checked').value === 'receita';
+            toggleTypeFields(isIncome ? 'receita' : 'despesa');
+            
+            const editId = document.getElementById('edit-id').value;
+            if(editId) { document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-check"></i> <span>${t('btn_submit_edit')}</span>`; document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> <span>${t('form_title_edit')}</span>`; } 
+            else { document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span>${t('btn_submit')}</span>`; document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-plus-circle text-emerald-500"></i> <span>${t('form_title_new')}</span>`; }
+            
+            updateLangUI(lang); render(); updateSaveTimestamp();
+        }
+
+        function t(key) { return translations[userConfig.lang][key] || key; }
+        function setCurrency(currency) { userConfig.currency = currency; localStorage.setItem('flowme_currency', currency); render(); }
+        
+        function updateThemeUI(theme) {
+            const actCls = "flex items-center gap-1.5 px-3 py-2 border-2 border-amber-500 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-lg transition text-xs font-bold shadow-sm";
+            const inactCls = "flex items-center gap-1.5 px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition text-xs font-medium";
+            ['light', 'dark', 'system'].forEach(t => { document.getElementById('btn-theme-' + t).className = (t === theme) ? actCls : inactCls; });
+        }
+        function setTheme(theme) { userConfig.theme = theme; localStorage.setItem('flowme_theme', theme); updateThemeUI(theme); applyTheme(); }
+        function applyTheme() { const html = document.documentElement; if (userConfig.theme === 'dark' || (userConfig.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) { html.classList.add('dark'); } else { html.classList.remove('dark'); } }
+        
+        function toggleNotifications(val) { userConfig.notificationsEnabled = val; localStorage.setItem('flowme_notif', val); render(); }
+        function setReminderDays(days) { userConfig.reminderDays = parseInt(days) || 0; localStorage.setItem('flowme_reminder_days', userConfig.reminderDays); render(); }
+        function setOverdueDays(days) { userConfig.overdueDays = parseInt(days) || 0; localStorage.setItem('flowme_overdue_days', userConfig.overdueDays); render(); }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (userConfig.theme === 'system') applyTheme(); });
+        const formatCurrency = (val) => val.toLocaleString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', { style: 'currency', currency: userConfig.currency });
+
+        // ================= TABS & BARS =================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            if (tabId === 'dashboard') document.getElementById(`content-${tabId}`).classList.add('flex');
+            
+            document.querySelectorAll('nav button').forEach(btn => { btn.className = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white whitespace-nowrap"; });
+            const actCls = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-emerald-500 text-slate-950 shadow-sm whitespace-nowrap";
+            document.getElementById(`tab-${tabId}`).className = actCls;
+            
+            const toolbar = document.getElementById('global-toolbar');
+            if(tabId === 'backup') toolbar.classList.add('hidden'); else toolbar.classList.remove('hidden');
+
+            if(tabId === 'faturas') populateInvoiceCards();
+        }
+
+        function toggleFilterMode() {
+            const mode = document.getElementById('filter-mode').value;
+            if (mode === 'month') {
+                document.getElementById('mode-month').classList.remove('hidden'); document.getElementById('mode-month').classList.add('flex');
+                document.getElementById('mode-range').classList.add('hidden'); document.getElementById('mode-range').classList.remove('flex');
+            } else {
+                document.getElementById('mode-month').classList.add('hidden'); document.getElementById('mode-month').classList.remove('flex');
+                document.getElementById('mode-range').classList.remove('hidden'); document.getElementById('mode-range').classList.add('flex');
+                if(!document.getElementById('date-start').value) {
+                    const d = new Date();
+                    document.getElementById('date-start').value = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
+                    document.getElementById('date-end').value = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
+                }
+            }
+            render();
+        }
+
+        function changeGlobalMonth(value) {
+            if(!value) return; state.currentMonth = value;
+            if (document.getElementById('filter-mode').value === 'month') { render(); if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); }
+        }
+        function changeMonthOffset(offset) {
+            const current = document.getElementById('global-month').value; if(!current) return;
+            const [year, month] = current.split('-'); const d = new Date(year, parseInt(month) - 1 + offset, 1);
+            const newVal = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            document.getElementById('global-month').value = newVal; changeGlobalMonth(newVal);
+        }
+
+        // ================= FORM =================
+        function toggleTypeFields(type) {
+            const lInc = document.getElementById('label-type-income'); const lExp = document.getElementById('label-type-expense');
+            const subSec = document.getElementById('sub-type-section'); const invMonthSec = document.getElementById('invoice-month-section');
+            const instSec = document.getElementById('installment-section'); const splitW = document.getElementById('split-section-wrapper');
+            const lblInst = document.getElementById('label-installment-text');
+
+            if (type === 'receita') {
+                lInc.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-emerald-50 border-emerald-500 text-emerald-700";
+                lExp.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 border-slate-200 cursor-pointer text-sm font-medium transition-all hover:bg-slate-50 text-slate-600 dark:hover:bg-slate-800 dark:border-slate-600";
+                
+                subSec.classList.add('hidden'); invMonthSec.classList.add('hidden');
+                splitW.classList.add('hidden'); document.getElementById('has-split').checked = false; toggleSplitSection(false);
+                
+                instSec.classList.remove('hidden'); lblInst.textContent = t('lbl_inst_inc');
+                document.getElementById('opt-status-paid').textContent = t('status_rec'); document.getElementById('opt-status-pending').textContent = t('status_pen_rec');
+                document.getElementById('opt-logic-div').classList.add('hidden'); document.getElementById('installment-logic').value = 'per_month';
+            } else {
+                lExp.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-rose-50 border-rose-500 text-rose-700";
+                lInc.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 border-slate-200 cursor-pointer text-sm font-medium transition-all hover:bg-slate-50 text-slate-600 dark:hover:bg-slate-800 dark:border-slate-600";
+                
+                subSec.classList.remove('hidden'); subSec.classList.add('grid');
+                toggleSubType(document.querySelector('input[name="expType"]:checked').value);
+                
+                splitW.classList.remove('hidden'); instSec.classList.remove('hidden'); lblInst.textContent = t('lbl_inst_exp');
+                document.getElementById('opt-status-paid').textContent = t('status_pag'); document.getElementById('opt-status-pending').textContent = t('status_pen_pag');
+                document.getElementById('opt-logic-div').classList.remove('hidden');
+            }
+        }
+        function toggleSubType(sType) {
+            const lDeb = document.getElementById('label-exp-debito'); const lCred = document.getElementById('label-exp-credito');
+            const invMonthSec = document.getElementById('invoice-month-section');
+            if (sType === 'debito') {
+                lDeb.className = "flex items-center justify-center gap-1.5 p-1.5 rounded border border-indigo-400 cursor-pointer text-xs font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 transition-colors";
+                lCred.className = "flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 transition-colors";
+                invMonthSec.classList.add('hidden');
+            } else {
+                lCred.className = "flex items-center justify-center gap-1.5 p-1.5 rounded border border-indigo-400 cursor-pointer text-xs font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 transition-colors";
+                lDeb.className = "flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 transition-colors";
+                invMonthSec.classList.remove('hidden');
+                if(!document.getElementById('invoice-month').value) document.getElementById('invoice-month').value = document.getElementById('global-month').value;
+            }
+        }
+
+        function toggleInstallmentOptions(checked) { document.getElementById('installment-options').classList.toggle('hidden', !checked); }
+        function toggleSplitSection(checked) { document.getElementById('split-container').classList.toggle('hidden', !checked); document.getElementById('btn-add-split-row').classList.toggle('hidden', !checked); }
+
+        function addSplitRow(person = '', value = '', status = 'pendente') {
+            const container = document.getElementById('split-rows'); const rowId = 'split-' + Date.now() + Math.floor(Math.random() * 1000);
+            const div = document.createElement('div'); div.id = rowId; div.className = "flex items-center gap-2 bg-white dark:bg-slate-800 p-1.5 rounded border border-slate-200 dark:border-slate-600 shadow-sm transition-colors";
+            div.innerHTML = `
+                <input type="text" placeholder="${t('placeholder_name')}" value="${person}" list="people-list" class="split-person w-2/5 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
+                <input type="number" step="0.01" placeholder="0.00" value="${value}" class="split-value w-1/4 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
+                <select class="split-status w-1/4 p-1 text-[10px] border border-slate-200 dark:border-slate-600 rounded bg-slate-50 dark:bg-slate-900 outline-none">
+                    <option value="pendente" ${status === 'pendente' ? 'selected' : ''}>${t('str_split_pen')}</option>
+                    <option value="pago" ${status === 'pago' ? 'selected' : ''}>${t('str_split_paid')}</option>
+                </select>
+                <button type="button" onclick="document.getElementById('${rowId}').remove()" class="text-rose-400 hover:text-rose-600 w-6 shrink-0 flex justify-center"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(div);
+        }
+
+        // ================= GLOBAL EDIT MODALS =================
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function filterGlobalEdit() {
+            const term = document.getElementById('global-edit-search').value.toLowerCase();
+            document.querySelectorAll('#global-edit-content > div').forEach(div => {
+                const val = div.querySelector('input[type="text"]').value.toLowerCase();
+                div.style.display = val.includes(term) ? 'flex' : 'none';
+            });
+        }
+        function openGlobalEdit(field) {
+            const m = document.getElementById('modal-global-edit'); const c = document.getElementById('global-edit-content');
+            document.getElementById('global-edit-field').value = field;
+            document.getElementById('global-edit-search').value = '';
+            document.getElementById('global-edit-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-500 mr-2"></i> ${t('title_manage')}`;
+            
+            let items = [];
+            if(field === 'category') items = [...new Set(state.transactions.map(t => t.category))].filter(Boolean);
+            else if (field === 'paymentMethod') items = [...new Set(state.transactions.map(t => t.paymentMethod))].filter(Boolean);
+            else if (field === 'description') items = [...new Set(state.transactions.map(t => t.description.replace(/\s*\(\d+\/\d+\)$/, '')))].filter(Boolean);
+            else if (field === 'person') items = [...new Set(state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []))].filter(Boolean);
+
+            c.innerHTML = '';
+            if(items.length === 0) { c.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Nenhum item salvo ainda.</p>'; }
+            else {
+                items.sort().forEach(it => {
+                    const rowId = 'ge-' + Math.random().toString(36).substr(2,6);
+                    const div = document.createElement('div'); div.className = "flex items-center gap-2 p-2 border border-slate-200 dark:border-slate-700 rounded bg-slate-50 dark:bg-slate-900";
+                    div.innerHTML = `
+                        <input type="text" id="${rowId}" value="${it}" class="flex-1 p-1 text-xs border border-transparent focus:border-indigo-400 bg-transparent outline-none dark:text-slate-200 transition min-w-0">
+                        <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="px-2 py-1 shrink-0 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 rounded text-[10px] font-bold transition">Salvar</button>`;
+                    c.appendChild(div);
+                });
+            }
+            m.classList.remove('hidden');
+        }
+
+        function saveGlobalEdit(oldVal, newVal, field) {
+            newVal = newVal.trim(); if(!newVal || oldVal === newVal) return;
+            state.transactions.forEach(t => {
+                if(field === 'description') {
+                    const match = t.description.match(/(.*)(\s+\(\d+\/\d+\))$/);
+                    if(match && match[1] === oldVal) t.description = newVal + match[2];
+                    else if (t.description === oldVal) t.description = newVal;
+                } else if (field === 'person') {
+                    if(t.splits) t.splits.forEach(s => { if(s.person === oldVal) s.person = newVal; });
+                } else if(t[field] === oldVal) {
+                    t[field] = newVal;
+                }
+            });
+            saveState(); updateAutocompleteLists(); render(); closeModal('modal-global-edit');
+            // update form if open
+            if(field !== 'person' && document.getElementById(field).value === oldVal) document.getElementById(field).value = newVal;
+        }
+
+        // ================= SAVE & LOAD =================
+        function updateSaveTimestamp() {
+            const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+            document.getElementById('last-save-time').innerHTML = `<i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">${t('saved_time')}</span> ${timeStr}`;
+        }
+        function saveState() { localStorage.setItem('flowme_state', JSON.stringify(state)); updateSaveTimestamp(); }
+        function manualSave() {
+            saveState(); const btn = document.getElementById('btn-manual-save'); const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> OK'; btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border-emerald-300');
+            setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('bg-emerald-100', 'text-emerald-700', 'border-emerald-300'); }, 2000);
+        }
+        function loadState() {
+            const data = localStorage.getItem('flowme_state');
+            if (data) { 
+                try { 
+                    const parsed = JSON.parse(data); 
+                    if(Array.isArray(parsed)) { state.transactions = parsed; state.invoiceSettings = {defaults:{}, exceptions:{}}; } // Migration
+                    else state = { transactions: parsed.transactions||[], currentMonth: state.currentMonth, invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}} };
+                } catch(e) { state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; } 
+            }
+            // Add defaults for older entries
+            state.transactions.forEach(t => {
+                if(t.type === 'despesa' && !t.expenseType) t.expenseType = 'debito';
+            });
+            updateSaveTimestamp();
+        }
+        function clearAllData() { if(confirm(t('confirm_clear'))) { localStorage.removeItem('flowme_state'); state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; render(); updateAutocompleteLists(); } }
+
+        function updateAutocompleteLists() {
+            const cats = [...new Set(state.transactions.map(t => t.category))].filter(Boolean);
+            const methods = [...new Set(state.transactions.map(t => t.paymentMethod))].filter(Boolean);
+            const people = [...new Set(state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []))].filter(Boolean);
+            document.getElementById('categories-list').innerHTML = cats.map(c => `<option value="${c}">`).join('');
+            document.getElementById('methods-list').innerHTML = methods.map(m => `<option value="${m}">`).join('');
+            let dlPeople = document.getElementById('people-list'); if(!dlPeople) { dlPeople = document.createElement('datalist'); dlPeople.id = 'people-list'; document.body.appendChild(dlPeople); }
+            dlPeople.innerHTML = people.map(p => `<option value="${p}">`).join('');
+        }
+
+        // ================= CRUD TRANSACTIONS =================
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const editId = document.getElementById('edit-id').value;
+            const groupId = document.getElementById('edit-group-id').value;
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const expType = type === 'despesa' ? document.querySelector('input[name="expType"]:checked').value : null;
+            const invoiceMonth = expType === 'credito' ? document.getElementById('invoice-month').value : null;
+            const description = document.getElementById('description').value.trim();
+            const rawValue = parseFloat(document.getElementById('value').value);
+            const dateStr = document.getElementById('date').value;
+            const category = document.getElementById('category').value.trim();
+            const paymentMethod = document.getElementById('payment-method').value.trim();
+            const status = document.getElementById('status').value;
+            
+            let splits = [];
+            if (type === 'despesa' && document.getElementById('has-split').checked) {
+                document.querySelectorAll('#split-rows > div').forEach(row => {
+                    const pName = row.querySelector('.split-person').value.trim(); const pVal = parseFloat(row.querySelector('.split-value').value); const pStat = row.querySelector('.split-status').value;
+                    if (pName && !isNaN(pVal)) splits.push({ person: pName, value: pVal, status: pStat });
+                });
+            }
+
+            if (editId) {
+                const index = state.transactions.findIndex(t => t.id === editId);
+                if (index !== -1) {
+                    const oldTrx = state.transactions[index];
+                    const descMatch = oldTrx.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
+                    let cascade = false;
+                    
+                    if(descMatch && oldTrx.description !== description) {
+                        if(confirm(t('confirm_cascade'))) cascade = true;
+                    }
+
+                    state.transactions[index] = { ...oldTrx, type, expenseType: expType, invoiceMonth, description, value: rawValue, date: dateStr, category, paymentMethod, status, splits };
+
+                    if (cascade) {
+                        const baseOld = descMatch[1]; const curP = parseInt(descMatch[2]); const newDescM = description.match(/(.*)\s+\((\d+)\/(\d+)\)$/); const baseNew = newDescM ? newDescM[1] : description;
+                        state.transactions.forEach(t => {
+                            if(t.groupId === groupId && t.id !== editId) {
+                                const m = t.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
+                                if(m && parseInt(m[2]) > curP) t.description = `${baseNew} (${m[2]}/${m[3]})`;
+                            } else if (!groupId) { // Fallback name match
+                                const m = t.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
+                                if(m && m[1] === baseOld && parseInt(m[2]) > curP) t.description = `${baseNew} (${m[2]}/${m[3]})`;
+                            }
+                        });
+                    }
+                }
+                cancelEdit();
+            } else {
+                const isInstallment = document.getElementById('is-installment').checked;
+                if (isInstallment) {
+                    const numInstallments = parseInt(document.getElementById('num-installments').value) || 2;
+                    const logic = document.getElementById('installment-logic').value;
+                    let baseValue = logic === 'total' ? (rawValue / numInstallments) : rawValue;
+                    let currentDate = new Date(dateStr + 'T12:00:00');
+                    let currentInvMonth = invoiceMonth ? new Date(invoiceMonth + '-01T12:00:00') : null;
+                    const newGroupId = 'g-' + Date.now();
+
+                    for (let i = 1; i <= numInstallments; i++) {
+                        let fDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth()+1).padStart(2,'0')}-${String(currentDate.getDate()).padStart(2,'0')}`;
+                        let fInvMonth = currentInvMonth ? `${currentInvMonth.getFullYear()}-${String(currentInvMonth.getMonth()+1).padStart(2,'0')}` : null;
+                        let parsedSplits = splits.map(s => ({ ...s, value: logic === 'total' ? (s.value / numInstallments) : s.value }));
+                        
+                        state.transactions.push({ id: 't-' + Date.now() + i, groupId: newGroupId, type, expenseType: expType, invoiceMonth: fInvMonth, description: `${description} (${i}/${numInstallments})`, value: baseValue, date: (expType === 'credito' ? dateStr : fDate), category, paymentMethod, status: i === 1 ? status : 'pendente', splits: parsedSplits });
+                        
+                        currentDate.setMonth(currentDate.getMonth() + 1);
+                        if(currentInvMonth) currentInvMonth.setMonth(currentInvMonth.getMonth() + 1);
+                    }
+                } else {
+                    state.transactions.push({ id: 't-' + Date.now(), type, expenseType: expType, invoiceMonth, description, value: rawValue, date: dateStr, category, paymentMethod, status, splits });
+                }
+            }
+            saveState(); render(); updateAutocompleteLists();
+            document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = ''; toggleInstallmentOptions(false);
+            document.querySelector('input[name="type"][value="receita"]').checked = true; toggleTypeFields('receita'); addSplitRow(); document.getElementById('date').value = dateStr;
+        }
+
+        function editTransaction(id) {
+            const trx = state.transactions.find(t => t.id === id); if (!trx) return;
+            document.getElementById('edit-id').value = trx.id; document.getElementById('edit-group-id').value = trx.groupId || '';
+            document.getElementById('description').value = trx.description; document.getElementById('value').value = trx.value;
+            document.getElementById('date').value = trx.date; document.getElementById('category').value = trx.category;
+            document.getElementById('payment-method').value = trx.paymentMethod; document.getElementById('status').value = trx.status;
+
+            document.querySelector(`input[name="type"][value="${trx.type}"]`).checked = true; toggleTypeFields(trx.type);
+            if(trx.type === 'despesa') {
+                document.querySelector(`input[name="expType"][value="${trx.expenseType||'debito'}"]`).checked = true; toggleSubType(trx.expenseType||'debito');
+                if(trx.expenseType === 'credito') document.getElementById('invoice-month').value = trx.invoiceMonth || '';
+            }
+            document.getElementById('installment-section').classList.add('hidden');
+            document.getElementById('split-rows').innerHTML = '';
+            if (trx.splits && trx.splits.length > 0 && trx.type === 'despesa') { document.getElementById('has-split').checked = true; toggleSplitSection(true); trx.splits.forEach(s => addSplitRow(s.person, s.value, s.status)); } else { document.getElementById('has-split').checked = false; toggleSplitSection(false); addSplitRow(); }
+
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> <span data-i18n="form_title_edit">${t('form_title_edit')}</span>`;
+            document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-check"></i> <span data-i18n="btn_submit_edit">${t('btn_submit_edit')}</span>`;
+            document.getElementById('btn-cancel-edit').classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            document.getElementById('edit-id').value = ''; document.getElementById('edit-group-id').value = ''; document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = '';
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-plus-circle text-emerald-500"></i> <span data-i18n="form_title_new">${t('form_title_new')}</span>`;
+            document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">${t('btn_submit')}</span>`;
+            document.getElementById('btn-cancel-edit').classList.add('hidden'); toggleTypeFields('receita'); addSplitRow();
+        }
+
+        function deleteTransaction(id) { if(confirm(t('confirm_del'))) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); render(); updateAutocompleteLists(); } }
+        function toggleStatus(id) { const index = state.transactions.findIndex(t => t.id === id); if(index !== -1) { state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); } }
+        function toggleSplitStatus(transactionId, splitIndex) { const tIndex = state.transactions.findIndex(t => t.id === transactionId); if(tIndex !== -1) { const s = state.transactions[tIndex].splits[splitIndex]; s.status = s.status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); } }
+
+        // ================= DUE DATES & ALERTS =================
+        function getDueDate(trx) {
+            if(trx.type === 'despesa' && trx.expenseType === 'credito' && trx.invoiceMonth) {
+                const key = `${trx.paymentMethod}-${trx.invoiceMonth}`;
+                if(state.invoiceSettings.exceptions[key]) return state.invoiceSettings.exceptions[key];
+                if(state.invoiceSettings.defaults[trx.paymentMethod]) return `${trx.invoiceMonth}-${String(state.invoiceSettings.defaults[trx.paymentMethod]).padStart(2, '0')}`;
+                return null;
+            }
+            return trx.date;
+        }
+
+        // ================= RENDER TRANSAÇÕES =================
+        function render() {
+            const search = document.getElementById('search-input').value.toLowerCase().trim();
+            const fType = document.getElementById('filter-type').value; const fStatus = document.getElementById('filter-status').value; const fSplit = document.getElementById('filter-split').value;
+            const filterMode = document.getElementById('filter-mode').value;
+
+            let filtered = state.transactions;
+            if (filterMode === 'month') { const targetMonth = state.currentMonth; filtered = filtered.filter(trx => { if(trx.type === 'despesa' && trx.expenseType === 'credito') return trx.invoiceMonth === targetMonth; return trx.date && trx.date.substring(0, 7) === targetMonth; }); } 
+            else {
+                const dStart = document.getElementById('date-start').value; const dEnd = document.getElementById('date-end').value;
+                filtered = filtered.filter(trx => { const compDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? (trx.invoiceMonth + '-01') : trx.date; if (!compDate) return false; let pass = true; if (dStart) pass = pass && compDate >= dStart; if (dEnd) pass = pass && compDate <= dEnd; return pass; });
+            }
+
+            filtered = filtered.filter(trx => {
+                const matchSearch = (trx.description||'').toLowerCase().includes(search) || (trx.category||'').toLowerCase().includes(search) || (trx.paymentMethod||'').toLowerCase().includes(search) || (trx.splits && trx.splits.some(s => (s.person||'').toLowerCase().includes(search)));
+                const matchType = (fType === 'todos' || trx.type === fType); const matchStatus = (fStatus === 'todos' || trx.status === fStatus); const matchSplit = (fSplit === 'todos' || (fSplit === 'rateio' && trx.splits && trx.splits.length > 0));
+                return matchSearch && matchType && matchStatus && matchSplit;
+            });
+
+            let tInc = 0, pInc = 0, tExp = 0, pExp = 0, pOwed = 0, pRec = 0; let peopleMap = {};
+
+            filtered.forEach(trx => {
+                let rowSplit = 0;
+                if (trx.splits && trx.type === 'despesa') {
+                    trx.splits.forEach(s => { rowSplit += s.value; if (!peopleMap[s.person]) peopleMap[s.person] = { rec: 0, pen: 0 }; s.status === 'pago' ? (peopleMap[s.person].rec += s.value, pRec += s.value) : (peopleMap[s.person].pen += s.value, pOwed += s.value); });
+                }
+                let cost = trx.value - rowSplit;
+                if (trx.type === 'receita') { tInc += trx.value; if (trx.status === 'pago') pInc += trx.value; } else { tExp += cost; if (trx.status === 'pago') pExp += cost; }
+            });
+
+            document.getElementById('summary-income').textContent = formatCurrency(tInc); document.getElementById('summary-income-paid').textContent = `${t('str_received')} ${formatCurrency(pInc)}`;
+            document.getElementById('summary-expense').textContent = formatCurrency(tExp); document.getElementById('summary-expense-paid').textContent = `${t('str_paid')} ${formatCurrency(pExp)}`;
+            const bal = tInc - tExp; const balEl = document.getElementById('summary-balance'); balEl.textContent = formatCurrency(bal); balEl.className = `text-xl font-bold mt-1 ${bal < 0 ? 'text-rose-600' : bal > 0 ? 'text-emerald-600' : 'text-slate-800 dark:text-slate-100'}`;
+            document.getElementById('summary-balance-real').textContent = `${t('str_real')} ${formatCurrency(pInc - pExp)}`;
+            document.getElementById('summary-splits').textContent = formatCurrency(pOwed + pRec); document.getElementById('summary-splits-received').textContent = `${t('str_received')} ${formatCurrency(pRec)}`;
+
+            const tbody = document.getElementById('transactions-body'); tbody.innerHTML = '';
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            if (filtered.length === 0) document.getElementById('empty-state').classList.remove('hidden');
+            else {
+                document.getElementById('empty-state').classList.add('hidden');
+                filtered.sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
+                
+                filtered.forEach(trx => {
+                    const rSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0; const myPart = trx.type === 'despesa' ? (trx.value - rSplit) : trx.value;
+                    
+                    const dueDate = getDueDate(trx);
+                    let isStrictlyLate = false, isApproaching = false;
+                    if(trx.status === 'pendente' && dueDate) {
+                        const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) isStrictlyLate = true;
+                        else if (diffDays >= 0 && diffDays <= userConfig.reminderDays) isApproaching = true;
+                    }
+                    const isCloseOrLate = isStrictlyLate || isApproaching;
+                    
+                    let badges = '';
+                    if (trx.splits && trx.splits.length > 0 && trx.type === 'despesa') {
+                        badges += `<div class="flex flex-wrap gap-1 mt-1">`;
+                        trx.splits.forEach((s, idx) => {
+                            const c = s.status === 'pago' ? 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400';
+                            const icon = s.status === 'pago' ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-clock"></i>';
+                            badges += `<span onclick="toggleSplitStatus('${trx.id}', ${idx})" title="Alternar Status" class="whitespace-nowrap flex items-center gap-1 cursor-pointer border px-1.5 py-0.5 rounded text-[10px] font-semibold transition hover:opacity-80 ${c}"><i class="fa-solid fa-user text-[9px]"></i> ${s.person}: ${formatCurrency(s.value)} ${icon}</span>`;
+                        });
+                        badges += `</div>`;
+                    }
+
+                    const dtPts = (trx.date || '').split('-'); const dateFormatted = dtPts.length >= 3 ? `${dtPts[2]}/${dtPts[1]}` : '--/--';
+                    
+                    const tr = document.createElement('tr'); tr.className = `hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${isStrictlyLate ? 'bg-rose-50/50 dark:bg-rose-900/20' : ''}`;
+                    tr.innerHTML = `
+                        <td class="p-3 whitespace-nowrap text-xs ${isCloseOrLate ? 'text-rose-600 font-bold' : 'text-slate-600 font-medium'}">
+                            ${isCloseOrLate ? '<i class="fa-solid fa-triangle-exclamation mr-1"></i>' : ''}${dateFormatted}
+                            ${(trx.type === 'despesa' && trx.expenseType === 'credito') ? `<br><span class="text-[9px] text-indigo-500 font-bold">Fat: ${trx.invoiceMonth ? trx.invoiceMonth.split('-')[1]+'/'+trx.invoiceMonth.split('-')[0].substring(2) : '--'}</span>` : ''}
+                        </td>
+                        <td class="p-3">
+                            <div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${trx.description || '--'}</div>
+                            <div class="mt-1"><span class="inline-flex items-center px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 rounded text-[9px] font-bold uppercase tracking-wider dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300"><i class="fa-solid fa-tag mr-1 text-slate-400"></i> ${trx.category || '--'}</span></div>
+                            ${badges}
+                        </td>
+                        <td class="p-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">
+                            ${trx.paymentMethod ? `<i class="fa-solid ${trx.expenseType === 'credito' ? 'fa-credit-card text-indigo-400' : (trx.type === 'despesa' ? 'fa-money-bill-transfer' : 'fa-building-columns')} mr-1"></i> ` + trx.paymentMethod : '—'}
+                        </td>
+                        <td class="p-3 whitespace-nowrap text-xs font-semibold text-slate-400 line-through decoration-slate-300">
+                            ${(trx.splits && trx.splits.length > 0) ? formatCurrency(trx.value) : ''}
+                        </td>
+                        <td class="p-3 whitespace-nowrap font-bold text-sm ${trx.type === 'receita' ? 'text-emerald-600' : 'text-slate-800 dark:text-slate-100'}">
+                            ${trx.type === 'receita' ? '+' : '-'} ${formatCurrency(myPart)}
+                        </td>
+                        <td class="p-3 whitespace-nowrap text-center">
+                            <button onclick="toggleStatus('${trx.id}')" class="px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wide transition border ${trx.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400'}">
+                                ${trx.status === 'pago' ? (trx.type === 'receita' ? t('status_rec') : t('status_pag')) : (t('status_pen_rec') || '').split(' ')[0]}
+                            </button>
+                        </td>
+                        <td class="p-3 whitespace-nowrap text-right space-x-1">
+                            <button onclick="editTransaction('${trx.id}')" title="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteTransaction('${trx.id}')" title="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            const pplC = document.getElementById('people-summary-list'); pplC.innerHTML = '';
+            for(let p in peopleMap) pplC.innerHTML += `<div class="py-2 flex justify-between items-center"><div class="font-semibold dark:text-slate-200">${p}<div class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</div></div><div class="text-right font-bold text-amber-600 dark:text-amber-400">${formatCurrency(peopleMap[p].pen)}</div></div>`;
+
+            // ALERTS
+            const alerts = document.getElementById('alert-zone'); alerts.innerHTML = '';
+            if(!userConfig.notificationsEnabled) return;
+            let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [];
+
+            state.transactions.forEach(trx => {
+                if(trx.status !== 'pendente') return;
+                const dueDate = getDueDate(trx); if(!dueDate) return;
+                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) { trx.type === 'receita' ? aIncLate.push(trx) : aExpLate.push(trx); }
+                else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
+            });
+
+            const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon];
+            if(allAlerts.length === 0) return;
+
+            let maxBadges = 3;
+            if(window.innerWidth < 640) maxBadges = 1;
+            else if (window.innerWidth < 1024) maxBadges = 2;
+
+            let html = ''; let shown = 0;
+            const buildBadge = (arr, msgKey, colorClass, icon) => {
+                if(arr.length > 0 && shown < maxBadges) { html += `<div class="${colorClass} px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`; shown++; }
+            };
+            buildBadge(aIncLate, 'rem_inc_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-circle-exclamation');
+            buildBadge(aExpLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
+            buildBadge(aIncSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
+            buildBadge(aExpSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
+            
+            if(allAlerts.length > maxBadges) html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200 rounded text-[10px] font-bold shadow-sm hover:bg-slate-300 transition"> +${allAlerts.length - maxBadges} alertas</button>`;
+            else if (allAlerts.length > 0) html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition"><i class="fa-solid fa-list"></i> Ver</button>`;
+            alerts.innerHTML = html;
+        }
+
+        // ================= FATURAS ABA =================
+        function populateInvoiceCards() {
+            const cards = [...new Set(state.transactions.filter(t => t.type === 'despesa' && t.expenseType === 'credito').map(t => t.paymentMethod))].filter(Boolean);
+            const sel = document.getElementById('invoice-card-select'); const cur = sel.value; sel.innerHTML = '';
+            if(cards.length === 0) sel.innerHTML = '<option value="">Nenhum cartão encontrado</option>';
+            else { cards.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`); if(cards.includes(cur)) sel.value = cur; }
+            renderFaturas();
+        }
+
+        function renderFaturas() {
+            const card = document.getElementById('invoice-card-select').value; const month = state.currentMonth;
+            const tbody = document.getElementById('invoice-transactions-body'); tbody.innerHTML = '';
+            
+            if(!card) { document.getElementById('invoice-empty-state').classList.remove('hidden'); document.getElementById('invoice-total-value').textContent = formatCurrency(0); document.getElementById('invoice-due-date-display').textContent = 'Vencimento: --/--/----'; return; }
+
+            const filtered = state.transactions.filter(t => t.type === 'despesa' && t.expenseType === 'credito' && t.paymentMethod === card && t.invoiceMonth === month);
+            if(filtered.length === 0) { document.getElementById('invoice-empty-state').classList.remove('hidden'); document.getElementById('invoice-total-value').textContent = formatCurrency(0); }
+            else {
+                document.getElementById('invoice-empty-state').classList.add('hidden');
+                let total = 0; filtered.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(t => { total += t.value;
+                    const rSplit = t.splits ? t.splits.reduce((acc, s) => acc + s.value, 0) : 0; const myPart = t.value - rSplit;
+                    const dtPts = (t.date || '').split('-'); const dateFormatted = dtPts.length >= 3 ? `${dtPts[2]}/${dtPts[1]}` : '--/--';
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-slate-50 dark:border-slate-700">
+                            <td class="p-3 text-xs text-slate-600 dark:text-slate-400">${dateFormatted}</td>
+                            <td class="p-3"><div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${t.description}</div><div class="text-[9px] text-slate-400 mt-0.5">${t.category}</div></td>
+                            <td class="p-3 text-xs font-semibold text-slate-400 line-through">${(t.splits && t.splits.length > 0) ? formatCurrency(t.value) : ''}</td>
+                            <td class="p-3 font-bold text-slate-800 dark:text-slate-100">${formatCurrency(myPart)}</td>
+                            <td class="p-3 text-center"><span class="px-2 py-1 text-[9px] font-bold rounded border ${t.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30'}">${t.status.toUpperCase()}</span></td>
+                            <td class="p-3 text-right space-x-1">
+                                <button onclick="switchTab('transacoes'); editTransaction('${t.id}')" title="Editar" class="text-slate-400 hover:text-blue-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                                <button onclick="deleteTransaction('${t.id}'); renderFaturas();" title="Excluir" class="text-slate-400 hover:text-rose-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash text-[10px]"></i></button>
+                            </td>
+                        </tr>`;
+                });
+                document.getElementById('invoice-total-value').textContent = formatCurrency(total);
+            }
+
+            // Render Due Date
+            const exKey = `${card}-${month}`;
+            let dueStr = '--/--/----'; let d = null;
+            if(state.invoiceSettings.exceptions[exKey]) d = state.invoiceSettings.exceptions[exKey];
+            else if(state.invoiceSettings.defaults[card]) d = `${month}-${String(state.invoiceSettings.defaults[card]).padStart(2,'0')}`;
+            if(d) { const pts = d.split('-'); dueStr = `${pts[2]}/${pts[1]}/${pts[0]}`; }
+            document.getElementById('invoice-due-date-display').textContent = `Vencimento: ${dueStr}`;
+        }
+
+        function openInvoiceDueModal() {
+            const card = document.getElementById('invoice-card-select').value; if(!card) return;
+            document.getElementById('invoice-due-card-name').textContent = card;
+            document.getElementById('invoice-due-day').value = state.invoiceSettings.defaults[card] || '';
+            document.getElementById('invoice-due-apply-all').checked = true;
+            document.getElementById('modal-invoice-due').classList.remove('hidden');
+        }
+
+        function saveInvoiceDueDate() {
+            const card = document.getElementById('invoice-card-select').value; const month = state.currentMonth;
+            const day = parseInt(document.getElementById('invoice-due-day').value); if(!day || day<1 || day>31) return;
+            const applyAll = document.getElementById('invoice-due-apply-all').checked;
+            
+            if(applyAll) { state.invoiceSettings.defaults[card] = day; delete state.invoiceSettings.exceptions[`${card}-${month}`]; }
+            else { state.invoiceSettings.exceptions[`${card}-${month}`] = `${month}-${String(day).padStart(2,'0')}`; }
+            
+            saveState(); renderFaturas(); render(); closeModal('modal-invoice-due');
+        }
+
+        // ================= ALERTS MODAL =================
+        function openAlertsModal() {
+            const c = document.getElementById('alerts-modal-content'); c.innerHTML = '';
+            const todayStr = new Date().toISOString().split('T')[0];
+            
+            let list = [];
+            state.transactions.forEach(trx => {
+                if(trx.status !== 'pendente') return; const dueDate = getDueDate(trx); if(!dueDate) return;
+                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00'); const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) list.push({t: trx, d: diffDays, late: true});
+                else if (diffDays > 0 && diffDays <= userConfig.reminderDays) list.push({t: trx, d: diffDays, late: false});
+            });
+
+            if(list.length === 0) { c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Tudo em dia!</p>'; }
+            else {
+                list.sort((a,b) => a.d - b.d).forEach(item => {
+                    const trx = item.t;
+                    const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800';
+                    const icon = trx.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
+                    const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length>=3 ? `${dtPts[2]}/${dtPts[1]}` : '';
+                    c.innerHTML += `
+                        <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="text-lg">${icon}</div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${trx.description}</p>
+                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-amber-600'}">${dtF} • ${item.late ? (Math.abs(item.d) + ' dias atrasado') : ('faltam ' + item.d + ' dias')}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-slate-900 dark:text-white">${formatCurrency(trx.value)}</p>
+                                <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">Ver Conta</button>
+                            </div>
+                        </div>`;
+                });
+            }
+            document.getElementById('modal-alerts').classList.remove('hidden');
+        }
+
+        // ================= CSV EXPORT / IMPORT =================
+        function exportToCSV() {
+            if(!state.transactions.length) return;
+            let csv = "data:text/csv;charset=utf-8,ID,GroupId,Tipo,ExpType,InvMonth,Descricao,ValorOriginal,Data,Categoria,Status,FormaPagamento,DadosRateio\n";
+            state.transactions.forEach(t => {
+                let spl = t.splits ? t.splits.map(s => `${s.person}:${s.value}:${s.status}`).join('|') : '';
+                csv += `${t.id},${t.groupId||''},${t.type},${t.expenseType||''},${t.invoiceMonth||''},${(t.description||'').replace(/,/g,'')},${t.value},${t.date||''},${(t.category||'').replace(/,/g,'')},${t.status},${(t.paymentMethod||'').replace(/,/g,'')},${spl}\n`;
+            });
+            const lnk = document.createElement("a"); lnk.href = encodeURI(csv); lnk.download = `FlowMe_Backup.csv`; lnk.click();
+        }
+
+        function importFromCSV() {
+            const file = document.getElementById('import-file').files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const lines = e.target.result.split('\n'); let imp = [];
+                let isValid = true;
+                for(let i=1; i<lines.length; i++) {
+                    if(!lines[i].trim()) continue;
+                    const c = lines[i].trim().split(','); 
+                    if(c.length < 12) { isValid = false; break; }
+                    let spl = []; if(c[11]) c[11].split('|').forEach(tk => { const s = tk.split(':'); if(s.length===3) spl.push({person:s[0], value:parseFloat(s[1]), status:s[2]}); });
+                    imp.push({ id: c[0]||'t-'+Date.now()+i, groupId: c[1]||'', type: c[2], expenseType: c[3]||'', invoiceMonth: c[4]||'', description: c[5], value: parseFloat(c[6]), date: c[7], category: c[8], status: c[9], paymentMethod: c[10], splits: spl });
+                }
+                if(!isValid || imp.length === 0) {
+                    const errMsg = document.getElementById('import-error-msg');
+                    errMsg.textContent = t('err_csv_invalid');
+                    errMsg.classList.remove('hidden');
+                    setTimeout(() => errMsg.classList.add('hidden'), 3000);
+                    return;
+                }
+                state.transactions = imp; saveState(); render(); updateAutocompleteLists(); switchTab('transacoes');
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>

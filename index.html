@@ -413,7 +413,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
                 
-                <!-- NOVO CARTÃO DE NUVEM COM GOOGLE DRIVE -->
+                <!-- CARTÃO DE NUVEM COM GOOGLE DRIVE -->
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between transition-colors">
                     <div class="border-b border-slate-100 pb-4 mb-4">
                         <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-brands fa-google text-blue-500 mr-2"></i> <span data-i18n="cfg_acc_title">Conta e Nuvem</span></h2>
@@ -429,22 +429,22 @@
                     </div>
                     <div id="cloud-auth-buttons">
                         <button onclick="handleAuthClick()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg border border-blue-700 shadow-sm transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-brands fa-google"></i> Conectar Google Drive
+                            <i class="fa-brands fa-google"></i> <span data-i18n="btn_cloud_connect">Conectar Google Drive</span>
                         </button>
                     </div>
                     <div id="cloud-sync-buttons" class="hidden flex-col gap-2">
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="saveToCloud()" class="py-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 font-bold text-[10px] rounded-lg border border-emerald-300 transition-colors flex flex-col items-center justify-center gap-1 shadow-sm">
                                 <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
-                                <span>Salvar na Nuvem</span>
+                                <span data-i18n="btn_cloud_save">Salvar na Nuvem</span>
                             </button>
                             <button onclick="loadFromCloud()" class="py-2 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 font-bold text-[10px] rounded-lg border border-indigo-300 transition-colors flex flex-col items-center justify-center gap-1 shadow-sm">
                                 <i class="fa-solid fa-cloud-arrow-down text-lg"></i>
-                                <span>Puxar da Nuvem</span>
+                                <span data-i18n="btn_cloud_load">Puxar da Nuvem</span>
                             </button>
                         </div>
                         <button onclick="handleSignoutClick()" class="w-full mt-2 py-1.5 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 font-medium text-[10px] rounded border border-slate-200 transition-colors">
-                            <i class="fa-solid fa-right-from-bracket mr-1"></i> Desconectar
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> <span data-i18n="btn_cloud_disconnect">Desconectar</span>
                         </button>
                     </div>
                 </div>
@@ -561,7 +561,7 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.0</span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.1</span></p>
             </div>
         </div>
     </main>
@@ -638,7 +638,7 @@
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
-                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.0",
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.1",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
                 opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
@@ -646,7 +646,11 @@
                 confirm_del: "Excluir permanentemente?", confirm_clear: "ATENÇÃO: Apagar tudo do navegador?", confirm_cascade: "Deseja aplicar o novo nome para as parcelas seguintes desta conta?",
                 btn_edit: "Editar", btn_delete_action: "Excluir", placeholder_name: "Nome", file_choose_btn: "Escolher", file_no_file: "Nenhum arquivo",
                 lbl_select_card: "Selecione o Cartão:", lbl_invoice_total: "Total da Fatura", btn_edit_due: "Editar Vencimento",
-                title_manage: "Gerenciar", err_csv_invalid: "Arquivo incompatível ou versão antiga."
+                title_manage: "Gerenciar", err_csv_invalid: "Arquivo incompatível ou versão antiga.",
+                cfg_acc_connected: "Conectado à Nuvem", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Salvar na Nuvem", btn_cloud_load: "Puxar da Nuvem", btn_cloud_disconnect: "Desconectar",
+                lbl_sync_saved: "(Salvo)", lbl_sync_loaded: "(Puxado)", msg_sync_success: "Sucesso!", msg_sync_saving: "Salvando...", msg_sync_loading: "Puxando...",
+                confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
+                err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem."
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -671,7 +675,7 @@
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
                 cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
-                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.0",
+                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.1",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
                 opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
@@ -679,7 +683,11 @@
                 confirm_del: "Delete permanently?", confirm_clear: "WARNING: Wipe all data from browser?", confirm_cascade: "Apply new name to subsequent installments of this bill?",
                 btn_edit: "Edit", btn_delete_action: "Delete", placeholder_name: "Name", file_choose_btn: "Choose file", file_no_file: "No file chosen",
                 lbl_select_card: "Select Card:", lbl_invoice_total: "Invoice Total", btn_edit_due: "Edit Due Date",
-                title_manage: "Manage", err_csv_invalid: "Incompatible file or old version."
+                title_manage: "Manage", err_csv_invalid: "Incompatible file or old version.",
+                cfg_acc_connected: "Connected to Cloud", btn_cloud_connect: "Connect Google Drive", btn_cloud_save: "Save to Cloud", btn_cloud_load: "Load from Cloud", btn_cloud_disconnect: "Disconnect",
+                lbl_sync_saved: "(Saved)", lbl_sync_loaded: "(Loaded)", msg_sync_success: "Success!", msg_sync_saving: "Saving...", msg_sync_loading: "Loading...",
+                confirm_cloud_load: "Cloud backup found! Do you want to load data to this device?", confirm_overwrite: "Warning: Cloud data will overwrite this device's current data. Continue?",
+                err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found."
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -704,7 +712,7 @@
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
-                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.0",
+                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.1",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
                 opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
@@ -712,7 +720,11 @@
                 confirm_del: "¿Borrar permanentemente?", confirm_clear: "ATENCIÓN: ¿Borrar todo del navegador?", confirm_cascade: "¿Aplicar nuevo nombre a las cuotas siguientes de esta cuenta?",
                 btn_edit: "Editar", btn_delete_action: "Eliminar", placeholder_name: "Nombre", file_choose_btn: "Elegir archivo", file_no_file: "Ningún archivo",
                 lbl_select_card: "Seleccionar Tarjeta:", lbl_invoice_total: "Total Factura", btn_edit_due: "Editar Vencimiento",
-                title_manage: "Administrar", err_csv_invalid: "Archivo incompatible o versión antigua."
+                title_manage: "Administrar", err_csv_invalid: "Archivo incompatible o versión antigua.",
+                cfg_acc_connected: "Conectado a la Nube", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Guardar en la Nube", btn_cloud_load: "Cargar de la Nube", btn_cloud_disconnect: "Desconectar",
+                lbl_sync_saved: "(Guardado)", lbl_sync_loaded: "(Cargado)", msg_sync_success: "¡Éxito!", msg_sync_saving: "Guardando...", msg_sync_loading: "Cargando...",
+                confirm_cloud_load: "¡Copia de seguridad encontrada! ¿Deseas cargar los datos a este dispositivo?", confirm_overwrite: "Atención: Los datos de la nube sobrescribirán los de este dispositivo. ¿Continuar?",
+                err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube."
             }
         };
 
@@ -969,10 +981,7 @@
             btn.innerHTML = '<i class="fa-solid fa-check"></i> OK'; btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border-emerald-300');
             setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('bg-emerald-100', 'text-emerald-700', 'border-emerald-300'); }, 2000);
             
-            // Auto Save to Cloud Se Estiver Logado
-            if(gapiInited && gapi.client.getToken() !== null) {
-                saveToCloud(true); 
-            }
+            if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); 
         }
         function loadState() {
             const data = localStorage.getItem('flowme_state');
@@ -1078,6 +1087,8 @@
             saveState(); render(); updateAutocompleteLists();
             document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = ''; toggleInstallmentOptions(false);
             document.querySelector('input[name="type"][value="receita"]').checked = true; toggleTypeFields('receita'); addSplitRow(); document.getElementById('date').value = dateStr;
+            
+            if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); 
         }
 
         function editTransaction(id) {
@@ -1108,9 +1119,9 @@
             document.getElementById('btn-cancel-edit').classList.add('hidden'); toggleTypeFields('receita'); addSplitRow();
         }
 
-        function deleteTransaction(id) { if(confirm(t('confirm_del'))) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); render(); updateAutocompleteLists(); } }
-        function toggleStatus(id) { const index = state.transactions.findIndex(t => t.id === id); if(index !== -1) { state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); } }
-        function toggleSplitStatus(transactionId, splitIndex) { const tIndex = state.transactions.findIndex(t => t.id === transactionId); if(tIndex !== -1) { const s = state.transactions[tIndex].splits[splitIndex]; s.status = s.status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); } }
+        function deleteTransaction(id) { if(confirm(t('confirm_del'))) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); render(); updateAutocompleteLists(); if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); } }
+        function toggleStatus(id) { const index = state.transactions.findIndex(t => t.id === id); if(index !== -1) { state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); } }
+        function toggleSplitStatus(transactionId, splitIndex) { const tIndex = state.transactions.findIndex(t => t.id === transactionId); if(tIndex !== -1) { const s = state.transactions[tIndex].splits[splitIndex]; s.status = s.status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); } }
 
         // ================= DUE DATES & ALERTS =================
         function getDueDate(trx) {
@@ -1416,6 +1427,7 @@
         let tokenClient;
         let gapiInited = false;
         let gisInited = false;
+        let isManualLogin = false;
 
         function gapiLoaded() { gapi.load('client', initializeGapiClient); }
         async function initializeGapiClient() {
@@ -1426,10 +1438,22 @@
         function gsiLoaded() {
             tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: CLIENT_ID, scope: SCOPES,
-                callback: (tokenResponse) => {
+                callback: async (tokenResponse) => {
                     if (tokenResponse.error !== undefined) throw (tokenResponse);
                     localStorage.setItem('flowme_google_token', JSON.stringify({ token: tokenResponse.access_token, expires: new Date().getTime() + (tokenResponse.expires_in * 1000) }));
-                    updateCloudUI(true);
+                    gapi.client.setToken({ access_token: tokenResponse.access_token });
+                    
+                    const isValid = await fetchUserInfo();
+                    
+                    if(isValid && isManualLogin) {
+                        let file = await findCloudFile();
+                        if(file) {
+                            if(state.transactions.length === 0 || confirm(t('confirm_cloud_load'))) {
+                                loadFromCloud(true);
+                            }
+                        }
+                        isManualLogin = false;
+                    }
                 },
             });
             gisInited = true; maybeEnableButtons();
@@ -1437,16 +1461,36 @@
 
         function maybeEnableButtons() { if (gapiInited && gisInited) checkExistingToken(); }
 
-        function checkExistingToken() {
+        async function fetchUserInfo() {
+            try {
+                const resp = await gapi.client.drive.about.get({ fields: 'user' });
+                const user = resp.result.user;
+                document.getElementById('cloud-user-name').textContent = user.displayName;
+                if (user.photoLink) {
+                    document.getElementById('cloud-user-avatar').innerHTML = `<img src="${user.photoLink}" alt="Avatar" class="w-full h-full object-cover">`;
+                }
+                updateCloudUI(true);
+                return true;
+            } catch (err) {
+                console.error("Token inválido ou expirado", err);
+                handleSignoutClick();
+                return false;
+            }
+        }
+
+        async function checkExistingToken() {
             const tokenData = localStorage.getItem('flowme_google_token');
             if(tokenData) {
                 const parsed = JSON.parse(tokenData);
-                if(parsed.expires > new Date().getTime()) { gapi.client.setToken({ access_token: parsed.token }); updateCloudUI(true); } 
+                if(parsed.expires > new Date().getTime()) { 
+                    gapi.client.setToken({ access_token: parsed.token }); 
+                    await fetchUserInfo();
+                } 
                 else { localStorage.removeItem('flowme_google_token'); updateCloudUI(false); }
             } else { updateCloudUI(false); }
         }
 
-        function handleAuthClick() { tokenClient.requestAccessToken({prompt: 'consent'}); }
+        function handleAuthClick() { isManualLogin = true; tokenClient.requestAccessToken({prompt: 'consent'}); }
         function handleSignoutClick() {
             const token = gapi.client.getToken();
             if (token !== null) { google.accounts.oauth2.revoke(token.access_token); gapi.client.setToken(''); }
@@ -1460,8 +1504,6 @@
             
             if(isLoggedIn) {
                 authBtns.classList.add('hidden'); syncBtns.classList.remove('hidden'); syncBtns.classList.add('flex');
-                userName.textContent = "Conectado à Nuvem";
-                userAvatar.innerHTML = '<i class="fa-brands fa-google text-blue-500 text-xl"></i>';
                 userInfo.classList.remove('opacity-50');
             } else {
                 authBtns.classList.remove('hidden'); syncBtns.classList.add('hidden'); syncBtns.classList.remove('flex');
@@ -1486,7 +1528,7 @@
         async function saveToCloud(silent = false) {
             if(!gapi.client.getToken()) return;
             const btn = document.querySelector('button[onclick="saveToCloud()"]'); let origHTML;
-            if(!silent && btn) { origHTML = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>Salvando...</span>'; }
+            if(!silent && btn) { origHTML = btn.innerHTML; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>${t('msg_sync_saving')}</span>`; }
 
             try {
                 const fileContent = JSON.stringify(state);
@@ -1508,23 +1550,28 @@
                 }
 
                 const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-                document.getElementById('cloud-last-sync').textContent = timeStr + ' (Salvo)';
-                if(!silent && btn) { btn.innerHTML = '<i class="fa-solid fa-check text-lg"></i><span>Sucesso!</span>'; setTimeout(() => btn.innerHTML = origHTML, 2000); }
+                document.getElementById('cloud-last-sync').textContent = timeStr + ' ' + t('lbl_sync_saved');
+                if(!silent && btn) { btn.innerHTML = `<i class="fa-solid fa-check text-lg"></i><span>${t('msg_sync_success')}</span>`; setTimeout(() => btn.innerHTML = origHTML, 2000); }
             } catch(e) {
-                console.error(e); if(!silent && btn) { alert("Erro ao salvar na nuvem."); btn.innerHTML = origHTML; }
+                console.error(e); if(!silent && btn) { alert(t('err_cloud')); btn.innerHTML = origHTML; }
             }
         }
 
-        async function loadFromCloud() {
+        async function loadFromCloud(silent = false) {
             if(!gapi.client.getToken()) { alert("Você precisa se conectar primeiro!"); return; }
-            if(!confirm("Atenção: Os dados da nuvem vão sobrescrever os dados atuais deste dispositivo. Deseja continuar?")) return;
+            if(!silent && !confirm(t('confirm_overwrite'))) return;
 
-            const btn = document.querySelector('button[onclick="loadFromCloud()"]'); const origHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>Puxando...</span>';
+            const btn = document.querySelector('button[onclick="loadFromCloud()"]'); 
+            const origHTML = btn ? btn.innerHTML : '';
+            if(!silent && btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>${t('msg_sync_loading')}</span>`;
 
             try {
                 let existingFile = await findCloudFile();
-                if(!existingFile) { alert("Nenhum backup encontrado na nuvem."); btn.innerHTML = origHTML; return; }
+                if(!existingFile) { 
+                    if(!silent) alert(t('msg_cloud_empty')); 
+                    if(!silent && btn) btn.innerHTML = origHTML; 
+                    return; 
+                }
 
                 const response = await gapi.client.drive.files.get({ fileId: existingFile.id, alt: 'media' });
                 let parsed = typeof response.body === 'string' ? JSON.parse(response.body) : response.body;
@@ -1535,10 +1582,11 @@
                 saveState(); render(); updateAutocompleteLists(); switchTab('transacoes');
                 
                 const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-                document.getElementById('cloud-last-sync').textContent = timeStr + ' (Puxado)';
-                btn.innerHTML = '<i class="fa-solid fa-check text-lg"></i><span>Sucesso!</span>'; setTimeout(() => btn.innerHTML = origHTML, 2000);
+                document.getElementById('cloud-last-sync').textContent = timeStr + ' ' + t('lbl_sync_loaded');
+                if(!silent && btn) { btn.innerHTML = `<i class="fa-solid fa-check text-lg"></i><span>${t('msg_sync_success')}</span>`; setTimeout(() => btn.innerHTML = origHTML, 2000); }
             } catch(e) {
-                console.error(e); alert("Erro ao puxar dados da nuvem."); btn.innerHTML = origHTML;
+                console.error(e); if(!silent) alert(t('err_cloud')); 
+                if(!silent && btn) btn.innerHTML = origHTML;
             }
         }
     </script>

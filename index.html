@@ -561,7 +561,7 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.1</span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.2</span></p>
             </div>
         </div>
     </main>
@@ -638,7 +638,7 @@
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
-                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.1",
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.2",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
                 opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
@@ -675,7 +675,7 @@
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
                 cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
-                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.1",
+                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.2",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
                 opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
@@ -712,7 +712,7 @@
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
-                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.1",
+                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.2",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
                 opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
@@ -981,7 +981,7 @@
             btn.innerHTML = '<i class="fa-solid fa-check"></i> OK'; btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border-emerald-300');
             setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('bg-emerald-100', 'text-emerald-700', 'border-emerald-300'); }, 2000);
             
-            if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); 
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
         }
         function loadState() {
             const data = localStorage.getItem('flowme_state');
@@ -1088,7 +1088,7 @@
             document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = ''; toggleInstallmentOptions(false);
             document.querySelector('input[name="type"][value="receita"]').checked = true; toggleTypeFields('receita'); addSplitRow(); document.getElementById('date').value = dateStr;
             
-            if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); 
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
         }
 
         function editTransaction(id) {
@@ -1119,9 +1119,9 @@
             document.getElementById('btn-cancel-edit').classList.add('hidden'); toggleTypeFields('receita'); addSplitRow();
         }
 
-        function deleteTransaction(id) { if(confirm(t('confirm_del'))) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); render(); updateAutocompleteLists(); if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); } }
-        function toggleStatus(id) { const index = state.transactions.findIndex(t => t.id === id); if(index !== -1) { state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); } }
-        function toggleSplitStatus(transactionId, splitIndex) { const tIndex = state.transactions.findIndex(t => t.id === transactionId); if(tIndex !== -1) { const s = state.transactions[tIndex].splits[splitIndex]; s.status = s.status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(gapiInited && gapi.client.getToken() !== null) saveToCloud(true); } }
+        function deleteTransaction(id) { if(confirm(t('confirm_del'))) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); render(); updateAutocompleteLists(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
+        function toggleStatus(id) { const index = state.transactions.findIndex(t => t.id === id); if(index !== -1) { state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
+        function toggleSplitStatus(transactionId, splitIndex) { const tIndex = state.transactions.findIndex(t => t.id === transactionId); if(tIndex !== -1) { const s = state.transactions[tIndex].splits[splitIndex]; s.status = s.status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
 
         // ================= DUE DATES & ALERTS =================
         function getDueDate(trx) {
@@ -1418,30 +1418,22 @@
             reader.readAsText(file);
         }
 
-        // ================= GOOGLE DRIVE CLOUD SYNC =================
+        // ================= GOOGLE DRIVE CLOUD SYNC (REWRITTEN VIA FETCH) =================
         const CLIENT_ID = '197974543800-l2v0rdmvg21gl595gc79a1h3aq5fntde.apps.googleusercontent.com';
-        const API_KEY = 'AIzaSyAmjbxjwsAI6RjuaC_YxnSTg-rQXqts4hw';
-        const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
         const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
         let tokenClient;
-        let gapiInited = false;
-        let gisInited = false;
+        let accessToken = null;
         let isManualLogin = false;
-
-        function gapiLoaded() { gapi.load('client', initializeGapiClient); }
-        async function initializeGapiClient() {
-            await gapi.client.init({ apiKey: API_KEY, discoveryDocs: [DISCOVERY_DOC] });
-            gapiInited = true; maybeEnableButtons();
-        }
 
         function gsiLoaded() {
             tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: CLIENT_ID, scope: SCOPES,
+                client_id: CLIENT_ID, 
+                scope: SCOPES,
                 callback: async (tokenResponse) => {
                     if (tokenResponse.error !== undefined) throw (tokenResponse);
-                    localStorage.setItem('flowme_google_token', JSON.stringify({ token: tokenResponse.access_token, expires: new Date().getTime() + (tokenResponse.expires_in * 1000) }));
-                    gapi.client.setToken({ access_token: tokenResponse.access_token });
+                    accessToken = tokenResponse.access_token;
+                    localStorage.setItem('flowme_google_token', JSON.stringify({ token: accessToken, expires: new Date().getTime() + (tokenResponse.expires_in * 1000) }));
                     
                     const isValid = await fetchUserInfo();
                     
@@ -1456,15 +1448,18 @@
                     }
                 },
             });
-            gisInited = true; maybeEnableButtons();
+            checkExistingToken();
         }
 
-        function maybeEnableButtons() { if (gapiInited && gisInited) checkExistingToken(); }
-
         async function fetchUserInfo() {
+            if(!accessToken) return false;
             try {
-                const resp = await gapi.client.drive.about.get({ fields: 'user' });
-                const user = resp.result.user;
+                const resp = await fetch('https://www.googleapis.com/drive/v3/about?fields=user', {
+                    headers: { 'Authorization': 'Bearer ' + accessToken }
+                });
+                if(!resp.ok) throw new Error('Token expirado');
+                const data = await resp.json();
+                const user = data.user;
                 document.getElementById('cloud-user-name').textContent = user.displayName;
                 if (user.photoLink) {
                     document.getElementById('cloud-user-avatar').innerHTML = `<img src="${user.photoLink}" alt="Avatar" class="w-full h-full object-cover">`;
@@ -1472,7 +1467,7 @@
                 updateCloudUI(true);
                 return true;
             } catch (err) {
-                console.error("Token inválido ou expirado", err);
+                console.error("Token inválido", err);
                 handleSignoutClick();
                 return false;
             }
@@ -1483,18 +1478,20 @@
             if(tokenData) {
                 const parsed = JSON.parse(tokenData);
                 if(parsed.expires > new Date().getTime()) { 
-                    gapi.client.setToken({ access_token: parsed.token }); 
+                    accessToken = parsed.token;
                     await fetchUserInfo();
                 } 
-                else { localStorage.removeItem('flowme_google_token'); updateCloudUI(false); }
+                else { handleSignoutClick(); }
             } else { updateCloudUI(false); }
         }
 
         function handleAuthClick() { isManualLogin = true; tokenClient.requestAccessToken({prompt: 'consent'}); }
+        
         function handleSignoutClick() {
-            const token = gapi.client.getToken();
-            if (token !== null) { google.accounts.oauth2.revoke(token.access_token); gapi.client.setToken(''); }
-            localStorage.removeItem('flowme_google_token'); updateCloudUI(false);
+            if (accessToken) { google.accounts.oauth2.revoke(accessToken); }
+            accessToken = null;
+            localStorage.removeItem('flowme_google_token'); 
+            updateCloudUI(false);
         }
 
         function updateCloudUI(isLoggedIn) {
@@ -1515,25 +1512,25 @@
 
         async function findCloudFile() {
             try {
-                const response = await gapi.client.drive.files.list({ q: "name='flowme_backup.json' and trashed=false", spaces: 'drive', fields: 'files(id, name, modifiedTime)', pageSize: 1 });
-                const files = response.result.files;
-                return (files && files.length > 0) ? files[0] : null;
+                const resp = await fetch("https://www.googleapis.com/drive/v3/files?q=name='flowme_backup.json' and trashed=false&spaces=drive&fields=files(id,name,modifiedTime)&pageSize=1", {
+                    headers: { 'Authorization': 'Bearer ' + accessToken }
+                });
+                if(!resp.ok) throw new Error('Falha ao buscar arquivo');
+                const data = await resp.json();
+                return (data.files && data.files.length > 0) ? data.files[0] : null;
             } catch (err) {
-                console.error(err);
-                if(err.status === 401 || err.status === 403) { handleSignoutClick(); alert("Sessão expirada. Reconecte-se."); }
-                return null;
+                console.error(err); return null;
             }
         }
 
         async function saveToCloud(silent = false) {
-            if(!gapi.client.getToken()) return;
+            if(!accessToken) return;
             const btn = document.querySelector('button[onclick="saveToCloud()"]'); let origHTML;
             if(!silent && btn) { origHTML = btn.innerHTML; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>${t('msg_sync_saving')}</span>`; }
 
             try {
                 const fileContent = JSON.stringify(state);
                 let existingFile = await findCloudFile();
-                const accessToken = gapi.client.getToken().access_token;
                 
                 if (existingFile) {
                     await fetch('https://www.googleapis.com/upload/drive/v3/files/' + existingFile.id + '?uploadType=media', {
@@ -1558,7 +1555,7 @@
         }
 
         async function loadFromCloud(silent = false) {
-            if(!gapi.client.getToken()) { alert("Você precisa se conectar primeiro!"); return; }
+            if(!accessToken) { alert("Você precisa se conectar primeiro!"); return; }
             if(!silent && !confirm(t('confirm_overwrite'))) return;
 
             const btn = document.querySelector('button[onclick="loadFromCloud()"]'); 
@@ -1573,8 +1570,12 @@
                     return; 
                 }
 
-                const response = await gapi.client.drive.files.get({ fileId: existingFile.id, alt: 'media' });
-                let parsed = typeof response.body === 'string' ? JSON.parse(response.body) : response.body;
+                const response = await fetch('https://www.googleapis.com/drive/v3/files/' + existingFile.id + '?alt=media', {
+                    headers: { 'Authorization': 'Bearer ' + accessToken }
+                });
+                if(!response.ok) throw new Error('Falha ao puxar arquivo');
+                
+                let parsed = await response.json();
 
                 if(Array.isArray(parsed)) { state.transactions = parsed; state.invoiceSettings = {defaults:{}, exceptions:{}}; }
                 else if (parsed.transactions) { state = { transactions: parsed.transactions||[], currentMonth: state.currentMonth, invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}} }; }
@@ -1591,6 +1592,5 @@
         }
     </script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="gsiLoaded()"></script>
-    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
 </body>
 </html>

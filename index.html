@@ -1,3 +1,4 @@
+<!-- ================= BLOCO 1: HEAD E ESTILOS ================= -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -44,7 +45,8 @@
     <div id="pwa-update-alert" class="hidden bg-indigo-600 text-white text-center py-2 text-xs font-semibold cursor-pointer hover:bg-indigo-700 transition" onclick="window.location.reload(true)">
         Nova versão disponível! Clique aqui para atualizar.
     </div>
-
+    
+<!-- ================= BLOCO 2: HEADER E NAVEGAÇÃO ================= -->
     <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -74,6 +76,7 @@
         </div>
     </header>
 
+<!-- ================= BLOCO 3: BARRA GLOBAL (Filtros e Salvar) ================= -->    
     <section id="global-toolbar" class="bg-white border-b border-slate-200 py-3 px-4 shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
             
@@ -116,7 +119,7 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
         
-        <!-- ================= ABAS: TRANSAÇÕES ================= -->
+<!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
@@ -357,7 +360,7 @@
             </div>
         </div>
 
-        <!-- ================= ABAS: FATURAS ================= -->
+<!-- ================= BLOCO 5: ABA FATURAS ================= -->
         <div id="content-faturas" class="tab-content hidden max-w-5xl mx-auto space-y-6">
             <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-colors flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex-1 w-full">
@@ -401,14 +404,14 @@
             </div>
         </div>
 
-        <!-- ================= ABAS: DASHBOARD ================= -->
+<!-- ================= BLOCO 6: ABA DASHBOARD ================= -->
         <div id="content-dashboard" class="tab-content hidden flex-col items-center justify-center min-h-[50vh] text-center">
             <i class="fa-solid fa-person-digging text-6xl text-slate-300 dark:text-slate-600 mb-4"></i>
             <h2 class="text-2xl font-bold text-slate-700 dark:text-slate-300" data-i18n="dash_wip_title">Em construção</h2>
             <p class="text-slate-500 dark:text-slate-400 mt-2" data-i18n="dash_wip_desc">Esta seção estará disponível em breve.</p>
         </div>
 
-        <!-- ================= ABAS: CONFIGURAÇÕES ================= -->
+<!-- ================= BLOCO 7: ABA CONFIGURAÇÕES ================= -->
         <div id="content-backup" class="tab-content hidden max-w-4xl mx-auto flex flex-col min-h-[70vh]">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
@@ -566,6 +569,7 @@
         </div>
     </main>
 
+<!-- ================= BLOCO 8: MODAIS (Alertas, Edição, etc) ================= -->
     <!-- MODALS -->
     <div id="modal-alerts" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh]">
@@ -612,6 +616,7 @@
         </div>
     </div>
 
+<!-- ================= BLOCO 9: JAVASCRIPT - TRADUÇÕES E CONFIGURAÇÃO INICIAL ================= -->
     <script>
         // ================= i18n =================
         const translations = {
@@ -912,6 +917,7 @@
             container.appendChild(div);
         }
 
+// ================= BLOCO 10: JAVASCRIPT - LÓGICA PRINCIPAL (Transações, Renders) =================
         // ================= GLOBAL EDIT MODALS =================
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
         function filterGlobalEdit() {
@@ -1418,6 +1424,7 @@
             reader.readAsText(file);
         }
 
+// ================= BLOCO 11: JAVASCRIPT - NUVEM E GOOGLE DRIVE =================
         // ================= GOOGLE DRIVE CLOUD SYNC (REWRITTEN VIA FETCH) =================
         const CLIENT_ID = '197974543800-l2v0rdmvg21gl595gc79a1h3aq5fntde.apps.googleusercontent.com';
         const SCOPES = 'https://www.googleapis.com/auth/drive.file';

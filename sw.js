@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowme-v1.4.31'; // Quando quiser forçar uma limpeza brutal, mude este número
+const CACHE_NAME = 'flowme-v1.4.5';
 const urlsToCache = ['./', './index.html', './manifest.json'];
 
 // Instala e guarda a versão inicial

@@ -478,6 +478,9 @@
                             <button onclick="setLanguage('es')" id="btn-lang-es" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
                                 <span class="text-lg">🇪🇸</span> <span class="lang-text">Espanhol</span>
                             </button>
+                            <button onclick="setLanguage('fr')" id="btn-lang-fr" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
+                                <span class="text-lg">🇫🇷</span> <span class="lang-text">Francês</span>
+                            </button>
                         </div>
                     </div>
                     <div>
@@ -510,6 +513,15 @@
                                     <i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span>
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- NOVO: ESTILO DAS ABAS -->
+                        <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
+                            <label class="block text-xs font-semibold text-slate-600 mb-2" data-i18n="cfg_tab_style">Estilo do Menu Principal:</label>
+                            <select id="cfg-tab-style" onchange="setTabStyle(this.value)" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 outline-none focus:border-emerald-500 transition-colors">
+                                <option value="both" data-i18n="opt_tab_both">Ícone e Texto</option>
+                                <option value="icons" data-i18n="opt_tab_icons">Apenas Ícones</option>
+                            </select>
                         </div>
                     </div>
 
@@ -574,7 +586,7 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.6</span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.7</span></p>
             </div>
         </div>
 
@@ -652,7 +664,7 @@
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
-                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.6",
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.7",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
                 opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
@@ -665,7 +677,7 @@
                 lbl_sync_saved: "(Salvo)", lbl_sync_loaded: "(Puxado)", msg_sync_success: "Sucesso!", msg_sync_saving: "Salvando...", msg_sync_loading: "Puxando...",
                 confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
                 err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.",
-                cfg_form_mode: "Estilo do Formulário (Celular):", opt_mode_modal: "Botão Flutuante (Modal)", opt_mode_collapse: "Retrátil (Sanfona)",
+                cfg_tab_style: "Estilo do Menu Principal:", opt_tab_both: "Ícone e Texto", opt_tab_icons: "Apenas Ícones",
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -690,7 +702,7 @@
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
                 cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
-                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.6",
+                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.7",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
                 opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
@@ -703,7 +715,7 @@
                 lbl_sync_saved: "(Saved)", lbl_sync_loaded: "(Loaded)", msg_sync_success: "Success!", msg_sync_saving: "Saving...", msg_sync_loading: "Loading...",
                 confirm_cloud_load: "Cloud backup found! Do you want to load data to this device?", confirm_overwrite: "Warning: Cloud data will overwrite this device's current data. Continue?",
                 err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found.",
-                cfg_form_mode: "Estilo do Formulário (Celular):", opt_mode_modal: "Botão Flutuante (Modal)", opt_mode_collapse: "Retrátil (Sanfona)",
+                cfg_tab_style: "Main Menu Style:", opt_tab_both: "Icon and Text", opt_tab_icons: "Icons Only",
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -728,7 +740,7 @@
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
-                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.6",
+                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.7",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
                 opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
@@ -741,7 +753,45 @@
                 lbl_sync_saved: "(Guardado)", lbl_sync_loaded: "(Cargado)", msg_sync_success: "¡Éxito!", msg_sync_saving: "Guardando...", msg_sync_loading: "Cargando...",
                 confirm_cloud_load: "¡Copia de seguridad encontrada! ¿Deseas cargar los datos a este dispositivo?", confirm_overwrite: "Atención: Los datos de la nube sobrescribirán los de este dispositivo. ¿Continuar?",
                 err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube.",
-                cfg_form_mode: "Estilo do Formulário (Celular):", opt_mode_modal: "Botão Flutuante (Modal)", opt_mode_collapse: "Retrátil (Sanfona)",
+                cfg_tab_style: "Estilo del Menú Principal:", opt_tab_both: "Icono y Texto", opt_tab_icons: "Solo Iconos",
+            },
+            fr: {
+                subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
+                period_label: "Période :", saved_time: "Enregistré :", btn_save_data: "Enregistrer les données",
+                card_income: "Revenus (Prévision)", card_expense: "Dépenses (Prévision)", card_balance: "Bilan mensuel", card_splits: "Partages à recevoir",
+                form_title_new: "Nouvelle transaction", form_title_edit: "Modification", btn_cancel: "Annuler", type_income: "Revenu", type_expense: "Dépense",
+                lbl_exp_deb: "Débit/Espèces", lbl_exp_cred: "Crédit", lbl_inv_month: "Mois de la facture",
+                label_desc: "Description / Nom", placeholder_desc: "Ex : Salaire, Électricité...", label_value: "Valeur", label_date_univ: "Date",
+                lbl_inst_inc: "Répéter le revenu ?", lbl_inst_exp: "Achat en plusieurs fois ?",
+                label_is_installment: "Répéter / Échelonner ?", label_installments: "Nº Fois", label_logic: "Logique", logic_rep: "Répliquer", logic_div: "Diviser le total",
+                label_category: "Catégorie", placeholder_cat: "Tapez ou sélectionnez...", label_account: "Compte/Carte", placeholder_acc: "Ex : Espèces, Banque...",
+                label_status: "Statut initial", status_rec: "Reçu", status_pen_rec: "En attente (Prévu)", status_pag: "Payé", status_pen_pag: "En attente (Échéance)",
+                label_is_split: "Diviser avec quelqu'un ?", btn_add_person: "Personne", btn_submit: "Enregistrer la transaction", btn_submit_edit: "Mettre à jour le compte",
+                placeholder_search: "Rechercher...", flt_all_types: "Tous les types", flt_income: "Revenus", flt_expense: "Dépenses", flt_all_status: "Tous les statuts", flt_paid: "Payés/Reçus", flt_pending: "En attente",
+                flt_all_splits: "Toutes", flt_only_splits: "Partages uniquement",
+                th_date: "Date", th_date_purchase: "Date d'achat", th_desc: "Description & Cat.", th_method: "Compte/Carte", th_orig: "Valeur Orig.", th_cost: "Votre coût", th_status: "Statut", th_actions: "Actions",
+                empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)",
+                dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
+                cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter",
+                cfg_imp_title: "Importer une sauvegarde (Strict v1.3.5+)", btn_import: "Restaurer", cfg_del_title: "Effacer la base de données", btn_delete: "Tout effacer",
+                cfg_acc_title: "Compte et Cloud", cfg_acc_user: "Utilisateur déconnecté", cfg_acc_sync: "Dernière synchro :", cfg_acc_btn: "Intégration Google bientôt",
+                cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", 
+                cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système",
+                cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", 
+                cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version 1.4.7",
+                curr_brl: "Réal brésilien (R$)", curr_usd: "Dollar américain ($)", curr_eur: "Euro (€)",
+                opt_month: "Mois :", opt_range: "Période :", str_to: "à",
+                str_received: "Reçu :", str_paid: "Payé :", str_real: "Réel :", str_pending: "En attente :", str_split_pen: "En attente", str_split_paid: "Payé",
+                rem_inc_soon: "revenu(s) à venir", rem_inc_late: "revenu(s) en retard", rem_exp_soon: "dépense(s) arrivant à échéance", rem_exp_late: "dépense(s) en retard",
+                confirm_del: "Supprimer définitivement ?", confirm_clear: "ATTENTION : Tout effacer du navigateur ?", confirm_cascade: "Appliquer le nouveau nom aux prochaines mensualités de ce compte ?",
+                btn_edit: "Modifier", btn_delete_action: "Supprimer", placeholder_name: "Nom", file_choose_btn: "Choisir un fichier", file_no_file: "Aucun fichier",
+                lbl_select_card: "Sélectionnez la carte :", lbl_invoice_total: "Total de la facture", btn_edit_due: "Modifier l'échéance",
+                title_manage: "Gérer", err_csv_invalid: "Fichier incompatible ou ancienne version.",
+                cfg_acc_connected: "Connecté au Cloud", btn_cloud_connect: "Connecter Google Drive", btn_cloud_save: "Enregistrer sur le Cloud", btn_cloud_load: "Charger depuis le Cloud", btn_cloud_disconnect: "Déconnecter",
+                lbl_sync_saved: "(Enregistré)", lbl_sync_loaded: "(Chargé)", msg_sync_success: "Succès !", msg_sync_saving: "Enregistrement...", msg_sync_loading: "Chargement...",
+                confirm_cloud_load: "Sauvegarde trouvée dans le Cloud ! Voulez-vous charger les données sur cet appareil ?", confirm_overwrite: "Attention : Les données du Cloud vont écraser celles de cet appareil. Continuer ?",
+                err_cloud: "Erreur de communication avec le Cloud.", msg_cloud_empty: "Aucune sauvegarde trouvée dans le Cloud.",
+                cfg_tab_style: "Style du menu principal :", opt_tab_both: "Icône et Texte", opt_tab_icons: "Icônes uniquement",
             }
         };
 
@@ -749,14 +799,14 @@
         let userConfig = { 
             lang: localStorage.getItem('flowme_lang') || 'pt', 
             currency: localStorage.getItem('flowme_currency') || 'BRL', 
-            theme: localStorage.getItem('flowme_theme') || 'system', 
+            theme: localStorage.getItem('flowme_theme') || 'system',
+            tabStyle: localStorage.getItem('flowme_tab_style') || 'both',
             mobileFormMode: localStorage.getItem('flowme_form_mode') || 'modal',
             reminderDays: parseInt(localStorage.getItem('flowme_reminder_days') || '3'),
             overdueDays: parseInt(localStorage.getItem('flowme_overdue_days') || '3'),
             notificationsEnabled: localStorage.getItem('flowme_notif') !== 'false'
         };
 
-        // NOTA: O comando resizeTimer está declarado apenas UMA VEZ aqui para evitar o erro!
         let resizeTimer;
         window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { render(); applyFormMode(); }, 200); });
 
@@ -774,6 +824,8 @@
             document.getElementById('cfg-overdue').value = userConfig.overdueDays;
             document.getElementById('cfg-notif').checked = userConfig.notificationsEnabled;
             applyFormMode();
+            document.getElementById('cfg-tab-style').value = userConfig.tabStyle;
+            applyTabStyle();
             
             updateThemeUI(userConfig.theme);
             applyTheme();
@@ -785,13 +837,24 @@
 
         // ================= CONFIG & THEME =================
         function updateLangUI(lang) {
-            const labels = { pt: 'Idioma:', en: 'Language:', es: 'Idioma:' };
+            const labels = { pt: 'Idioma:', en: 'Language:', es: 'Idioma:', fr: 'Langue:' };
             document.getElementById('lbl-language').innerText = labels[lang] || 'Idioma:';
             const actCls = "flex items-center gap-2 px-3 py-2 border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-lg transition text-sm font-bold shadow-sm";
             const inactCls = "flex items-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition text-sm font-medium";
-            ['pt', 'en', 'es'].forEach(l => { document.getElementById('btn-lang-' + l).className = (l === lang) ? actCls : inactCls; });
-            const nms = { pt: { pt: 'Português', en: 'Inglês', es: 'Espanhol' }, en: { pt: 'Portuguese', en: 'English', es: 'Spanish' }, es: { pt: 'Portugués', en: 'Inglés', es: 'Español' } };
-            document.querySelector('#btn-lang-pt .lang-text').innerText = nms[lang].pt; document.querySelector('#btn-lang-en .lang-text').innerText = nms[lang].en; document.querySelector('#btn-lang-es .lang-text').innerText = nms[lang].es;
+            
+            ['pt', 'en', 'es', 'fr'].forEach(l => { document.getElementById('btn-lang-' + l).className = (l === lang) ? actCls : inactCls; });
+            
+            const nms = { 
+                pt: { pt: 'Português', en: 'Inglês', es: 'Espanhol', fr: 'Francês' }, 
+                en: { pt: 'Portuguese', en: 'English', es: 'Spanish', fr: 'French' }, 
+                es: { pt: 'Portugués', en: 'Inglés', es: 'Español', fr: 'Francés' },
+                fr: { pt: 'Portugais', en: 'Anglais', es: 'Espagnol', fr: 'Français' }
+            };
+            
+            document.querySelector('#btn-lang-pt .lang-text').innerText = nms[lang].pt; 
+            document.querySelector('#btn-lang-en .lang-text').innerText = nms[lang].en; 
+            document.querySelector('#btn-lang-es .lang-text').innerText = nms[lang].es;
+            document.querySelector('#btn-lang-fr .lang-text').innerText = nms[lang].fr;
         }
 
         function setLanguage(lang) {
@@ -847,6 +910,29 @@
             if(tabId === 'faturas') populateInvoiceCards();
         }
 
+        // ================= TAB STYLE CONTROLS =================
+        function setTabStyle(style) {
+            userConfig.tabStyle = style;
+            localStorage.setItem('flowme_tab_style', style);
+            applyTabStyle();
+        }
+
+        function applyTabStyle() {
+            const style = userConfig.tabStyle;
+            
+            // Esconde ou mostra os textos (spans)
+            document.querySelectorAll('nav button span[data-i18n]').forEach(span => {
+                if (style === 'icons') span.classList.add('hidden');
+                else span.classList.remove('hidden');
+            });
+            
+            // Tira ou coloca a margem do ícone para ele ficar centralizado
+            document.querySelectorAll('nav button i').forEach(icon => {
+                if (style === 'icons') icon.classList.remove('mr-1');
+                else icon.classList.add('mr-1');
+            });
+        }
+        
         function toggleFilterMode() {
             const mode = document.getElementById('filter-mode').value;
             if (mode === 'month') {

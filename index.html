@@ -709,8 +709,13 @@
                 <button onclick="closeModal('modal-smart-importer')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-4 overflow-y-auto space-y-4">
-                <p class="text-xs text-slate-600 dark:text-slate-400">Identificamos as colunas do seu arquivo. Verifique se o mapeamento abaixo está correto para o cartão <strong id="importer-card-name" class="text-indigo-500 uppercase"></strong>.</p>
+                <p class="text-xs text-slate-600 dark:text-slate-400">Verifique o mapeamento das colunas e defina o nome do cartão para esta fatura.</p>
                 
+                <div>
+                    <label class="block text-[10px] font-bold text-indigo-500 uppercase tracking-wide mb-1">Nome do Cartão / Banco</label>
+                    <input type="text" id="csv-card-name" placeholder="Ex: Nubank, Santander..." class="w-full p-2 border border-indigo-300 dark:border-indigo-500/50 rounded-lg text-sm font-bold text-slate-800 dark:text-slate-100 bg-indigo-50 dark:bg-indigo-900/20 outline-none focus:border-indigo-500">
+                </div>
+
                 <div class="space-y-3 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Coluna de DATA</label>
@@ -728,8 +733,8 @@
 
                 <div class="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                     <label class="flex items-start gap-2 text-xs text-amber-800 dark:text-amber-400 cursor-pointer">
-                        <input type="checkbox" id="csv-invert-value" checked class="mt-0.5 rounded-sm border-slate-300 text-amber-600 focus:ring-amber-500">
-                        <span><strong>Inverter valores negativos?</strong><br>A maioria dos bancos exporta compras com o sinal de menos (ex: -R$50). Deixe marcado para converter em despesas positivas no app.</span>
+                        <input type="checkbox" id="csv-invert-value" checked class="mt-0.5 rounded-sm border-amber-300 text-amber-600 focus:ring-amber-500">
+                        <span><strong>Inverter valores negativos?</strong><br>Bancos costumam exportar gastos com o sinal de menos. Deixe marcado para converter em despesas normais no app.</span>
                     </label>
                 </div>
                 
@@ -905,7 +910,7 @@
                 btn_import_csv: "Importer",
             }
         };
-        const FLOWME_VERSION = '1.7.0';
+        const FLOWME_VERSION = '1.7.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1591,7 +1596,6 @@
         let currentCsvLines = [];
         let currentCsvDelimiter = ',';
 
-        // Lê a linha do CSV com segurança (ignora vírgulas dentro de textos com aspas)
         function parseCSVLine(text, delimiter) {
             let ret = []; let inQuote = false; let value = '';
             for (let ch of text) {
@@ -1605,8 +1609,8 @@
             const file = inputElement.files[0]; if (!file) return;
             const card = document.getElementById('invoice-card-select').value;
             
-            if(!card) { alert("Por favor, selecione para qual Cartão de Crédito você quer importar!"); inputElement.value = ''; return; }
-            document.getElementById('importer-card-name').textContent = card;
+            // Preenche o campo de banco com o que já estiver selecionado, mas deixa o usuário apagar e criar um novo
+            document.getElementById('csv-card-name').value = card || '';
 
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -1614,7 +1618,6 @@
                 currentCsvLines = text.split('\n').filter(l => l.trim().length > 0);
                 if(currentCsvLines.length === 0) return;
                 
-                // Adivinha o delimitador: Se tiver vírgula, é CSV padrão. Se não, tenta ponto-e-vírgula (padrão Brasil).
                 currentCsvDelimiter = currentCsvLines[0].includes(',') ? ',' : ';';
                 const headers = parseCSVLine(currentCsvLines[0], currentCsvDelimiter);
                 
@@ -1630,15 +1633,17 @@
                 });
                 
                 document.getElementById('modal-smart-importer').classList.remove('hidden');
-                inputElement.value = ''; // Limpa o input
+                inputElement.value = ''; 
             };
             reader.readAsText(file);
         }
 
         function processSmartImport() {
-            const card = document.getElementById('invoice-card-select').value;
+            const card = document.getElementById('csv-card-name').value.trim();
+            if(!card) { alert("Por favor, digite o nome do Cartão/Banco!"); return; }
+            
             const invoiceMonth = state.currentMonth;
-            const batchId = 'import-' + Date.now();
+            const batchId = 'import-' + Date.now(); // Etiqueta secreta atrelada a este clique
             
             const iDate = parseInt(document.getElementById('csv-col-date').value);
             const iDesc = parseInt(document.getElementById('csv-col-desc').value);
@@ -1649,41 +1654,36 @@
             
             for(let i = 1; i < currentCsvLines.length; i++) {
                 const cols = parseCSVLine(currentCsvLines[i], currentCsvDelimiter);
-                if(cols.length <= Math.max(iDate, iDesc, iVal)) continue; // Linha vazia ou quebrada
+                if(cols.length <= Math.max(iDate, iDesc, iVal)) continue; 
                 
-                // 1. O VALOR
-                let rawVal = cols[iVal].replace(/R\$\s*/g, '').replace(/[a-zA-Z]/g, '').trim(); // Remove letras e R$
+                let rawVal = cols[iVal].replace(/R\$\s*/g, '').replace(/[a-zA-Z]/g, '').trim(); 
                 if(!rawVal) continue;
-                // Arruma a bagunça matemática de bancos brasileiros vs americanos
-                if(rawVal.includes(',') && rawVal.includes('.')) rawVal = rawVal.replace(/\./g, '').replace(',', '.'); // Ex: 1.500,00 -> 1500.00
-                else if (rawVal.includes(',')) rawVal = rawVal.replace(',', '.'); // Ex: 50,00 -> 50.00
+                if(rawVal.includes(',') && rawVal.includes('.')) rawVal = rawVal.replace(/\./g, '').replace(',', '.'); 
+                else if (rawVal.includes(',')) rawVal = rawVal.replace(',', '.'); 
                 
                 let finalVal = parseFloat(rawVal); if(isNaN(finalVal)) continue;
-                if(invertVals) finalVal = Math.abs(finalVal); // Se vier -50, vira 50.
-                if(finalVal === 0) continue; // Ignora pagamentos de fatura zerados
+                if(invertVals) finalVal = Math.abs(finalVal); 
+                if(finalVal === 0) continue; 
                 
-                // 2. A DATA
                 let rawDate = cols[iDate].trim();
                 let finalDate = rawDate;
-                if(rawDate.includes('/')) { // Formato brasileiro DD/MM/YYYY
+                if(rawDate.includes('/')) { 
                     const p = rawDate.split('/');
-                    if(p.length === 3) finalDate = `${p[2].length === 2 ? '20'+p[2] : p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+                    if(p.length >= 3) finalDate = `${p[2].length === 2 ? '20'+p[2] : p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
                 }
                 
-                // 3. A DESCRIÇÃO
                 const desc = cols[iDesc].trim(); if(!desc) continue;
                 
-                // CRIA A TRANSAÇÃO NO APP
                 state.transactions.push({
                     id: 't-' + Date.now() + i,
-                    groupId: batchId,        // Etiqueta atrelada
-                    type: 'despesa',         // Importação de faturas sempre entra como despesa
+                    groupId: batchId,        
+                    type: 'despesa',         
                     expenseType: 'credito',
                     invoiceMonth: invoiceMonth,
                     description: desc,
                     value: finalVal,
                     date: finalDate,
-                    category: 'Importado',   // Categoria genérica para arrumar depois
+                    category: 'Importado',   
                     paymentMethod: card,
                     status: 'pendente',
                     splits: []
@@ -1691,9 +1691,45 @@
                 count++;
             }
             
-            saveState(); renderFaturas(); render(); updateAutocompleteLists();
+            saveState(); 
+            populateInvoiceCards(); // Atualiza a lista caso você tenha criado um banco novo
+            document.getElementById('invoice-card-select').value = card; // Força a tela a olhar para o banco importado
+            renderFaturas(); render(); updateAutocompleteLists();
             closeModal('modal-smart-importer');
-            showUpdateSuccess(`${count} transações importadas!`);
+            
+            showImportSuccessToast(count, batchId); // Dispara a barra preta
+        }
+
+        // ================= SISTEMA DE TOAST (DESFAZER) =================
+        function showImportSuccessToast(count, batchId) {
+            const toast = document.createElement('div');
+            toast.id = 'toast-' + batchId;
+            toast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl z-[100] flex items-center gap-4 text-sm transition-all duration-500 opacity-0 translate-y-10 w-[90%] max-w-sm justify-between';
+            toast.innerHTML = `
+                <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> <span class="font-medium">${count} contas importadas!</span></div>
+                <button onclick="undoImport('${batchId}'); this.parentElement.remove()" class="shrink-0 text-amber-400 font-bold hover:text-amber-300 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded hover:bg-slate-700 transition border border-slate-600">Desfazer</button>
+            `;
+            document.body.appendChild(toast);
+            
+            // Faz o toast subir suavemente
+            setTimeout(() => toast.classList.remove('opacity-0', 'translate-y-10'), 100);
+            
+            // Fica na tela por 8 segundos para dar tempo de você clicar
+            setTimeout(() => {
+                if(document.body.contains(toast)) {
+                    toast.classList.add('opacity-0', 'translate-y-10');
+                    setTimeout(() => toast.remove(), 500);
+                }
+            }, 8000);
+        }
+
+        function undoImport(batchId) {
+            state.transactions = state.transactions.filter(t => t.groupId !== batchId);
+            saveState();
+            populateInvoiceCards();
+            renderFaturas();
+            render();
+            updateAutocompleteLists();
         }
         
 // ================= DASHBOARD & CHARTS =================

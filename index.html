@@ -80,18 +80,18 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (Filtros e Salvar) ================= -->    
-    <section id="global-toolbar" class="bg-white border-b border-slate-200 py-3 px-4 shadow-sm transition-all duration-300">
+    <section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
             
-            <!-- 1. FILTRO DE DATA (Caixa compacta e centralizada) -->
+            <!-- 1. FILTRO DE DATA -->
             <div class="flex justify-center w-full md:w-auto">
-                <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 overflow-x-auto">
-                    <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2">
+                <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                    <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2 shrink-0">
                         <option value="month" data-i18n="opt_month">Mês:</option>
                         <option value="range" data-i18n="opt_range">Período:</option>
                     </select>
                     
-                    <div id="mode-month" class="flex items-center gap-1">
+                    <div id="mode-month" class="flex items-center gap-1 shrink-0">
                         <button onclick="changeMonthOffset(-1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Mês Anterior">
                             <i class="fa-solid fa-chevron-left"></i>
                         </button>
@@ -101,7 +101,7 @@
                         </button>
                     </div>
 
-                    <div id="mode-range" class="hidden items-center gap-2">
+                    <div id="mode-range" class="hidden items-center gap-2 shrink-0">
                         <input type="date" id="date-start" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
                         <span class="text-slate-400 text-xs font-medium" data-i18n="str_to">até</span>
                         <input type="date" id="date-end" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
@@ -110,8 +110,8 @@
             </div>
             
             <!-- 2. ALERTAS E SALVAMENTO -->
-            <div class="flex items-center justify-between w-full md:w-auto gap-4 mt-1 md:mt-0">
-                <div id="alert-zone" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"></div>
+            <div class="flex items-center justify-between w-full md:w-auto gap-4 mt-2 md:mt-0">
+                <div id="alert-zone" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto [&::-webkit-scrollbar]:hidden"></div>
                 
                 <div class="flex items-center gap-3 shrink-0 ml-auto">
                     <span id="last-save-time" class="hidden sm:inline text-[10px] text-slate-400 font-medium tracking-wide">
@@ -125,6 +125,8 @@
             
         </div>
     </section>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 min-w-0">
     
 <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">
@@ -621,9 +623,10 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.9</span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.95</span></p>
             </div>
         </div>
+    </main>
 
 <!-- ================= BLOCO 8: MODAIS (Alertas, Edição, etc) ================= -->
     <!-- MODALS -->
@@ -699,7 +702,7 @@
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
-                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.9",
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.95",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
                 opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
@@ -738,7 +741,7 @@
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
                 cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
-                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.9",
+                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.95",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
                 opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
@@ -777,7 +780,7 @@
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
-                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.9",
+                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.95",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
                 opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
@@ -816,7 +819,7 @@
                 cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", 
                 cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système",
                 cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", 
-                cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version 1.4.9",
+                cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version 1.4.95",
                 curr_brl: "Réal brésilien (R$)", curr_usd: "Dollar américain ($)", curr_eur: "Euro (€)",
                 opt_month: "Mois :", opt_range: "Période :", str_to: "à",
                 str_received: "Reçu :", str_paid: "Payé :", str_real: "Réel :", str_pending: "En attente :", str_split_pen: "En attente", str_split_paid: "Payé",

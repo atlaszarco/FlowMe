@@ -910,7 +910,7 @@
                 btn_import_csv: "Importer",
             }
         };
-        const FLOWME_VERSION = '1.7.5';
+        const FLOWME_VERSION = '1.8.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1429,7 +1429,91 @@
             toggleMobileForm(false);
         }
 
-        function deleteTransaction(id) { if(confirm(t('confirm_del'))) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); render(); updateAutocompleteLists(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
+        // ================= SISTEMA DE EXCLUSÃO COM DESFAZER (UNDO) =================
+        let pendingDeletions = {}; // A "gaveta" fotográfica temporária
+
+        function deleteTransaction(id) { 
+            // 1. Encontra a transação e tira uma "foto" dela
+            const trxIndex = state.transactions.findIndex(t => t.id === id);
+            if (trxIndex === -1) return;
+            const deletedTrx = state.transactions[trxIndex];
+            
+            // 2. Remove do banco de dados oficial instantaneamente
+            state.transactions.splice(trxIndex, 1);
+            
+            // 3. Salva e atualiza as tabelas na mesma hora
+            saveState(); 
+            render(); 
+            if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas();
+            updateAutocompleteLists(); 
+            
+            // 4. Sincroniza silenciosamente com o Google Drive
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
+            
+            // 5. Chama a barra preta passando
+            showDeleteToast(deletedTrx);
+        }
+
+        function showDeleteToast(trx) {
+            const toastId = 'toast-del-' + trx.id;
+            
+            // Evita que as barras se acumulem se você apagar várias coisas rápido
+            const existing = document.getElementById(toastId);
+            if(existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.id = toastId;
+            toast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl z-[100] flex items-center gap-4 text-sm transition-all duration-500 opacity-0 translate-y-10 w-[90%] max-w-sm justify-between';
+            
+            // Encurta o nome se for muito grande para não quebrar a barra
+            const shortName = trx.description.length > 15 ? trx.description.substring(0, 15) + '...' : trx.description;
+
+            toast.innerHTML = `
+                <div class="flex items-center gap-2 min-w-0">
+                    <i class="fa-solid fa-trash-can text-rose-400 text-lg shrink-0"></i> 
+                    <span class="font-medium truncate">Excluída: ${shortName}</span>
+                </div>
+                <button onclick="undoDelete('${trx.id}'); this.parentElement.remove()" class="shrink-0 text-amber-400 font-bold hover:text-amber-300 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded hover:bg-slate-700 transition border border-slate-600">Desfazer</button>
+            `;
+            document.body.appendChild(toast);
+            
+            // Animação de subida suave
+            setTimeout(() => toast.classList.remove('opacity-0', 'translate-y-10'), 100);
+            
+            // Guarda a foto na gaveta
+            pendingDeletions[trx.id] = trx;
+
+            // Timer de 6 segundos para desaparecer
+            setTimeout(() => {
+                if(document.body.contains(toast)) {
+                    toast.classList.add('opacity-0', 'translate-y-10');
+                    setTimeout(() => {
+                        toast.remove();
+                        delete pendingDeletions[trx.id]; // Joga a foto fora definitivamente
+                    }, 500);
+                }
+            }, 6000);
+        }
+
+        function undoDelete(id) {
+            const trx = pendingDeletions[id];
+            if (!trx) return; // Se a foto não estiver mais lá, aborta
+            
+            // 1. Devolve a transação exatamente como era para o banco oficial
+            state.transactions.push(trx);
+            
+            // 2. Limpa da gaveta de pendências
+            delete pendingDeletions[id];
+            
+            // 3. Salva, renderiza a tela e atualiza a nuvem
+            saveState(); 
+            render(); 
+            if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas();
+            updateAutocompleteLists(); 
+            
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+        
         function toggleStatus(id) { const index = state.transactions.findIndex(t => t.id === id); if(index !== -1) { state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
         function toggleSplitStatus(transactionId, splitIndex) { const tIndex = state.transactions.findIndex(t => t.id === transactionId); if(tIndex !== -1) { const s = state.transactions[tIndex].splits[splitIndex]; s.status = s.status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
 

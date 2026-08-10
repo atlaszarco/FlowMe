@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlowMe</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2310b981'/><text x='50%' y='52%' font-family='sans-serif' font-size='65' font-weight='bold' fill='white' dominant-baseline='middle' text-anchor='middle'>$</text></svg>">
-
+    
     <link rel="manifest" href="./manifest.json">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -501,7 +501,6 @@
                 <!-- WRAPPER PARA OS DOIS BLOCOS MENORES NO LADO ESQUERDO -->
                 <div class="flex flex-col gap-6">
                     <!-- BLOCO DE APARÊNCIA -->
-                   <!-- BLOCO DE APARÊNCIA -->
                     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors">
                         <div class="border-b border-slate-100 pb-4 mb-4">
                             <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-palette text-amber-500 mr-2"></i> <span data-i18n="cfg_appearance_title">Aparência</span></h2>
@@ -683,7 +682,7 @@
                 cfg_acc_connected: "Conectado à Nuvem", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Salvar na Nuvem", btn_cloud_load: "Puxar da Nuvem", btn_cloud_disconnect: "Desconectar",
                 lbl_sync_saved: "(Salvo)", lbl_sync_loaded: "(Puxado)", msg_sync_success: "Sucesso!", msg_sync_saving: "Salvando...", msg_sync_loading: "Puxando...",
                 confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
-                err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem."
+                err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.",
                 cfg_form_mode: "Estilo do Formulário (Celular):", opt_mode_modal: "Botão Flutuante (Modal)", opt_mode_collapse: "Retrátil (Sanfona)",
             },
             en: {
@@ -721,7 +720,8 @@
                 cfg_acc_connected: "Connected to Cloud", btn_cloud_connect: "Connect Google Drive", btn_cloud_save: "Save to Cloud", btn_cloud_load: "Load from Cloud", btn_cloud_disconnect: "Disconnect",
                 lbl_sync_saved: "(Saved)", lbl_sync_loaded: "(Loaded)", msg_sync_success: "Success!", msg_sync_saving: "Saving...", msg_sync_loading: "Loading...",
                 confirm_cloud_load: "Cloud backup found! Do you want to load data to this device?", confirm_overwrite: "Warning: Cloud data will overwrite this device's current data. Continue?",
-                err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found."
+                err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found.",
+                cfg_form_mode: "Estilo do Formulário (Celular):", opt_mode_modal: "Botão Flutuante (Modal)", opt_mode_collapse: "Retrátil (Sanfona)",
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -758,7 +758,8 @@
                 cfg_acc_connected: "Conectado a la Nube", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Guardar en la Nube", btn_cloud_load: "Cargar de la Nube", btn_cloud_disconnect: "Desconectar",
                 lbl_sync_saved: "(Guardado)", lbl_sync_loaded: "(Cargado)", msg_sync_success: "¡Éxito!", msg_sync_saving: "Guardando...", msg_sync_loading: "Cargando...",
                 confirm_cloud_load: "¡Copia de seguridad encontrada! ¿Deseas cargar los datos a este dispositivo?", confirm_overwrite: "Atención: Los datos de la nube sobrescribirán los de este dispositivo. ¿Continuar?",
-                err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube."
+                err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube.",
+                cfg_form_mode: "Estilo do Formulário (Celular):", opt_mode_modal: "Botão Flutuante (Modal)", opt_mode_collapse: "Retrátil (Sanfona)",
             }
         };
 
@@ -773,6 +774,7 @@
             notificationsEnabled: localStorage.getItem('flowme_notif') !== 'false'
         };
 
+        // NOTA: O comando resizeTimer está declarado apenas UMA VEZ aqui para evitar o erro!
         let resizeTimer;
         window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { render(); applyFormMode(); }, 200); });
 
@@ -780,7 +782,7 @@
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('PWA SW erro:', err));
             }
-           
+            
             const today = new Date();
             state.currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
             document.getElementById('global-month').value = state.currentMonth;
@@ -1195,6 +1197,9 @@
             document.querySelector('input[name="type"][value="receita"]').checked = true; toggleTypeFields('receita'); addSplitRow(); document.getElementById('date').value = dateStr;
             
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
+            
+            // NOVO: Fecha o formulário no celular após salvar
+            toggleMobileForm(false);
         }
 
         function editTransaction(id) {
@@ -1215,7 +1220,10 @@
 
             document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> <span data-i18n="form_title_edit">${t('form_title_edit')}</span>`;
             document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-check"></i> <span data-i18n="btn_submit_edit">${t('btn_submit_edit')}</span>`;
-            document.getElementById('btn-cancel-edit').classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('btn-cancel-edit').classList.remove('hidden'); 
+            
+            toggleMobileForm(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function cancelEdit() {
@@ -1223,6 +1231,8 @@
             document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-plus-circle text-emerald-500"></i> <span data-i18n="form_title_new">${t('form_title_new')}</span>`;
             document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">${t('btn_submit')}</span>`;
             document.getElementById('btn-cancel-edit').classList.add('hidden'); toggleTypeFields('receita'); addSplitRow();
+            
+            toggleMobileForm(false);
         }
 
         function deleteTransaction(id) { if(confirm(t('confirm_del'))) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); render(); updateAutocompleteLists(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }

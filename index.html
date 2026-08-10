@@ -565,7 +565,7 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.2</span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.31</span></p>
             </div>
         </div>
     </main>
@@ -644,7 +644,7 @@
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
-                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.2",
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.31",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
                 opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
@@ -681,7 +681,7 @@
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
                 cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
-                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.2",
+                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.31",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
                 opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
@@ -718,7 +718,7 @@
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
-                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.2",
+                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.31",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
                 opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
@@ -1520,6 +1520,30 @@
                 userInfo.classList.add('opacity-50');
             }
         }
+        
+        async function findOrCreateAppFolder() {
+            const folderName = "FlowMe App";
+            try {
+                // 1. Procura a pasta
+                const resp = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false&spaces=drive&fields=files(id)&pageSize=1`, {
+                    headers: { 'Authorization': 'Bearer ' + accessToken }
+                });
+                const data = await resp.json();
+                if (data.files && data.files.length > 0) return data.files[0].id;
+
+                // 2. Se não achar, cria a pasta
+                const createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: folderName, mimeType: 'application/vnd.google-apps.folder' })
+                });
+                const createData = await createResp.json();
+                return createData.id;
+            } catch (err) {
+                console.error("Erro ao gerenciar pasta:", err);
+                return null;
+            }
+        }
 
         async function findCloudFile() {
             try {
@@ -1544,13 +1568,19 @@
                 let existingFile = await findCloudFile();
                 
                 if (existingFile) {
+                    // Atualiza o arquivo existente onde quer que ele esteja
                     await fetch('https://www.googleapis.com/upload/drive/v3/files/' + existingFile.id + '?uploadType=media', {
                         method: 'PATCH', headers: new Headers({ 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' }), body: fileContent
                     });
                 } else {
+                    // Cria o arquivo novo DENTRO da pasta
+                    const folderId = await findOrCreateAppFolder();
+                    const metadata = { name: 'flowme_backup.json', mimeType: 'application/json' };
+                    if (folderId) metadata.parents = [folderId]; // Diz ao Drive para colocar na pasta
+
                     const boundary = '-------314159265358979323846';
                     const delimiter = "\r\n--" + boundary + "\r\n"; const close_delim = "\r\n--" + boundary + "--";
-                    const multipartRequestBody = delimiter + 'Content-Type: application/json\r\n\r\n' + JSON.stringify({ name: 'flowme_backup.json', mimeType: 'application/json' }) + delimiter + 'Content-Type: application/json\r\n\r\n' + fileContent + close_delim;
+                    const multipartRequestBody = delimiter + 'Content-Type: application/json\r\n\r\n' + JSON.stringify(metadata) + delimiter + 'Content-Type: application/json\r\n\r\n' + fileContent + close_delim;
 
                     await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
                         method: 'POST', headers: new Headers({ 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'multipart/related; boundary=' + boundary }), body: multipartRequestBody

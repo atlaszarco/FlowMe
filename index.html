@@ -910,7 +910,7 @@
                 btn_import_csv: "Importer",
             }
         };
-        const FLOWME_VERSION = '1.8.2';
+        const FLOWME_VERSION = '1.8.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1921,20 +1921,45 @@
                 }
             });
 
-            // 4. Evolução (Últimos 6 Meses Fixos)
+            // 4. Evolução (Dinâmica baseada no Filtro Global)
+            const filterMode = document.getElementById('filter-mode').value;
             const months = [];
-            const today = new Date();
-            for(let i=5; i>=0; i--) {
-                const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-                months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+            
+            if (filterMode === 'month') {
+                // Mostra o mês selecionado no topo como o ÚLTIMO, e os 5 anteriores a ele
+                const [selYear, selMonth] = state.currentMonth.split('-').map(Number);
+                for(let i = 5; i >= 0; i--) {
+                    const d = new Date(selYear, selMonth - 1 - i, 1);
+                    months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+                }
+            } else {
+                // Mostra exatamente os meses contidos no período selecionado
+                const dStart = document.getElementById('date-start').value;
+                const dEnd = document.getElementById('date-end').value;
+                if (dStart && dEnd) {
+                    const start = new Date(dStart + 'T12:00:00');
+                    const end = new Date(dEnd + 'T12:00:00');
+                    let curr = new Date(start.getFullYear(), start.getMonth(), 1);
+                    const endLimit = new Date(end.getFullYear(), end.getMonth(), 1);
+                    
+                    while (curr <= endLimit && months.length < 60) { // Limite de segurança de 5 anos
+                        months.push(`${curr.getFullYear()}-${String(curr.getMonth() + 1).padStart(2, '0')}`);
+                        curr.setMonth(curr.getMonth() + 1);
+                    }
+                } else {
+                    months.push(state.currentMonth);
+                }
             }
             
-            let evInc = [0,0,0,0,0,0];
-            let evExp = [0,0,0,0,0,0];
+            // Preenche os arrays de valores com zeros, do exato tamanho dos meses gerados
+            let evInc = new Array(months.length).fill(0);
+            let evExp = new Array(months.length).fill(0);
 
+            // Verifica as transações e as encaixa no mês correspondente
             state.transactions.forEach(trx => {
                 const compDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
                 if(!compDate) return;
+                
                 const idx = months.indexOf(compDate);
                 if(idx !== -1) {
                     let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
@@ -1943,8 +1968,10 @@
                 }
             });
 
+            // Formata os rótulos para exibição (Ex: 08/26)
             const evLabels = months.map(m => { const pts = m.split('-'); return `${pts[1]}/${pts[0].substring(2)}`; });
 
+            // Desenha o gráfico
             if(chartEvolution) chartEvolution.destroy();
             chartEvolution = new Chart(document.getElementById('chart-evolution'), {
                 type: 'line',
@@ -1962,7 +1989,6 @@
                     interaction: { mode: 'index', intersect: false }
                 }
             });
-        }
         
         // ================= FATURAS ABA =================
         function populateInvoiceCards() {

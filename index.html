@@ -416,10 +416,40 @@
         </div>
 
 <!-- ================= BLOCO 6: ABA DASHBOARD ================= -->
-        <div id="content-dashboard" class="tab-content hidden flex-col items-center justify-center min-h-[50vh] text-center">
-            <i class="fa-solid fa-person-digging text-6xl text-slate-300 dark:text-slate-600 mb-4"></i>
-            <h2 class="text-2xl font-bold text-slate-700 dark:text-slate-300" data-i18n="dash_wip_title">Em construção</h2>
-            <p class="text-slate-500 dark:text-slate-400 mt-2" data-i18n="dash_wip_desc">Esta seção estará disponível em breve.</p>
+        <div id="content-dashboard" class="tab-content hidden max-w-7xl mx-auto space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Gráfico 1: Fluxo de Caixa -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
+                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_cashflow">Fluxo de Caixa (Mês)</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="chart-cashflow"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 2: Despesas por Categoria -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
+                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_categories">Despesas por Categoria</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="chart-categories"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 3: Evolução 6 Meses -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
+                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_evolution">Evolução (Últimos 6 Meses)</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="chart-evolution"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 4: Gastos por Conta/Cartão -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
+                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_accounts">Gastos por Conta / Cartão</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="chart-accounts"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
 
 <!-- ================= BLOCO 7: ABA CONFIGURAÇÕES ================= -->
@@ -587,7 +617,7 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.71</span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão 1.4.8</span></p>
             </div>
         </div>
 
@@ -665,7 +695,7 @@
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
-                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.71",
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão 1.4.8",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
                 opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
@@ -679,6 +709,7 @@
                 confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
                 err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.",
                 cfg_tab_style: "Estilo do Menu Principal:", opt_tab_both: "Ícone e Texto", opt_tab_icons: "Apenas Ícones",
+                chart_cashflow: "Fluxo de Caixa (Filtro Atual)", chart_categories: "Despesas por Categoria", chart_evolution: "Evolução (Últimos 6 Meses)", chart_accounts: "Gastos por Conta / Cartão", lbl_chart_inc: "Receitas", lbl_chart_exp: "Despesas",
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -703,7 +734,7 @@
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
                 cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
-                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.71",
+                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version 1.4.8",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
                 opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
@@ -717,6 +748,7 @@
                 confirm_cloud_load: "Cloud backup found! Do you want to load data to this device?", confirm_overwrite: "Warning: Cloud data will overwrite this device's current data. Continue?",
                 err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found.",
                 cfg_tab_style: "Main Menu Style:", opt_tab_both: "Icon and Text", opt_tab_icons: "Icons Only",
+                chart_cashflow: "Cash Flow (Current Filter)", chart_categories: "Expenses by Category", chart_evolution: "Evolution (Last 6 Months)", chart_accounts: "Expenses by Account / Card", lbl_chart_inc: "Income", lbl_chart_exp: "Expenses",
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -741,7 +773,7 @@
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
-                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.71",
+                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión 1.4.8",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
                 opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
@@ -755,6 +787,7 @@
                 confirm_cloud_load: "¡Copia de seguridad encontrada! ¿Deseas cargar los datos a este dispositivo?", confirm_overwrite: "Atención: Los datos de la nube sobrescribirán los de este dispositivo. ¿Continuar?",
                 err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube.",
                 cfg_tab_style: "Estilo del Menú Principal:", opt_tab_both: "Icono y Texto", opt_tab_icons: "Solo Iconos",
+                chart_cashflow: "Flujo de Caja (Filtro Actual)", chart_categories: "Gastos por Categoría", chart_evolution: "Evolución (Últimos 6 Meses)", chart_accounts: "Gastos por Cuenta / Tarjeta", lbl_chart_inc: "Ingresos", lbl_chart_exp: "Gastos",
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -779,7 +812,7 @@
                 cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", 
                 cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système",
                 cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", 
-                cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version 1.4.71",
+                cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version 1.4.8",
                 curr_brl: "Réal brésilien (R$)", curr_usd: "Dollar américain ($)", curr_eur: "Euro (€)",
                 opt_month: "Mois :", opt_range: "Période :", str_to: "à",
                 str_received: "Reçu :", str_paid: "Payé :", str_real: "Réel :", str_pending: "En attente :", str_split_pen: "En attente", str_split_paid: "Payé",
@@ -793,6 +826,7 @@
                 confirm_cloud_load: "Sauvegarde trouvée dans le Cloud ! Voulez-vous charger les données sur cet appareil ?", confirm_overwrite: "Attention : Les données du Cloud vont écraser celles de cet appareil. Continuer ?",
                 err_cloud: "Erreur de communication avec le Cloud.", msg_cloud_empty: "Aucune sauvegarde trouvée dans le Cloud.",
                 cfg_tab_style: "Style du menu principal :", opt_tab_both: "Icône et Texte", opt_tab_icons: "Icônes uniquement",
+                chart_cashflow: "Flux de trésorerie (Filtre actuel)", chart_categories: "Dépenses par catégorie", chart_evolution: "Évolution (6 derniers mois)", chart_accounts: "Dépenses par compte / carte", lbl_chart_inc: "Revenus", lbl_chart_exp: "Dépenses",
             }
         };
 
@@ -899,7 +933,12 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`content-${tabId}`).classList.remove('hidden');
-            if (tabId === 'dashboard') document.getElementById(`content-${tabId}`).classList.add('flex');
+            
+            if (tabId === 'dashboard') {
+                document.getElementById(`content-${tabId}`).classList.remove('flex'); // remove a classe antiga
+                document.getElementById(`content-${tabId}`).classList.add('block');
+                render();
+            }
             
             document.querySelectorAll('nav button').forEach(btn => { btn.className = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white whitespace-nowrap"; });
             const actCls = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-emerald-500 text-slate-950 shadow-sm whitespace-nowrap";
@@ -1431,8 +1470,155 @@
             if(allAlerts.length > maxBadges) html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200 rounded text-[10px] font-bold shadow-sm hover:bg-slate-300 transition"> +${allAlerts.length - maxBadges} alertas</button>`;
             else if (allAlerts.length > 0) html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition"><i class="fa-solid fa-list"></i> Ver</button>`;
             alerts.innerHTML = html;
+
+            renderDashboard(filtered);
         }
 
+// ================= DASHBOARD & CHARTS =================
+        let chartCashflow, chartCategories, chartEvolution, chartAccounts;
+
+        function renderDashboard(filtered) {
+            const dash = document.getElementById('content-dashboard');
+            if (dash.classList.contains('hidden')) return; 
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#cbd5e1' : '#64748b';
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+            Chart.defaults.color = textColor;
+            Chart.defaults.font.family = 'Inter, sans-serif';
+
+            // 1. Fluxo de Caixa (Barras)
+            let tInc = 0, tExp = 0;
+            filtered.forEach(trx => {
+                let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
+                let cost = trx.type === 'despesa' ? (trx.value - rowSplit) : trx.value;
+                if(trx.type === 'receita') tInc += cost; else tExp += cost;
+            });
+
+            if(chartCashflow) chartCashflow.destroy();
+            chartCashflow = new Chart(document.getElementById('chart-cashflow'), {
+                type: 'bar',
+                data: {
+                    labels: [t('lbl_chart_inc') || 'Receitas', t('lbl_chart_exp') || 'Despesas'],
+                    datasets: [{
+                        data: [tInc, tExp],
+                        backgroundColor: ['#10b981', '#f43f5e'],
+                        borderRadius: 6,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => formatCurrency(ctx.raw) } } },
+                    scales: { y: { grid: { color: gridColor }, ticks: { callback: (val) => formatCurrency(val) } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // 2. Despesas por Categoria (Rosca)
+            let catMap = {};
+            filtered.forEach(trx => {
+                if(trx.type === 'despesa') {
+                    let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
+                    let cost = trx.value - rowSplit;
+                    if(cost > 0) {
+                        const c = trx.category || 'Outros';
+                        catMap[c] = (catMap[c] || 0) + cost;
+                    }
+                }
+            });
+            const catLabels = Object.keys(catMap).sort((a,b) => catMap[b] - catMap[a]);
+            const catData = catLabels.map(l => catMap[l]);
+            const catColors = ['#f43f5e', '#f59e0b', '#3b82f6', '#8b5cf6', '#d946ef', '#ec4899', '#14b8a6', '#64748b', '#0ea5e9', '#f97316'];
+
+            if(chartCategories) chartCategories.destroy();
+            chartCategories = new Chart(document.getElementById('chart-categories'), {
+                type: 'doughnut',
+                data: {
+                    labels: catLabels.length ? catLabels : ['-'],
+                    datasets: [{ data: catData.length ? catData : [1], backgroundColor: catData.length ? catColors : [gridColor], borderWidth: isDark ? 2 : 1, borderColor: isDark ? '#1e293b' : '#ffffff' }]
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, cutout: '65%', 
+                    plugins: { 
+                        legend: { position: 'right', labels: { boxWidth: 12, padding: 15 } },
+                        tooltip: { callbacks: { label: (ctx) => catData.length ? formatCurrency(ctx.raw) : '0' } }
+                    } 
+                }
+            });
+
+            // 3. Gastos por Conta / Cartão (Barras Horizontais)
+            let accMap = {};
+            filtered.forEach(trx => {
+                if(trx.type === 'despesa') {
+                    let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
+                    let cost = trx.value - rowSplit;
+                    if(cost > 0) {
+                        const acc = trx.paymentMethod || 'Outros';
+                        accMap[acc] = (accMap[acc] || 0) + cost;
+                    }
+                }
+            });
+            const accLabels = Object.keys(accMap).sort((a,b) => accMap[b] - accMap[a]);
+            const accData = accLabels.map(l => accMap[l]);
+
+            if(chartAccounts) chartAccounts.destroy();
+            chartAccounts = new Chart(document.getElementById('chart-accounts'), {
+                type: 'bar',
+                data: {
+                    labels: accLabels.length ? accLabels : ['-'],
+                    datasets: [{ label: t('lbl_chart_exp') || 'Despesas', data: accData.length ? accData : [0], backgroundColor: '#8b5cf6', borderRadius: 4 }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => accData.length ? formatCurrency(ctx.raw) : '0' } } },
+                    scales: { x: { grid: { color: gridColor }, ticks: { callback: (val) => formatCurrency(val) } }, y: { grid: { display: false } } }
+                }
+            });
+
+            // 4. Evolução (Últimos 6 Meses Fixos)
+            const months = [];
+            const today = new Date();
+            for(let i=5; i>=0; i--) {
+                const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+                months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+            }
+            
+            let evInc = [0,0,0,0,0,0];
+            let evExp = [0,0,0,0,0,0];
+
+            state.transactions.forEach(trx => {
+                const compDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
+                if(!compDate) return;
+                const idx = months.indexOf(compDate);
+                if(idx !== -1) {
+                    let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
+                    let cost = trx.type === 'despesa' ? (trx.value - rowSplit) : trx.value;
+                    if(trx.type === 'receita') evInc[idx] += cost; else evExp[idx] += cost;
+                }
+            });
+
+            const evLabels = months.map(m => { const pts = m.split('-'); return `${pts[1]}/${pts[0].substring(2)}`; });
+
+            if(chartEvolution) chartEvolution.destroy();
+            chartEvolution = new Chart(document.getElementById('chart-evolution'), {
+                type: 'line',
+                data: {
+                    labels: evLabels,
+                    datasets: [
+                        { label: t('lbl_chart_inc') || 'Receitas', data: evInc, borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.3, borderWidth: 2 },
+                        { label: t('lbl_chart_exp') || 'Despesas', data: evExp, borderColor: '#f43f5e', backgroundColor: '#f43f5e', tension: 0.3, borderWidth: 2 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}` } } },
+                    scales: { y: { grid: { color: gridColor }, ticks: { callback: (val) => formatCurrency(val) } }, x: { grid: { color: gridColor } } },
+                    interaction: { mode: 'index', intersect: false }
+                }
+            });
+        }
+        
         // ================= FATURAS ABA =================
         function populateInvoiceCards() {
             const cards = [...new Set(state.transactions.filter(t => t.type === 'despesa' && t.expenseType === 'credito').map(t => t.paymentMethod))].filter(Boolean);

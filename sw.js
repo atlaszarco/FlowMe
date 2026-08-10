@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowme-v1.4.2';
+const CACHE_NAME = 'flowme-v1.4.31';
 const urlsToCache = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (event) => {

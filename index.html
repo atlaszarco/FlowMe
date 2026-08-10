@@ -910,7 +910,7 @@
                 btn_import_csv: "Importer",
             }
         };
-        const FLOWME_VERSION = '1.8.0';
+        const FLOWME_VERSION = '1.8.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1637,41 +1637,44 @@
 
             // ALERTS
             const alerts = document.getElementById('alert-zone'); alerts.innerHTML = '';
-            if(!userConfig.notificationsEnabled) return;
-            let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [];
-
-            state.transactions.forEach(trx => {
-                if(trx.status !== 'pendente') return;
-                const dueDate = getDueDate(trx); if(!dueDate) return;
-                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
-                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) { trx.type === 'receita' ? aIncLate.push(trx) : aExpLate.push(trx); }
-                else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
-            });
-
-            const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon];
-            if(allAlerts.length === 0) return;
-
-            let maxBadges = 3;
-            if(window.innerWidth < 640) maxBadges = 1;
-            else if (window.innerWidth < 1024) maxBadges = 2;
-
-            let html = ''; let shown = 0;
-            const buildBadge = (arr, msgKey, colorClass, icon) => {
-                if(arr.length > 0 && shown < maxBadges) { html += `<div class="${colorClass} px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`; shown++; }
-            };
-            buildBadge(aIncLate, 'rem_inc_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-circle-exclamation');
-            buildBadge(aExpLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
-            buildBadge(aIncSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
-            buildBadge(aExpSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
             
-            if(allAlerts.length > maxBadges) {
-                html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[10px] font-bold shadow-sm hover:bg-amber-200 dark:hover:bg-amber-900/50 transition flex items-center gap-1.5"> +${allAlerts.length - maxBadges} <i class="fa-solid fa-bell"></i></button>`;
-            } else if (allAlerts.length > 0) {
-                html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> Ver</button>`;
+            if(userConfig.notificationsEnabled) {
+                let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [];
+
+                state.transactions.forEach(trx => {
+                    if(trx.status !== 'pendente') return;
+                    const dueDate = getDueDate(trx); if(!dueDate) return;
+                    const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) { trx.type === 'receita' ? aIncLate.push(trx) : aExpLate.push(trx); }
+                    else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
+                });
+
+                const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon];
+                
+                if(allAlerts.length > 0) {
+                    let maxBadges = 3;
+                    if(window.innerWidth < 640) maxBadges = 1;
+                    else if (window.innerWidth < 1024) maxBadges = 2;
+
+                    let html = ''; let shown = 0;
+                    const buildBadge = (arr, msgKey, colorClass, icon) => {
+                        if(arr.length > 0 && shown < maxBadges) { html += `<div class="${colorClass} px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`; shown++; }
+                    };
+                    buildBadge(aIncLate, 'rem_inc_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-circle-exclamation');
+                    buildBadge(aExpLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
+                    buildBadge(aIncSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
+                    buildBadge(aExpSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
+                    
+                    if(allAlerts.length > maxBadges) {
+                        html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[10px] font-bold shadow-sm hover:bg-amber-200 dark:hover:bg-amber-900/50 transition flex items-center gap-1.5"> +${allAlerts.length - maxBadges} <i class="fa-solid fa-bell"></i></button>`;
+                    } else {
+                        html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> Ver</button>`;
+                    }
+                    alerts.innerHTML = html;
+                }
             }
-            alerts.innerHTML = html;
 
             renderDashboard(filtered);
         }

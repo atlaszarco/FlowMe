@@ -39,6 +39,7 @@
         .dark tr:hover { background-color: #334155; }
         .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]), .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
     </style>
+    <link rel="manifest" href="./manifest.json">
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
 
@@ -747,6 +748,9 @@
         window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(render, 200); });
 
         window.addEventListener('DOMContentLoaded', () => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('PWA SW erro:', err));
+            }
             const today = new Date();
             state.currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
             document.getElementById('global-month').value = state.currentMonth;

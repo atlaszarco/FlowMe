@@ -864,7 +864,7 @@
                 btn_import_csv: "Importer",
             }
         };
-        const FLOWME_VERSION = '1.6.9';
+        const FLOWME_VERSION = '1.6.92';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -882,7 +882,6 @@
         window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { render(); applyFormMode(); }, 200); });
 
         window.addEventListener('DOMContentLoaded', () => {
-            window.addEventListener('DOMContentLoaded', () => {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('PWA SW erro:', err));
             }
@@ -892,6 +891,14 @@
                 showUpdateSuccess(FLOWME_VERSION);
             }
             localStorage.setItem('flowme_version', FLOWME_VERSION);
+
+            setTimeout(() => {
+                if (typeof google === 'undefined') {
+                    console.warn("Modo Offline/Adblock: Google não carregou.");
+                    hideSplashScreen();
+                    updateCloudUI(false);
+                }
+            }, 4000);
             
             const today = new Date();
             
@@ -1864,21 +1871,26 @@
         }
 
         async function checkExistingToken() {
-            const tokenData = localStorage.getItem('flowme_google_token');
             const spinner = document.getElementById('splash-spinner');
             const loginBtn = document.getElementById('splash-login-btn');
 
-            if(tokenData) {
-                const parsed = JSON.parse(tokenData);
-                if(parsed.expires > new Date().getTime()) { 
-                    accessToken = parsed.token;
-                    const isValid = await fetchUserInfo();
-                    
-                    if(isValid) {
-                        setTimeout(hideSplashScreen, 1000); 
-                        return;
-                    }
-                } 
+            try {
+                const tokenData = localStorage.getItem('flowme_google_token');
+                if(tokenData) {
+                    const parsed = JSON.parse(tokenData);
+                    if(parsed.expires > new Date().getTime()) { 
+                        accessToken = parsed.token;
+                        const isValid = await fetchUserInfo();
+                        
+                        if(isValid) {
+                            setTimeout(hideSplashScreen, 1000); 
+                            return;
+                        }
+                    } 
+                }
+            } catch (error) {
+                console.error("Erro na leitura do token:", error);
+                localStorage.removeItem('flowme_google_token'); // Limpa a sujeira
             }
             
             handleSignoutClick();

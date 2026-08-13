@@ -1010,7 +1010,7 @@
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }
         
-        const FLOWME_VERSION = '2.1.1';
+        const FLOWME_VERSION = '2.1.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1500,9 +1500,33 @@
         let isMobileFormOpen = false;
         
         function toggleMobileForm(forceOpen = null) {
+            if (window.innerWidth >= 1024) return; // Ignora a animação se for desktop
+            
             if (forceOpen !== null) isMobileFormOpen = forceOpen;
             else isMobileFormOpen = !isMobileFormOpen;
-            applyFormMode();
+            
+            const wrapper = document.getElementById('form-wrapper');
+            
+            if (isMobileFormOpen) {
+                // Prepara a tela para "brotar" (Scale 95% + Translada de baixo para cima)
+                wrapper.classList.remove('hidden');
+                wrapper.classList.add('fixed', 'inset-0', 'z-50', 'w-full', 'h-full', 'rounded-none', 'p-6', 'bg-slate-50', 'dark:bg-slate-900', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95', 'translate-y-10');
+                
+                requestAnimationFrame(() => {
+                    wrapper.classList.remove('opacity-0', 'scale-95', 'translate-y-10');
+                    wrapper.classList.add('opacity-100', 'scale-100', 'translate-y-0');
+                });
+            } else {
+                // Anima a saída afundando e deslizando para baixo
+                wrapper.classList.remove('opacity-100', 'scale-100', 'translate-y-0');
+                wrapper.classList.add('opacity-0', 'scale-95', 'translate-y-10');
+                
+                setTimeout(() => {
+                    wrapper.classList.add('hidden');
+                    // Remove as classes de animação para não quebrar o layout se o usuário girar o celular para modo paisagem
+                    wrapper.classList.remove('fixed', 'inset-0', 'z-50', 'w-full', 'h-full', 'rounded-none', 'p-6', 'bg-slate-50', 'dark:bg-slate-900', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95', 'translate-y-10');
+                }, 300); // 300ms = tempo exato da duração da animação no CSS
+            }
         }
         
         function applyFormMode() {
@@ -1510,25 +1534,21 @@
             const wrapper = document.getElementById('form-wrapper');
             const btnCloseModal = document.getElementById('btn-close-modal');
 
-            // Reset geral do Desktop
-            wrapper.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:sticky lg:top-24 transition-all overflow-y-auto lg:block lg:!fixed-none lg:!inset-auto lg:!z-auto lg:!w-auto lg:!h-auto lg:!rounded-xl lg:!p-5";
-
             if (window.innerWidth >= 1024) { 
-                wrapper.classList.remove('hidden');
+                // Força o modo Desktop (coluna da direita) e remove sujeiras do mobile
+                wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm lg:sticky lg:top-24 transition-all overflow-hidden block";
                 if(fab) fab.classList.add('hidden');
                 if(btnCloseModal) btnCloseModal.classList.add('hidden');
-                return;
-            }
-
-            // Regras Exclusivas do Mobile (Botão Flutuante / Modal)
-            if(fab) fab.classList.remove('hidden');
-            if(btnCloseModal) btnCloseModal.classList.remove('hidden');
-
-            if (isMobileFormOpen) {
-                wrapper.classList.add('fixed', 'inset-0', 'z-50', 'w-full', 'h-full', 'rounded-none', 'p-6');
-                wrapper.classList.remove('hidden');
+                isMobileFormOpen = false; 
             } else {
-                wrapper.classList.add('hidden');
+                // Prepara os botões do Mobile
+                if(fab) fab.classList.remove('hidden');
+                if(btnCloseModal) btnCloseModal.classList.remove('hidden');
+                
+                // Se estiver fechado, garante que fica escondido sem perder as formatações base
+                if (!isMobileFormOpen) {
+                    wrapper.className = "hidden bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all overflow-hidden";
+                }
             }
         }
         

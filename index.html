@@ -917,7 +917,7 @@
                 btn_view: "Voir", modal_alerts_title: "Centre d'Alertes", btn_view_trx: "Voir Transac.", msg_late: "X jours de retard", msg_left: "il reste X jours", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance"
             }
         };
-        const FLOWME_VERSION = '1.9.7';
+        const FLOWME_VERSION = '2.0.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2689,8 +2689,10 @@
 
         async function findCloudFile() {
             try {
-                const resp = await fetch("https://www.googleapis.com/drive/v3/files?q=name='flowme_backup.json' and trashed=false&spaces=drive&fields=files(id,name,modifiedTime)&pageSize=1", {
-                    headers: { 'Authorization': 'Bearer ' + accessToken }
+                const cacheBuster = '&t=' + Date.now();
+                const resp = await fetch("https://www.googleapis.com/drive/v3/files?q=name='flowme_backup.json' and trashed=false&spaces=drive&fields=files(id,name,modifiedTime)&pageSize=1" + cacheBuster, {
+                    headers: { 'Authorization': 'Bearer ' + accessToken },
+                    cache: 'no-store' 
                 });
                 if(!resp.ok) throw new Error('Falha ao buscar arquivo');
                 const data = await resp.json();
@@ -2753,17 +2755,20 @@
                     return; 
                 }
 
-                const response = await fetch('https://www.googleapis.com/drive/v3/files/' + existingFile.id + '?alt=media', {
-                    headers: { 'Authorization': 'Bearer ' + accessToken }
+                // Aplicando o mesmo truque duplo anti-cache na hora de baixar os dados reais
+                const response = await fetch('https://www.googleapis.com/drive/v3/files/' + existingFile.id + '?alt=media&t=' + Date.now(), {
+                    headers: { 'Authorization': 'Bearer ' + accessToken },
+                    cache: 'no-store'
                 });
                 if(!response.ok) throw new Error('Falha ao puxar arquivo');
                 
                 let parsed = await response.json();
 
                 if(Array.isArray(parsed)) { state.transactions = parsed; state.invoiceSettings = {defaults:{}, exceptions:{}}; }
-                else if (parsed.transactions) { state = { transactions: parsed.transactions||[], currentMonth: state.currentMonth, invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}} }; }
+                else if (parsed.transactions) { state = { transactions: parsed.transactions||[], currentMonth: state.currentMonth, invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}}, limits: parsed.limits||[] }; }
 
-                saveState(); render(); updateAutocompleteLists(); switchTab('transacoes');
+                // Repare que adicionei o renderLimitsSettings() aqui também, para que a tela de limites se atualize automaticamente se você puxar as regras da nuvem!
+                saveState(); render(); renderLimitsSettings(); updateAutocompleteLists(); switchTab('transacoes');
                 
                 const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
                 document.getElementById('cloud-last-sync').textContent = timeStr + ' ' + t('lbl_sync_loaded');
@@ -2773,6 +2778,7 @@
                 if(!silent && btn) btn.innerHTML = origHTML;
             }
         }
+        
     </script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="gsiLoaded()"></script>
 </body>

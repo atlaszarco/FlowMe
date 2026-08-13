@@ -231,7 +231,7 @@
                             <label for="description" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_desc">Descrição</label>
                             <div class="flex gap-1 w-full">
                                 <input type="text" id="description" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
-                                <button type="button" onclick="openGlobalEdit('description')" class="shrink-0 px-2 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-500 rounded-lg transition" title="Gerenciar Nomes"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button type="button" onclick="openGlobalEdit('description')" class="..." data-i18n-title="tt_manage_desc"><i class="fa-solid fa-pen-to-square"></i></button>
                             </div>
                         </div>
 
@@ -278,7 +278,7 @@
                                 <label for="category" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_category">Categoria</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="category" list="categories-list" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
-                                    <button type="button" onclick="openGlobalEdit('category')" class="shrink-0 px-2 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-500 rounded-lg transition" title="Gerenciar Categorias"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button type="button" onclick="openGlobalEdit('category')" class="..." data-i18n-title="tt_manage_cat"><i class="fa-solid fa-pen-to-square"></i></button>
                                 </div>
                                 <datalist id="categories-list"></datalist>
                             </div>
@@ -286,7 +286,7 @@
                                 <label for="payment-method" id="label-method" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_account">Conta</label>
                                 <div class="flex gap-1">
                                     <input type="text" id="payment-method" list="methods-list" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
-                                    <button type="button" onclick="openGlobalEdit('paymentMethod')" class="shrink-0 px-2 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-500 rounded-lg transition" title="Gerenciar Contas/Cartões"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button type="button" onclick="openGlobalEdit('paymentMethod')" class="..." data-i18n-title="tt_manage_acc"><i class="fa-solid fa-pen-to-square"></i></button>
                                 </div>
                                 <datalist id="methods-list"></datalist>
                             </div>
@@ -307,7 +307,7 @@
                                         <input type="checkbox" id="has-split" onchange="toggleSplitSection(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
                                         <span data-i18n="label_is_split">Dividir com alguém?</span>
                                     </label>
-                                    <button type="button" onclick="openGlobalEdit('person')" class="px-2 py-0.5 bg-slate-200 hover:bg-slate-300 border border-slate-300 text-slate-500 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300 rounded transition" title="Gerenciar Pessoas"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>
+                                    <button type="button" onclick="openGlobalEdit('person')" class="..." data-i18n-title="tt_manage_person"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>
                                 </div>
                                 <button type="button" id="btn-add-split-row" onclick="addSplitRow()" class="hidden text-[10px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 text-slate-700 dark:text-slate-300 px-2 py-1 rounded shadow-sm transition">
                                     <i class="fa-solid fa-plus"></i> <span data-i18n="btn_add_person">Pessoa</span>
@@ -680,7 +680,7 @@
     </main>
 
 <!-- ================= BLOCO 8: MODAIS (Alertas, Edição, etc) ================= -->
-    <!-- MODALS -->
+    <!-- MODALS: ALERTAS -->
     <div id="modal-alerts" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh]">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
@@ -691,6 +691,7 @@
         </div>
     </div>
 
+    <!-- MODAL: GERENCIAR GLOBAL -->
     <div id="modal-global-edit" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh]">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
@@ -698,7 +699,11 @@
                 <button onclick="closeModal('modal-global-edit')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-4 overflow-y-auto max-h-[60vh] flex flex-col">
-                <input type="text" id="global-edit-search" oninput="filterGlobalEdit()" placeholder="Pesquisar..." class="w-full p-2 mb-3 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="global-edit-new" data-i18n="ph_add_new" placeholder="Adicionar novo..." class="flex-1 p-2 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
+                    <button onclick="addGlobalItem()" data-i18n="btn_add" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition">Adicionar</button>
+                </div>
+                <input type="text" id="global-edit-search" oninput="filterGlobalEdit()" data-i18n="placeholder_search" placeholder="Pesquisar..." class="w-full p-2 mb-3 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
                 <div id="global-edit-content" class="space-y-2 flex-1 overflow-y-auto"></div>
             </div>
             <input type="hidden" id="global-edit-field">
@@ -771,6 +776,7 @@
             </div>
         </div>
     </div>
+   
     <!-- MODAL: CRIAR LIMITE -->
     <div id="modal-limit-form" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col">
@@ -779,6 +785,7 @@
                 <button onclick="closeModal('modal-limit-form')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-4 space-y-3">
+                <input type="hidden" id="edit-limit-id"> <!-- CAMPO ESCONDIDO ADICIONADO -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" data-i18n="lbl_lim_type">Tipo de Limite</label>
                     <select id="limit-type" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
@@ -806,31 +813,46 @@
         const translations = {
             pt: {
                 subtitle: "Seu controle pessoal de fluxo financeiro", tab_transactions: "Transações", tab_invoices: "Faturas", tab_dashboard: "Painel", tab_settings: "Configurações",
-                period_label: "Período:", saved_time: "Salvo:", btn_save_data: "Salvar Dados", card_income: "Receitas (Previsão)", card_expense: "Despesas (Previsão)", card_balance: "Balanço do Mês", card_splits: "Rateios a Receber",
-                form_title_new: "Nova Movimentação", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Receita", type_expense: "Despesa", lbl_exp_deb: "Débito/Pix", lbl_exp_cred: "Crédito", lbl_inv_month: "Mês da Fatura",
-                label_desc: "Descrição / Nome", placeholder_desc: "Ex: Salário, Energia...", label_value: "Valor", label_date_univ: "Data", lbl_inst_inc: "Repetir recebimento?", lbl_inst_exp: "Compra parcelada?",
+                period_label: "Período:", saved_time: "Salvo:", btn_save_data: "Salvar Dados",
+                card_income: "Receitas (Previsão)", card_expense: "Despesas (Previsão)", card_balance: "Balanço do Mês", card_splits: "Rateios a Receber",
+                form_title_new: "Nova Movimentação", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Receita", type_expense: "Despesa",
+                lbl_exp_deb: "Débito/Pix", lbl_exp_cred: "Crédito", lbl_inv_month: "Mês da Fatura",
+                label_desc: "Descrição / Nome", placeholder_desc: "Ex: Salário, Energia...", label_value: "Valor", label_date_univ: "Data",
+                lbl_inst_inc: "Repetir recebimento?", lbl_inst_exp: "Compra parcelada?",
                 label_is_installment: "Repetir / Parcelar?", label_installments: "Nº Vezes", label_logic: "Lógica", logic_rep: "Replicar Valor", logic_div: "Dividir Total",
                 label_category: "Categoria", placeholder_cat: "Digite ou selecione...", label_account: "Conta/Cartão", placeholder_acc: "Ex: Nubank, Dinheiro...",
                 label_status: "Status Inicial", status_rec: "Recebido", status_pen_rec: "Pendente (Previsão)", status_pag: "Pago", status_pen_pag: "Pendente (Vencimento)", status_pen: "Pendente",
                 label_is_split: "Dividir com alguém?", btn_add_person: "Pessoa", btn_submit: "Salvar Movimentação", btn_submit_edit: "Atualizar Conta",
                 placeholder_search: "Buscar...", flt_all_types: "Todos os Tipos", flt_income: "Receitas", flt_expense: "Despesas", flt_all_status: "Todos os Status", flt_paid: "Pagos/Recebidos", flt_pending: "Pendentes",
-                flt_all_splits: "Todas", flt_only_splits: "Apenas Rateios", th_date: "Data", th_date_purchase: "Data da Compra", th_desc: "Descrição & Cat.", th_method: "Conta/Cartão", th_orig: "Valor Orig.", th_cost: "Seu Custo", th_status: "Status", th_actions: "Ações",
-                empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)", dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
-                cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar", cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Banco de Dados", btn_delete: "Apagar Tudo",
+                flt_all_splits: "Todas", flt_only_splits: "Apenas Rateios",
+                th_date: "Data", th_date_purchase: "Data da Compra", th_desc: "Descrição & Cat.", th_method: "Conta/Cartão", th_orig: "Valor Orig.", th_cost: "Seu Custo", th_status: "Status", th_actions: "Ações",
+                empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)",
+                dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
+                cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar",
+                cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Banco de Dados", btn_delete: "Apagar Tudo",
                 cfg_acc_title: "Conta e Nuvem", cfg_acc_user: "Usuário Desconectado", cfg_acc_sync: "Última sincronização:", cfg_acc_btn: "Integração Google em breve",
-                cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
-                cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão",
-                curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)", opt_month: "Mês:", opt_range: "Período:", str_to: "até",
+                cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
+                cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
+                cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
+                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão",
+                curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
+                opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
                 rem_inc_soon: "recebimento(s) próximo(s)", rem_inc_late: "recebimento(s) atrasado(s)", rem_exp_soon: "conta(s) vence(m) em breve", rem_exp_late: "conta(s) atrasada(s)",
                 confirm_del: "Excluir permanentemente?", confirm_clear: "ATENÇÃO: Apagar tudo do navegador?", confirm_cascade: "Deseja aplicar o novo nome para as parcelas seguintes desta conta?",
-                btn_edit: "Editar", btn_delete_action: "Excluir", placeholder_name: "Nome", file_choose_btn: "Escolher", file_no_file: "Nenhum arquivo", lbl_select_card: "Selecione o Cartão:", lbl_invoice_total: "Total da Fatura", btn_edit_due: "Editar Vencimento",
-                title_manage: "Gerenciar", err_csv_invalid: "Arquivo incompatível ou versão antiga.", cfg_acc_connected: "Conectado à Nuvem", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Salvar na Nuvem", btn_cloud_load: "Puxar da Nuvem", btn_cloud_disconnect: "Desconectar",
-                lbl_sync_saved: "(Salvo)", lbl_sync_loaded: "(Puxado)", msg_sync_success: "Sucesso!", msg_sync_saving: "Salvando...", msg_sync_loading: "Puxando...", confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
-                err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.", cfg_tab_style: "Estilo do Menu Principal:", opt_tab_both: "Ícone e Texto", opt_tab_icons: "Apenas Ícones",
-                chart_cashflow: "Fluxo de Caixa (Filtro Atual)", chart_categories: "Despesas por Categoria", chart_evolution: "Evolução (Últimos 6 Meses)", chart_accounts: "Gastos por Conta / Cartão", lbl_chart_inc: "Receitas", lbl_chart_exp: "Despesas", btn_import_csv: "Importar",
-                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação", dash_limits: "Orçamentos do Mês", btn_config: "Configurar", cfg_limits_title: "Orçamentos e Limites", btn_new: "Novo", modal_limit_title: "Criar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:",
-                btn_view: "Ver", modal_alerts_title: "Central de Alertas", btn_view_trx: "Ver Conta", msg_late: "X dias atrasado", msg_left: "faltam X dias", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento"
+                btn_edit: "Editar", btn_delete_action: "Excluir", placeholder_name: "Nome", file_choose_btn: "Escolher", file_no_file: "Nenhum arquivo",
+                lbl_select_card: "Selecione o Cartão:", lbl_invoice_total: "Total da Fatura", btn_edit_due: "Editar Vencimento",
+                title_manage: "Gerenciar", err_csv_invalid: "Arquivo incompatível ou versão antiga.",
+                cfg_acc_connected: "Conectado à Nuvem", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Salvar na Nuvem", btn_cloud_load: "Puxar da Nuvem", btn_cloud_disconnect: "Desconectar",
+                lbl_sync_saved: "(Salvo)", lbl_sync_loaded: "(Puxado)", msg_sync_success: "Sucesso!", msg_sync_saving: "Salvando...", msg_sync_loading: "Puxando...",
+                confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
+                err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.",
+                cfg_tab_style: "Estilo do Menu Principal:", opt_tab_both: "Ícone e Texto", opt_tab_icons: "Apenas Ícones",
+                chart_cashflow: "Fluxo de Caixa (Filtro Atual)", chart_categories: "Despesas por Categoria", chart_evolution: "Evolução (Últimos 6 Meses)", chart_accounts: "Gastos por Conta / Cartão", lbl_chart_inc: "Receitas", lbl_chart_exp: "Despesas",
+                btn_import_csv: "Importar",
+                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação", dash_limits: "Orçamentos do Mês", btn_config: "Configurar", cfg_limits_title: "Orçamentos e Limites", btn_new: "Novo", modal_limit_title: "Criar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:", btn_view: "Ver", modal_alerts_title: "Central de Alertas", btn_view_trx: "Ver Conta", msg_late: "X dias atrasado", msg_left: "faltam X dias", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento",
+                tt_manage_desc: "Gerenciar Nomes", tt_manage_cat: "Gerenciar Categorias", tt_manage_acc: "Gerenciar Contas/Cartões", tt_manage_person: "Gerenciar Pessoas",
+                err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -857,8 +879,9 @@
                 lbl_sync_saved: "(Saved)", lbl_sync_loaded: "(Loaded)", msg_sync_success: "Success!", msg_sync_saving: "Saving...", msg_sync_loading: "Loading...", confirm_cloud_load: "Cloud backup found! Do you want to load data to this device?", confirm_overwrite: "Warning: Cloud data will overwrite this device's current data. Continue?",
                 err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found.", cfg_tab_style: "Main Menu Style:", opt_tab_both: "Icon and Text", opt_tab_icons: "Icons Only",
                 chart_cashflow: "Cash Flow (Current Filter)", chart_categories: "Expenses by Category", chart_evolution: "Evolution (Last 6 Months)", chart_accounts: "Expenses by Account / Card", lbl_chart_inc: "Income", lbl_chart_exp: "Expenses", btn_import_csv: "Import",
-                smart_import_title: "Smart Importer", smart_import_desc: "Verify column mapping and set the card name.", lbl_csv_card: "Card / Bank Name", ph_csv_card: "Ex: Chase, Amex...", lbl_csv_date: "DATE Column", lbl_csv_desc: "DESCRIPTION Column", lbl_csv_val: "VALUE Column", lbl_csv_invert: "Invert negative values?", desc_csv_invert: "Banks export expenses with a minus sign. Keep checked to convert to expenses.", btn_confirm_import: "Confirm Import", dash_limits: "Monthly Budgets", btn_config: "Configure", cfg_limits_title: "Budgets & Limits", btn_new: "New", modal_limit_title: "Create Limit", lbl_lim_type: "Limit Type", opt_lim_cat: "By Category", opt_lim_method: "By Account/Card", opt_lim_person: "By Person (Split)", lbl_lim_target: "Exact Name", ph_lim_target: "Type exact name...", lbl_lim_val: "Max Value", btn_save_rule: "Save Rule", lim_empty: "No limits registered.", lim_free: "Free:", lim_busted: "Busted:", lim_busted_alert: "Busted by", lim_remaining: "remaining", lim_used: "used", msg_lim_risk: "budgets at risk", msg_all_control: "Everything under control!", btn_view_dash: "View Panel", err_csv_card: "Please enter the Card/Bank name!", err_lim_fields: "Fill in name and value!", msg_imported: "bills imported!", btn_undo: "Undo", str_col: "Column", str_unnamed: "Unnamed", warn_busted: "⚠️ The budget for <b>TARGET</b> will be busted by <span class='font-bold'>VALUE</span>!", warn_near: "👀 Attention: This purchase will use PCT% of the budget for <b>TARGET</b>.", str_budget: "Budget:",
-                btn_view: "View", modal_alerts_title: "Alerts Center", btn_view_trx: "View Trx", msg_late: "X days late", msg_left: "X days left", lbl_due_date: "Due Date", modal_due_title: "Invoice Due Date", lbl_due_day: "Due Day", lbl_apply_all: "Apply as default for all future invoices for this card.", btn_save_due: "Save Due Date"
+                smart_import_title: "Smart Importer", smart_import_desc: "Verify column mapping and set the card name.", lbl_csv_card: "Card / Bank Name", ph_csv_card: "Ex: Chase, Amex...", lbl_csv_date: "DATE Column", lbl_csv_desc: "DESCRIPTION Column", lbl_csv_val: "VALUE Column", lbl_csv_invert: "Invert negative values?", desc_csv_invert: "Banks export expenses with a minus sign. Keep checked to convert to expenses.", btn_confirm_import: "Confirm Import", dash_limits: "Monthly Budgets", btn_config: "Configure", cfg_limits_title: "Budgets & Limits", btn_new: "New", modal_limit_title: "Create Limit", lbl_lim_type: "Limit Type", opt_lim_cat: "By Category", opt_lim_method: "By Account/Card", opt_lim_person: "By Person (Split)", lbl_lim_target: "Exact Name", ph_lim_target: "Type exact name...", lbl_lim_val: "Max Value", btn_save_rule: "Save Rule", lim_empty: "No limits registered.", lim_free: "Free:", lim_busted: "Busted:", lim_busted_alert: "Busted by", lim_remaining: "remaining", lim_used: "used", msg_lim_risk: "budgets at risk", msg_all_control: "Everything under control!", btn_view_dash: "View Panel", err_csv_card: "Please enter the Card/Bank name!", err_lim_fields: "Fill in name and value!", msg_imported: "bills imported!", btn_undo: "Undo", str_col: "Column", str_unnamed: "Unnamed", warn_busted: "⚠️ The budget for <b>TARGET</b> will be busted by <span class='font-bold'>VALUE</span>!", warn_near: "👀 Attention: This purchase will use PCT% of the budget for <b>TARGET</b>.", str_budget: "Budget:", btn_view: "View", modal_alerts_title: "Alerts Center", btn_view_trx: "View Trx", msg_late: "X days late", msg_left: "X days left", lbl_due_date: "Due Date", modal_due_title: "Invoice Due Date", lbl_due_day: "Due Day", lbl_apply_all: "Apply as default for all future invoices for this card.", btn_save_due: "Save Due Date",
+                tt_manage_desc: "Manage Names", tt_manage_cat: "Manage Categories", tt_manage_acc: "Manage Accounts", tt_manage_person: "Manage People",
+                err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -885,8 +908,9 @@
                 lbl_sync_saved: "(Guardado)", lbl_sync_loaded: "(Cargado)", msg_sync_success: "¡Éxito!", msg_sync_saving: "Guardando...", msg_sync_loading: "Cargando...", confirm_cloud_load: "¡Copia de seguridad encontrada! ¿Deseas cargar los datos a este dispositivo?", confirm_overwrite: "Atención: Los datos de la nube sobrescribirán los de este dispositivo. ¿Continuar?",
                 err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube.", cfg_tab_style: "Estilo del Menú Principal:", opt_tab_both: "Icono y Texto", opt_tab_icons: "Solo Iconos",
                 chart_cashflow: "Flujo de Caja (Filtro Actual)", chart_categories: "Gastos por Categoría", chart_evolution: "Evolución (Últimos 6 Meses)", chart_accounts: "Gastos por Cuenta / Tarjeta", lbl_chart_inc: "Ingresos", lbl_chart_exp: "Gastos", btn_import_csv: "Importar",
-                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifica el mapeo de columnas y define el nombre.", lbl_csv_card: "Nombre de Tarjeta / Banco", ph_csv_card: "Ej: Santander, BBVA...", lbl_csv_date: "Columna FECHA", lbl_csv_desc: "Columna DESCRIPCIÓN", lbl_csv_val: "Columna VALOR", lbl_csv_invert: "¿Invertir valores negativos?", desc_csv_invert: "Los bancos exportan gastos con signo menos. Deja marcado para convertir.", btn_confirm_import: "Confirmar Importación", dash_limits: "Presupuestos", btn_config: "Configurar", cfg_limits_title: "Presupuestos y Límites", btn_new: "Nuevo", modal_limit_title: "Crear Límite", lbl_lim_type: "Tipo de Límite", opt_lim_cat: "Por Categoría", opt_lim_method: "Por Cuenta/Tarjeta", opt_lim_person: "Por Persona (División)", lbl_lim_target: "Nombre exacto", ph_lim_target: "Escribe nombre exacto...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Guardar Regla", lim_empty: "Sin límites.", lim_free: "Libre:", lim_busted: "Pasado:", lim_busted_alert: "Pasado en", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "presupuestos en riesgo", msg_all_control: "¡Todo bajo control!", btn_view_dash: "Ver Panel", err_csv_card: "¡Ingresa el nombre de la Tarjeta/Banco!", err_lim_fields: "¡Rellena nombre y valor!", msg_imported: "cuentas importadas!", btn_undo: "Deshacer", str_col: "Columna", str_unnamed: "Sin nombre", warn_busted: "⚠️ ¡El presupuesto de <b>TARGET</b> se excederá en <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atención: Esta compra usará PCT% del presupuesto de <b>TARGET</b>.", str_budget: "Presupuesto:",
-                btn_view: "Ver", modal_alerts_title: "Centro de Alertas", btn_view_trx: "Ver Transacción", msg_late: "X días de retraso", msg_left: "faltan X días", lbl_due_date: "Vencimiento", modal_due_title: "Vencimiento de Factura", lbl_due_day: "Día de Vencimiento", lbl_apply_all: "Aplicar como predeterminado para facturas futuras.", btn_save_due: "Guardar Vencimiento"
+                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifica el mapeo de columnas y define el nombre.", lbl_csv_card: "Nombre de Tarjeta / Banco", ph_csv_card: "Ej: Santander, BBVA...", lbl_csv_date: "Columna FECHA", lbl_csv_desc: "Columna DESCRIPCIÓN", lbl_csv_val: "Columna VALOR", lbl_csv_invert: "¿Invertir valores negativos?", desc_csv_invert: "Los bancos exportan gastos con signo menos. Deja marcado para convertir.", btn_confirm_import: "Confirmar Importación", dash_limits: "Presupuestos", btn_config: "Configurar", cfg_limits_title: "Presupuestos y Límites", btn_new: "Nuevo", modal_limit_title: "Crear Límite", lbl_lim_type: "Tipo de Límite", opt_lim_cat: "Por Categoría", opt_lim_method: "Por Cuenta/Tarjeta", opt_lim_person: "Por Persona (División)", lbl_lim_target: "Nombre exacto", ph_lim_target: "Escribe nombre exacto...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Guardar Regla", lim_empty: "Sin límites.", lim_free: "Libre:", lim_busted: "Pasado:", lim_busted_alert: "Pasado en", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "presupuestos en riesgo", msg_all_control: "¡Todo bajo control!", btn_view_dash: "Ver Panel", err_csv_card: "¡Ingresa el nombre de la Tarjeta/Banco!", err_lim_fields: "¡Rellena nombre y valor!", msg_imported: "cuentas importadas!", btn_undo: "Deshacer", str_col: "Columna", str_unnamed: "Sin nombre", warn_busted: "⚠️ ¡El presupuesto de <b>TARGET</b> se excederá en <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atención: Esta compra usará PCT% del presupuesto de <b>TARGET</b>.", str_budget: "Presupuesto:", btn_view: "Ver", modal_alerts_title: "Centro de Alertas", btn_view_trx: "Ver Transacción", msg_late: "X días de retraso", msg_left: "faltan X días", lbl_due_date: "Vencimiento", modal_due_title: "Vencimiento de Factura", lbl_due_day: "Día de Vencimiento", lbl_apply_all: "Aplicar como predeterminado para facturas futuras.", btn_save_due: "Guardar Vencimiento",
+                tt_manage_desc: "Administrar Nombres", tt_manage_cat: "Administrar Categorías", tt_manage_acc: "Administrar Cuentas", tt_manage_person: "Administrar Personas",
+                err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -913,11 +937,48 @@
                 lbl_sync_saved: "(Enregistré)", lbl_sync_loaded: "(Chargé)", msg_sync_success: "Succès !", msg_sync_saving: "Enregistrement...", msg_sync_loading: "Chargement...", confirm_cloud_load: "Sauvegarde trouvée dans le Cloud ! Voulez-vous charger les données sur cet appareil ?", confirm_overwrite: "Attention : Les données du Cloud vont écraser celles de cet appareil. Continuer ?",
                 err_cloud: "Erreur de communication avec le Cloud.", msg_cloud_empty: "Aucune sauvegarde trouvée dans le Cloud.", cfg_tab_style: "Style du menu principal :", opt_tab_both: "Icône et Texte", opt_tab_icons: "Icônes uniquement",
                 chart_cashflow: "Flux de trésorerie (Filtre actuel)", chart_categories: "Dépenses par catégorie", chart_evolution: "Évolution (6 derniers mois)", chart_accounts: "Dépenses par compte / carte", lbl_chart_inc: "Revenus", lbl_chart_exp: "Dépenses", btn_import_csv: "Importer",
-                smart_import_title: "Importateur Intelligent", smart_import_desc: "Vérifiez le mappage des colonnes et définissez le nom.", lbl_csv_card: "Nom de Carte / Banque", ph_csv_card: "Ex : Crédit Agricole...", lbl_csv_date: "Colonne DATE", lbl_csv_desc: "Colonne DESCRIPTION", lbl_csv_val: "Colonne VALEUR", lbl_csv_invert: "Inverser les valeurs négatives ?", desc_csv_invert: "Laissez coché pour convertir en dépenses.", btn_confirm_import: "Confirmer l'importation", dash_limits: "Budgets Mensuels", btn_config: "Configurer", cfg_limits_title: "Budgets et Limites", btn_new: "Nouveau", modal_limit_title: "Créer une limite", lbl_lim_type: "Type de Limite", opt_lim_cat: "Par Catégorie", opt_lim_method: "Par Compte/Carte", opt_lim_person: "Par Personne (Partage)", lbl_lim_target: "Nom exact", ph_lim_target: "Tapez le nom exact...", lbl_lim_val: "Valeur Max", btn_save_rule: "Enregistrer", lim_empty: "Aucune limite enregistrée.", lim_free: "Libre :", lim_busted: "Dépassé :", lim_busted_alert: "Dépassé de", lim_remaining: "restants", lim_used: "utilisé", msg_lim_risk: "budgets à risque", msg_all_control: "Tout est sous contrôle !", btn_view_dash: "Voir le Panel", err_csv_card: "Veuillez entrer le nom de la Carte/Banque !", err_lim_fields: "Remplissez le nom et la valeur !", msg_imported: "comptes importés !", btn_undo: "Annuler", str_col: "Colonne", str_unnamed: "Sans nom", warn_busted: "⚠️ Le budget de <b>TARGET</b> sera dépassé de <span class='font-bold'>VALUE</span> !", warn_near: "👀 Attention : Cet achat utilisera PCT% du budget de <b>TARGET</b>.", str_budget: "Budget :",
-                btn_view: "Voir", modal_alerts_title: "Centre d'Alertes", btn_view_trx: "Voir Transac.", msg_late: "X jours de retard", msg_left: "il reste X jours", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance"
+                smart_import_title: "Importateur Intelligent", smart_import_desc: "Vérifiez le mappage des colonnes et définissez le nom.", lbl_csv_card: "Nom de Carte / Banque", ph_csv_card: "Ex : Crédit Agricole...", lbl_csv_date: "Colonne DATE", lbl_csv_desc: "Colonne DESCRIPTION", lbl_csv_val: "Colonne VALEUR", lbl_csv_invert: "Inverser les valeurs négatives ?", desc_csv_invert: "Laissez coché pour convertir en dépenses.", btn_confirm_import: "Confirmer l'importation", dash_limits: "Budgets Mensuels", btn_config: "Configurer", cfg_limits_title: "Budgets et Limites", btn_new: "Nouveau", modal_limit_title: "Créer une limite", lbl_lim_type: "Type de Limite", opt_lim_cat: "Par Catégorie", opt_lim_method: "Par Compte/Carte", opt_lim_person: "Par Personne (Partage)", lbl_lim_target: "Nom exact", ph_lim_target: "Tapez le nom exact...", lbl_lim_val: "Valeur Max", btn_save_rule: "Enregistrer", lim_empty: "Aucune limite enregistrée.", lim_free: "Libre :", lim_busted: "Dépassé :", lim_busted_alert: "Dépassé de", lim_remaining: "restants", lim_used: "utilisé", msg_lim_risk: "budgets à risque", msg_all_control: "Tout est sous contrôle !", btn_view_dash: "Voir le Panel", err_csv_card: "Veuillez entrer le nom de la Carte/Banque !", err_lim_fields: "Remplissez le nom et la valeur !", msg_imported: "comptes importés !", btn_undo: "Annuler", str_col: "Colonne", str_unnamed: "Sans nom", warn_busted: "⚠️ Le budget de <b>TARGET</b> sera dépassé de <span class='font-bold'>VALUE</span> !", warn_near: "👀 Attention : Cet achat utilisera PCT% du budget de <b>TARGET</b>.", str_budget: "Budget :", btn_view: "Voir", modal_alerts_title: "Centre d'Alertes", btn_view_trx: "Voir Transac.", msg_late: "X jours de retard", msg_left: "il reste X jours", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance",
+                tt_manage_desc: "Gérer Noms", tt_manage_cat: "Gérer Catégories", tt_manage_acc: "Gérer Comptes", tt_manage_person: "Gérer Personnes",
+                err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer"
             }
         };
-        const FLOWME_VERSION = '2.0.0';
+
+        function setLanguage(lang) {
+            userConfig.lang = lang; localStorage.setItem('flowme_lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (translations[lang][key]) el.innerHTML = translations[lang][key]; });
+            
+            // TRADUÇÃO DINÂMICA DE TOOLTIPS
+            document.querySelectorAll('[data-i18n-title]').forEach(el => { 
+                const key = el.getAttribute('data-i18n-title'); 
+                if (translations[lang][key]) el.title = translations[lang][key]; 
+            });
+            
+            document.getElementById('description').placeholder = t('placeholder_desc'); 
+            document.getElementById('category').placeholder = t('placeholder_cat'); 
+            document.getElementById('payment-method').placeholder = t('placeholder_acc'); 
+            document.getElementById('search-input').placeholder = t('placeholder_search');
+            document.getElementById('csv-card-name').placeholder = t('ph_csv_card');
+            document.getElementById('limit-target').placeholder = t('ph_lim_target');
+            
+            document.querySelectorAll('.split-person').forEach(el => el.placeholder = t('placeholder_name'));
+            document.querySelectorAll('.split-status option[value="pendente"]').forEach(el => el.textContent = t('str_split_pen'));
+            document.querySelectorAll('.split-status option[value="pago"]').forEach(el => el.textContent = t('str_split_paid'));
+            const fileInput = document.getElementById('import-file'); if(!fileInput.files || fileInput.files.length === 0) document.getElementById('file-name-text').textContent = t('file_no_file');
+            
+            const isIncome = document.querySelector('input[name="type"]:checked').value === 'receita';
+            toggleTypeFields(isIncome ? 'receita' : 'despesa');
+            
+            const editId = document.getElementById('edit-id').value;
+            if(editId) { document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-check"></i> <span data-i18n="btn_submit_edit">${t('btn_submit_edit')}</span>`; document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> <span data-i18n="form_title_edit">${t('form_title_edit')}</span>`; } 
+            else { document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">${t('btn_submit')}</span>`; document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-plus-circle text-emerald-500"></i> <span data-i18n="form_title_new">${t('form_title_new')}</span>`; }
+
+            const versionSpan = document.querySelector('[data-i18n="cfg_version"]');
+            if(versionSpan) versionSpan.innerHTML = t('cfg_version') + ' ' + FLOWME_VERSION;
+            
+            updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
+        }
+        
+        const FLOWME_VERSION = '2.0.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1201,17 +1262,38 @@
                 div.style.display = val.includes(term) ? 'flex' : 'none';
             });
         }
+
+        function addGlobalItem() {
+            const field = document.getElementById('global-edit-field').value;
+            const newVal = document.getElementById('global-edit-new').value.trim();
+            if(!newVal) return;
+            
+            if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
+            if(!state.customData[field]) state.customData[field] = [];
+            
+            if(!state.customData[field].includes(newVal)) {
+                state.customData[field].push(newVal);
+                saveState();
+                updateAutocompleteLists();
+                openGlobalEdit(field); // Recarrega a tela já com o item
+            }
+            document.getElementById('global-edit-new').value = '';
+        }
+        
         function openGlobalEdit(field) {
             const m = document.getElementById('modal-global-edit'); const c = document.getElementById('global-edit-content');
             document.getElementById('global-edit-field').value = field;
             document.getElementById('global-edit-search').value = '';
+            if(document.getElementById('global-edit-new')) document.getElementById('global-edit-new').value = '';
             document.getElementById('global-edit-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-500 mr-2"></i> ${t('title_manage')}`;
             
+            if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
+            
             let items = [];
-            if(field === 'category') items = [...new Set(state.transactions.map(t => t.category))].filter(Boolean);
-            else if (field === 'paymentMethod') items = [...new Set(state.transactions.map(t => t.paymentMethod))].filter(Boolean);
-            else if (field === 'description') items = [...new Set(state.transactions.map(t => t.description.replace(/\s*\(\d+\/\d+\)$/, '')))].filter(Boolean);
-            else if (field === 'person') items = [...new Set(state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []))].filter(Boolean);
+            if(field === 'category') items = [...new Set([...state.transactions.map(t => t.category), ...(state.customData.category||[])])].filter(Boolean);
+            else if (field === 'paymentMethod') items = [...new Set([...state.transactions.map(t => t.paymentMethod), ...(state.customData.paymentMethod||[])])].filter(Boolean);
+            else if (field === 'description') items = [...new Set([...state.transactions.map(t => t.description.replace(/\s*\(\d+\/\d+\)$/, '')), ...(state.customData.description||[])])].filter(Boolean);
+            else if (field === 'person') items = [...new Set([...state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []), ...(state.customData.person||[])])].filter(Boolean);
 
             c.innerHTML = '';
             if(items.length === 0) { c.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Nenhum item salvo ainda.</p>'; }
@@ -1221,7 +1303,7 @@
                     const div = document.createElement('div'); div.className = "flex items-center gap-2 p-2 border border-slate-200 dark:border-slate-700 rounded bg-slate-50 dark:bg-slate-900";
                     div.innerHTML = `
                         <input type="text" id="${rowId}" value="${it}" class="flex-1 p-1 text-xs border border-transparent focus:border-indigo-400 bg-transparent outline-none dark:text-slate-200 transition min-w-0">
-                        <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="px-2 py-1 shrink-0 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 rounded text-[10px] font-bold transition">Salvar</button>`;
+                        <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="px-2 py-1 shrink-0 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 rounded text-[10px] font-bold transition">${t('btn_save')}</button>`;
                     c.appendChild(div);
                 });
             }
@@ -1230,6 +1312,13 @@
 
         function saveGlobalEdit(oldVal, newVal, field) {
             newVal = newVal.trim(); if(!newVal || oldVal === newVal) return;
+            
+            if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
+            if(state.customData[field]) {
+                const idx = state.customData[field].indexOf(oldVal);
+                if(idx !== -1) state.customData[field][idx] = newVal;
+            }
+
             state.transactions.forEach(t => {
                 if(field === 'description') {
                     const match = t.description.match(/(.*)(\s+\(\d+\/\d+\))$/);
@@ -1241,8 +1330,7 @@
                     t[field] = newVal;
                 }
             });
-            saveState(); updateAutocompleteLists(); render(); closeModal('modal-global-edit');
-            // update form if open
+            saveState(); updateAutocompleteLists(); render(); openGlobalEdit(field);
             if(field !== 'person' && document.getElementById(field).value === oldVal) document.getElementById(field).value = newVal;
         }
 
@@ -1251,10 +1339,12 @@
             const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
             document.getElementById('last-save-time').innerHTML = `<i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">${t('saved_time')}</span> ${timeStr}`;
         }
+        
         function saveState() { 
             localStorage.setItem('flowme_state', JSON.stringify(state)); 
             updateSaveTimestamp(); 
         }
+        
         function manualSave() {
             saveState(); 
             const btn = document.getElementById('btn-manual-save'); const orig = btn.innerHTML;
@@ -1263,28 +1353,42 @@
             
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
         }
+        
         function loadState() {
             const data = localStorage.getItem('flowme_state');
             if (data) { 
                 try { 
                     const parsed = JSON.parse(data); 
-                    if(Array.isArray(parsed)) { state.transactions = parsed; state.invoiceSettings = {defaults:{}, exceptions:{}}; } // Migration
-                    else state = { transactions: parsed.transactions||[], currentMonth: state.currentMonth, invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}}, limits: parsed.limits||[] };
+                    if(Array.isArray(parsed)) { 
+                        state.transactions = parsed; 
+                        state.invoiceSettings = {defaults:{}, exceptions:{}}; 
+                    } else { 
+                        state = { 
+                            transactions: parsed.transactions||[], 
+                            currentMonth: state.currentMonth, 
+                            invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}}, 
+                            limits: parsed.limits||[],
+                            customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] }
+                        }; 
+                    }
                 } catch(e) { state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; state.limits = []; } 
             }
-            // Add defaults for older entries
+            if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
             state.transactions.forEach(t => {
                 if(t.type === 'despesa' && !t.expenseType) t.expenseType = 'debito';
             });
             updateSaveTimestamp();
             renderLimitsSettings();
         }
+        
         function clearAllData() { if(confirm(t('confirm_clear'))) { localStorage.removeItem('flowme_state'); state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; render(); updateAutocompleteLists(); } }
 
         function updateAutocompleteLists() {
-            const cats = [...new Set(state.transactions.map(t => t.category))].filter(Boolean);
-            const methods = [...new Set(state.transactions.map(t => t.paymentMethod))].filter(Boolean);
-            const people = [...new Set(state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []))].filter(Boolean);
+            if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
+            const cats = [...new Set([...state.transactions.map(t => t.category), ...(state.customData.category || [])])].filter(Boolean);
+            const methods = [...new Set([...state.transactions.map(t => t.paymentMethod), ...(state.customData.paymentMethod || [])])].filter(Boolean);
+            const people = [...new Set([...state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []), ...(state.customData.person || [])])].filter(Boolean);
+            
             document.getElementById('categories-list').innerHTML = cats.map(c => `<option value="${c}">`).join('');
             document.getElementById('methods-list').innerHTML = methods.map(m => `<option value="${m}">`).join('');
             let dlPeople = document.getElementById('people-list'); if(!dlPeople) { dlPeople = document.createElement('datalist'); dlPeople.id = 'people-list'; document.body.appendChild(dlPeople); }
@@ -1960,27 +2064,47 @@
 // ================= DASHBOARD & CHARTS =================
         let chartCashflow, chartCategories, chartEvolution, chartAccounts;
         // ================= SISTEMA DE LIMITES E ORÇAMENTOS =================
-        function openLimitModal() {
-            document.getElementById('limit-target').value = '';
-            document.getElementById('limit-value').value = '';
+        function openLimitModal(editId = null) {
+            document.getElementById('edit-limit-id').value = editId || '';
+            if(editId && state.limits) {
+                const lim = state.limits.find(l => l.id === editId);
+                if(lim) {
+                    document.getElementById('limit-type').value = lim.type;
+                    document.getElementById('limit-target').value = lim.target;
+                    document.getElementById('limit-value').value = lim.max;
+                }
+            } else {
+                document.getElementById('limit-type').value = 'category';
+                document.getElementById('limit-target').value = '';
+                document.getElementById('limit-value').value = '';
+            }
             document.getElementById('modal-limit-form').classList.remove('hidden');
         }
         
         function saveLimit() {
+            const editId = document.getElementById('edit-limit-id').value;
             const type = document.getElementById('limit-type').value;
             const target = document.getElementById('limit-target').value.trim();
             const value = parseFloat(document.getElementById('limit-value').value);
             
             if(!target || isNaN(value)) { alert(t('err_lim_fields')); return; }
-            
             if(!state.limits) state.limits = [];
-            state.limits.push({ id: 'lim-' + Date.now(), type, target, max: value });
+            
+            // NOVIDADE: Verifica se já existe um limite exatamente igual criado
+            const isDuplicate = state.limits.some(l => l.target.toLowerCase() === target.toLowerCase() && l.type === type && l.id !== editId);
+            if(isDuplicate) { alert(t('err_lim_dup')); return; }
+            
+            if(editId) {
+                const lim = state.limits.find(l => l.id === editId);
+                if(lim) { lim.type = type; lim.target = target; lim.max = value; }
+            } else {
+                state.limits.push({ id: 'lim-' + Date.now(), type, target, max: value });
+            }
             
             saveState();
             renderLimitsSettings();
-            render(); // Atualiza o Dashboard
+            render(); 
             closeModal('modal-limit-form');
-            
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
 
@@ -2094,11 +2218,15 @@
                             <p class="text-sm font-bold text-slate-800 dark:text-slate-100">${lim.target}</p>
                             <p class="text-xs font-semibold text-pink-600">${formatCurrency(lim.max)}</p>
                         </div>
-                        <button onclick="deleteLimit('${lim.id}')" class="text-slate-400 hover:text-rose-500 p-2 transition"><i class="fa-solid fa-trash"></i></button>
+                        <div class="flex gap-1">
+                            <button onclick="openLimitModal('${lim.id}')" class="text-slate-400 hover:text-blue-500 p-2 transition"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteLimit('${lim.id}')" class="text-slate-400 hover:text-rose-500 p-2 transition"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     </div>
                 `;
             });
         }
+        
         function renderDashboard(filtered) {
         // PROCESSA AS BARRAS DE LIMITES
             if(!state.limits) state.limits = [];

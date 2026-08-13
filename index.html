@@ -44,6 +44,8 @@
         /* Efeito global de clique físico e hover vibrante para botões */
         button { 
             transition: transform 0.1s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease; 
+            -webkit-tap-highlight-color: transparent; /* Remove o piscar cinza do celular */
+            touch-action: manipulation; /* Melhora a resposta ao toque */
         }
         button:active { 
             transform: scale(0.93) !important; /* Faz o botão afundar fisicamente */
@@ -54,7 +56,7 @@
         .dark button:hover { filter: brightness(1.15); } /* Brilha ainda mais no modo escuro */
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
+<body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
     
     <!-- ================= BLOCO 0: SPLASH SCREEN (ONBOARDING) ================= -->
     <div id="splash-screen" class="fixed inset-0 z-50 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
@@ -92,7 +94,7 @@
                 </div>
             </div>
             
-            <nav class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 overflow-x-auto min-w-0">
+            <nav id="tabs-nav" class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 overflow-x-auto min-w-0 cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <button onclick="switchTab('transacoes')" id="tab-transacoes" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-emerald-500 text-slate-950 shadow-sm whitespace-nowrap">
                     <i class="fa-solid fa-list-ul mr-1"></i> <span data-i18n="tab_transactions">Transações</span>
                 </button>
@@ -1012,7 +1014,7 @@
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }
         
-        const FLOWME_VERSION = '2.1.4';
+        const FLOWME_VERSION = '2.1.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1161,20 +1163,50 @@
             document.getElementById(`content-${tabId}`).classList.remove('hidden');
             
             if (tabId === 'dashboard') {
-                document.getElementById(`content-${tabId}`).classList.remove('flex'); // remove a classe antiga
+                document.getElementById(`content-${tabId}`).classList.remove('flex');
                 document.getElementById(`content-${tabId}`).classList.add('block');
                 render();
             }
             
             document.querySelectorAll('nav button').forEach(btn => { btn.className = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white whitespace-nowrap"; });
             const actCls = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-emerald-500 text-slate-950 shadow-sm whitespace-nowrap";
-            document.getElementById(`tab-${tabId}`).className = actCls;
+            
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.className = actCls;
+            
+            // Calcula a posição e desliza a aba clicada para o centro
+            const nav = document.getElementById('tabs-nav');
+            if (nav && activeBtn) {
+                const navCenter = nav.offsetWidth / 2;
+                const btnCenter = activeBtn.offsetLeft + (activeBtn.offsetWidth / 2);
+                nav.scrollTo({ left: btnCenter - navCenter, behavior: 'smooth' });
+            }
             
             const toolbar = document.getElementById('global-toolbar');
             if(tabId === 'backup') toolbar.classList.add('hidden'); else toolbar.classList.remove('hidden');
 
             if(tabId === 'faturas') populateInvoiceCards();
         }
+
+        // ================= DRAG TO SCROLL (MENU DE ABAS NO PC) =================
+        const tabsNav = document.getElementById('tabs-nav');
+        let isDraggingTabs = false;
+        let startXTabs, scrollLeftTabs;
+
+        tabsNav.addEventListener('mousedown', (e) => {
+            isDraggingTabs = true;
+            startXTabs = e.pageX - tabsNav.offsetLeft;
+            scrollLeftTabs = tabsNav.scrollLeft;
+        });
+        tabsNav.addEventListener('mouseleave', () => { isDraggingTabs = false; });
+        tabsNav.addEventListener('mouseup', () => { isDraggingTabs = false; });
+        tabsNav.addEventListener('mousemove', (e) => {
+            if (!isDraggingTabs) return;
+            e.preventDefault();
+            const x = e.pageX - tabsNav.offsetLeft;
+            const walk = (x - startXTabs) * 2; // O "* 2" controla a velocidade do arraste
+            tabsNav.scrollLeft = scrollLeftTabs - walk;
+        });
 
         // ================= TAB STYLE CONTROLS =================
         function setTabStyle(style) {

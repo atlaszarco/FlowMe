@@ -242,7 +242,7 @@
                         <div>
                             <label for="description" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_desc">Descrição</label>
                             <div class="flex gap-1 w-full">
-                                <input type="text" id="description" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                <input type="text" id="description" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
                                 <button type="button" onclick="openGlobalEdit('description')" class="..." data-i18n-title="tt_manage_desc"><i class="fa-solid fa-pen-to-square"></i></button>
                             </div>
                         </div>
@@ -289,7 +289,7 @@
                             <div>
                                 <label for="category" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_category">Categoria</label>
                                 <div class="flex gap-1">
-                                    <input type="text" id="category" list="categories-list" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                    <input type="text" id="category" list="categories-list" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
                                     <button type="button" onclick="openGlobalEdit('category')" class="..." data-i18n-title="tt_manage_cat"><i class="fa-solid fa-pen-to-square"></i></button>
                                 </div>
                                 <datalist id="categories-list"></datalist>
@@ -297,7 +297,7 @@
                             <div>
                                 <label for="payment-method" id="label-method" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_account">Conta</label>
                                 <div class="flex gap-1">
-                                    <input type="text" id="payment-method" list="methods-list" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                    <input type="text" id="payment-method" list="methods-list" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
                                     <button type="button" onclick="openGlobalEdit('paymentMethod')" class="..." data-i18n-title="tt_manage_acc"><i class="fa-solid fa-pen-to-square"></i></button>
                                 </div>
                                 <datalist id="methods-list"></datalist>
@@ -350,7 +350,7 @@
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
                         <div class="relative flex-1">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
-                            <input type="text" id="search-input" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:border-emerald-500 transition-colors">
+                            <input type="text" id="search-input" autocomplete="off" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:border-emerald-500 transition-colors">
                         </div>
                         <div class="flex items-center gap-2 overflow-x-auto">
                             <select id="filter-type" onchange="render()" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none focus:border-emerald-500 transition-colors">
@@ -712,10 +712,10 @@
             </div>
             <div class="p-4 overflow-y-auto max-h-[60vh] flex flex-col">
                 <div class="flex gap-2 mb-3">
-                    <input type="text" id="global-edit-new" data-i18n="ph_add_new" placeholder="Adicionar novo..." class="flex-1 p-2 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
+                    <input type="text" id="global-edit-new" autocomplete="off" data-i18n="ph_add_new" placeholder="Adicionar novo..." class="flex-1 p-2 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
                     <button onclick="addGlobalItem()" data-i18n="btn_add" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition">Adicionar</button>
                 </div>
-                <input type="text" id="global-edit-search" oninput="filterGlobalEdit()" data-i18n="placeholder_search" placeholder="Pesquisar..." class="w-full p-2 mb-3 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
+                <input type="text" id="global-edit-search" autocomplete="off" oninput="filterGlobalEdit()" data-i18n="placeholder_search" placeholder="Pesquisar..." class="w-full p-2 mb-3 text-xs border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-white transition">
                 <div id="global-edit-content" class="space-y-2 flex-1 overflow-y-auto"></div>
             </div>
             <input type="hidden" id="global-edit-field">
@@ -808,7 +808,7 @@
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1" data-i18n="lbl_lim_target">Nome exato</label>
-                    <input type="text" id="limit-target" list="limit-target-options" placeholder="Digite o nome exato usado no app..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
+                    <input type="text" id="limit-target" list="limit-target-options" autocomplete="off" placeholder="Digite o nome exato usado no app..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
                     <datalist id="limit-target-options"></datalist>
                 </div>
                 <div>
@@ -995,7 +995,7 @@
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }
         
-        const FLOWME_VERSION = '2.0.4';
+        const FLOWME_VERSION = '2.0.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1259,7 +1259,7 @@
             const container = document.getElementById('split-rows'); const rowId = 'split-' + Date.now() + Math.floor(Math.random() * 1000);
             const div = document.createElement('div'); div.id = rowId; div.className = "flex items-center gap-2 bg-white dark:bg-slate-800 p-1.5 rounded border border-slate-200 dark:border-slate-600 shadow-sm transition-colors";
             div.innerHTML = `
-                <input type="text" placeholder="${t('placeholder_name')}" value="${person}" list="people-list" class="split-person w-2/5 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
+                <input type="text" autocomplete="off" placeholder="${t('placeholder_name')}" value="${person}" list="people-list" class="split-person w-2/5 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
                 <input type="number" step="0.01" placeholder="0.00" value="${value}" class="split-value w-1/4 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
                 <select class="split-status w-1/4 p-1 text-[10px] border border-slate-200 dark:border-slate-600 rounded bg-slate-50 dark:bg-slate-900 outline-none">
                     <option value="pendente" ${status === 'pendente' ? 'selected' : ''}>${t('str_split_pen')}</option>

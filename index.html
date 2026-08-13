@@ -162,41 +162,56 @@
     
 <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_income">Receitas (Previsão)</p>
-                        <h3 id="summary-income" class="text-xl font-bold text-emerald-600 mt-1">0,00</h3>
-                        <p id="summary-income-paid" class="text-[10px] text-slate-500 mt-1">Já recebido: 0,00</p>
+            
+            <!-- GAVETA 1: RESUMO FINANCEIRO -->
+            <div class="mb-6">
+                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="resumo" onclick="toggleAccordion('resumo')">
+                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-wallet text-emerald-500"></i> <span data-i18n="acc_summary">Resumo Financeiro</span>
+                    </h3>
+                    <i id="acc-icon-resumo" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                </button>
+                <div id="acc-content-resumo" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                    <div class="overflow-hidden">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                            <!-- Os 4 Cartões Ficam AQUI Dentro -->
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_income">Receitas (Previsão)</p>
+                                    <h3 id="summary-income" class="text-xl font-bold text-emerald-600 mt-1">0,00</h3>
+                                    <p id="summary-income-paid" class="text-[10px] text-slate-500 mt-1">Já recebido: 0,00</p>
+                                </div>
+                                <div class="bg-emerald-50 dark:bg-emerald-900/30 h-10 w-10 flex items-center justify-center rounded-full text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_expense">Despesas (Previsão)</p>
+                                    <h3 id="summary-expense" class="text-xl font-bold text-rose-600 mt-1">0,00</h3>
+                                    <p id="summary-expense-paid" class="text-[10px] text-slate-500 mt-1">Já pago: 0,00</p>
+                                </div>
+                                <div class="bg-rose-50 dark:bg-rose-900/30 h-10 w-10 flex items-center justify-center rounded-full text-rose-600 dark:text-rose-400"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_balance">Balanço</p>
+                                    <h3 id="summary-balance" class="text-xl font-bold mt-1 text-slate-800 dark:text-white">0,00</h3>
+                                    <p id="summary-balance-real" class="text-[10px] text-slate-500 mt-1">Saldo Real: 0,00</p>
+                                </div>
+                                <div class="bg-slate-100 dark:bg-slate-700 h-10 w-10 flex items-center justify-center rounded-full text-slate-600 dark:text-slate-300"><i class="fa-solid fa-scale-balanced"></i></div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_splits">Rateios a Receber</p>
+                                    <h3 id="summary-splits" class="text-xl font-bold text-amber-600 mt-1">0,00</h3>
+                                    <p id="summary-splits-received" class="text-[10px] text-slate-500 mt-1">Recebido: 0,00</p>
+                                </div>
+                                <div class="bg-amber-50 dark:bg-amber-900/30 h-10 w-10 flex items-center justify-center rounded-full text-amber-600 dark:text-amber-400"><i class="fa-solid fa-users"></i></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-emerald-50 h-10 w-10 flex items-center justify-center rounded-full text-emerald-600"><i class="fa-solid fa-arrow-trend-up"></i></div>
-                </div>
-                
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_expense">Despesas (Previsão)</p>
-                        <h3 id="summary-expense" class="text-xl font-bold text-rose-600 mt-1">0,00</h3>
-                        <p id="summary-expense-paid" class="text-[10px] text-slate-500 mt-1">Já pago: 0,00</p>
-                    </div>
-                    <div class="bg-rose-50 h-10 w-10 flex items-center justify-center rounded-full text-rose-600"><i class="fa-solid fa-arrow-trend-down"></i></div>
-                </div>
-                
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_balance">Balanço</p>
-                        <h3 id="summary-balance" class="text-xl font-bold mt-1 text-slate-800">0,00</h3>
-                        <p id="summary-balance-real" class="text-[10px] text-slate-500 mt-1">Saldo Real: 0,00</p>
-                    </div>
-                    <div class="bg-slate-100 h-10 w-10 flex items-center justify-center rounded-full text-slate-600"><i class="fa-solid fa-scale-balanced"></i></div>
-                </div>
-                
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center transition-colors">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_splits">Rateios a Receber</p>
-                        <h3 id="summary-splits" class="text-xl font-bold text-amber-600 mt-1">0,00</h3>
-                        <p id="summary-splits-received" class="text-[10px] text-slate-500 mt-1">Recebido: 0,00</p>
-                    </div>
-                    <div class="bg-amber-50 h-10 w-10 flex items-center justify-center rounded-full text-amber-600"><i class="fa-solid fa-users"></i></div>
                 </div>
             </div>
 
@@ -351,65 +366,89 @@
                 </div>
 
                 <!-- TABELA TRANSAÇÕES -->
+                <!-- LADO DIREITO (TABELA E PESSOAS) -->
                 <div class="lg:col-span-2 space-y-4">
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
-                        <div class="relative flex-1">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
-                            <input type="text" id="search-input" autocomplete="off" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
-                        <div class="flex items-center gap-2 overflow-x-auto">
-                            <select id="filter-type" onchange="render()" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none focus:border-emerald-500 transition-colors">
-                                <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
-                                <option value="receita" data-i18n="flt_income">Receitas</option>
-                                <option value="despesa" data-i18n="flt_expense">Despesas</option>
-                            </select>
-                            <select id="filter-status" onchange="render()" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none focus:border-emerald-500 transition-colors">
-                                <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
-                                <option value="pago" data-i18n="flt_paid">Pagos/Recebidos</option>
-                                <option value="pendente" data-i18n="flt_pending">Pendentes</option>
-                            </select>
-                            <select id="filter-split" onchange="render()" class="p-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none focus:border-emerald-500 transition-colors">
-                                <option value="todos" data-i18n="flt_all_splits">Todas</option>
-                                <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
-                            </select>
+                    
+                    <!-- GAVETA 2: FILTROS E HISTÓRICO -->
+                    <div>
+                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="historico" onclick="toggleAccordion('historico')">
+                            <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-list-ul text-blue-500"></i> <span data-i18n="acc_filters">Filtros e Histórico</span>
+                            </h3>
+                            <i id="acc-icon-historico" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        </button>
+                        
+                        <div id="acc-content-historico" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                            <div class="overflow-hidden">
+                                <div class="mt-4 space-y-4">
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
+                                        <div class="relative flex-1">
+                                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
+                                            <input type="text" id="search-input" autocomplete="off" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        </div>
+                                        <div class="flex items-center gap-2 overflow-x-auto">
+                                            <select id="filter-type" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                                <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
+                                                <option value="receita" data-i18n="flt_income">Receitas</option>
+                                                <option value="despesa" data-i18n="flt_expense">Despesas</option>
+                                            </select>
+                                            <select id="filter-status" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                                <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
+                                                <option value="pago" data-i18n="flt_paid">Pagos/Recebidos</option>
+                                                <option value="pendente" data-i18n="flt_pending">Pendentes</option>
+                                            </select>
+                                            <select id="filter-split" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                                <option value="todos" data-i18n="flt_all_splits">Todas</option>
+                                                <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                
+                                    <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-colors">
+                                        <div class="overflow-x-auto w-full">
+                                            <table class="w-full text-left border-collapse min-w-[750px]">
+                                                <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 transition-colors">
+                                                    <tr>
+                                                        <th class="p-3" data-i18n="th_date">Data</th>
+                                                        <th class="p-3" data-i18n="th_desc">Descrição & Categoria</th>
+                                                        <th class="p-3" data-i18n="th_method">Conta/Cartão</th>
+                                                        <th class="p-3" data-i18n="th_orig">Valor Orig.</th>
+                                                        <th class="p-3" data-i18n="th_cost">Seu Custo</th>
+                                                        <th class="p-3 text-center" data-i18n="th_status">Status</th>
+                                                        <th class="p-3 text-right" data-i18n="th_actions">Ações</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="transactions-body" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-sm">
+                                                    <!-- Injeção de dados via JS -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div id="empty-state" class="hidden flex flex-col items-center justify-center p-10 text-slate-400">
+                                            <i class="fa-solid fa-folder-open text-3xl mb-3 text-slate-300 dark:text-slate-600"></i>
+                                            <p class="text-sm" data-i18n="empty_state">Nenhuma movimentação encontrada.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-colors">
-                        <div class="overflow-x-auto w-full">
-                            <table class="w-full text-left border-collapse min-w-[750px]">
-                                <thead class="bg-slate-50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 transition-colors">
-                                    <tr>
-                                        <th class="p-3" data-i18n="th_date">Data</th>
-                                        <th class="p-3" data-i18n="th_desc">Descrição & Categoria</th>
-                                        <th class="p-3" data-i18n="th_method">Conta/Cartão</th>
-                                        <th class="p-3" data-i18n="th_orig">Valor Orig.</th>
-                                        <th class="p-3" data-i18n="th_cost">Seu Custo</th>
-                                        <th class="p-3 text-center" data-i18n="th_status">Status</th>
-                                        <th class="p-3 text-right" data-i18n="th_actions">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="transactions-body" class="divide-y divide-slate-100 text-sm">
-                                    <!-- Injeção de dados via JS -->
-                                </tbody>
-                            </table>
+                    <!-- GAVETA 3: PESSOAS -->
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
+                        <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="pessoas" onclick="toggleAccordion('pessoas')">
+                            <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
+                            </h3>
+                            <i id="acc-icon-pessoas" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        </button>
+                        <div id="acc-content-pessoas" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                            <div class="overflow-hidden">
+                                <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700 pt-3"></div>
+                            </div>
                         </div>
-                        <div id="empty-state" class="hidden flex flex-col items-center justify-center p-10 text-slate-400">
-                            <i class="fa-solid fa-folder-open text-3xl mb-3 text-slate-300"></i>
-                            <p class="text-sm" data-i18n="empty_state">Nenhuma movimentação encontrada.</p>
-                        </div>
-                    </div>
-
-                    <!-- RESUMO DE PESSOAS -->
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-colors">
-                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1 border-b border-slate-100 pb-2">
-                            <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
-                        </h3>
-                        <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50"></div>
                     </div>
 
                 </div>
-            </div>
             
             <!-- Botão Flutuante (FAB) -->
             <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-6 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-lg items-center justify-center text-2xl z-40 hover:bg-emerald-600 transition-transform active:scale-90 flex">
@@ -473,43 +512,78 @@
         
             <!-- ORÇAMENTOS E LIMITES -->
             <div id="dashboard-limits-section" class="hidden bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors mb-6">
-                <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">
+                <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-limits" onclick="toggleAccordion('dash-limits')">
                     <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider"><i class="fa-solid fa-bullseye text-pink-500 mr-1"></i> <span data-i18n="dash_limits">Orçamentos do Mês</span></h3>
-                    <button onclick="switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="text-[10px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 px-2 py-1 rounded transition border border-slate-200 dark:border-slate-600" data-i18n="btn_config">Configurar</button>
+                    <div class="flex gap-3 items-center">
+                        <span onclick="event.stopPropagation(); switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="text-[10px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 px-2 py-1 rounded transition border border-slate-200 dark:border-slate-600" data-i18n="btn_config">Configurar</span>
+                        <i id="acc-icon-dash-limits" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                </button>
+                <div id="acc-content-dash-limits" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                    <div class="overflow-hidden">
+                        <div id="dashboard-limits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4"></div>
+                    </div>
                 </div>
-                <div id="dashboard-limits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Gráfico 1: Fluxo de Caixa -->
                 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_cashflow">Fluxo de Caixa (Mês)</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chart-cashflow"></canvas>
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-fluxo" onclick="toggleAccordion('dash-fluxo')">
+                        <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_cashflow">Fluxo de Caixa (Filtro Atual)</h3>
+                        <i id="acc-icon-dash-fluxo" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="acc-content-dash-fluxo" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="relative h-64 w-full pt-4">
+                                <canvas id="chart-cashflow"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gráfico 2: Despesas por Categoria -->
                 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_categories">Despesas por Categoria</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chart-categories"></canvas>
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-cat" onclick="toggleAccordion('dash-cat')">
+                        <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_categories">Despesas por Categoria</h3>
+                        <i id="acc-icon-dash-cat" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="acc-content-dash-cat" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="relative h-64 w-full pt-4">
+                                <canvas id="chart-categories"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gráfico 3: Evolução 6 Meses -->
                 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_evolution">Evolução (Últimos 6 Meses)</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chart-evolution"></canvas>
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-evo" onclick="toggleAccordion('dash-evo')">
+                        <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_evolution">Evolução (Últimos 6 Meses)</h3>
+                        <i id="acc-icon-dash-evo" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="acc-content-dash-evo" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="relative h-64 w-full pt-4">
+                                <canvas id="chart-evolution"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gráfico 4: Gastos por Conta/Cartão -->
                 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-slate-700 pb-2" data-i18n="chart_accounts">Gastos por Conta / Cartão</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chart-accounts"></canvas>
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-acc" onclick="toggleAccordion('dash-acc')">
+                        <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_accounts">Gastos por Conta / Cartão</h3>
+                        <i id="acc-icon-dash-acc" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="acc-content-dash-acc" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="relative h-64 w-full pt-4">
+                                <canvas id="chart-accounts"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -520,180 +594,189 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
                 
-                <!-- CARTÃO DE NUVEM COM GOOGLE DRIVE -->
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between transition-colors">
-                    <div class="border-b border-slate-100 pb-4 mb-4">
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-brands fa-google text-blue-500 mr-2"></i> <span data-i18n="cfg_acc_title">Conta e Nuvem</span></h2>
-                    </div>
-                    <div class="flex items-center gap-4 mb-4 opacity-50" id="cloud-user-info">
-                        <div class="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center text-slate-400 overflow-hidden" id="cloud-user-avatar">
-                            <i class="fa-solid fa-user text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-700" id="cloud-user-name" data-i18n="cfg_acc_user">Usuário Desconectado</p>
-                            <p class="text-[10px] text-slate-500"><span data-i18n="cfg_acc_sync">Última sincronização:</span> <span id="cloud-last-sync">--</span></p>
-                        </div>
-                    </div>
-                    <div id="cloud-auth-buttons">
-                        <button onclick="handleAuthClick()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg border border-blue-700 shadow-sm transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-brands fa-google"></i> <span data-i18n="btn_cloud_connect">Conectar Google Drive</span>
-                        </button>
-                    </div>
-                    <div id="cloud-sync-buttons" class="hidden flex-col gap-2">
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="saveToCloud()" class="py-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 font-bold text-[10px] rounded-lg border border-emerald-300 transition-colors flex flex-col items-center justify-center gap-1 shadow-sm">
-                                <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
-                                <span data-i18n="btn_cloud_save">Salvar na Nuvem</span>
-                            </button>
-                            <button onclick="loadFromCloud()" class="py-2 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 font-bold text-[10px] rounded-lg border border-indigo-300 transition-colors flex flex-col items-center justify-center gap-1 shadow-sm">
-                                <i class="fa-solid fa-cloud-arrow-down text-lg"></i>
-                                <span data-i18n="btn_cloud_load">Puxar da Nuvem</span>
-                            </button>
-                        </div>
-                        <button onclick="handleSignoutClick()" class="w-full mt-2 py-1.5 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 font-medium text-[10px] rounded border border-slate-200 transition-colors">
-                            <i class="fa-solid fa-right-from-bracket mr-1"></i> <span data-i18n="btn_cloud_disconnect">Desconectar</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between transition-colors">
-                    <div class="border-b border-slate-100 pb-4 mb-4">
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-earth-americas text-emerald-500 mr-2"></i> <span data-i18n="cfg_lang_curr">Idioma e Moeda</span></h2>
-                    </div>
-                    <div class="mb-5">
-                        <label id="lbl-language" class="block text-xs font-semibold text-slate-600 mb-2">Idioma:</label>
-                        <div class="flex flex-wrap gap-2" id="lang-buttons">
-                            <button onclick="setLanguage('pt')" id="btn-lang-pt" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
-                                <span class="text-lg">🇧🇷</span> <span class="lang-text">Português</span>
-                            </button>
-                            <button onclick="setLanguage('en')" id="btn-lang-en" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
-                                <span class="text-lg">🇦🇺</span> <span class="lang-text">Inglês</span>
-                            </button>
-                            <button onclick="setLanguage('es')" id="btn-lang-es" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
-                                <span class="text-lg">🇪🇸</span> <span class="lang-text">Espanhol</span>
-                            </button>
-                            <button onclick="setLanguage('fr')" id="btn-lang-fr" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium">
-                                <span class="text-lg">🇫🇷</span> <span class="lang-text">Francês</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-2" data-i18n="cfg_currency">Moeda Padrão:</label>
-                        <select id="cfg-currency" onchange="setCurrency(this.value)" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 outline-none focus:border-emerald-500 transition-colors">
-                            <option value="BRL" data-i18n="curr_brl">Real Brasileiro (R$)</option>
-                            <option value="USD" data-i18n="curr_usd">Dólar Americano ($)</option>
-                            <option value="EUR" data-i18n="curr_eur">Euro (€)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- WRAPPER PARA OS DOIS BLOCOS MENORES NO LADO ESQUERDO -->
-                <div class="flex flex-col gap-6">
-                    <!-- BLOCO DE APARÊNCIA -->
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors">
-                        <div class="border-b border-slate-100 pb-4 mb-4">
-                            <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-palette text-amber-500 mr-2"></i> <span data-i18n="cfg_appearance_title">Aparência</span></h2>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-2" data-i18n="cfg_theme">Tema do Aplicativo:</label>
-                            <div class="flex flex-wrap gap-2" id="theme-buttons">
-                                <button onclick="setTheme('light')" id="btn-theme-light" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium">
-                                    <i class="fa-solid fa-sun text-amber-500"></i> <span data-i18n="cfg_theme_light">Claro</span>
-                                </button>
-                                <button onclick="setTheme('dark')" id="btn-theme-dark" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium">
-                                    <i class="fa-solid fa-moon text-indigo-400"></i> <span data-i18n="cfg_theme_dark">Escuro</span>
-                                </button>
-                                <button onclick="setTheme('system')" id="btn-theme-system" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium">
-                                    <i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- ESTILO DAS ABAS -->
-                        <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
-                            <label class="block text-xs font-semibold text-slate-600 mb-2" data-i18n="cfg_tab_style">Estilo do Menu Principal:</label>
-                            <select id="cfg-tab-style" onchange="setTabStyle(this.value)" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 outline-none focus:border-emerald-500 transition-colors">
-                                <option value="both" data-i18n="opt_tab_both">Ícone e Texto</option>
-                                <option value="icons" data-i18n="opt_tab_icons">Apenas Ícones</option>
-                            </select>
-                        </div>
-                        
-                        <!-- ESTILO DOS PAINÉIS (Sanfona) -->
-                        <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
-                            <label class="block text-xs font-semibold text-slate-600 mb-2" data-i18n="cfg_panel_style">Estilo dos Painéis:</label>
-                            <select id="cfg-panel-style" onchange="setPanelStyle(this.value)" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 outline-none focus:border-emerald-500 transition-colors">
-                                <option value="blocks" data-i18n="opt_panel_blocks">Blocos Expandidos</option>
-                                <option value="accordion" data-i18n="opt_panel_accordion">Sanfonas (Recolhíveis)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- BLOCO DE ALERTAS E LEMBRETES -->
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors">
-                        <div class="border-b border-slate-100 pb-4 mb-4">
-                            <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-bell text-rose-500 mr-2"></i> <span data-i18n="cfg_alerts_title">Alertas e Lembretes</span></h2>
-                        </div>
-                        <div class="space-y-3">
-                            <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
-                                <input type="checkbox" id="cfg-notif" onchange="toggleNotifications(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                                <span data-i18n="cfg_notif">Ativar Notificações/Alertas</span>
-                            </label>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_pre">Avisar quando faltar</span>
-                                <input type="number" id="cfg-reminder" onchange="setReminderDays(this.value)" min="0" max="30" class="w-16 p-1.5 border border-slate-300 rounded-md text-xs text-center bg-white outline-none focus:border-amber-500 transition-colors">
-                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_pos">dia(s)</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_overdue">Avisar quando passar</span>
-                                <input type="number" id="cfg-overdue" onchange="setOverdueDays(this.value)" min="0" max="90" class="w-16 p-1.5 border border-slate-300 rounded-md text-xs text-center bg-white outline-none focus:border-rose-500 transition-colors">
-                                <span class="text-xs text-slate-600" data-i18n="cfg_rem_pos">dia(s)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors">
-                    <div class="border-b border-slate-100 pb-4 mb-4">
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-shield-halved text-indigo-500 mr-2"></i> <span data-i18n="cfg_title">Dados e Segurança</span></h2>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-800 flex justify-between items-center gap-2 transition-colors">
-                            <div><h3 class="text-[11px] font-bold text-emerald-900 dark:text-emerald-400" data-i18n="cfg_export_title">Exportar Planilha</h3></div>
-                            <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[10px] rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-download"></i> <span data-i18n="btn_export">Exportar</span>
-                            </button>
-                        </div>
-                        <div class="p-3 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-lg border border-indigo-100 dark:border-indigo-800 transition-colors">
-                            <h3 class="text-[11px] font-bold text-indigo-900 dark:text-indigo-400 mb-2" data-i18n="cfg_imp_title">Importar Backup</h3>
-                            <div class="flex flex-col gap-2 w-full">
-                                <div class="flex items-center gap-2">
-                                    <label class="flex-1 flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md px-2 py-1 cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-700">
-                                        <span class="bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 px-2 py-1 rounded text-[10px] font-bold transition-colors" data-i18n="file_choose_btn">Escolher</span>
-                                        <span id="file-name-text" class="text-[10px] text-slate-500 truncate" data-i18n="file_no_file">Nenhum arquivo</span>
-                                        <input type="file" id="import-file" accept=".csv" class="hidden" onchange="const tNode=document.getElementById('file-name-text'); if(this.files[0]){ tNode.textContent=this.files[0].name; tNode.removeAttribute('data-i18n'); } else { tNode.setAttribute('data-i18n', 'file_no_file'); tNode.textContent=t('file_no_file'); }">
-                                    </label>
-                                    <button onclick="importFromCSV()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-[10px] rounded-lg shadow-sm transition" data-i18n="btn_import">Restaurar</button>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-cloud" onclick="toggleAccordion('cfg-cloud')">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-brands fa-google text-blue-500 mr-2"></i> <span data-i18n="cfg_acc_title">Conta e Nuvem</span></h2>
+                        <i id="acc-icon-cfg-cloud" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="acc-content-cfg-cloud" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr] flex-1">
+                        <div class="overflow-hidden flex flex-col h-full">
+                            <div class="pt-4 flex-1 flex flex-col justify-between">
+                                <div class="flex items-center gap-4 mb-4 opacity-50" id="cloud-user-info">
+                                    <div class="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-400 overflow-hidden" id="cloud-user-avatar">
+                                        <i class="fa-solid fa-user text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300" id="cloud-user-name" data-i18n="cfg_acc_user">Usuário Desconectado</p>
+                                        <p class="text-[10px] text-slate-500"><span data-i18n="cfg_acc_sync">Última sincronização:</span> <span id="cloud-last-sync">--</span></p>
+                                    </div>
                                 </div>
-                                <p id="import-error-msg" class="text-[10px] text-rose-500 font-bold hidden"></p>
+                                <div id="cloud-auth-buttons">
+                                    <button onclick="handleAuthClick()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg border border-blue-700 shadow-sm transition-colors flex items-center justify-center gap-2">
+                                        <i class="fa-brands fa-google"></i> <span data-i18n="btn_cloud_connect">Conectar Google Drive</span>
+                                    </button>
+                                </div>
+                                <div id="cloud-sync-buttons" class="hidden flex-col gap-2">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button onclick="saveToCloud()" class="py-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-300 font-bold text-[10px] rounded-lg border border-emerald-300 dark:border-emerald-800 transition-colors flex flex-col items-center justify-center gap-1 shadow-sm">
+                                            <i class="fa-solid fa-cloud-arrow-up text-lg"></i> <span data-i18n="btn_cloud_save">Salvar na Nuvem</span>
+                                        </button>
+                                        <button onclick="loadFromCloud()" class="py-2 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-300 font-bold text-[10px] rounded-lg border border-indigo-300 dark:border-indigo-800 transition-colors flex flex-col items-center justify-center gap-1 shadow-sm">
+                                            <i class="fa-solid fa-cloud-arrow-down text-lg"></i> <span data-i18n="btn_cloud_load">Puxar da Nuvem</span>
+                                        </button>
+                                    </div>
+                                    <button onclick="handleSignoutClick()" class="w-full mt-2 py-1.5 bg-slate-50 dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 text-slate-500 hover:text-rose-600 font-medium text-[10px] rounded border border-slate-200 dark:border-slate-600 transition-colors">
+                                        <i class="fa-solid fa-right-from-bracket mr-1"></i> <span data-i18n="btn_cloud_disconnect">Desconectar</span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="p-3 bg-rose-50/50 dark:bg-rose-900/20 rounded-lg border border-rose-100 dark:border-rose-800 flex justify-between items-center gap-2 transition-colors mt-2">
-                            <div><h3 class="text-[11px] font-bold text-rose-900 dark:text-rose-400" data-i18n="cfg_del_title">Apagar Banco de Dados</h3></div>
-                            <button onclick="clearAllData()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-[10px] rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-trash"></i> <span data-i18n="btn_delete">Apagar Tudo</span>
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- BLOCO DE GERENCIAR LIMITES -->
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors md:col-span-2">
-                    <div class="border-b border-slate-100 pb-4 mb-4 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-bullseye text-pink-500 mr-2"></i> <span data-i18n="cfg_limits_title">Orçamentos e Limites</span></h2>
-                        <button onclick="openLimitModal()" class="text-xs bg-pink-100 text-pink-700 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 transition border border-pink-200 flex items-center gap-1"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></button>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-lang" onclick="toggleAccordion('cfg-lang')">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-earth-americas text-emerald-500 mr-2"></i> <span data-i18n="cfg_lang_curr">Idioma e Moeda</span></h2>
+                        <i id="acc-icon-cfg-lang" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="acc-content-cfg-lang" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="pt-4 mb-5">
+                                <label id="lbl-language" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Idioma:</label>
+                                <div class="flex flex-wrap gap-2" id="lang-buttons">
+                                    <button onclick="setLanguage('pt')" id="btn-lang-pt" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇧🇷</span> <span class="lang-text">Português</span></button>
+                                    <button onclick="setLanguage('en')" id="btn-lang-en" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇦🇺</span> <span class="lang-text">Inglês</span></button>
+                                    <button onclick="setLanguage('es')" id="btn-lang-es" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇪🇸</span> <span class="lang-text">Espanhol</span></button>
+                                    <button onclick="setLanguage('fr')" id="btn-lang-fr" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇫🇷</span> <span class="lang-text">Francês</span></button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_currency">Moeda Padrão:</label>
+                                <select id="cfg-currency" onchange="setCurrency(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                    <option value="BRL" data-i18n="curr_brl">Real Brasileiro (R$)</option>
+                                    <option value="USD" data-i18n="curr_usd">Dólar Americano ($)</option>
+                                    <option value="EUR" data-i18n="curr_eur">Euro (€)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div id="settings-limits-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <!-- Renderizado via JS -->
+                </div>
+
+                <div class="flex flex-col gap-6">
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
+                        <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-app" onclick="toggleAccordion('cfg-app')">
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-palette text-amber-500 mr-2"></i> <span data-i18n="cfg_appearance_title">Aparência</span></h2>
+                            <i id="acc-icon-cfg-app" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        </button>
+                        <div id="acc-content-cfg-app" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                            <div class="overflow-hidden">
+                                <div class="pt-4">
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_theme">Tema do Aplicativo:</label>
+                                    <div class="flex flex-wrap gap-2" id="theme-buttons">
+                                        <button onclick="setTheme('light')" id="btn-theme-light" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-sun text-amber-500"></i> <span data-i18n="cfg_theme_light">Claro</span></button>
+                                        <button onclick="setTheme('dark')" id="btn-theme-dark" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-moon text-indigo-400"></i> <span data-i18n="cfg_theme_dark">Escuro</span></button>
+                                        <button onclick="setTheme('system')" id="btn-theme-system" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span></button>
+                                    </div>
+                                </div>
+                                <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_tab_style">Estilo do Menu Principal:</label>
+                                    <select id="cfg-tab-style" onchange="setTabStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        <option value="both" data-i18n="opt_tab_both">Ícone e Texto</option>
+                                        <option value="icons" data-i18n="opt_tab_icons">Apenas Ícones</option>
+                                    </select>
+                                </div>
+                                <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_panel_style">Estilo dos Painéis:</label>
+                                    <select id="cfg-panel-style" onchange="setPanelStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        <option value="blocks" data-i18n="opt_panel_blocks">Blocos Expandidos</option>
+                                        <option value="accordion" data-i18n="opt_panel_accordion">Sanfonas (Recolhíveis)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
+                        <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-notif" onclick="toggleAccordion('cfg-notif')">
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-bell text-rose-500 mr-2"></i> <span data-i18n="cfg_alerts_title">Alertas e Lembretes</span></h2>
+                            <i id="acc-icon-cfg-notif" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        </button>
+                        <div id="acc-content-cfg-notif" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                            <div class="overflow-hidden">
+                                <div class="space-y-3 pt-4">
+                                    <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
+                                        <input type="checkbox" id="cfg-notif" onchange="toggleNotifications(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                        <span data-i18n="cfg_notif">Ativar Notificações/Alertas</span>
+                                    </label>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pre">Avisar quando faltar</span>
+                                        <input type="number" id="cfg-reminder" onchange="setReminderDays(this.value)" min="0" max="30" class="w-16 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs text-center bg-white dark:bg-slate-900 outline-none focus:border-amber-500 dark:text-slate-100 transition-colors">
+                                        <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pos">dia(s)</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_overdue">Avisar quando passar</span>
+                                        <input type="number" id="cfg-overdue" onchange="setOverdueDays(this.value)" min="0" max="90" class="w-16 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs text-center bg-white dark:bg-slate-900 outline-none focus:border-rose-500 dark:text-slate-100 transition-colors">
+                                        <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pos">dia(s)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-sec" onclick="toggleAccordion('cfg-sec')">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-shield-halved text-indigo-500 mr-2"></i> <span data-i18n="cfg_title">Dados e Segurança</span></h2>
+                        <i id="acc-icon-cfg-sec" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="acc-content-cfg-sec" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="space-y-4 pt-4">
+                                <div class="p-3 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-800 flex justify-between items-center gap-2 transition-colors">
+                                    <div><h3 class="text-[11px] font-bold text-emerald-900 dark:text-emerald-400" data-i18n="cfg_export_title">Exportar Planilha</h3></div>
+                                    <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[10px] rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
+                                        <i class="fa-solid fa-download"></i> <span data-i18n="btn_export">Exportar</span>
+                                    </button>
+                                </div>
+                                <div class="p-3 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-lg border border-indigo-100 dark:border-indigo-800 transition-colors">
+                                    <h3 class="text-[11px] font-bold text-indigo-900 dark:text-indigo-400 mb-2" data-i18n="cfg_imp_title">Importar Backup</h3>
+                                    <div class="flex flex-col gap-2 w-full">
+                                        <div class="flex items-center gap-2">
+                                            <label class="flex-1 flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md px-2 py-1 cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-700">
+                                                <span class="bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 px-2 py-1 rounded text-[10px] font-bold transition-colors" data-i18n="file_choose_btn">Escolher</span>
+                                                <span id="file-name-text" class="text-[10px] text-slate-500 truncate" data-i18n="file_no_file">Nenhum arquivo</span>
+                                                <input type="file" id="import-file" accept=".csv" class="hidden" onchange="const tNode=document.getElementById('file-name-text'); if(this.files[0]){ tNode.textContent=this.files[0].name; tNode.removeAttribute('data-i18n'); } else { tNode.setAttribute('data-i18n', 'file_no_file'); tNode.textContent=t('file_no_file'); }">
+                                            </label>
+                                            <button onclick="importFromCSV()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-[10px] rounded-lg shadow-sm transition" data-i18n="btn_import">Restaurar</button>
+                                        </div>
+                                        <p id="import-error-msg" class="text-[10px] text-rose-500 font-bold hidden"></p>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-rose-50/50 dark:bg-rose-900/20 rounded-lg border border-rose-100 dark:border-rose-800 flex justify-between items-center gap-2 transition-colors mt-2">
+                                    <div><h3 class="text-[11px] font-bold text-rose-900 dark:text-rose-400" data-i18n="cfg_del_title">Apagar Banco de Dados</h3></div>
+                                    <button onclick="clearAllData()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-[10px] rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
+                                        <i class="fa-solid fa-trash"></i> <span data-i18n="btn_delete">Apagar Tudo</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors md:col-span-2">
+                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-limits" onclick="toggleAccordion('cfg-limits')">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-bullseye text-pink-500 mr-2"></i> <span data-i18n="cfg_limits_title">Orçamentos e Limites</span></h2>
+                        <div class="flex gap-4 items-center">
+                            <span onclick="event.stopPropagation(); openLimitModal()" class="text-xs bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 dark:hover:bg-pink-800 transition border border-pink-200 dark:border-pink-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></span>
+                            <i id="acc-icon-cfg-limits" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        </div>
+                    </button>
+                    <div id="acc-content-cfg-limits" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div id="settings-limits-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-4">
+                                <!-- Renderizado via JS -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -882,7 +965,8 @@
                 tt_manage_desc: "Gerenciar Nomes", tt_manage_cat: "Gerenciar Categorias", tt_manage_acc: "Gerenciar Contas/Cartões", tt_manage_person: "Gerenciar Pessoas",
                 err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar",
                 btn_use: "Usar",
-                cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)"
+                cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)",
+                acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -913,7 +997,8 @@
                 tt_manage_desc: "Manage Names", tt_manage_cat: "Manage Categories", tt_manage_acc: "Manage Accounts", tt_manage_person: "Manage People",
                 err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save",
                 btn_use: "Use",
-                cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)"
+                cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)",
+                acc_summary: "Financial Summary", acc_filters: "Filters & History"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -944,7 +1029,8 @@
                 tt_manage_desc: "Administrar Nombres", tt_manage_cat: "Administrar Categorías", tt_manage_acc: "Administrar Cuentas", tt_manage_person: "Administrar Personas",
                 err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar",
                 btn_use: "Usar",
-                cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)"
+                cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)",
+                acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -975,7 +1061,8 @@
                 tt_manage_desc: "Gérer Noms", tt_manage_cat: "Gérer Catégories", tt_manage_acc: "Gérer Comptes", tt_manage_person: "Gérer Personnes",
                 err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer",
                 btn_use: "Utiliser",
-                cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)"
+                cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)",
+                acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique"
             }
         };
 
@@ -1013,8 +1100,76 @@
             
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }
+
+        // ================= SANFONA E ESTILO DOS PAINÉIS =================
+        let accordionState = JSON.parse(localStorage.getItem('flowme_accordions')) || {};
+
+        function toggleAccordion(id) {
+            if (userConfig.panelStyle !== 'accordion') return; // Se não for sanfona, ignora o clique
+            
+            const content = document.getElementById(`acc-content-${id}`);
+            const icon = document.getElementById(`acc-icon-${id}`);
+            const isOpen = content.classList.contains('[grid-template-rows:1fr]');
+            
+            if (isOpen) {
+                content.classList.remove('[grid-template-rows:1fr]');
+                content.classList.add('[grid-template-rows:0fr]');
+                icon.classList.remove('rotate-180');
+                accordionState[id] = false;
+            } else {
+                content.classList.remove('[grid-template-rows:0fr]');
+                content.classList.add('[grid-template-rows:1fr]');
+                icon.classList.add('rotate-180');
+                accordionState[id] = true;
+            }
+            // Salva na memória na mesma hora
+            localStorage.setItem('flowme_accordions', JSON.stringify(accordionState));
+        }
+
+        function applyPanelStyle() {
+            const isAccordion = userConfig.panelStyle === 'accordion';
+            
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                const id = header.getAttribute('data-acc-id');
+                const content = document.getElementById(`acc-content-${id}`);
+                const icon = document.getElementById(`acc-icon-${id}`);
+                
+                if (isAccordion) {
+                    header.classList.add('cursor-pointer');
+                    header.classList.remove('cursor-default');
+                    if(icon) icon.classList.remove('hidden');
+                    
+                    const shouldBeOpen = accordionState[id] !== false; // Se nunca foi mexido, abre por padrão
+                    if (shouldBeOpen) {
+                        content.classList.remove('[grid-template-rows:0fr]');
+                        content.classList.add('[grid-template-rows:1fr]');
+                        if(icon) icon.classList.add('rotate-180');
+                    } else {
+                        content.classList.remove('[grid-template-rows:1fr]');
+                        content.classList.add('[grid-template-rows:0fr]');
+                        if(icon) icon.classList.remove('rotate-180');
+                    }
+                } else {
+                    // Força modo Blocos Expandidos (Ignora a memória e abre tudo)
+                    header.classList.remove('cursor-pointer');
+                    header.classList.add('cursor-default');
+                    if(icon) icon.classList.add('hidden');
+                    
+                    content.classList.remove('[grid-template-rows:0fr]');
+                    content.classList.add('[grid-template-rows:1fr]');
+                    if(icon) icon.classList.add('rotate-180');
+                }
+            });
+        }
+
+        // Linca o botão de "Estilo dos Painéis"
+        function setPanelStyle(style) {
+            userConfig.panelStyle = style;
+            localStorage.setItem('flowme_panel_style', style);
+            applyPanelStyle(); // Atualiza a tela ao vivo ao trocar
+        }
         
-        const FLOWME_VERSION = '2.1.8';
+        const FLOWME_VERSION = '2.1.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1064,9 +1219,9 @@
             applyFormMode();
             document.getElementById('cfg-tab-style').value = userConfig.tabStyle;
             applyTabStyle();
-            
             updateThemeUI(userConfig.theme);
             applyTheme();
+            applyPanelStyle();
             loadState();
             setLanguage(userConfig.lang);
             updateAutocompleteLists();

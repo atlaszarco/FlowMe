@@ -92,7 +92,7 @@
                 </div>
             </div>
             
-            <nav class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 overflow-x-auto min-w-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <nav class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 overflow-x-auto min-w-0">
                 <button onclick="switchTab('transacoes')" id="tab-transacoes" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-emerald-500 text-slate-950 shadow-sm whitespace-nowrap">
                     <i class="fa-solid fa-list-ul mr-1"></i> <span data-i18n="tab_transactions">Transações</span>
                 </button>
@@ -199,6 +199,8 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start relative">
+            <!-- Fundo embaçado para o formulário no celular -->
+            <div id="form-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden" onclick="toggleMobileForm(false)"></div>
 
                 <!-- O FORMULÁRIO EM SI -->
                 <div id="form-wrapper" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:sticky lg:top-24 transition-all overflow-hidden lg:block hidden">
@@ -1010,7 +1012,7 @@
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }
         
-        const FLOWME_VERSION = '2.1.2';
+        const FLOWME_VERSION = '2.1.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1499,6 +1501,8 @@
         // ================= MOBILE FORM CONTROLS =================
         let isMobileFormOpen = false;
         
+        let isMobileFormOpen = false;
+        
         function toggleMobileForm(forceOpen = null) {
             if (window.innerWidth >= 1024) return; // Ignora a animação se for desktop
             
@@ -1506,26 +1510,35 @@
             else isMobileFormOpen = !isMobileFormOpen;
             
             const wrapper = document.getElementById('form-wrapper');
+            const backdrop = document.getElementById('form-backdrop');
             
             if (isMobileFormOpen) {
-                // Prepara a tela para "brotar" (Scale 95% + Translada de baixo para cima)
+                // Liga os elementos na tela
+                backdrop.classList.remove('hidden');
                 wrapper.classList.remove('hidden');
-                wrapper.classList.add('fixed', 'inset-0', 'z-50', 'w-full', 'h-full', 'rounded-none', 'p-6', 'bg-slate-50', 'dark:bg-slate-900', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95', 'translate-y-10');
                 
+                // Formata o Wrapper como Pop-up (Modal) Centralizado
+                wrapper.classList.add('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95');
+                
+                // Aciona a animação fluída no próximo quadro (Frame)
                 requestAnimationFrame(() => {
-                    wrapper.classList.remove('opacity-0', 'scale-95', 'translate-y-10');
-                    wrapper.classList.add('opacity-100', 'scale-100', 'translate-y-0');
+                    backdrop.classList.remove('opacity-0');
+                    wrapper.classList.remove('opacity-0', 'scale-95');
+                    wrapper.classList.add('opacity-100', 'scale-100');
                 });
             } else {
-                // Anima a saída afundando e deslizando para baixo
-                wrapper.classList.remove('opacity-100', 'scale-100', 'translate-y-0');
-                wrapper.classList.add('opacity-0', 'scale-95', 'translate-y-10');
+                // Retrai a animação (Soma o Scale e Opacidade)
+                backdrop.classList.add('opacity-0');
+                wrapper.classList.remove('opacity-100', 'scale-100');
+                wrapper.classList.add('opacity-0', 'scale-95');
                 
+                // Espera 300ms (tempo do CSS) para esconder o código
                 setTimeout(() => {
                     wrapper.classList.add('hidden');
-                    // Remove as classes de animação para não quebrar o layout se o usuário girar o celular para modo paisagem
-                    wrapper.classList.remove('fixed', 'inset-0', 'z-50', 'w-full', 'h-full', 'rounded-none', 'p-6', 'bg-slate-50', 'dark:bg-slate-900', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95', 'translate-y-10');
-                }, 300); // 300ms = tempo exato da duração da animação no CSS
+                    backdrop.classList.add('hidden');
+                    // Limpa as classes do mobile para não dar erro se a pessoa girar o celular/tela
+                    wrapper.classList.remove('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
+                }, 300);
             }
         }
         
@@ -1533,12 +1546,14 @@
             const fab = document.getElementById('fab-form');
             const wrapper = document.getElementById('form-wrapper');
             const btnCloseModal = document.getElementById('btn-close-modal');
+            const backdrop = document.getElementById('form-backdrop');
 
             if (window.innerWidth >= 1024) { 
-                // Força o modo Desktop (coluna da direita) e remove sujeiras do mobile
-                wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm lg:sticky lg:top-24 transition-all overflow-hidden block";
+                // Força o modo Desktop (coluna da direita) e permite scroll interno se a tela for baixinha
+                wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm lg:sticky lg:top-24 transition-all overflow-y-auto max-h-[85vh] block";
                 if(fab) fab.classList.add('hidden');
                 if(btnCloseModal) btnCloseModal.classList.add('hidden');
+                if(backdrop) backdrop.classList.add('hidden', 'opacity-0');
                 isMobileFormOpen = false; 
             } else {
                 // Prepara os botões do Mobile
@@ -1548,6 +1563,7 @@
                 // Se estiver fechado, garante que fica escondido sem perder as formatações base
                 if (!isMobileFormOpen) {
                     wrapper.className = "hidden bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all overflow-hidden";
+                    if(backdrop) backdrop.className = "fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden";
                 }
             }
         }

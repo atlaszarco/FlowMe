@@ -447,6 +447,16 @@
 
 <!-- ================= BLOCO 6: ABA DASHBOARD ================= -->
         <div id="content-dashboard" class="tab-content hidden max-w-7xl mx-auto space-y-6">
+        
+            <!-- ORÇAMENTOS E LIMITES -->
+            <div id="dashboard-limits-section" class="hidden bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors mb-6">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">
+                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider"><i class="fa-solid fa-bullseye text-pink-500 mr-1"></i> Orçamentos do Mês</h3>
+                    <button onclick="switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="text-[10px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 px-2 py-1 rounded transition border border-slate-200 dark:border-slate-600">Configurar</button>
+                </div>
+                <div id="dashboard-limits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+            
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Gráfico 1: Fluxo de Caixa -->
                 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
@@ -643,6 +653,17 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- BLOCO DE GERENCIAR LIMITES -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col transition-colors md:col-span-2">
+                    <div class="border-b border-slate-100 pb-4 mb-4 flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center"><i class="fa-solid fa-bullseye text-pink-500 mr-2"></i> Orçamentos e Limites</h2>
+                        <button onclick="openLimitModal()" class="text-xs bg-pink-100 text-pink-700 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 transition border border-pink-200 flex items-center gap-1"><i class="fa-solid fa-plus"></i> Novo</button>
+                    </div>
+                    <div id="settings-limits-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <!-- Renderizado via JS -->
+                    </div>
+                </div>
             </div>
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
@@ -741,6 +762,34 @@
                 <button onclick="processSmartImport()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-sm shadow-md transition-all flex items-center justify-center gap-2">
                     <i class="fa-solid fa-file-import"></i> Confirmar Importação
                 </button>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL: CRIAR LIMITE -->
+    <div id="modal-limit-form" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Criar Limite</h3>
+                <button onclick="closeModal('modal-limit-form')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-4 space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Tipo de Limite</label>
+                    <select id="limit-type" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
+                        <option value="category">Por Categoria</option>
+                        <option value="method">Por Cartão/Conta</option>
+                        <option value="person">Por Pessoa (Rateio)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Nome exato (Ex: Lazer, Nubank...)</label>
+                    <input type="text" id="limit-target" placeholder="Digite o nome exato usado no app..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Valor Máximo (R$)</label>
+                    <input type="number" id="limit-value" step="0.01" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
+                </div>
+                <button onclick="saveLimit()" class="w-full py-2 mt-2 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-lg text-sm transition shadow-md">Salvar Regra</button>
             </div>
         </div>
     </div>
@@ -910,7 +959,7 @@
                 btn_import_csv: "Importer",
             }
         };
-        const FLOWME_VERSION = '1.8.7';
+        const FLOWME_VERSION = '1.9.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1263,6 +1312,7 @@
                 if(t.type === 'despesa' && !t.expenseType) t.expenseType = 'debito';
             });
             updateSaveTimestamp();
+            renderLimitsSettings();
         }
         function clearAllData() { if(confirm(t('confirm_clear'))) { localStorage.removeItem('flowme_state'); state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; render(); updateAutocompleteLists(); } }
 
@@ -1675,7 +1725,7 @@
                     alerts.innerHTML = html;
                 }
             }
-
+            
             renderDashboard(filtered);
         }
 
@@ -1821,8 +1871,119 @@
         
 // ================= DASHBOARD & CHARTS =================
         let chartCashflow, chartCategories, chartEvolution, chartAccounts;
-
+        // ================= SISTEMA DE LIMITES E ORÇAMENTOS =================
+        function openLimitModal() {
+            document.getElementById('limit-target').value = '';
+            document.getElementById('limit-value').value = '';
+            document.getElementById('modal-limit-form').classList.remove('hidden');
+        }
+        
+        function saveLimit() {
+            const type = document.getElementById('limit-type').value;
+            const target = document.getElementById('limit-target').value.trim();
+            const value = parseFloat(document.getElementById('limit-value').value);
+            
+            if(!target || isNaN(value)) { alert("Preencha o nome e o valor!"); return; }
+            
+            if(!state.limits) state.limits = [];
+            state.limits.push({ id: 'lim-' + Date.now(), type, target, max: value });
+            
+            saveState();
+            renderLimitsSettings();
+            render(); // Atualiza o Dashboard
+            closeModal('modal-limit-form');
+            
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+        
+        function deleteLimit(id) {
+            state.limits = state.limits.filter(l => l.id !== id);
+            saveState();
+            renderLimitsSettings();
+            render();
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+        
+        function renderLimitsSettings() {
+            const container = document.getElementById('settings-limits-list');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            if(!state.limits || state.limits.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 col-span-full">Nenhum limite cadastrado.</p>';
+                return;
+            }
+            
+            const iconMap = { category: 'fa-tag', method: 'fa-credit-card', person: 'fa-user' };
+            
+            state.limits.forEach(lim => {
+                container.innerHTML += `
+                    <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-lg shadow-sm">
+                        <div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase"><i class="fa-solid ${iconMap[lim.type]} mr-1"></i> ${lim.type}</p>
+                            <p class="text-sm font-bold text-slate-800 dark:text-slate-100">${lim.target}</p>
+                            <p class="text-xs font-semibold text-pink-600">${formatCurrency(lim.max)}</p>
+                        </div>
+                        <button onclick="deleteLimit('${lim.id}')" class="text-slate-400 hover:text-rose-500 p-2 transition"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
         function renderDashboard(filtered) {
+        // PROCESSA AS BARRAS DE LIMITES
+            if(!state.limits) state.limits = [];
+            const limitsSection = document.getElementById('dashboard-limits-section');
+            const limitsContainer = document.getElementById('dashboard-limits-container');
+            
+            if(state.limits.length === 0) {
+                limitsSection.classList.add('hidden');
+            } else {
+                limitsSection.classList.remove('hidden');
+                limitsContainer.innerHTML = '';
+                
+                // Separa só as compras do mês atual
+                const currentMonthTx = state.transactions.filter(t => {
+                    const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                    return cDate === state.currentMonth;
+                });
+        
+                state.limits.forEach(lim => {
+                    let spent = 0;
+                    currentMonthTx.forEach(trx => {
+                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                            const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
+                            if(s) spent += s.value;
+                        } else if(lim.type === 'category' && trx.category.toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        } else if(lim.type === 'method' && trx.paymentMethod.toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        }
+                    });
+        
+                    const pct = Math.min(100, (spent / lim.max) * 100);
+                    let color = 'bg-emerald-500'; // Seguro (Verde)
+                    if(pct >= 90) color = 'bg-rose-500'; // Estourando (Vermelho)
+                    else if(pct >= 70) color = 'bg-amber-400'; // Atenção (Amarelo)
+        
+                    const remaining = lim.max - spent;
+        
+                    limitsContainer.innerHTML += `
+                        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-xl shadow-sm">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate w-3/5">${lim.target}</span>
+                                <span class="text-[10px] font-bold ${remaining < 0 ? 'text-rose-500' : 'text-slate-500'}">${formatCurrency(spent)} / ${formatCurrency(lim.max)}</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-1.5 overflow-hidden">
+                                <div class="${color} h-2 rounded-full transition-all duration-700" style="width: ${pct}%"></div>
+                            </div>
+                            <p class="text-[9px] font-semibold text-slate-400 text-right">${remaining >= 0 ? `Livre: ${formatCurrency(remaining)}` : `Estourado: ${formatCurrency(Math.abs(remaining))}`}</p>
+                        </div>
+                    `;
+                });
+            }
+            
             const dash = document.getElementById('content-dashboard');
             if (dash.classList.contains('hidden')) return; 
 

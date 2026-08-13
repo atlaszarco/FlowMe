@@ -684,7 +684,7 @@
     <div id="modal-alerts" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh]">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> Central de Alertas</h3>
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> <span data-i18n="modal_alerts_title">Central de Alertas</span></h3>
                 <button onclick="closeModal('modal-alerts')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-4 overflow-y-auto space-y-2" id="alerts-modal-content"></div>
@@ -708,20 +708,20 @@
     <div id="modal-invoice-due" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Vencimento da Fatura</h3>
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_due_title">Vencimento da Fatura</h3>
                 <button onclick="closeModal('modal-invoice-due')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-4 space-y-4">
                 <p id="invoice-due-card-name" class="text-xs font-semibold text-slate-500 uppercase"></p>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Dia do Vencimento</label>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" data-i18n="lbl_due_day">Dia do Vencimento</label>
                     <input type="number" id="invoice-due-day" min="1" max="31" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-indigo-500">
                 </div>
                 <label class="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400 cursor-pointer">
                     <input type="checkbox" id="invoice-due-apply-all" class="mt-0.5 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500">
-                    <span>Aplicar como padrão para todas as faturas futuras deste cartão.</span>
+                    <span data-i18n="lbl_apply_all">Aplicar como padrão para todas as faturas futuras deste cartão.</span>
                 </label>
-                <button onclick="saveInvoiceDueDate()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition">Salvar Vencimento</button>
+                <button onclick="saveInvoiceDueDate()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition"><span data-i18n="btn_save_due">Salvar Vencimento</span></button>
             </div>
         </div>
     </div>
@@ -806,170 +806,118 @@
         const translations = {
             pt: {
                 subtitle: "Seu controle pessoal de fluxo financeiro", tab_transactions: "Transações", tab_invoices: "Faturas", tab_dashboard: "Painel", tab_settings: "Configurações",
-                period_label: "Período:", saved_time: "Salvo:", btn_save_data: "Salvar Dados",
-                card_income: "Receitas (Previsão)", card_expense: "Despesas (Previsão)", card_balance: "Balanço do Mês", card_splits: "Rateios a Receber",
-                form_title_new: "Nova Movimentação", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Receita", type_expense: "Despesa",
-                lbl_exp_deb: "Débito/Pix", lbl_exp_cred: "Crédito", lbl_inv_month: "Mês da Fatura",
-                label_desc: "Descrição / Nome", placeholder_desc: "Ex: Salário, Energia...", label_value: "Valor", label_date_univ: "Data",
-                lbl_inst_inc: "Repetir recebimento?", lbl_inst_exp: "Compra parcelada?",
+                period_label: "Período:", saved_time: "Salvo:", btn_save_data: "Salvar Dados", card_income: "Receitas (Previsão)", card_expense: "Despesas (Previsão)", card_balance: "Balanço do Mês", card_splits: "Rateios a Receber",
+                form_title_new: "Nova Movimentação", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Receita", type_expense: "Despesa", lbl_exp_deb: "Débito/Pix", lbl_exp_cred: "Crédito", lbl_inv_month: "Mês da Fatura",
+                label_desc: "Descrição / Nome", placeholder_desc: "Ex: Salário, Energia...", label_value: "Valor", label_date_univ: "Data", lbl_inst_inc: "Repetir recebimento?", lbl_inst_exp: "Compra parcelada?",
                 label_is_installment: "Repetir / Parcelar?", label_installments: "Nº Vezes", label_logic: "Lógica", logic_rep: "Replicar Valor", logic_div: "Dividir Total",
                 label_category: "Categoria", placeholder_cat: "Digite ou selecione...", label_account: "Conta/Cartão", placeholder_acc: "Ex: Nubank, Dinheiro...",
-                label_status: "Status Inicial", status_rec: "Recebido", status_pen_rec: "Pendente (Previsão)", status_pag: "Pago", status_pen_pag: "Pendente (Vencimento)",
+                label_status: "Status Inicial", status_rec: "Recebido", status_pen_rec: "Pendente (Previsão)", status_pag: "Pago", status_pen_pag: "Pendente (Vencimento)", status_pen: "Pendente",
                 label_is_split: "Dividir com alguém?", btn_add_person: "Pessoa", btn_submit: "Salvar Movimentação", btn_submit_edit: "Atualizar Conta",
                 placeholder_search: "Buscar...", flt_all_types: "Todos os Tipos", flt_income: "Receitas", flt_expense: "Despesas", flt_all_status: "Todos os Status", flt_paid: "Pagos/Recebidos", flt_pending: "Pendentes",
-                flt_all_splits: "Todas", flt_only_splits: "Apenas Rateios",
-                th_date: "Data", th_date_purchase: "Data da Compra", th_desc: "Descrição & Cat.", th_method: "Conta/Cartão", th_orig: "Valor Orig.", th_cost: "Seu Custo", th_status: "Status", th_actions: "Ações",
-                empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)",
-                dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
-                cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar",
-                cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Banco de Dados", btn_delete: "Apagar Tudo",
+                flt_all_splits: "Todas", flt_only_splits: "Apenas Rateios", th_date: "Data", th_date_purchase: "Data da Compra", th_desc: "Descrição & Cat.", th_method: "Conta/Cartão", th_orig: "Valor Orig.", th_cost: "Seu Custo", th_status: "Status", th_actions: "Ações",
+                empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)", dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
+                cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar", cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Banco de Dados", btn_delete: "Apagar Tudo",
                 cfg_acc_title: "Conta e Nuvem", cfg_acc_user: "Usuário Desconectado", cfg_acc_sync: "Última sincronização:", cfg_acc_btn: "Integração Google em breve",
-                cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
-                cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
-                cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
-                cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão",
-                curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
-                opt_month: "Mês:", opt_range: "Período:", str_to: "até",
+                cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
+                cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão",
+                curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)", opt_month: "Mês:", opt_range: "Período:", str_to: "até",
                 str_received: "Recebido:", str_paid: "Pago:", str_real: "Real:", str_pending: "Pendente:", str_split_pen: "Pendente", str_split_paid: "Pago",
                 rem_inc_soon: "recebimento(s) próximo(s)", rem_inc_late: "recebimento(s) atrasado(s)", rem_exp_soon: "conta(s) vence(m) em breve", rem_exp_late: "conta(s) atrasada(s)",
                 confirm_del: "Excluir permanentemente?", confirm_clear: "ATENÇÃO: Apagar tudo do navegador?", confirm_cascade: "Deseja aplicar o novo nome para as parcelas seguintes desta conta?",
-                btn_edit: "Editar", btn_delete_action: "Excluir", placeholder_name: "Nome", file_choose_btn: "Escolher", file_no_file: "Nenhum arquivo",
-                lbl_select_card: "Selecione o Cartão:", lbl_invoice_total: "Total da Fatura", btn_edit_due: "Editar Vencimento",
-                title_manage: "Gerenciar", err_csv_invalid: "Arquivo incompatível ou versão antiga.",
-                cfg_acc_connected: "Conectado à Nuvem", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Salvar na Nuvem", btn_cloud_load: "Puxar da Nuvem", btn_cloud_disconnect: "Desconectar",
-                lbl_sync_saved: "(Salvo)", lbl_sync_loaded: "(Puxado)", msg_sync_success: "Sucesso!", msg_sync_saving: "Salvando...", msg_sync_loading: "Puxando...",
-                confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
-                err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.",
-                cfg_tab_style: "Estilo do Menu Principal:", opt_tab_both: "Ícone e Texto", opt_tab_icons: "Apenas Ícones",
-                chart_cashflow: "Fluxo de Caixa (Filtro Atual)", chart_categories: "Despesas por Categoria", chart_evolution: "Evolução (Últimos 6 Meses)", chart_accounts: "Gastos por Conta / Cartão", lbl_chart_inc: "Receitas", lbl_chart_exp: "Despesas",
-                btn_import_csv: "Importar",
-                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação", dash_limits: "Orçamentos do Mês", btn_config: "Configurar", cfg_limits_title: "Orçamentos e Limites", btn_new: "Novo", modal_limit_title: "Criar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:"
+                btn_edit: "Editar", btn_delete_action: "Excluir", placeholder_name: "Nome", file_choose_btn: "Escolher", file_no_file: "Nenhum arquivo", lbl_select_card: "Selecione o Cartão:", lbl_invoice_total: "Total da Fatura", btn_edit_due: "Editar Vencimento",
+                title_manage: "Gerenciar", err_csv_invalid: "Arquivo incompatível ou versão antiga.", cfg_acc_connected: "Conectado à Nuvem", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Salvar na Nuvem", btn_cloud_load: "Puxar da Nuvem", btn_cloud_disconnect: "Desconectar",
+                lbl_sync_saved: "(Salvo)", lbl_sync_loaded: "(Puxado)", msg_sync_success: "Sucesso!", msg_sync_saving: "Salvando...", msg_sync_loading: "Puxando...", confirm_cloud_load: "Backup encontrado na nuvem! Deseja puxar os dados e substituir os atuais do dispositivo?", confirm_overwrite: "Atenção: Os dados da nuvem vão sobrescrever os dados atuais. Deseja continuar?",
+                err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.", cfg_tab_style: "Estilo do Menu Principal:", opt_tab_both: "Ícone e Texto", opt_tab_icons: "Apenas Ícones",
+                chart_cashflow: "Fluxo de Caixa (Filtro Atual)", chart_categories: "Despesas por Categoria", chart_evolution: "Evolução (Últimos 6 Meses)", chart_accounts: "Gastos por Conta / Cartão", lbl_chart_inc: "Receitas", lbl_chart_exp: "Despesas", btn_import_csv: "Importar",
+                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação", dash_limits: "Orçamentos do Mês", btn_config: "Configurar", cfg_limits_title: "Orçamentos e Limites", btn_new: "Novo", modal_limit_title: "Criar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:",
+                btn_view: "Ver", modal_alerts_title: "Central de Alertas", btn_view_trx: "Ver Conta", msg_late: "X dias atrasado", msg_left: "faltam X dias", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
-                period_label: "Period:", saved_time: "Saved:", btn_save_data: "Save Data",
-                card_income: "Income (Forecast)", card_expense: "Expenses (Forecast)", card_balance: "Monthly Balance", card_splits: "Splits to Receive",
-                form_title_new: "New Transaction", form_title_edit: "Editing", btn_cancel: "Cancel", type_income: "Income", type_expense: "Expense",
-                lbl_exp_deb: "Debit/Cash", lbl_exp_cred: "Credit", lbl_inv_month: "Invoice Month",
-                label_desc: "Description / Name", placeholder_desc: "Ex: Salary, Bill...", label_value: "Value", label_date_univ: "Date",
-                lbl_inst_inc: "Repeat income?", lbl_inst_exp: "Installments?",
+                period_label: "Period:", saved_time: "Saved:", btn_save_data: "Save Data", card_income: "Income (Forecast)", card_expense: "Expenses (Forecast)", card_balance: "Monthly Balance", card_splits: "Splits to Receive",
+                form_title_new: "New Transaction", form_title_edit: "Editing", btn_cancel: "Cancel", type_income: "Income", type_expense: "Expense", lbl_exp_deb: "Debit/Cash", lbl_exp_cred: "Credit", lbl_inv_month: "Invoice Month",
+                label_desc: "Description / Name", placeholder_desc: "Ex: Salary, Bill...", label_value: "Value", label_date_univ: "Date", lbl_inst_inc: "Repeat income?", lbl_inst_exp: "Installments?",
                 label_is_installment: "Repeat / Installments?", label_installments: "Num", label_logic: "Logic", logic_rep: "Replicate", logic_div: "Divide Total",
                 label_category: "Category", placeholder_cat: "Type or select...", label_account: "Account/Card", placeholder_acc: "Ex: Cash, Bank...",
-                label_status: "Initial Status", status_rec: "Received", status_pen_rec: "Pending (Expected)", status_pag: "Paid", status_pen_pag: "Pending (Due)",
+                label_status: "Initial Status", status_rec: "Received", status_pen_rec: "Pending (Expected)", status_pag: "Paid", status_pen_pag: "Pending (Due)", status_pen: "Pending",
                 label_is_split: "Split with someone?", btn_add_person: "Person", btn_submit: "Save Transaction", btn_submit_edit: "Update Transaction",
                 placeholder_search: "Search...", flt_all_types: "All Types", flt_income: "Income", flt_expense: "Expenses", flt_all_status: "All Status", flt_paid: "Paid/Received", flt_pending: "Pending",
-                flt_all_splits: "All", flt_only_splits: "Only Splits",
-                th_date: "Date", th_date_purchase: "Purchase Date", th_desc: "Description & Cat.", th_method: "Account/Card", th_orig: "Orig. Value", th_cost: "Your Cost", th_status: "Status", th_actions: "Actions",
-                empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)",
-                dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
-                cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export",
-                cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Database", btn_delete: "Wipe All",
+                flt_all_splits: "All", flt_only_splits: "Only Splits", th_date: "Date", th_date_purchase: "Purchase Date", th_desc: "Description & Cat.", th_method: "Account/Card", th_orig: "Orig. Value", th_cost: "Your Cost", th_status: "Status", th_actions: "Actions",
+                empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)", dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
+                cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Database", btn_delete: "Wipe All",
                 cfg_acc_title: "Account & Cloud", cfg_acc_user: "Logged Out", cfg_acc_sync: "Last sync:", cfg_acc_btn: "Google Integration soon",
-                cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", 
-                cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
-                cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", 
-                cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version",
-                curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)",
-                opt_month: "Month:", opt_range: "Range:", str_to: "to",
+                cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
+                cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version",
+                curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)", opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
                 rem_inc_soon: "income(s) arriving soon", rem_inc_late: "late income(s)", rem_exp_soon: "expense(s) due soon", rem_exp_late: "late expense(s)",
                 confirm_del: "Delete permanently?", confirm_clear: "WARNING: Wipe all data from browser?", confirm_cascade: "Apply new name to subsequent installments of this bill?",
-                btn_edit: "Edit", btn_delete_action: "Delete", placeholder_name: "Name", file_choose_btn: "Choose file", file_no_file: "No file chosen",
-                lbl_select_card: "Select Card:", lbl_invoice_total: "Invoice Total", btn_edit_due: "Edit Due Date",
-                title_manage: "Manage", err_csv_invalid: "Incompatible file or old version.",
-                cfg_acc_connected: "Connected to Cloud", btn_cloud_connect: "Connect Google Drive", btn_cloud_save: "Save to Cloud", btn_cloud_load: "Load from Cloud", btn_cloud_disconnect: "Disconnect",
-                lbl_sync_saved: "(Saved)", lbl_sync_loaded: "(Loaded)", msg_sync_success: "Success!", msg_sync_saving: "Saving...", msg_sync_loading: "Loading...",
-                confirm_cloud_load: "Cloud backup found! Do you want to load data to this device?", confirm_overwrite: "Warning: Cloud data will overwrite this device's current data. Continue?",
-                err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found.",
-                cfg_tab_style: "Main Menu Style:", opt_tab_both: "Icon and Text", opt_tab_icons: "Icons Only",
-                chart_cashflow: "Cash Flow (Current Filter)", chart_categories: "Expenses by Category", chart_evolution: "Evolution (Last 6 Months)", chart_accounts: "Expenses by Account / Card", lbl_chart_inc: "Income", lbl_chart_exp: "Expenses",
-                btn_import_csv: "Import",
-                smart_import_title: "Smart Importer", smart_import_desc: "Verify column mapping and set the card name.", lbl_csv_card: "Card / Bank Name", ph_csv_card: "Ex: Chase, Amex...", lbl_csv_date: "DATE Column", lbl_csv_desc: "DESCRIPTION Column", lbl_csv_val: "VALUE Column", lbl_csv_invert: "Invert negative values?", desc_csv_invert: "Banks export expenses with a minus sign. Keep checked to convert to expenses.", btn_confirm_import: "Confirm Import", dash_limits: "Monthly Budgets", btn_config: "Configure", cfg_limits_title: "Budgets & Limits", btn_new: "New", modal_limit_title: "Create Limit", lbl_lim_type: "Limit Type", opt_lim_cat: "By Category", opt_lim_method: "By Account/Card", opt_lim_person: "By Person (Split)", lbl_lim_target: "Exact Name", ph_lim_target: "Type exact name...", lbl_lim_val: "Max Value", btn_save_rule: "Save Rule", lim_empty: "No limits registered.", lim_free: "Free:", lim_busted: "Busted:", lim_busted_alert: "Busted by", lim_remaining: "remaining", lim_used: "used", msg_lim_risk: "budgets at risk", msg_all_control: "Everything under control!", btn_view_dash: "View Panel", err_csv_card: "Please enter the Card/Bank name!", err_lim_fields: "Fill in name and value!", msg_imported: "bills imported!", btn_undo: "Undo", str_col: "Column", str_unnamed: "Unnamed", warn_busted: "⚠️ The budget for <b>TARGET</b> will be busted by <span class='font-bold'>VALUE</span>!", warn_near: "👀 Attention: This purchase will use PCT% of the budget for <b>TARGET</b>.", str_budget: "Budget:"
+                btn_edit: "Edit", btn_delete_action: "Delete", placeholder_name: "Name", file_choose_btn: "Choose file", file_no_file: "No file chosen", lbl_select_card: "Select Card:", lbl_invoice_total: "Invoice Total", btn_edit_due: "Edit Due Date",
+                title_manage: "Manage", err_csv_invalid: "Incompatible file or old version.", cfg_acc_connected: "Connected to Cloud", btn_cloud_connect: "Connect Google Drive", btn_cloud_save: "Save to Cloud", btn_cloud_load: "Load from Cloud", btn_cloud_disconnect: "Disconnect",
+                lbl_sync_saved: "(Saved)", lbl_sync_loaded: "(Loaded)", msg_sync_success: "Success!", msg_sync_saving: "Saving...", msg_sync_loading: "Loading...", confirm_cloud_load: "Cloud backup found! Do you want to load data to this device?", confirm_overwrite: "Warning: Cloud data will overwrite this device's current data. Continue?",
+                err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found.", cfg_tab_style: "Main Menu Style:", opt_tab_both: "Icon and Text", opt_tab_icons: "Icons Only",
+                chart_cashflow: "Cash Flow (Current Filter)", chart_categories: "Expenses by Category", chart_evolution: "Evolution (Last 6 Months)", chart_accounts: "Expenses by Account / Card", lbl_chart_inc: "Income", lbl_chart_exp: "Expenses", btn_import_csv: "Import",
+                smart_import_title: "Smart Importer", smart_import_desc: "Verify column mapping and set the card name.", lbl_csv_card: "Card / Bank Name", ph_csv_card: "Ex: Chase, Amex...", lbl_csv_date: "DATE Column", lbl_csv_desc: "DESCRIPTION Column", lbl_csv_val: "VALUE Column", lbl_csv_invert: "Invert negative values?", desc_csv_invert: "Banks export expenses with a minus sign. Keep checked to convert to expenses.", btn_confirm_import: "Confirm Import", dash_limits: "Monthly Budgets", btn_config: "Configure", cfg_limits_title: "Budgets & Limits", btn_new: "New", modal_limit_title: "Create Limit", lbl_lim_type: "Limit Type", opt_lim_cat: "By Category", opt_lim_method: "By Account/Card", opt_lim_person: "By Person (Split)", lbl_lim_target: "Exact Name", ph_lim_target: "Type exact name...", lbl_lim_val: "Max Value", btn_save_rule: "Save Rule", lim_empty: "No limits registered.", lim_free: "Free:", lim_busted: "Busted:", lim_busted_alert: "Busted by", lim_remaining: "remaining", lim_used: "used", msg_lim_risk: "budgets at risk", msg_all_control: "Everything under control!", btn_view_dash: "View Panel", err_csv_card: "Please enter the Card/Bank name!", err_lim_fields: "Fill in name and value!", msg_imported: "bills imported!", btn_undo: "Undo", str_col: "Column", str_unnamed: "Unnamed", warn_busted: "⚠️ The budget for <b>TARGET</b> will be busted by <span class='font-bold'>VALUE</span>!", warn_near: "👀 Attention: This purchase will use PCT% of the budget for <b>TARGET</b>.", str_budget: "Budget:",
+                btn_view: "View", modal_alerts_title: "Alerts Center", btn_view_trx: "View Trx", msg_late: "X days late", msg_left: "X days left", lbl_due_date: "Due Date", modal_due_title: "Invoice Due Date", lbl_due_day: "Due Day", lbl_apply_all: "Apply as default for all future invoices for this card.", btn_save_due: "Save Due Date"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
-                period_label: "Período:", saved_time: "Guardado:", btn_save_data: "Guardar Datos",
-                card_income: "Ingresos (Previstos)", card_expense: "Gastos (Previstos)", card_balance: "Balance del Mes", card_splits: "Divisiones a Recibir",
-                form_title_new: "Nueva Transacción", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Ingreso", type_expense: "Gasto",
-                lbl_exp_deb: "Débito/Efectivo", lbl_exp_cred: "Crédito", lbl_inv_month: "Mes de Factura",
-                label_desc: "Descripción / Nombre", placeholder_desc: "Ej: Salario, Luz...", label_value: "Valor", label_date_univ: "Fecha",
-                lbl_inst_inc: "¿Repetir ingreso?", lbl_inst_exp: "¿Compra en cuotas?",
+                period_label: "Período:", saved_time: "Guardado:", btn_save_data: "Guardar Datos", card_income: "Ingresos (Previstos)", card_expense: "Gastos (Previstos)", card_balance: "Balance del Mes", card_splits: "Divisiones a Recibir",
+                form_title_new: "Nueva Transacción", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Ingreso", type_expense: "Gasto", lbl_exp_deb: "Débito/Efectivo", lbl_exp_cred: "Crédito", lbl_inv_month: "Mes de Factura",
+                label_desc: "Descripción / Nombre", placeholder_desc: "Ej: Salario, Luz...", label_value: "Valor", label_date_univ: "Fecha", lbl_inst_inc: "¿Repetir ingreso?", lbl_inst_exp: "¿Compra en cuotas?",
                 label_is_installment: "¿Repetir / Cuotas?", label_installments: "Nº Veces", label_logic: "Lógica", logic_rep: "Replicar", logic_div: "Dividir Total",
                 label_category: "Categoría", placeholder_cat: "Escribe o elige...", label_account: "Cuenta/Tarjeta", placeholder_acc: "Ej: Efectivo, Banco...",
-                label_status: "Estado Inicial", status_rec: "Recibido", status_pen_rec: "Pendiente (Esperado)", status_pag: "Pagado", status_pen_pag: "Pendiente (Venc.)",
+                label_status: "Estado Inicial", status_rec: "Recibido", status_pen_rec: "Pendiente (Esperado)", status_pag: "Pagado", status_pen_pag: "Pendiente (Venc.)", status_pen: "Pendiente",
                 label_is_split: "¿Dividir gasto?", btn_add_person: "Persona", btn_submit: "Guardar Transacción", btn_submit_edit: "Actualizar Cuenta",
                 placeholder_search: "Buscar...", flt_all_types: "Todos los Tipos", flt_income: "Ingresos", flt_expense: "Gastos", flt_all_status: "Todos los Estados", flt_paid: "Pagados/Recibidos", flt_pending: "Pendientes",
-                flt_all_splits: "Todas", flt_only_splits: "Solo Divisiones",
-                th_date: "Fecha", th_date_purchase: "Fecha de Compra", th_desc: "Descripción y Cat.", th_method: "Cuenta/Tarjeta", th_orig: "Valor Orig.", th_cost: "Tu Costo", th_status: "Estado", th_actions: "Acciones",
-                empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)",
-                dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
-                cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar",
-                cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Base de Datos", btn_delete: "Borrar Todo",
+                flt_all_splits: "Todas", flt_only_splits: "Solo Divisiones", th_date: "Fecha", th_date_purchase: "Fecha de Compra", th_desc: "Descripción y Cat.", th_method: "Cuenta/Tarjeta", th_orig: "Valor Orig.", th_cost: "Tu Costo", th_status: "Estado", th_actions: "Acciones",
+                empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)", dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
+                cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Base de Datos", btn_delete: "Borrar Todo",
                 cfg_acc_title: "Cuenta y Nube", cfg_acc_user: "Usuario Desconectado", cfg_acc_sync: "Última sincro:", cfg_acc_btn: "Integración Google pronto",
-                cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", 
-                cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
-                cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", 
-                cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión",
-                curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)",
-                opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
+                cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
+                cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión",
+                curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)", opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
                 rem_inc_soon: "ingreso(s) cercano(s)", rem_inc_late: "ingreso(s) atrasado(s)", rem_exp_soon: "gasto(s) vence(n) pronto", rem_exp_late: "gasto(s) atrasado(s)",
                 confirm_del: "¿Borrar permanentemente?", confirm_clear: "ATENCIÓN: ¿Borrar todo del navegador?", confirm_cascade: "¿Aplicar nuevo nombre a las cuotas siguientes de esta cuenta?",
-                btn_edit: "Editar", btn_delete_action: "Eliminar", placeholder_name: "Nombre", file_choose_btn: "Elegir archivo", file_no_file: "Ningún archivo",
-                lbl_select_card: "Seleccionar Tarjeta:", lbl_invoice_total: "Total Factura", btn_edit_due: "Editar Vencimiento",
-                title_manage: "Administrar", err_csv_invalid: "Archivo incompatible o versión antigua.",
-                cfg_acc_connected: "Conectado a la Nube", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Guardar en la Nube", btn_cloud_load: "Cargar de la Nube", btn_cloud_disconnect: "Desconectar",
-                lbl_sync_saved: "(Guardado)", lbl_sync_loaded: "(Cargado)", msg_sync_success: "¡Éxito!", msg_sync_saving: "Guardando...", msg_sync_loading: "Cargando...",
-                confirm_cloud_load: "¡Copia de seguridad encontrada! ¿Deseas cargar los datos a este dispositivo?", confirm_overwrite: "Atención: Los datos de la nube sobrescribirán los de este dispositivo. ¿Continuar?",
-                err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube.",
-                cfg_tab_style: "Estilo del Menú Principal:", opt_tab_both: "Icono y Texto", opt_tab_icons: "Solo Iconos",
-                chart_cashflow: "Flujo de Caja (Filtro Actual)", chart_categories: "Gastos por Categoría", chart_evolution: "Evolución (Últimos 6 Meses)", chart_accounts: "Gastos por Cuenta / Tarjeta", lbl_chart_inc: "Ingresos", lbl_chart_exp: "Gastos",
-                btn_import_csv: "Importar",
-                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifica el mapeo de columnas y define el nombre.", lbl_csv_card: "Nombre de Tarjeta / Banco", ph_csv_card: "Ej: Santander, BBVA...", lbl_csv_date: "Columna FECHA", lbl_csv_desc: "Columna DESCRIPCIÓN", lbl_csv_val: "Columna VALOR", lbl_csv_invert: "¿Invertir valores negativos?", desc_csv_invert: "Los bancos exportan gastos con signo menos. Deja marcado para convertir.", btn_confirm_import: "Confirmar Importación", dash_limits: "Presupuestos", btn_config: "Configurar", cfg_limits_title: "Presupuestos y Límites", btn_new: "Nuevo", modal_limit_title: "Crear Límite", lbl_lim_type: "Tipo de Límite", opt_lim_cat: "Por Categoría", opt_lim_method: "Por Cuenta/Tarjeta", opt_lim_person: "Por Persona (División)", lbl_lim_target: "Nombre exacto", ph_lim_target: "Escribe nombre exacto...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Guardar Regla", lim_empty: "Sin límites.", lim_free: "Libre:", lim_busted: "Pasado:", lim_busted_alert: "Pasado en", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "presupuestos en riesgo", msg_all_control: "¡Todo bajo control!", btn_view_dash: "Ver Panel", err_csv_card: "¡Ingresa el nombre de la Tarjeta/Banco!", err_lim_fields: "¡Rellena nombre y valor!", msg_imported: "cuentas importadas!", btn_undo: "Deshacer", str_col: "Columna", str_unnamed: "Sin nombre", warn_busted: "⚠️ ¡El presupuesto de <b>TARGET</b> se excederá en <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atención: Esta compra usará PCT% del presupuesto de <b>TARGET</b>.", str_budget: "Presupuesto:"
+                btn_edit: "Editar", btn_delete_action: "Eliminar", placeholder_name: "Nombre", file_choose_btn: "Elegir archivo", file_no_file: "Ningún archivo", lbl_select_card: "Seleccionar Tarjeta:", lbl_invoice_total: "Total Factura", btn_edit_due: "Editar Vencimiento",
+                title_manage: "Administrar", err_csv_invalid: "Archivo incompatible o versión antigua.", cfg_acc_connected: "Conectado a la Nube", btn_cloud_connect: "Conectar Google Drive", btn_cloud_save: "Guardar en la Nube", btn_cloud_load: "Cargar de la Nube", btn_cloud_disconnect: "Desconectar",
+                lbl_sync_saved: "(Guardado)", lbl_sync_loaded: "(Cargado)", msg_sync_success: "¡Éxito!", msg_sync_saving: "Guardando...", msg_sync_loading: "Cargando...", confirm_cloud_load: "¡Copia de seguridad encontrada! ¿Deseas cargar los datos a este dispositivo?", confirm_overwrite: "Atención: Los datos de la nube sobrescribirán los de este dispositivo. ¿Continuar?",
+                err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube.", cfg_tab_style: "Estilo del Menú Principal:", opt_tab_both: "Icono y Texto", opt_tab_icons: "Solo Iconos",
+                chart_cashflow: "Flujo de Caja (Filtro Actual)", chart_categories: "Gastos por Categoría", chart_evolution: "Evolución (Últimos 6 Meses)", chart_accounts: "Gastos por Cuenta / Tarjeta", lbl_chart_inc: "Ingresos", lbl_chart_exp: "Gastos", btn_import_csv: "Importar",
+                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifica el mapeo de columnas y define el nombre.", lbl_csv_card: "Nombre de Tarjeta / Banco", ph_csv_card: "Ej: Santander, BBVA...", lbl_csv_date: "Columna FECHA", lbl_csv_desc: "Columna DESCRIPCIÓN", lbl_csv_val: "Columna VALOR", lbl_csv_invert: "¿Invertir valores negativos?", desc_csv_invert: "Los bancos exportan gastos con signo menos. Deja marcado para convertir.", btn_confirm_import: "Confirmar Importación", dash_limits: "Presupuestos", btn_config: "Configurar", cfg_limits_title: "Presupuestos y Límites", btn_new: "Nuevo", modal_limit_title: "Crear Límite", lbl_lim_type: "Tipo de Límite", opt_lim_cat: "Por Categoría", opt_lim_method: "Por Cuenta/Tarjeta", opt_lim_person: "Por Persona (División)", lbl_lim_target: "Nombre exacto", ph_lim_target: "Escribe nombre exacto...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Guardar Regla", lim_empty: "Sin límites.", lim_free: "Libre:", lim_busted: "Pasado:", lim_busted_alert: "Pasado en", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "presupuestos en riesgo", msg_all_control: "¡Todo bajo control!", btn_view_dash: "Ver Panel", err_csv_card: "¡Ingresa el nombre de la Tarjeta/Banco!", err_lim_fields: "¡Rellena nombre y valor!", msg_imported: "cuentas importadas!", btn_undo: "Deshacer", str_col: "Columna", str_unnamed: "Sin nombre", warn_busted: "⚠️ ¡El presupuesto de <b>TARGET</b> se excederá en <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atención: Esta compra usará PCT% del presupuesto de <b>TARGET</b>.", str_budget: "Presupuesto:",
+                btn_view: "Ver", modal_alerts_title: "Centro de Alertas", btn_view_trx: "Ver Transacción", msg_late: "X días de retraso", msg_left: "faltan X días", lbl_due_date: "Vencimiento", modal_due_title: "Vencimiento de Factura", lbl_due_day: "Día de Vencimiento", lbl_apply_all: "Aplicar como predeterminado para facturas futuras.", btn_save_due: "Guardar Vencimiento"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
-                period_label: "Période :", saved_time: "Enregistré :", btn_save_data: "Enregistrer les données",
-                card_income: "Revenus (Prévision)", card_expense: "Dépenses (Prévision)", card_balance: "Bilan mensuel", card_splits: "Partages à recevoir",
-                form_title_new: "Nouvelle transaction", form_title_edit: "Modification", btn_cancel: "Annuler", type_income: "Revenu", type_expense: "Dépense",
-                lbl_exp_deb: "Débit/Espèces", lbl_exp_cred: "Crédit", lbl_inv_month: "Mois de la facture",
-                label_desc: "Description / Nom", placeholder_desc: "Ex : Salaire, Électricité...", label_value: "Valeur", label_date_univ: "Date",
-                lbl_inst_inc: "Répéter le revenu ?", lbl_inst_exp: "Achat en plusieurs fois ?",
+                period_label: "Période :", saved_time: "Enregistré :", btn_save_data: "Enregistrer les données", card_income: "Revenus (Prévision)", card_expense: "Dépenses (Prévision)", card_balance: "Bilan mensuel", card_splits: "Partages à recevoir",
+                form_title_new: "Nouvelle transaction", form_title_edit: "Modification", btn_cancel: "Annuler", type_income: "Revenu", type_expense: "Dépense", lbl_exp_deb: "Débit/Espèces", lbl_exp_cred: "Crédit", lbl_inv_month: "Mois de la facture",
+                label_desc: "Description / Nom", placeholder_desc: "Ex : Salaire, Électricité...", label_value: "Valeur", label_date_univ: "Date", lbl_inst_inc: "Répéter le revenu ?", lbl_inst_exp: "Achat en plusieurs fois ?",
                 label_is_installment: "Répéter / Échelonner ?", label_installments: "Nº Fois", label_logic: "Logique", logic_rep: "Répliquer", logic_div: "Diviser le total",
                 label_category: "Catégorie", placeholder_cat: "Tapez ou sélectionnez...", label_account: "Compte/Carte", placeholder_acc: "Ex : Espèces, Banque...",
-                label_status: "Statut initial", status_rec: "Reçu", status_pen_rec: "En attente (Prévu)", status_pag: "Payé", status_pen_pag: "En attente (Échéance)",
+                label_status: "Statut initial", status_rec: "Reçu", status_pen_rec: "En attente (Prévu)", status_pag: "Payé", status_pen_pag: "En attente (Échéance)", status_pen: "En attente",
                 label_is_split: "Diviser avec quelqu'un ?", btn_add_person: "Personne", btn_submit: "Enregistrer la transaction", btn_submit_edit: "Mettre à jour le compte",
                 placeholder_search: "Rechercher...", flt_all_types: "Tous les types", flt_income: "Revenus", flt_expense: "Dépenses", flt_all_status: "Tous les statuts", flt_paid: "Payés/Reçus", flt_pending: "En attente",
-                flt_all_splits: "Toutes", flt_only_splits: "Partages uniquement",
-                th_date: "Date", th_date_purchase: "Date d'achat", th_desc: "Description & Cat.", th_method: "Compte/Carte", th_orig: "Valeur Orig.", th_cost: "Votre coût", th_status: "Statut", th_actions: "Actions",
-                empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)",
-                dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
-                cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter",
-                cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer la base de données", btn_delete: "Tout effacer",
+                flt_all_splits: "Toutes", flt_only_splits: "Partages uniquement", th_date: "Date", th_date_purchase: "Date d'achat", th_desc: "Description & Cat.", th_method: "Compte/Carte", th_orig: "Valeur Orig.", th_cost: "Votre coût", th_status: "Statut", th_actions: "Actions",
+                empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)", dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
+                cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer la base de données", btn_delete: "Tout effacer",
                 cfg_acc_title: "Compte et Cloud", cfg_acc_user: "Utilisateur déconnecté", cfg_acc_sync: "Dernière synchro :", cfg_acc_btn: "Intégration Google bientôt",
-                cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", 
-                cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système",
-                cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", 
-                cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version",
-                curr_brl: "Réal brésilien (R$)", curr_usd: "Dollar américain ($)", curr_eur: "Euro (€)",
-                opt_month: "Mois :", opt_range: "Période :", str_to: "à",
+                cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système",
+                cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version",
+                curr_brl: "Réal brésilien (R$)", curr_usd: "Dollar américain ($)", curr_eur: "Euro (€)", opt_month: "Mois :", opt_range: "Période :", str_to: "à",
                 str_received: "Reçu :", str_paid: "Payé :", str_real: "Réel :", str_pending: "En attente :", str_split_pen: "En attente", str_split_paid: "Payé",
                 rem_inc_soon: "revenu(s) à venir", rem_inc_late: "revenu(s) en retard", rem_exp_soon: "dépense(s) arrivant à échéance", rem_exp_late: "dépense(s) en retard",
                 confirm_del: "Supprimer définitivement ?", confirm_clear: "ATTENTION : Tout effacer du navigateur ?", confirm_cascade: "Appliquer le nouveau nom aux prochaines mensualités de ce compte ?",
-                btn_edit: "Modifier", btn_delete_action: "Supprimer", placeholder_name: "Nom", file_choose_btn: "Choisir un fichier", file_no_file: "Aucun fichier",
-                lbl_select_card: "Sélectionnez la carte :", lbl_invoice_total: "Total de la facture", btn_edit_due: "Modifier l'échéance",
-                title_manage: "Gérer", err_csv_invalid: "Fichier incompatible ou ancienne version.",
-                cfg_acc_connected: "Connecté au Cloud", btn_cloud_connect: "Connecter Google Drive", btn_cloud_save: "Enregistrer sur le Cloud", btn_cloud_load: "Charger depuis le Cloud", btn_cloud_disconnect: "Déconnecter",
-                lbl_sync_saved: "(Enregistré)", lbl_sync_loaded: "(Chargé)", msg_sync_success: "Succès !", msg_sync_saving: "Enregistrement...", msg_sync_loading: "Chargement...",
-                confirm_cloud_load: "Sauvegarde trouvée dans le Cloud ! Voulez-vous charger les données sur cet appareil ?", confirm_overwrite: "Attention : Les données du Cloud vont écraser celles de cet appareil. Continuer ?",
-                err_cloud: "Erreur de communication avec le Cloud.", msg_cloud_empty: "Aucune sauvegarde trouvée dans le Cloud.",
-                cfg_tab_style: "Style du menu principal :", opt_tab_both: "Icône et Texte", opt_tab_icons: "Icônes uniquement",
-                chart_cashflow: "Flux de trésorerie (Filtre actuel)", chart_categories: "Dépenses par catégorie", chart_evolution: "Évolution (6 derniers mois)", chart_accounts: "Dépenses par compte / carte", lbl_chart_inc: "Revenus", lbl_chart_exp: "Dépenses",
-                btn_import_csv: "Importer",
-                smart_import_title: "Importateur Intelligent", smart_import_desc: "Vérifiez le mappage des colonnes et définissez le nom.", lbl_csv_card: "Nom de Carte / Banque", ph_csv_card: "Ex : Crédit Agricole...", lbl_csv_date: "Colonne DATE", lbl_csv_desc: "Colonne DESCRIPTION", lbl_csv_val: "Colonne VALEUR", lbl_csv_invert: "Inverser les valeurs négatives ?", desc_csv_invert: "Laissez coché pour convertir en dépenses.", btn_confirm_import: "Confirmer l'importation", dash_limits: "Budgets Mensuels", btn_config: "Configurer", cfg_limits_title: "Budgets et Limites", btn_new: "Nouveau", modal_limit_title: "Créer une limite", lbl_lim_type: "Type de Limite", opt_lim_cat: "Par Catégorie", opt_lim_method: "Par Compte/Carte", opt_lim_person: "Par Personne (Partage)", lbl_lim_target: "Nom exact", ph_lim_target: "Tapez le nom exact...", lbl_lim_val: "Valeur Max", btn_save_rule: "Enregistrer", lim_empty: "Aucune limite enregistrée.", lim_free: "Libre :", lim_busted: "Dépassé :", lim_busted_alert: "Dépassé de", lim_remaining: "restants", lim_used: "utilisé", msg_lim_risk: "budgets à risque", msg_all_control: "Tout est sous contrôle !", btn_view_dash: "Voir le Panel", err_csv_card: "Veuillez entrer le nom de la Carte/Banque !", err_lim_fields: "Remplissez le nom et la valeur !", msg_imported: "comptes importés !", btn_undo: "Annuler", str_col: "Colonne", str_unnamed: "Sans nom", warn_busted: "⚠️ Le budget de <b>TARGET</b> sera dépassé de <span class='font-bold'>VALUE</span> !", warn_near: "👀 Attention : Cet achat utilisera PCT% du budget de <b>TARGET</b>.", str_budget: "Budget :"
+                btn_edit: "Modifier", btn_delete_action: "Supprimer", placeholder_name: "Nom", file_choose_btn: "Choisir un fichier", file_no_file: "Aucun fichier", lbl_select_card: "Sélectionnez la carte :", lbl_invoice_total: "Total de la facture", btn_edit_due: "Modifier l'échéance",
+                title_manage: "Gérer", err_csv_invalid: "Fichier incompatible ou ancienne version.", cfg_acc_connected: "Connecté au Cloud", btn_cloud_connect: "Connecter Google Drive", btn_cloud_save: "Enregistrer sur le Cloud", btn_cloud_load: "Charger depuis le Cloud", btn_cloud_disconnect: "Déconnecter",
+                lbl_sync_saved: "(Enregistré)", lbl_sync_loaded: "(Chargé)", msg_sync_success: "Succès !", msg_sync_saving: "Enregistrement...", msg_sync_loading: "Chargement...", confirm_cloud_load: "Sauvegarde trouvée dans le Cloud ! Voulez-vous charger les données sur cet appareil ?", confirm_overwrite: "Attention : Les données du Cloud vont écraser celles de cet appareil. Continuer ?",
+                err_cloud: "Erreur de communication avec le Cloud.", msg_cloud_empty: "Aucune sauvegarde trouvée dans le Cloud.", cfg_tab_style: "Style du menu principal :", opt_tab_both: "Icône et Texte", opt_tab_icons: "Icônes uniquement",
+                chart_cashflow: "Flux de trésorerie (Filtre actuel)", chart_categories: "Dépenses par catégorie", chart_evolution: "Évolution (6 derniers mois)", chart_accounts: "Dépenses par compte / carte", lbl_chart_inc: "Revenus", lbl_chart_exp: "Dépenses", btn_import_csv: "Importer",
+                smart_import_title: "Importateur Intelligent", smart_import_desc: "Vérifiez le mappage des colonnes et définissez le nom.", lbl_csv_card: "Nom de Carte / Banque", ph_csv_card: "Ex : Crédit Agricole...", lbl_csv_date: "Colonne DATE", lbl_csv_desc: "Colonne DESCRIPTION", lbl_csv_val: "Colonne VALEUR", lbl_csv_invert: "Inverser les valeurs négatives ?", desc_csv_invert: "Laissez coché pour convertir en dépenses.", btn_confirm_import: "Confirmer l'importation", dash_limits: "Budgets Mensuels", btn_config: "Configurer", cfg_limits_title: "Budgets et Limites", btn_new: "Nouveau", modal_limit_title: "Créer une limite", lbl_lim_type: "Type de Limite", opt_lim_cat: "Par Catégorie", opt_lim_method: "Par Compte/Carte", opt_lim_person: "Par Personne (Partage)", lbl_lim_target: "Nom exact", ph_lim_target: "Tapez le nom exact...", lbl_lim_val: "Valeur Max", btn_save_rule: "Enregistrer", lim_empty: "Aucune limite enregistrée.", lim_free: "Libre :", lim_busted: "Dépassé :", lim_busted_alert: "Dépassé de", lim_remaining: "restants", lim_used: "utilisé", msg_lim_risk: "budgets à risque", msg_all_control: "Tout est sous contrôle !", btn_view_dash: "Voir le Panel", err_csv_card: "Veuillez entrer le nom de la Carte/Banque !", err_lim_fields: "Remplissez le nom et la valeur !", msg_imported: "comptes importés !", btn_undo: "Annuler", str_col: "Colonne", str_unnamed: "Sans nom", warn_busted: "⚠️ Le budget de <b>TARGET</b> sera dépassé de <span class='font-bold'>VALUE</span> !", warn_near: "👀 Attention : Cet achat utilisera PCT% du budget de <b>TARGET</b>.", str_budget: "Budget :",
+                btn_view: "Voir", modal_alerts_title: "Centre d'Alertes", btn_view_trx: "Voir Transac.", msg_late: "X jours de retard", msg_left: "il reste X jours", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance"
             }
         };
-        const FLOWME_VERSION = '1.9.5';
+        const FLOWME_VERSION = '1.9.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1771,7 +1719,7 @@
                     if(allAlerts.length > maxBadges) {
                         html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[10px] font-bold shadow-sm hover:bg-amber-200 dark:hover:bg-amber-900/50 transition flex items-center gap-1.5"> +${allAlerts.length - maxBadges} <i class="fa-solid fa-bell"></i></button>`;
                     } else {
-                        html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> Ver</button>`;
+                        html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> ${t('btn_view')}</button>`;
                     }
                     alerts.innerHTML = html;
                 }
@@ -1821,7 +1769,6 @@
             if(list.length === 0 && modalLimits.length === 0) { 
                 c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">' + t('msg_all_control') + '</p>'; 
             } else {
-                // Preenche primeiro os alertas de Orçamento
                 modalLimits.sort((a,b) => b.pct - a.pct).forEach(item => {
                     const isBusted = item.pct > 100;
                     const bg = isBusted ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-pink-50 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800';
@@ -1833,7 +1780,7 @@
                             <div class="flex items-center gap-3">
                                 <div class="text-lg">${icon}</div>
                                 <div>
-                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${t('str_budget')} ${item.lim.target}</p>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${t('str_budget')}${item.lim.target}</p>
                                     <p class="text-[10px] font-medium ${isBusted ? 'text-rose-600' : 'text-pink-600'}">${isBusted ? t('lim_busted_alert') + ' ' + formatCurrency(Math.abs(rem)) : formatCurrency(rem) + ' ' + t('lim_remaining') + ' (' + item.pct.toFixed(0) + '% ' + t('lim_used') + ')'}</p>
                                 </div>
                             </div>
@@ -1843,24 +1790,26 @@
                         </div>`;
                 });
 
-                // E preenche os alertas de Contas Pendentes logo abaixo
                 list.sort((a,b) => a.d - b.d).forEach(item => {
                     const trx = item.t;
                     const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800';
                     const icon = trx.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
                     const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length>=3 ? `${dtPts[2]}/${dtPts[1]}` : '';
+                    
+                    const timeMsg = item.late ? t('msg_late').replace('X', Math.abs(item.d)) : t('msg_left').replace('X', item.d);
+                    
                     c.innerHTML += `
                         <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
                             <div class="flex items-center gap-3">
                                 <div class="text-lg">${icon}</div>
                                 <div>
                                     <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${trx.description}</p>
-                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-amber-600'}">${dtF} • ${item.late ? (Math.abs(item.d) + ' dias atrasado') : ('faltam ' + item.d + ' dias')}</p>
+                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-amber-600'}">${dtF} •${timeMsg}</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <p class="text-sm font-bold text-slate-900 dark:text-white">${formatCurrency(trx.value)}</p>
-                                <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">Ver Conta</button>
+                                <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_trx')}</button>
                             </div>
                         </div>`;
                 });
@@ -2141,7 +2090,7 @@
                 container.innerHTML += `
                     <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-lg shadow-sm">
                         <div>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase"><i class="fa-solid ${iconMap[lim.type]} mr-1"></i> ${lim.type}</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase"><i class="fa-solid ${iconMap[lim.type]} mr-1"></i> ${t('opt_lim_' + (lim.type === 'category' ? 'cat' : lim.type))}</p>
                             <p class="text-sm font-bold text-slate-800 dark:text-slate-100">${lim.target}</p>
                             <p class="text-xs font-semibold text-pink-600">${formatCurrency(lim.max)}</p>
                         </div>
@@ -2386,7 +2335,7 @@
             const card = document.getElementById('invoice-card-select').value; const month = state.currentMonth;
             const tbody = document.getElementById('invoice-transactions-body'); tbody.innerHTML = '';
             
-            if(!card) { document.getElementById('invoice-empty-state').classList.remove('hidden'); document.getElementById('invoice-total-value').textContent = formatCurrency(0); document.getElementById('invoice-due-date-display').textContent = 'Vencimento: --/--/----'; return; }
+            if(!card) { document.getElementById('invoice-empty-state').classList.remove('hidden'); document.getElementById('invoice-total-value').textContent = formatCurrency(0); document.getElementById('invoice-due-date-display').textContent = t('lbl_due_date') + ': --/--/----'; return; }
 
             const filtered = state.transactions.filter(t => t.type === 'despesa' && t.expenseType === 'credito' && t.paymentMethod === card && t.invoiceMonth === month);
             if(filtered.length === 0) { document.getElementById('invoice-empty-state').classList.remove('hidden'); document.getElementById('invoice-total-value').textContent = formatCurrency(0); }
@@ -2401,14 +2350,14 @@
                             <td class="p-3"><div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${t.description}</div><div class="text-[9px] text-slate-400 mt-0.5">${t.category}</div></td>
                             <td class="p-3 text-xs font-semibold text-slate-400 line-through">${(t.splits && t.splits.length > 0) ? formatCurrency(t.value) : ''}</td>
                             <td class="p-3 font-bold text-slate-800 dark:text-slate-100">${formatCurrency(myPart)}</td>
-                            <td class="p-3 text-center"><span class="px-2 py-1 text-[9px] font-bold rounded border ${t.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30'}">${t.status.toUpperCase()}</span></td>
+                            <td class="p-3 text-center"><span class="px-2 py-1 text-[9px] font-bold rounded border ${t.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30'}">${t(t.status === 'pago' ? 'status_pag' : 'status_pen').toUpperCase()}</span></td>
                             <td class="p-3 text-right space-x-1">
                                 <button onclick="switchTab('transacoes'); editTransaction('${t.id}')" title="Editar" class="text-slate-400 hover:text-blue-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen text-[10px]"></i></button>
                                 <button onclick="deleteTransaction('${t.id}'); renderFaturas();" title="Excluir" class="text-slate-400 hover:text-rose-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash text-[10px]"></i></button>
                             </td>
                         </tr>`;
                 });
-                document.getElementById('invoice-total-value').textContent = formatCurrency(total);
+                document.getElementById('invoice-due-date-display').textContent = `${t('lbl_due_date')}: ${dueStr}`;
             }
 
             // Render Due Date

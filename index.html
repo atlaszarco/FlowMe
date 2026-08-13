@@ -1010,7 +1010,7 @@
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }
         
-        const FLOWME_VERSION = '2.1.0';
+        const FLOWME_VERSION = '2.1.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1383,7 +1383,7 @@
                     c.appendChild(div);
                 });
             }
-            m.openModal('modal-global-edit');
+            openModal('modal-global-edit');
         }
 
         function selectGlobalItem(val) {
@@ -2062,7 +2062,7 @@
                     if(hLow.includes('valor') || hLow.includes('amount')) sVal.value = i;
                 });
                 
-                document.getElementById('modal-smart-importer').openModal('modal-smart-importer');
+                openModal('modal-smart-importer');
                 inputElement.value = ''; 
             };
             reader.readAsText(file);
@@ -2180,7 +2180,7 @@
                 document.getElementById('limit-value').value = '';
             }
             updateLimitOptions(); // <--- Avisa a lista para se preencher ao abrir
-            document.getElementById('modal-limit-form').openModal('modal-limit-form');
+            openModal('modal-limit-form');
         }
 
         function updateLimitOptions() {
@@ -2639,7 +2639,7 @@
             document.getElementById('invoice-due-card-name').textContent = card;
             document.getElementById('invoice-due-day').value = state.invoiceSettings.defaults[card] || '';
             document.getElementById('invoice-due-apply-all').checked = true;
-            document.getElementById('modal-invoice-due').openModal('modal-invoice-due');
+            openModal('modal-invoice-due');
         }
 
         function saveInvoiceDueDate() {
@@ -2742,7 +2742,7 @@
                         </div>`;
                 });
             }
-            document.getElementById('modal-alerts').openModal('modal-alerts');
+            openModal('modal-alerts');
         }
 
         // ================= CSV EXPORT / IMPORT =================

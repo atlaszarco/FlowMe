@@ -917,7 +917,7 @@
                 btn_view: "Voir", modal_alerts_title: "Centre d'Alertes", btn_view_trx: "Voir Transac.", msg_late: "X jours de retard", msg_left: "il reste X jours", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance"
             }
         };
-        const FLOWME_VERSION = '1.9.6';
+        const FLOWME_VERSION = '1.9.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2335,29 +2335,41 @@
             const card = document.getElementById('invoice-card-select').value; const month = state.currentMonth;
             const tbody = document.getElementById('invoice-transactions-body'); tbody.innerHTML = '';
             
-            if(!card) { document.getElementById('invoice-empty-state').classList.remove('hidden'); document.getElementById('invoice-total-value').textContent = formatCurrency(0); document.getElementById('invoice-due-date-display').textContent = t('lbl_due_date') + ': --/--/----'; return; }
+            if(!card) { 
+                document.getElementById('invoice-empty-state').classList.remove('hidden'); 
+                document.getElementById('invoice-total-value').textContent = formatCurrency(0); 
+                document.getElementById('invoice-due-date-display').textContent = `${t('lbl_due_date')}: --/--/----`; 
+                return; 
+            }
 
-            const filtered = state.transactions.filter(t => t.type === 'despesa' && t.expenseType === 'credito' && t.paymentMethod === card && t.invoiceMonth === month);
-            if(filtered.length === 0) { document.getElementById('invoice-empty-state').classList.remove('hidden'); document.getElementById('invoice-total-value').textContent = formatCurrency(0); }
-            else {
+            const filtered = state.transactions.filter(trx => trx.type === 'despesa' && trx.expenseType === 'credito' && trx.paymentMethod === card && trx.invoiceMonth === month);
+            if(filtered.length === 0) { 
+                document.getElementById('invoice-empty-state').classList.remove('hidden'); 
+                document.getElementById('invoice-total-value').textContent = formatCurrency(0); 
+            } else {
                 document.getElementById('invoice-empty-state').classList.add('hidden');
-                let total = 0; filtered.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(t => { total += t.value;
-                    const rSplit = t.splits ? t.splits.reduce((acc, s) => acc + s.value, 0) : 0; const myPart = t.value - rSplit;
-                    const dtPts = (t.date || '').split('-'); const dateFormatted = dtPts.length >= 3 ? `${dtPts[2]}/${dtPts[1]}` : '--/--';
+                let total = 0; 
+                filtered.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(trx => { 
+                    total += trx.value;
+                    const rSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0; 
+                    const myPart = trx.value - rSplit;
+                    const dtPts = (trx.date || '').split('-'); 
+                    const dateFormatted = dtPts.length >= 3 ? `${dtPts[2]}/${dtPts[1]}` : '--/--';
+                    
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-slate-50 dark:border-slate-700">
                             <td class="p-3 text-xs text-slate-600 dark:text-slate-400">${dateFormatted}</td>
-                            <td class="p-3"><div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${t.description}</div><div class="text-[9px] text-slate-400 mt-0.5">${t.category}</div></td>
-                            <td class="p-3 text-xs font-semibold text-slate-400 line-through">${(t.splits && t.splits.length > 0) ? formatCurrency(t.value) : ''}</td>
+                            <td class="p-3"><div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${trx.description}</div><div class="text-[9px] text-slate-400 mt-0.5">${trx.category}</div></td>
+                            <td class="p-3 text-xs font-semibold text-slate-400 line-through">${(trx.splits && trx.splits.length > 0) ? formatCurrency(trx.value) : ''}</td>
                             <td class="p-3 font-bold text-slate-800 dark:text-slate-100">${formatCurrency(myPart)}</td>
-                            <td class="p-3 text-center"><span class="px-2 py-1 text-[9px] font-bold rounded border ${t.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30'}">${t(t.status === 'pago' ? 'status_pag' : 'status_pen').toUpperCase()}</span></td>
+                            <td class="p-3 text-center"><span class="px-2 py-1 text-[9px] font-bold rounded border ${trx.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30'}">${t(trx.status === 'pago' ? 'status_pag' : 'status_pen').toUpperCase()}</span></td>
                             <td class="p-3 text-right space-x-1">
-                                <button onclick="switchTab('transacoes'); editTransaction('${t.id}')" title="Editar" class="text-slate-400 hover:text-blue-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen text-[10px]"></i></button>
-                                <button onclick="deleteTransaction('${t.id}'); renderFaturas();" title="Excluir" class="text-slate-400 hover:text-rose-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash text-[10px]"></i></button>
+                                <button onclick="switchTab('transacoes'); editTransaction('${trx.id}')" title="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                                <button onclick="deleteTransaction('${trx.id}'); renderFaturas();" title="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash text-[10px]"></i></button>
                             </td>
                         </tr>`;
                 });
-                document.getElementById('invoice-due-date-display').textContent = `${t('lbl_due_date')}: ${dueStr}`;
+                document.getElementById('invoice-total-value').textContent = formatCurrency(total);
             }
 
             // Render Due Date
@@ -2366,7 +2378,7 @@
             if(state.invoiceSettings.exceptions[exKey]) d = state.invoiceSettings.exceptions[exKey];
             else if(state.invoiceSettings.defaults[card]) d = `${month}-${String(state.invoiceSettings.defaults[card]).padStart(2,'0')}`;
             if(d) { const pts = d.split('-'); dueStr = `${pts[2]}/${pts[1]}/${pts[0]}`; }
-            document.getElementById('invoice-due-date-display').textContent = `Vencimento: ${dueStr}`;
+            document.getElementById('invoice-due-date-display').textContent = `${t('lbl_due_date')}: ${dueStr}`;
         }
 
         function openInvoiceDueModal() {
@@ -2401,25 +2413,78 @@
                 else if (diffDays > 0 && diffDays <= userConfig.reminderDays) list.push({t: trx, d: diffDays, late: false});
             });
 
-            if(list.length === 0) { c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Tudo em dia!</p>'; }
-            else {
+            let modalLimits = [];
+            if (state.limits && state.limits.length > 0) {
+                const currentMonthTx = state.transactions.filter(trx => {
+                    const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
+                    return cDate === state.currentMonth;
+                });
+                state.limits.forEach(lim => {
+                    let spent = 0;
+                    currentMonthTx.forEach(trx => {
+                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                            const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
+                            if(s) spent += s.value;
+                        } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        }
+                    });
+                    const pct = (spent / lim.max) * 100;
+                    if(pct >= 90) modalLimits.push({ lim, pct, spent });
+                });
+            }
+
+            if(list.length === 0 && modalLimits.length === 0) { 
+                c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">' + t('msg_all_control') + '</p>'; 
+            } else {
+                // Preenche primeiro os alertas de Orçamento
+                modalLimits.sort((a,b) => b.pct - a.pct).forEach(item => {
+                    const isBusted = item.pct > 100;
+                    const bg = isBusted ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-pink-50 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800';
+                    const icon = isBusted ? '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>' : '<i class="fa-solid fa-bullseye text-pink-500"></i>';
+                    const rem = item.lim.max - item.spent;
+                    
+                    c.innerHTML += `
+                        <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="text-lg">${icon}</div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${t('str_budget')} ${item.lim.target}</p>
+                                    <p class="text-[10px] font-medium ${isBusted ? 'text-rose-600' : 'text-pink-600'}">${isBusted ? t('lim_busted_alert') + ' ' + formatCurrency(Math.abs(rem)) : formatCurrency(rem) + ' ' + t('lim_remaining') + ' (' + item.pct.toFixed(0) + '% ' + t('lim_used') + ')'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button onclick="closeModal('modal-alerts'); switchTab('dashboard');" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_dash')}</button>
+                            </div>
+                        </div>`;
+                });
+
+                // Preenche os alertas de Contas Pendentes logo abaixo
                 list.sort((a,b) => a.d - b.d).forEach(item => {
                     const trx = item.t;
                     const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800';
                     const icon = trx.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
                     const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length>=3 ? `${dtPts[2]}/${dtPts[1]}` : '';
+                    
+                    // Monta a string dinâmica de tempo
+                    const timeMsg = item.late ? t('msg_late').replace('X', Math.abs(item.d)) : t('msg_left').replace('X', item.d);
+                    
                     c.innerHTML += `
                         <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
                             <div class="flex items-center gap-3">
                                 <div class="text-lg">${icon}</div>
                                 <div>
                                     <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${trx.description}</p>
-                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-amber-600'}">${dtF} • ${item.late ? (Math.abs(item.d) + ' dias atrasado') : ('faltam ' + item.d + ' dias')}</p>
+                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-amber-600'}">${dtF} • ${timeMsg}</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <p class="text-sm font-bold text-slate-900 dark:text-white">${formatCurrency(trx.value)}</p>
-                                <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">Ver Conta</button>
+                                <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_trx')}</button>
                             </div>
                         </div>`;
                 });

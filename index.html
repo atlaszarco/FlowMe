@@ -199,7 +199,7 @@
                         <button id="btn-close-modal" onclick="toggleMobileForm(false)" type="button" class="hidden lg:hidden text-slate-400 hover:text-slate-600 text-xl px-2"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                     
-                    <form id="transaction-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <form id="transaction-form" onsubmit="handleFormSubmit(event)" oninput="checkLimitsInRealTime()" onchange="checkLimitsInRealTime()" class="space-y-4">
                         <input type="hidden" id="edit-id">
                         <input type="hidden" id="edit-group-id">
                         
@@ -319,6 +319,12 @@
                                     <!-- JS injeta os inputs aqui -->
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- AVISO ANTI-SUSTO (LIMITES E ORÇAMENTOS) -->
+                        <div id="limit-warning-zone" class="hidden p-3 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-lg text-[10px] text-rose-700 dark:text-rose-400 font-semibold flex items-start gap-2 transition-all mt-2 mb-2">
+                            <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+                            <span id="limit-warning-text"></span>
                         </div>
 
                         <button type="submit" id="btn-submit" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg text-sm shadow-md transition-all flex items-center justify-center gap-2 mt-2">
@@ -959,7 +965,7 @@
                 btn_import_csv: "Importer",
             }
         };
-        const FLOWME_VERSION = '1.9.0';
+        const FLOWME_VERSION = '1.9.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1685,8 +1691,9 @@
             const pplC = document.getElementById('people-summary-list'); pplC.innerHTML = '';
             for(let p in peopleMap) pplC.innerHTML += `<div class="py-2 flex justify-between items-center"><div class="font-semibold dark:text-slate-200">${p}<div class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</div></div><div class="text-right font-bold text-amber-600 dark:text-amber-400">${formatCurrency(peopleMap[p].pen)}</div></div>`;
 
-            // ALERTS
+            // ALERTS E ORÇAMENTOS (SINO SUPERIOR)
             const alerts = document.getElementById('alert-zone'); alerts.innerHTML = '';
+            let limitAlerts = [];
             
             if(userConfig.notificationsEnabled) {
                 let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [];
@@ -1701,7 +1708,33 @@
                     else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
                 });
 
-                const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon];
+                // Calcula silenciosamente se tem algum limite/orçamento em risco
+                if (state.limits && state.limits.length > 0) {
+                    const currentMonthTx = state.transactions.filter(t => {
+                        const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                        return cDate === state.currentMonth;
+                    });
+                    
+                    state.limits.forEach(lim => {
+                        let spent = 0;
+                        currentMonthTx.forEach(trx => {
+                            if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                                const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
+                                if(s) spent += s.value;
+                            } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                                let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                                spent += (trx.value - rSplit);
+                            } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                                let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                                spent += (trx.value - rSplit);
+                            }
+                        });
+                        const pct = (spent / lim.max) * 100;
+                        if(pct >= 90) limitAlerts.push({ lim, pct, spent }); // Entra no radar de alertas
+                    });
+                }
+
+                const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon, ...limitAlerts];
                 
                 if(allAlerts.length > 0) {
                     let maxBadges = 3;
@@ -1714,6 +1747,13 @@
                     };
                     buildBadge(aIncLate, 'rem_inc_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-circle-exclamation');
                     buildBadge(aExpLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
+                    
+                    // Exibe a pílula de orçamento no topo se houver espaço
+                    if(limitAlerts.length > 0 && shown < maxBadges) {
+                        html += `<div class="bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800 px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid fa-bullseye"></i> <span>${limitAlerts.length} orçamentos em risco</span></div>`;
+                        shown++;
+                    }
+
                     buildBadge(aIncSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
                     buildBadge(aExpSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
                     
@@ -1725,6 +1765,97 @@
                     alerts.innerHTML = html;
                 }
             }
+
+            renderDashboard(filtered);
+        }
+
+        // ================= ALERTS MODAL ATUALIZADO =================
+        function openAlertsModal() {
+            const c = document.getElementById('alerts-modal-content'); c.innerHTML = '';
+            const todayStr = new Date().toISOString().split('T')[0];
+            
+            let list = [];
+            state.transactions.forEach(trx => {
+                if(trx.status !== 'pendente') return; const dueDate = getDueDate(trx); if(!dueDate) return;
+                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00'); const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) list.push({t: trx, d: diffDays, late: true});
+                else if (diffDays > 0 && diffDays <= userConfig.reminderDays) list.push({t: trx, d: diffDays, late: false});
+            });
+
+            let modalLimits = [];
+            if (state.limits && state.limits.length > 0) {
+                const currentMonthTx = state.transactions.filter(t => {
+                    const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                    return cDate === state.currentMonth;
+                });
+                state.limits.forEach(lim => {
+                    let spent = 0;
+                    currentMonthTx.forEach(trx => {
+                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                            const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
+                            if(s) spent += s.value;
+                        } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        }
+                    });
+                    const pct = (spent / lim.max) * 100;
+                    if(pct >= 90) modalLimits.push({ lim, pct, spent });
+                });
+            }
+
+            if(list.length === 0 && modalLimits.length === 0) { 
+                c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Tudo sob controle!</p>'; 
+            } else {
+                // Preenche primeiro os alertas de Orçamento
+                modalLimits.sort((a,b) => b.pct - a.pct).forEach(item => {
+                    const isBusted = item.pct > 100;
+                    const bg = isBusted ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-pink-50 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800';
+                    const icon = isBusted ? '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>' : '<i class="fa-solid fa-bullseye text-pink-500"></i>';
+                    const rem = item.lim.max - item.spent;
+                    
+                    c.innerHTML += `
+                        <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="text-lg">${icon}</div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">Orçamento: ${item.lim.target}</p>
+                                    <p class="text-[10px] font-medium ${isBusted ? 'text-rose-600' : 'text-pink-600'}">${isBusted ? 'Estourado em ' + formatCurrency(Math.abs(rem)) : formatCurrency(rem) + ' restantes (' + item.pct.toFixed(0) + '% usado)'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button onclick="closeModal('modal-alerts'); switchTab('dashboard');" class="text-[9px] font-bold text-indigo-500 hover:underline">Ver Painel</button>
+                            </div>
+                        </div>`;
+                });
+
+                // E preenche os alertas de Contas Pendentes logo abaixo
+                list.sort((a,b) => a.d - b.d).forEach(item => {
+                    const trx = item.t;
+                    const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800';
+                    const icon = trx.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
+                    const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length>=3 ? `${dtPts[2]}/${dtPts[1]}` : '';
+                    c.innerHTML += `
+                        <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="text-lg">${icon}</div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${trx.description}</p>
+                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-amber-600'}">${dtF} • ${item.late ? (Math.abs(item.d) + ' dias atrasado') : ('faltam ' + item.d + ' dias')}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-slate-900 dark:text-white">${formatCurrency(trx.value)}</p>
+                                <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">Ver Conta</button>
+                            </div>
+                        </div>`;
+                });
+            }
+            document.getElementById('modal-alerts').classList.remove('hidden');
+        }
             
             renderDashboard(filtered);
         }
@@ -1894,6 +2025,88 @@
             closeModal('modal-limit-form');
             
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+
+        function checkLimitsInRealTime() {
+            const warningZone = document.getElementById('limit-warning-zone');
+            const warningText = document.getElementById('limit-warning-text');
+            
+            // Se não houver limites ou zona de aviso, não faz nada
+            if(!state.limits || state.limits.length === 0 || !warningZone) { 
+                if(warningZone) warningZone.classList.add('hidden'); return; 
+            }
+            
+            // Se for receita, não afeta orçamento
+            const typeEl = document.querySelector('input[name="type"]:checked');
+            if(!typeEl || typeEl.value !== 'despesa') { warningZone.classList.add('hidden'); return; }
+            
+            // Pega o que o usuário está digitando agora
+            const rawValue = parseFloat(document.getElementById('value').value) || 0;
+            const category = document.getElementById('category').value.trim().toLowerCase();
+            const method = document.getElementById('payment-method').value.trim().toLowerCase();
+            const isSplit = document.getElementById('has-split').checked;
+            
+            // Subtrai os rateios (só conta o que VOCÊ vai pagar)
+            let myPart = rawValue;
+            let splitData = [];
+            if(isSplit) {
+                let totalSplit = 0;
+                document.querySelectorAll('#split-rows > div').forEach(row => {
+                    const pName = row.querySelector('.split-person').value.trim().toLowerCase();
+                    const pVal = parseFloat(row.querySelector('.split-value').value) || 0;
+                    if(pName && pVal > 0) { splitData.push({person: pName, val: pVal}); totalSplit += pVal; }
+                });
+                myPart = rawValue - totalSplit;
+            }
+            
+            // Filtra as contas do mês atual (Ignorando a conta antiga caso você esteja editando)
+            const editId = document.getElementById('edit-id').value;
+            const currentMonthTx = state.transactions.filter(t => {
+                if(t.id === editId) return false;
+                const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                return cDate === state.currentMonth;
+            });
+            
+            let warnings = [];
+            
+            state.limits.forEach(lim => {
+                let spent = 0;
+                currentMonthTx.forEach(trx => {
+                    if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                        const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
+                        if(s) spent += s.value;
+                    } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                        let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                        spent += (trx.value - rSplit);
+                    } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                        let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                        spent += (trx.value - rSplit);
+                    }
+                });
+                
+                // Simula como ficaria o total SE a pessoa salvar essa conta
+                let projectedSpend = spent;
+                if(lim.type === 'category' && category === lim.target.toLowerCase()) projectedSpend += myPart;
+                if(lim.type === 'method' && method === lim.target.toLowerCase()) projectedSpend += myPart;
+                if(lim.type === 'person') {
+                    const s = splitData.find(sp => sp.person === lim.target.toLowerCase());
+                    if(s) projectedSpend += s.val;
+                }
+                
+                // Dispara os alertas baseados na simulação
+                if(projectedSpend > lim.max) {
+                    warnings.push(`⚠️ O orçamento de <b>${lim.target}</b> será estourado em <span class="font-bold">${formatCurrency(projectedSpend - lim.max)}</span>!`);
+                } else if (projectedSpend >= lim.max * 0.9 && rawValue > 0) {
+                    warnings.push(`👀 Atenção: Essa compra usará ${((projectedSpend/lim.max)*100).toFixed(0)}% do orçamento de <b>${lim.target}</b>.`);
+                }
+            });
+            
+            if(warnings.length > 0) {
+                warningText.innerHTML = warnings.join('<br>');
+                warningZone.classList.remove('hidden');
+            } else {
+                warningZone.classList.add('hidden');
+            }
         }
         
         function deleteLimit(id) {

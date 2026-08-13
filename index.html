@@ -1014,7 +1014,7 @@
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }
         
-        const FLOWME_VERSION = '2.1.7';
+        const FLOWME_VERSION = '2.1.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1174,12 +1174,14 @@
             const activeBtn = document.getElementById(`tab-${tabId}`);
             activeBtn.className = actCls;
             
-            // Calcula a posição e desliza a aba clicada para o centro
+            // CÁLCULO PARA CENTRALIZAR A ABA
             const nav = document.getElementById('tabs-nav');
             if (nav && activeBtn) {
-                const navCenter = nav.offsetWidth / 2;
-                const btnCenter = activeBtn.offsetLeft + (activeBtn.offsetWidth / 2);
-                nav.scrollTo({ left: btnCenter - navCenter, behavior: 'smooth' });
+                const navRect = nav.getBoundingClientRect();
+                const btnRect = activeBtn.getBoundingClientRect();
+                // Calcula exatamente quantos pixels faltam para o centro do botão alinhar com o centro do menu
+                const scrollOffset = (btnRect.left - navRect.left) + (btnRect.width / 2) - (navRect.width / 2);
+                nav.scrollBy({ left: scrollOffset, behavior: 'smooth' });
             }
             
             const toolbar = document.getElementById('global-toolbar');

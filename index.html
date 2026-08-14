@@ -1128,6 +1128,7 @@
             const icon = document.getElementById(`acc-icon-${id}`);
             const actionBtn = document.getElementById(`acc-action-${id}`); 
             
+            if(!content) return; // Proteção extra contra quebras
             const isOpen = content.classList.contains('[grid-template-rows:1fr]');
             
             if (isOpen) {
@@ -1148,7 +1149,7 @@
 
         function applyPanelStyle() {
             const isAccordion = userConfig.panelStyle === 'accordion';
-            document.body.classList.toggle('mode-blocks', !isAccordion); // Aciona o CSS Mestre
+            document.body.classList.toggle('mode-blocks', !isAccordion); // CSS Mestre entra em ação
             
             document.querySelectorAll('.accordion-header').forEach(header => {
                 const id = header.getAttribute('data-acc-id');
@@ -1156,8 +1157,9 @@
                 const icon = document.getElementById(`acc-icon-${id}`);
                 const actionBtn = document.getElementById(`acc-action-${id}`);
                 
+                if(!content) return; // Proteção extra
+                
                 if (isAccordion) {
-                    // MODO SANFONA: Respeita a memória de aberto/fechado
                     header.classList.add('cursor-pointer');
                     header.classList.remove('cursor-default');
                     if(icon) icon.classList.remove('hidden');
@@ -1175,7 +1177,6 @@
                         if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                     }
                 } else {
-                    // MODO BLOCOS: Força tudo a ficar aberto e interativo
                     header.classList.remove('cursor-pointer');
                     header.classList.add('cursor-default');
                     if(icon) icon.classList.add('hidden');
@@ -1194,7 +1195,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.2.9';
+        const FLOWME_VERSION = '2.3.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1503,13 +1504,6 @@
         }
 
 // ================= BLOCO 10: JAVASCRIPT - LÓGICA PRINCIPAL (Transações, Renders) =================
-        // ================= GLOBAL EDIT MODALS =================
-        // ================= FUNÇÕES DO MODO SANFONA =================
-        function setPanelStyle(style) {
-            userConfig.panelStyle = style;
-            localStorage.setItem('flowme_panel_style', style);
-        }
-
         // ================= GLOBAL EDIT MODALS & ANIMAÇÕES =================
         function openModal(id) {
             const m = document.getElementById(id);

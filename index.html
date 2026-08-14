@@ -1270,7 +1270,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.0';
+        const FLOWME_VERSION = '2.4.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1721,146 +1721,6 @@
         }
 
         // ================= GERENCIADOR RESPONSIVO (BARRA GLOBAL) =================
-        let currentAlertsData = null; // Guarda os alertas para não ter que recalcular se só virar a tela
-
-        function getResponsiveProfile() {
-            const width = window.innerWidth;
-            const portrait = window.matchMedia('(orientation: portrait)').matches;
-            if (width < 640 && portrait) return 'mobile-portrait';
-            if (width < 768 && !portrait) return 'mobile-landscape';
-            if (width < 1024) return 'tablet';
-            return 'desktop';
-        }
-
-        function updateGlobalToolbarResponsive() {
-            const profile = getResponsiveProfile();
-            responsiveProfile = profile;
-            document.body.dataset.responsive = profile;
-            updateSaveDisplay(profile);
-            renderToolbarAlerts();
-            
-            // Reordenação do Efeito Tetris nas Configurações
-            const cfgContainer = document.getElementById('cfg-container');
-            if (cfgContainer) {
-                const c1 = document.getElementById('cfg-wrap-cloud');
-                const c2 = document.getElementById('cfg-wrap-lang');
-                const c3 = document.getElementById('cfg-wrap-app');
-                const c4 = document.getElementById('cfg-wrap-notif');
-                const c5 = document.getElementById('cfg-wrap-sec');
-                const c6 = document.getElementById('cfg-wrap-limits');
-                
-                if (c1 && c2 && c3 && c4 && c5 && c6) {
-                    if (profile === 'tablet' || profile === 'desktop') {
-                        // Ordem intercalada para preencher colunas de cima pra baixo: 1, 3, 5 (Esq) e 2, 4, 6 (Dir)
-                        cfgContainer.append(c1, c3, c5, c2, c4, c6);
-                    } else {
-                        // Ordem natural empilhada no mobile: 1, 2, 3, 4, 5, 6
-                        cfgContainer.append(c1, c2, c3, c4, c5, c6);
-                    }
-                }
-            }
-        }
-
-        window.addEventListener('resize', updateGlobalToolbarResponsive);
-        window.addEventListener('orientationchange', updateGlobalToolbarResponsive);
-        document.addEventListener('DOMContentLoaded', updateGlobalToolbarResponsive);
-
-        function getMaxAlertBadges(profile) {
-            switch (profile) {
-                case 'mobile-portrait': return 2;
-                case 'mobile-landscape': return 1;
-                case 'tablet': return 2;
-                case 'desktop': return 3;
-                default: return 1;
-            }
-        }
-
-        function collectAlerts() {
-            let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [], limitAlerts = [];
-            if(!userConfig.notificationsEnabled) return null;
-            
-            const todayStr = new Date().toISOString().split('T')[0];
-
-            state.transactions.forEach(trx => {
-                if(trx.status !== 'pendente') return;
-                const dueDate = getDueDate(trx); if(!dueDate) return;
-                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
-                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) { trx.type === 'receita' ? aIncLate.push(trx) : aExpLate.push(trx); }
-                else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
-            });
-
-            if (state.limits && state.limits.length > 0) {
-                const currentMonthTx = state.transactions.filter(t => {
-                    const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
-                    return cDate === state.currentMonth;
-                });
-                state.limits.forEach(lim => {
-                    let spent = 0;
-                    currentMonthTx.forEach(trx => {
-                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
-                            const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
-                            if(s) spent += s.value;
-                        } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
-                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
-                            spent += (trx.value - rSplit);
-                        } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
-                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
-                            spent += (trx.value - rSplit);
-                        }
-                    });
-                    const pct = (spent / lim.max) * 100;
-                    if(pct >= 90) limitAlerts.push({ lim, pct, spent }); 
-                });
-            }
-            return [
-                { count: aIncLate.length, msgKey: 'rem_inc_late', bg: 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', icon: 'fa-circle-exclamation' },
-                { count: aExpLate.length, msgKey: 'rem_exp_late', bg: 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', icon: 'fa-triangle-exclamation' },
-                { count: limitAlerts.length, msgKey: 'msg_lim_risk', bg: 'bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800', icon: 'fa-bullseye' },
-                { count: aIncSoon.length, msgKey: 'rem_inc_soon', bg: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', icon: 'fa-clock' },
-                { count: aExpSoon.length, msgKey: 'rem_exp_soon', bg: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', icon: 'fa-clock' }
-            ];
-        }
-
-        function renderToolbarAlerts(groups, profile) {
-            const alertsZone = document.getElementById('global-toolbar-alerts');
-            if(!alertsZone || !groups) return;
-            
-            alertsZone.innerHTML = '';
-            const maxBadges = getMaxAlertBadges(profile);
-            let shown = 0;
-            let totalAlerts = 0;
-            let html = '';
-
-            groups.forEach(group => {
-                totalAlerts += group.count;
-                if (group.count > 0 && shown < maxBadges) {
-                    html += `<div class="${group.bg} px-2 py-1.5 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1.5 transition-colors shrink-0 whitespace-nowrap max-w-[150px] sm:max-w-[200px] overflow-hidden truncate"><i class="fa-solid ${group.icon} shrink-0"></i> <span class="truncate">${group.count} ${t(group.msgKey)}</span></div>`;
-                    shown++;
-                }
-            });
-
-            // Conta quantos alertas VISÍVEIS o usuário está vendo agora
-            let visibleAlerts = 0;
-            let countVisible = 0;
-            groups.forEach(group => {
-                if (group.count > 0 && countVisible < maxBadges) { visibleAlerts += group.count; countVisible++; }
-            });
-            
-            const hiddenCount = Math.max(totalAlerts - visibleAlerts, 0);
-
-            if (totalAlerts > 0) {
-                if (hiddenCount > 0) {
-                    html += `<button onclick="openAlertsModal()" class="shrink-0 px-2.5 py-1.5 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[11px] font-bold shadow-sm hover:bg-amber-200 dark:hover:bg-amber-900/50 transition flex items-center gap-1.5"> +${hiddenCount} <i class="fa-solid fa-bell"></i></button>`;
-                } else {
-                    html += `<button onclick="openAlertsModal()" class="shrink-0 px-2.5 py-1.5 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[11px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> ${t('btn_view')}</button>`;
-                }
-                alertsZone.innerHTML = html;
-            }
-        }
-
-        // ================= GERENCIADOR RESPONSIVO (BARRA GLOBAL) =================
         let responsiveProfile = null;
         let currentAlertGroups = { incomeLate: [], expenseLate: [], incomeSoon: [], expenseSoon: [], limits: [] };
 
@@ -1945,12 +1805,62 @@
             buildBadge(groups.incomeSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
             buildBadge(groups.expenseSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
 
-            const hiddenAlerts = Math.max(allAlerts.length - shown, 0);
-
+            let visibleAlerts = 0;
+            let visibleGroups = 0;
+            
+            groups.incomeLate.length > 0 && visibleGroups < maxBadges
+                ? (visibleAlerts += groups.incomeLate.length, visibleGroups++)
+                : null;
+            
+            groups.expenseLate.length > 0 && visibleGroups < maxBadges
+                ? (visibleAlerts += groups.expenseLate.length, visibleGroups++)
+                : null;
+            
+            groups.limits.length > 0 && visibleGroups < maxBadges
+                ? (visibleAlerts += groups.limits.length, visibleGroups++)
+                : null;
+            
+            groups.incomeSoon.length > 0 && visibleGroups < maxBadges
+                ? (visibleAlerts += groups.incomeSoon.length, visibleGroups++)
+                : null;
+            
+            groups.expenseSoon.length > 0 && visibleGroups < maxBadges
+                ? (visibleAlerts += groups.expenseSoon.length, visibleGroups++)
+                : null;
+            
+            const totalAlerts =
+                groups.incomeLate.length +
+                groups.expenseLate.length +
+                groups.incomeSoon.length +
+                groups.expenseSoon.length +
+                groups.limits.length;
+            
+            const hiddenAlerts =
+                Math.max(totalAlerts - visibleAlerts, 0);
+            
             if (hiddenAlerts > 0) {
-                html += `<button type="button" onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[10px] font-bold shadow-sm hover:bg-amber-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> <span>${hiddenAlerts}</span></button>`;
-            } else {
-                html += `<button type="button" onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> <span>${t('btn_view')}</span></button>`;
+                html += `
+                    <button
+                        type="button"
+                        onclick="openAlertsModal()"
+                        class="shrink-0 px-2 py-1
+                               bg-amber-100 text-amber-800
+                               border border-amber-200
+                               dark:bg-amber-900/30
+                               dark:text-amber-400
+                               dark:border-amber-800
+                               rounded text-[10px]
+                               font-bold shadow-sm
+                               hover:bg-amber-200
+                               transition
+                               flex items-center gap-1.5">
+            
+                        <i class="fa-solid fa-bell"></i>
+            
+                        <span>${hiddenAlerts}</span>
+            
+                    </button>
+                `;
             }
 
             alertsContainer.innerHTML = html;

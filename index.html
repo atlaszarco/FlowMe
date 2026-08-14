@@ -70,37 +70,71 @@
         }
         .animate-save-pop i { animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* Arquitetura Responsiva da Barra Global */
+        /* BARRA GLOBAL - LAYOUT RESPONSIVO */
         #global-toolbar-inner { display: grid; align-items: center; }
-        #global-toolbar-filter { grid-area: filter; min-width: 0; }
-        #global-toolbar-alerts { grid-area: alerts; min-width: 0; }
-        #global-toolbar-save { grid-area: save; justify-self: end; }
 
+        /* --- MOBILE RETRATO --- */
         body[data-responsive="mobile-portrait"] #global-toolbar-inner {
-            grid-template-columns: 1fr auto;
+            grid-template-columns: minmax(0, 1fr) auto;
             grid-template-areas: "filter save" "alerts alerts";
-            gap: 12px 8px;
-        }
-        body[data-responsive="mobile-portrait"] #filter-mode { font-size: 11px; }
-        body[data-responsive="mobile-portrait"] #global-month { max-width: 105px; }
-
-        body[data-responsive="mobile-landscape"] #global-toolbar-inner {
-            grid-template-columns: auto 1fr auto;
-            grid-template-areas: "filter alerts save";
             gap: 8px;
         }
+        body[data-responsive="mobile-portrait"] #global-toolbar-filter { grid-area: filter; min-width: 0; }
+        body[data-responsive="mobile-portrait"] #global-toolbar-alerts { grid-area: alerts; }
+        body[data-responsive="mobile-portrait"] #global-toolbar-save { grid-area: save; }
+        body[data-responsive="mobile-portrait"] #global-month { max-width: 105px; }
+        body[data-responsive="mobile-portrait"] #filter-mode { font-size: 11px; }
+        body[data-responsive="mobile-portrait"] #last-save-time { display: none !important; }
+        body[data-responsive="mobile-portrait"] #btn-manual-save { width: 40px; }
 
+        /* --- MOBILE HORIZONTAL --- */
+        body[data-responsive="mobile-landscape"] #global-toolbar-inner {
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas: "filter save" "alerts alerts";
+            gap: 8px 12px;
+        }
+        body[data-responsive="mobile-landscape"] #global-toolbar-filter { grid-area: filter; min-width: 0; }
+        body[data-responsive="mobile-landscape"] #global-toolbar-alerts { grid-area: alerts; }
+        body[data-responsive="mobile-landscape"] #global-toolbar-save { grid-area: save; }
+        body[data-responsive="mobile-landscape"] #global-month { max-width: 125px; }
+        body[data-responsive="mobile-landscape"] #last-save-time { display: none !important; }
+        body[data-responsive="mobile-landscape"] #btn-manual-save { width: 40px; }
+
+        /* --- TABLET --- */
         body[data-responsive="tablet"] #global-toolbar-inner {
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: auto minmax(0, 1fr) auto;
             grid-template-areas: "filter alerts save";
             gap: 12px;
         }
+        body[data-responsive="tablet"] #global-toolbar-filter { grid-area: filter; min-width: 0; }
+        body[data-responsive="tablet"] #global-toolbar-alerts { grid-area: alerts; min-width: 0; }
+        body[data-responsive="tablet"] #global-toolbar-save { grid-area: save; }
+        body[data-responsive="tablet"] #last-save-time { display: none !important; }
 
+        /* --- DESKTOP --- */
         body[data-responsive="desktop"] #global-toolbar-inner {
             grid-template-columns: auto minmax(0, 1fr) auto;
             grid-template-areas: "filter alerts save";
             gap: 24px;
         }
+        body[data-responsive="desktop"] #global-toolbar-filter { grid-area: filter; }
+        body[data-responsive="desktop"] #global-toolbar-alerts { grid-area: alerts; min-width: 0; }
+        body[data-responsive="desktop"] #global-toolbar-save { grid-area: save; }
+
+        /* --- ALERTAS, FILTROS E SALVAR --- */
+        #global-toolbar-alerts { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-width: 0; }
+        #global-toolbar-alerts-inner { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-width: 0; overflow: hidden; }
+        #global-toolbar-alerts-inner > * { flex-shrink: 0; }
+        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner { justify-content: flex-start; }
+        body[data-responsive="mobile-landscape"] #global-toolbar-alerts-inner { justify-content: flex-start; }
+        body[data-responsive="tablet"] #global-toolbar-alerts-inner { justify-content: center; }
+        body[data-responsive="desktop"] #global-toolbar-alerts-inner { justify-content: center; }
+
+        #global-toolbar-filter > div { min-width: 0; }
+        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div, body[data-responsive="mobile-landscape"] #global-toolbar-filter > div { max-width: 100%; overflow-x: hidden; }
+
+        #global-toolbar-save { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-shrink: 0; }
+        #last-save-time { white-space: nowrap; }
     
     </style>
 </head>
@@ -159,49 +193,48 @@
         </div>
     </header>
 
-<!-- ================= BLOCO 3: BARRA GLOBAL (Filtros e Salvar) ================= -->    
-    <section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-300">
-        <div id="global-toolbar-inner" class="max-w-7xl mx-auto w-full">
-            
-            <!-- 1. FILTRO DE DATA -->
-            <div id="global-toolbar-filter" class="flex justify-start">
-                <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                    <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2 shrink-0">
-                        <option value="month" data-i18n="opt_month">Mês:</option>
-                        <option value="range" data-i18n="opt_range">Período:</option>
-                    </select>
-                    
-                    <div id="mode-month" class="flex items-center gap-1 shrink-0">
-                        <button onclick="changeMonthOffset(-1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Mês Anterior"><i class="fa-solid fa-chevron-left"></i></button>
-                        <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-sm focus:ring-0 font-semibold cursor-pointer outline-none w-max text-center">
-                        <button onclick="changeMonthOffset(1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Próximo Mês"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
+<!-- ================= BLOCO 3: BARRA GLOBAL ================= -->
+<section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-300">
+    <div id="global-toolbar-inner" class="max-w-7xl mx-auto">
 
-                    <div id="mode-range" class="hidden items-center gap-2 shrink-0">
-                        <input type="date" id="date-start" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
-                        <span class="text-slate-400 text-xs font-medium" data-i18n="str_to">até</span>
-                        <input type="date" id="date-end" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
-                    </div>
+        <!-- FILTRO -->
+        <div id="global-toolbar-filter" class="flex min-w-0 justify-self-start">
+            <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full">
+                <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2 shrink-0">
+                    <option value="month" data-i18n="opt_month">Mês:</option>
+                    <option value="range" data-i18n="opt_range">Período:</option>
+                </select>
+                <div id="mode-month" class="flex items-center gap-1 shrink-0">
+                    <button onclick="changeMonthOffset(-1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Mês Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-sm focus:ring-0 font-semibold cursor-pointer outline-none w-max text-center">
+                    <button onclick="changeMonthOffset(1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Próximo Mês"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div id="mode-range" class="hidden items-center gap-2 shrink-0">
+                    <input type="date" id="date-start" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
+                    <span class="text-slate-400 text-xs font-medium" data-i18n="str_to">até</span>
+                    <input type="date" id="date-end" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
                 </div>
             </div>
-            
-            <!-- 2. ALERTAS (Agora alinhado dependendo do modo) -->
-            <div id="global-toolbar-alerts" class="flex items-center justify-center gap-2 w-full overflow-hidden transition-all">
-                <!-- JS injeta os alertas aqui -->
-            </div>
-            
-            <!-- 3. SALVAR -->
-            <div id="global-toolbar-save" class="flex items-center gap-3 shrink-0">
-                <span id="last-save-time" class="text-[10px] text-slate-400 font-medium tracking-wide">
-                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
-                </span>
-                <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9">
-                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span id="save-btn-text" data-i18n="btn_save_data">Salvar</span>
-                </button>
-            </div>
-            
         </div>
-    </section>
+
+        <!-- ALERTAS -->
+        <div id="global-toolbar-alerts">
+            <div id="global-toolbar-alerts-inner"></div>
+        </div>
+
+        <!-- SALVAR -->
+        <div id="global-toolbar-save">
+            <span id="last-save-time" class="text-[10px] text-slate-400 font-medium tracking-wide">
+                <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
+            </span>
+            <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9">
+                <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+                <span data-i18n="btn_save_data">Salvar</span>
+            </button>
+        </div>
+
+    </div>
+</section>
     
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 min-w-0">
 <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
@@ -1232,7 +1265,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.3.6';
+        const FLOWME_VERSION = '2.3.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1809,6 +1842,102 @@
                 alertsZone.innerHTML = html;
             }
         }
+
+        // ================= GERENCIADOR RESPONSIVO (BARRA GLOBAL) =================
+        let responsiveProfile = null;
+        let currentAlertGroups = { incomeLate: [], expenseLate: [], incomeSoon: [], expenseSoon: [], limits: [] };
+
+        function getResponsiveProfile() {
+            const width = window.innerWidth;
+            const portrait = window.matchMedia('(orientation: portrait)').matches;
+            if (width < 640 && portrait) return 'mobile-portrait';
+            if (width < 768 && !portrait) return 'mobile-landscape';
+            if (width < 1024) return 'tablet';
+            return 'desktop';
+        }
+
+        function getMaxAlertBadges(profile) {
+            switch (profile) {
+                case 'mobile-portrait': return 2;
+                case 'mobile-landscape': return 1;
+                case 'tablet': return 2;
+                case 'desktop': return 3;
+                default: return 1;
+            }
+        }
+
+        function updateSaveDisplay(profile) {
+            const saveText = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
+            const saveTime = document.getElementById('last-save-time');
+            const saveButton = document.getElementById('btn-manual-save');
+            if (!saveText || !saveTime || !saveButton) return;
+
+            const showSaveText = profile === 'tablet' || profile === 'desktop';
+            const showSaveTimestamp = profile === 'desktop';
+
+            saveText.classList.toggle('hidden', !showSaveText);
+            saveTime.classList.toggle('hidden', !showSaveTimestamp);
+
+            if (profile === 'mobile-portrait' || profile === 'mobile-landscape') {
+                saveButton.classList.add('w-10'); saveButton.classList.remove('w-auto');
+            } else {
+                saveButton.classList.remove('w-10'); saveButton.classList.add('w-auto');
+            }
+        }
+
+        function updateGlobalToolbarResponsive() {
+            const profile = getResponsiveProfile();
+            responsiveProfile = profile;
+            document.body.dataset.responsive = profile;
+            updateSaveDisplay(profile);
+            renderToolbarAlerts();
+        }
+
+        window.addEventListener('resize', updateGlobalToolbarResponsive);
+        window.addEventListener('orientationchange', updateGlobalToolbarResponsive);
+        document.addEventListener('DOMContentLoaded', updateGlobalToolbarResponsive);
+
+        function renderToolbarAlerts() {
+            const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
+            if (!alertsContainer) return;
+            alertsContainer.innerHTML = '';
+
+            const groups = currentAlertGroups;
+            const allAlerts = [...groups.incomeLate, ...groups.expenseLate, ...groups.incomeSoon, ...groups.expenseSoon, ...groups.limits];
+            if (allAlerts.length === 0) return;
+
+            const profile = responsiveProfile || getResponsiveProfile();
+            const maxBadges = getMaxAlertBadges(profile);
+
+            let html = ''; let shown = 0;
+
+            const buildBadge = (arr, msgKey, colorClass, icon) => {
+                if (arr.length === 0 || shown >= maxBadges) return;
+                html += `<div class="${colorClass} px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`;
+                shown++;
+            };
+
+            buildBadge(groups.incomeLate, 'rem_inc_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-circle-exclamation');
+            buildBadge(groups.expenseLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
+            
+            if (groups.limits.length > 0 && shown < maxBadges) {
+                html += `<div class="bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800 px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid fa-bullseye"></i> <span>${groups.limits.length} ${t('msg_lim_risk')}</span></div>`;
+                shown++;
+            }
+
+            buildBadge(groups.incomeSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
+            buildBadge(groups.expenseSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
+
+            const hiddenAlerts = Math.max(allAlerts.length - shown, 0);
+
+            if (hiddenAlerts > 0) {
+                html += `<button type="button" onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[10px] font-bold shadow-sm hover:bg-amber-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> <span>${hiddenAlerts}</span></button>`;
+            } else {
+                html += `<button type="button" onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> <span>${t('btn_view')}</span></button>`;
+            }
+
+            alertsContainer.innerHTML = html;
+        }
         
         // ================= SAVE & LOAD =================
         function updateSaveTimestamp() {
@@ -1824,23 +1953,26 @@
         function manualSave() {
             saveState(); 
             const btn = document.getElementById('btn-manual-save'); 
-            const textSpan = document.getElementById('save-btn-text');
-            const originalText = textSpan ? textSpan.innerText : t('btn_save_data');
-            const showTextClass = textSpan && textSpan.style.display !== 'none' ? 'inline' : 'none';
             
-            const origHTML = `<i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span id="save-btn-text" style="display: ${showTextClass};" data-i18n="btn_save_data">${originalText}</span>`;
+            // Verifica se o Gerenciador Responsivo escondeu o texto ou não
+            const textSpan = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
+            const isTextHidden = textSpan ? textSpan.classList.contains('hidden') : false;
+            
+            // Monta o texto respeitando a visibilidade atual da tela
+            const textHTML = `<span id="save-btn-text" class="${isTextHidden ? 'hidden' : ''}" data-i18n="btn_save_data">${t('btn_save_data') || 'Salvar'}</span>`;
+            const origHTML = `<i class="fa-solid fa-cloud-arrow-up text-sm"></i> ${textHTML}`;
             
             // Estágio 1: Afundou e começa a girar (Carregando rápido)
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm"></i> <span style="display: ${showTextClass};" data-i18n="btn_save_data">${originalText}</span>`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm"></i> ${textHTML}`;
             
             setTimeout(() => {
                 // Estágio 2: Confirmação com POP de expansão
-                btn.innerHTML = `<i class="fa-solid fa-check text-base"></i> <span style="display: ${showTextClass};" class="font-bold">OK</span>`;
+                btn.innerHTML = `<i class="fa-solid fa-check text-base"></i> <span class="${isTextHidden ? 'hidden' : ''} font-bold">OK</span>`;
                 btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border-emerald-300', 'animate-save-pop');
                 btn.classList.remove('bg-slate-100', 'text-slate-600', 'border-slate-200', 'hover:bg-emerald-50', 'hover:text-emerald-700');
                 
                 setTimeout(() => { 
-                    // Estágio 3: Volta ao estado pacífico original
+                    // Estágio 3: Volta ao estado original
                     btn.innerHTML = origHTML; 
                     btn.classList.remove('bg-emerald-100', 'text-emerald-700', 'border-emerald-300', 'animate-save-pop'); 
                     btn.classList.add('bg-slate-100', 'text-slate-600', 'border-slate-200', 'hover:bg-emerald-50', 'hover:text-emerald-700');
@@ -2282,9 +2414,53 @@
             const pplC = document.getElementById('people-summary-list'); pplC.innerHTML = '';
             for(let p in peopleMap) pplC.innerHTML += `<div class="py-2 flex justify-between items-center"><div class="font-semibold dark:text-slate-200">${p}<div class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</div></div><div class="text-right font-bold text-amber-600 dark:text-amber-400">${formatCurrency(peopleMap[p].pen)}</div></div>`;
 
-            // ALERTS E ORÇAMENTOS
-            currentAlertsData = collectAlerts();
-            updateGlobalToolbarResponsive(); // Chama a nova inteligência que desenha a barra
+            // ALERTS E ORÇAMENTOS (SINO SUPERIOR)
+            let limitAlerts = [];
+            
+            if (userConfig.notificationsEnabled) {
+                let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [];
+
+                state.transactions.forEach(trx => {
+                    if(trx.status !== 'pendente') return;
+                    const dueDate = getDueDate(trx); if(!dueDate) return;
+                    const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) { trx.type === 'receita' ? aIncLate.push(trx) : aExpLate.push(trx); }
+                    else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
+                });
+
+                if (state.limits && state.limits.length > 0) {
+                    const currentMonthTx = state.transactions.filter(t => {
+                        const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                        return cDate === state.currentMonth;
+                    });
+                    
+                    state.limits.forEach(lim => {
+                        let spent = 0;
+                        currentMonthTx.forEach(trx => {
+                            if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                                const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
+                                if(s) spent += s.value;
+                            } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                                let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                                spent += (trx.value - rSplit);
+                            } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                                let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                                spent += (trx.value - rSplit);
+                            }
+                        });
+                        const pct = (spent / lim.max) * 100;
+                        if(pct >= 90) limitAlerts.push({ lim, pct, spent }); 
+                    });
+                }
+
+                currentAlertGroups = { incomeLate: aIncLate, expenseLate: aExpLate, incomeSoon: aIncSoon, expenseSoon: aExpSoon, limits: limitAlerts };
+                renderToolbarAlerts();
+            } else {
+                currentAlertGroups = { incomeLate: [], expenseLate: [], incomeSoon: [], expenseSoon: [], limits: [] };
+                renderToolbarAlerts();
+            }
 
             renderDashboard(filtered);
         }

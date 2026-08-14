@@ -1124,20 +1124,20 @@
             
             const content = document.getElementById(`acc-content-${id}`);
             const icon = document.getElementById(`acc-icon-${id}`);
-            const actionBtn = document.getElementById(`acc-action-${id}`); // Procura botão extra se houver
+            const actionBtn = document.getElementById(`acc-action-${id}`);
             
             const isOpen = content.classList.contains('[grid-template-rows:1fr]');
             
             if (isOpen) {
                 content.classList.remove('[grid-template-rows:1fr]');
                 content.classList.add('[grid-template-rows:0fr]');
-                icon.classList.remove('rotate-180');
+                if(icon) icon.classList.remove('rotate-180');
                 if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = false;
             } else {
                 content.classList.remove('[grid-template-rows:0fr]');
                 content.classList.add('[grid-template-rows:1fr]');
-                icon.classList.add('rotate-180');
+                if(icon) icon.classList.add('rotate-180');
                 if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = true;
             }
@@ -1146,17 +1146,14 @@
 
         function applyPanelStyle() {
             const isAccordion = userConfig.panelStyle === 'accordion';
+            document.body.classList.toggle('mode-blocks', !isAccordion); // Regra Suprema CSS
             
-            document.querySelectorAll('.accordion-header').forEach(header => {
-                const id = header.getAttribute('data-acc-id');
-                const content = document.getElementById(`acc-content-${id}`);
-                const icon = document.getElementById(`acc-icon-${id}`);
-                const actionBtn = document.getElementById(`acc-action-${id}`);
-                
-                if (isAccordion) {
-                    header.classList.add('cursor-pointer');
-                    header.classList.remove('cursor-default');
-                    if(icon) icon.classList.remove('hidden');
+            if (isAccordion) {
+                document.querySelectorAll('.accordion-header').forEach(header => {
+                    const id = header.getAttribute('data-acc-id');
+                    const content = document.getElementById(`acc-content-${id}`);
+                    const icon = document.getElementById(`acc-icon-${id}`);
+                    const actionBtn = document.getElementById(`acc-action-${id}`);
                     
                     const shouldBeOpen = accordionState[id] !== false; 
                     if (shouldBeOpen) {
@@ -1170,17 +1167,8 @@
                         if(icon) icon.classList.remove('rotate-180');
                         if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                     }
-                } else {
-                    header.classList.remove('cursor-pointer');
-                    header.classList.add('cursor-default');
-                    if(icon) icon.classList.add('hidden');
-                    
-                    content.classList.remove('[grid-template-rows:0fr]');
-                    content.classList.add('[grid-template-rows:1fr]');
-                    if(icon) icon.classList.add('rotate-180');
-                    if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
-                }
-            });
+                });
+            }
         }
 
         function setPanelStyle(style) {

@@ -1150,12 +1150,17 @@
             const isAccordion = userConfig.panelStyle === 'accordion';
             document.body.classList.toggle('mode-blocks', !isAccordion); // Aciona o CSS Mestre
             
-            if (isAccordion) {
-                document.querySelectorAll('.accordion-header').forEach(header => {
-                    const id = header.getAttribute('data-acc-id');
-                    const content = document.getElementById(`acc-content-${id}`);
-                    const icon = document.getElementById(`acc-icon-${id}`);
-                    const actionBtn = document.getElementById(`acc-action-${id}`);
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                const id = header.getAttribute('data-acc-id');
+                const content = document.getElementById(`acc-content-${id}`);
+                const icon = document.getElementById(`acc-icon-${id}`);
+                const actionBtn = document.getElementById(`acc-action-${id}`);
+                
+                if (isAccordion) {
+                    // MODO SANFONA: Respeita a memória de aberto/fechado
+                    header.classList.add('cursor-pointer');
+                    header.classList.remove('cursor-default');
+                    if(icon) icon.classList.remove('hidden');
                     
                     const shouldBeOpen = accordionState[id] !== false; 
                     if (shouldBeOpen) {
@@ -1169,8 +1174,18 @@
                         if(icon) icon.classList.remove('rotate-180');
                         if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                     }
-                });
-            }
+                } else {
+                    // MODO BLOCOS: Força tudo a ficar aberto e interativo
+                    header.classList.remove('cursor-pointer');
+                    header.classList.add('cursor-default');
+                    if(icon) icon.classList.add('hidden');
+                    
+                    content.classList.remove('[grid-template-rows:0fr]');
+                    content.classList.add('[grid-template-rows:1fr]');
+                    if(icon) icon.classList.add('rotate-180');
+                    if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
+                }
+            });
         }
 
         function setPanelStyle(style) {
@@ -1179,7 +1194,7 @@
             applyPanelStyle(); 
         }
         
-        const FLOWME_VERSION = '2.2.7';
+        const FLOWME_VERSION = '2.2.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

@@ -71,270 +71,126 @@
         .animate-save-pop i { animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
         /* =========================================================
-           BARRA GLOBAL - LAYOUT RESPONSIVO
+           BARRA GLOBAL - LAYOUT FLUIDO (SEM BREAKPOINTS FIXOS)
            ========================================================= */
         
         #global-toolbar-inner {
-            display: grid;
-            align-items: center;
-            width: 100%;
-        }
-        
-        
-        /* =========================================================
-           1. CELULAR RETRATO
-           Filtro + Salvar
-           Alertas em uma segunda linha
-           ========================================================= */
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-inner {
-            grid-template-columns: minmax(0, 1fr) auto;
-            grid-template-areas:
-                "filter save"
-                "alerts alerts";
-            gap: 8px;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter {
-            grid-area: filter;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner {
-            justify-content: flex-start;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div {
-            max-width: 100%;
-            overflow: hidden;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-month {
-            max-width: 105px;
-        }
-        
-        body[data-responsive="mobile-portrait"] #filter-mode {
-            font-size: 11px;
-        }
-
-        /* ===== AJUSTES EXTRAS PARA O FILTRO EM TELAS MUITO ESTREITAS ===== */
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div {
-            padding: 0.2rem 0.4rem;    /* reduz o padding interno */
-            gap: 0.2rem;              /* reduz o espaçamento entre os itens */
-            flex-wrap: nowrap;        /* impede que os itens quebrem para linha de baixo */
-        }
-        
-        body[data-responsive="mobile-portrait"] #filter-mode {
-            font-size: 0.6rem;        /* fonte menor */
-            max-width: 55px;          /* largura máxima para caber */
-            padding: 0.1rem 0.2rem;
-            text-overflow: ellipsis;  /* corta o texto se ultrapassar */
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-month {
-            font-size: 0.65rem;
-            max-width: 70px;          /* já existe, mas reforçamos */
-            padding: 0.1rem 0.2rem;
-        }
-        
-        body[data-responsive="mobile-portrait"] #mode-month button {
-            padding: 0.1rem 0.2rem;   /* botões das setas menores */
-            font-size: 0.55rem;
-        }
-        
-        body[data-responsive="mobile-portrait"] #mode-range input[type="date"] {
-            font-size: 0.5rem;        /* data inputs menores */
-            padding: 0.1rem 0.2rem;
-            max-width: 60px;
-        }
-        
-        body[data-responsive="mobile-portrait"] #mode-range span {
-            font-size: 0.5rem;        /* texto "até" menor */
-            padding: 0 0.1rem;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner {
-            gap: 4px;                /* alertas mais juntos */
-        }
-        
-        /* =========================================================
-           2. CELULAR HORIZONTAL
-           Tudo em uma única linha
-           ========================================================= */
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-inner {
-            grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
-            grid-template-areas:
-                "filter alerts save";
-            gap: 8px 12px;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-filter {
-            grid-area: filter;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-alerts-inner {
-            justify-content: center;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-filter > div {
-            max-width: 100%;
-            overflow: hidden;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-month {
-            max-width: 125px;
-        }
-        
-        
-        /* =========================================================
-           3. TABLET
-           Tudo em uma linha
-           Alertas ocupam o espaço central
-           ========================================================= */
-        
-        body[data-responsive="tablet"] #global-toolbar-inner {
-            grid-template-columns: auto minmax(0, 1fr) auto;
-            grid-template-areas:
-                "filter alerts save";
-            gap: 16px;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-filter {
-            grid-area: filter;
-            min-width: 0;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-alerts-inner {
-            justify-content: center;
-        }
-        
-        
-        /* =========================================================
-           4. DESKTOP
-           Mais espaço e informações
-           ========================================================= */
-        
-        body[data-responsive="desktop"] #global-toolbar-inner {
-            grid-template-columns: auto minmax(0, 1fr) auto;
-            grid-template-areas:
-                "filter alerts save";
-            gap: 24px;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-filter {
-            grid-area: filter;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-alerts-inner {
-            justify-content: center;
-        }
-        
-        
-        /* =========================================================
-           ESTRUTURA INTERNA DOS ALERTAS
-           ========================================================= */
-        
-        #global-toolbar-alerts {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            justify-content: center;
+            gap: 8px 16px; /* espaçamento vertical e horizontal */
             width: 100%;
-            min-width: 0;
         }
         
+        /* FILTRO */
+        #global-toolbar-filter {
+            flex: 1 1 180px; /* encolhe, mas não abaixo de 180px */
+            min-width: 0;
+        }
+        #global-toolbar-filter > div {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px 8px;
+            padding: 4px 8px;
+            background: var(--bg-filter, #f8fafc);
+            border-radius: 8px;
+            border: 1px solid var(--border-filter, #e2e8f0);
+            min-width: 0;
+        }
+        #filter-mode {
+            font-size: clamp(0.6rem, 2vw, 0.875rem);
+            max-width: 70px;
+        }
+        #global-month {
+            font-size: clamp(0.6rem, 2vw, 0.875rem);
+            max-width: 110px;
+        }
+        #mode-month button {
+            padding: 2px 6px;
+            font-size: clamp(0.5rem, 1.5vw, 0.75rem);
+        }
+        #mode-range input[type="date"] {
+            font-size: clamp(0.45rem, 1.5vw, 0.75rem);
+            padding: 2px 4px;
+            max-width: 90px;
+        }
+        #mode-range span {
+            font-size: clamp(0.4rem, 1.2vw, 0.75rem);
+            padding: 0 2px;
+        }
+        
+        /* ALERTAS */
+        #global-toolbar-alerts {
+            flex: 1 1 0; /* ocupa o espaço restante */
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+        }
         #global-toolbar-alerts-inner {
             display: flex;
             align-items: center;
-            gap: 8px;
-            width: 100%;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
             min-width: 0;
             overflow: hidden;
         }
-        
         #global-toolbar-alerts-inner > * {
-            flex-shrink: 0;
-        }
-        
-        
-        /* =========================================================
-           FILTRO
-           ========================================================= */
-        
-        #global-toolbar-filter > div {
+            flex-shrink: 1; /* permite encolher */
             min-width: 0;
         }
+        /* Badges individuais (já têm classes, mas podemos forçar ellipsis) */
+        #global-toolbar-alerts-inner .badge {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px; /* evita que ocupem muito espaço */
+        }
         
-        
-        /* =========================================================
-           SALVAR
-           ========================================================= */
-        
+        /* BOTÃO SALVAR */
         #global-toolbar-save {
+            flex: 0 0 auto; /* não encolhe */
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            gap: 12px;
-            flex-shrink: 0;
+            gap: 8px;
         }
-        
         #last-save-time {
+            font-size: clamp(0.5rem, 1.2vw, 0.65rem);
             white-space: nowrap;
         }
-
-        body[data-responsive="mobile-portrait"] #global-month {
-            width: 105px;
+        #btn-manual-save {
+            padding: 4px 10px;
+            font-size: clamp(0.55rem, 1.5vw, 0.75rem);
+            white-space: nowrap;
         }
-        
-        body[data-responsive="mobile-landscape"] #global-month {
-            width: 125px;
+        /* Em telas muito estreitas, esconde o texto do botão Salvar */
+        @media (max-width: 480px) {
+            #btn-manual-save span {
+                display: none;
+            }
+            #btn-manual-save {
+                padding: 4px 8px;
+                width: 32px;
+                justify-content: center;
+            }
+            #last-save-time {
+                display: none; /* esconde o timestamp para ganhar espaço */
+            }
         }
-        
-        body[data-responsive="mobile-portrait"] #mode-range {
-            gap: 4px;
-        }
-        
-        body[data-responsive="mobile-landscape"] #mode-range {
-            gap: 6px;
+        /* Em telas médias (entre 480px e 700px), mostra apenas o ícone, mas mantém o timestamp? */
+        @media (max-width: 700px) {
+            #btn-manual-save span {
+                display: none;
+            }
+            #btn-manual-save {
+                padding: 4px 8px;
+                width: 32px;
+                justify-content: center;
+            }
+            #last-save-time {
+                font-size: 0.5rem;
+            }
         }
         
     </style>
@@ -1471,7 +1327,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.4';
+        const FLOWME_VERSION = '2.4.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1936,7 +1792,7 @@
 
         function getMaxAlertBadges(profile) {
             switch (profile) {
-                case 'mobile-portrait': return 2;
+                case 'mobile-portrait': return 1;
                 case 'mobile-landscape': return 1;
                 case 'tablet': return 2;
                 case 'desktop': return 3;

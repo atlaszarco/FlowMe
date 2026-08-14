@@ -168,8 +168,8 @@
                 </button>
             </div>
 
-            <!-- 2. ALERTAS (Gaveta do Meio ou Linha de Baixo) -->
-            <div id="alert-zone" class="col-span-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 flex items-center justify-center gap-2 overflow-x-auto w-full min-w-0 [&::-webkit-scrollbar]:hidden px-1"></div>
+            <!-- 2. ALERTAS (Gaveta do Meio ou Linha de Baixo - Sem Rolagem!) -->
+            <div id="alert-zone" class="col-span-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 flex items-center justify-center gap-2 w-full min-w-0 transition-all px-1"></div>
             
         </div>
     </section>
@@ -1203,7 +1203,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.3.4';
+        const FLOWME_VERSION = '2.3.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2167,9 +2167,11 @@
                 const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon, ...limitAlerts];
                 
                 if(allAlerts.length > 0) {
-                    let maxBadges = 2; // Padrão: 2 alertas (Celular Retrato, Horizontal e PC pequeno)
-                    if(window.innerWidth >= 1024) maxBadges = 3; // Tela de PC Cheia
-                    if(window.innerWidth < 360) maxBadges = 1; // Proteção só para celulares muito pequenos
+                    // O "Controlador de Tráfego" inteligente de Alertas:
+                    let maxBadges = 1; // Padrão seguro para Celular Deitado (tudo espremido na mesma linha)
+                    if (window.innerWidth < 640) maxBadges = 2; // Celular em pé (ganha a linha de baixo inteira, cabe 2 folgado)
+                    if (window.innerWidth >= 768) maxBadges = 2; // Tablet/Notebook (Botão salvar ganha texto, espaço balanceado, cabe 2)
+                    if (window.innerWidth >= 1024) maxBadges = 3; // Telas de PC grandes (cabe 3 tranquilo)
 
                     let html = ''; let shown = 0;
                     const buildBadge = (arr, msgKey, colorClass, icon) => {

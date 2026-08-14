@@ -68,8 +68,38 @@
             40% { transform: scale(1.25); }
             100% { transform: scale(1); }
         }
-        .animate-save-pop i {
-            animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        .animate-save-pop i { animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* Arquitetura Responsiva da Barra Global */
+        #global-toolbar-inner { display: grid; align-items: center; }
+        #global-toolbar-filter { grid-area: filter; min-width: 0; }
+        #global-toolbar-alerts { grid-area: alerts; min-width: 0; }
+        #global-toolbar-save { grid-area: save; justify-self: end; }
+
+        body[data-responsive="mobile-portrait"] #global-toolbar-inner {
+            grid-template-columns: 1fr auto;
+            grid-template-areas: "filter save" "alerts alerts";
+            gap: 12px 8px;
+        }
+        body[data-responsive="mobile-portrait"] #filter-mode { font-size: 11px; }
+        body[data-responsive="mobile-portrait"] #global-month { max-width: 105px; }
+
+        body[data-responsive="mobile-landscape"] #global-toolbar-inner {
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas: "filter alerts save";
+            gap: 8px;
+        }
+
+        body[data-responsive="tablet"] #global-toolbar-inner {
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas: "filter alerts save";
+            gap: 12px;
+        }
+
+        body[data-responsive="desktop"] #global-toolbar-inner {
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            grid-template-areas: "filter alerts save";
+            gap: 24px;
         }
     
     </style>
@@ -131,13 +161,10 @@
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (Filtros e Salvar) ================= -->    
     <section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-300">
-        <!-- Grid Inteligente: 
-             Mobile Retrato: 2 Colunas (Data na esq | Salvar na dir) e Alertas na linha 2.
-             Landscape/PC (sm:): 3 Colunas (Data | Alertas | Salvar) na mesma linha. -->
-        <div class="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-[auto_1fr_auto] gap-x-2 sm:gap-x-6 gap-y-3 items-center">
+        <div id="global-toolbar-inner" class="max-w-7xl mx-auto w-full">
             
-            <!-- 1. FILTRO DE DATA (Gaveta Esquerda) -->
-            <div class="col-start-1 row-start-1 justify-self-start flex min-w-0">
+            <!-- 1. FILTRO DE DATA -->
+            <div id="global-toolbar-filter" class="flex justify-start">
                 <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
                     <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2 shrink-0">
                         <option value="month" data-i18n="opt_month">Mês:</option>
@@ -158,18 +185,20 @@
                 </div>
             </div>
             
-            <!-- 3. SALVAR (Gaveta Direita) -->
-            <div class="col-start-2 sm:col-start-3 row-start-1 justify-self-end flex items-center gap-3 shrink-0">
-                <span id="last-save-time" class="hidden md:inline text-[10px] text-slate-400 font-medium tracking-wide">
+            <!-- 2. ALERTAS (Agora alinhado dependendo do modo) -->
+            <div id="global-toolbar-alerts" class="flex items-center justify-center gap-2 w-full overflow-hidden transition-all">
+                <!-- JS injeta os alertas aqui -->
+            </div>
+            
+            <!-- 3. SALVAR -->
+            <div id="global-toolbar-save" class="flex items-center gap-3 shrink-0">
+                <span id="last-save-time" class="text-[10px] text-slate-400 font-medium tracking-wide">
                     <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
                 </span>
-                <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9 w-10 md:w-auto">
-                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span class="hidden md:inline" data-i18n="btn_save_data">Salvar</span>
+                <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9">
+                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span id="save-btn-text" data-i18n="btn_save_data">Salvar</span>
                 </button>
             </div>
-
-            <!-- 2. ALERTAS (Gaveta do Meio ou Linha de Baixo - Sem Rolagem!) -->
-            <div id="alert-zone" class="col-span-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 flex items-center justify-center gap-2 w-full min-w-0 transition-all px-1"></div>
             
         </div>
     </section>
@@ -1203,7 +1232,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.3.5';
+        const FLOWME_VERSION = '2.3.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1653,6 +1682,134 @@
             if(field !== 'person' && document.getElementById(field).value === oldVal) document.getElementById(field).value = newVal;
         }
 
+        // ================= GERENCIADOR RESPONSIVO (BARRA GLOBAL) =================
+        let currentAlertsData = null; // Guarda os alertas para não ter que recalcular se só virar a tela
+
+        function getResponsiveProfile() {
+            const width = window.innerWidth;
+            const portrait = window.matchMedia('(orientation: portrait)').matches;
+            if (width < 640 && portrait) return 'mobile-portrait';
+            if (width < 768 && !portrait) return 'mobile-landscape';
+            if (width < 1024) return 'tablet';
+            return 'desktop';
+        }
+
+        function updateGlobalToolbarResponsive() {
+            const profile = getResponsiveProfile();
+            document.body.setAttribute('data-responsive', profile);
+
+            const saveText = document.getElementById('save-btn-text');
+            const saveTime = document.getElementById('last-save-time');
+            
+            if (saveText && saveTime) {
+                const showText = profile === 'tablet' || profile === 'desktop';
+                const showTimestamp = profile === 'desktop';
+                saveText.style.display = showText ? 'inline' : 'none';
+                saveTime.style.display = showTimestamp ? 'inline' : 'none';
+            }
+            
+            if(currentAlertsData) renderToolbarAlerts(currentAlertsData, profile);
+        }
+
+        window.addEventListener('resize', updateGlobalToolbarResponsive);
+        window.addEventListener('orientationchange', updateGlobalToolbarResponsive);
+        document.addEventListener('DOMContentLoaded', updateGlobalToolbarResponsive);
+
+        function getMaxAlertBadges(profile) {
+            switch (profile) {
+                case 'mobile-portrait': return 2;
+                case 'mobile-landscape': return 1;
+                case 'tablet': return 2;
+                case 'desktop': return 3;
+                default: return 1;
+            }
+        }
+
+        function collectAlerts() {
+            let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [], limitAlerts = [];
+            if(!userConfig.notificationsEnabled) return null;
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            state.transactions.forEach(trx => {
+                if(trx.status !== 'pendente') return;
+                const dueDate = getDueDate(trx); if(!dueDate) return;
+                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) { trx.type === 'receita' ? aIncLate.push(trx) : aExpLate.push(trx); }
+                else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
+            });
+
+            if (state.limits && state.limits.length > 0) {
+                const currentMonthTx = state.transactions.filter(t => {
+                    const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                    return cDate === state.currentMonth;
+                });
+                state.limits.forEach(lim => {
+                    let spent = 0;
+                    currentMonthTx.forEach(trx => {
+                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                            const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
+                            if(s) spent += s.value;
+                        } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
+                            spent += (trx.value - rSplit);
+                        }
+                    });
+                    const pct = (spent / lim.max) * 100;
+                    if(pct >= 90) limitAlerts.push({ lim, pct, spent }); 
+                });
+            }
+            return [
+                { count: aIncLate.length, msgKey: 'rem_inc_late', bg: 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', icon: 'fa-circle-exclamation' },
+                { count: aExpLate.length, msgKey: 'rem_exp_late', bg: 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', icon: 'fa-triangle-exclamation' },
+                { count: limitAlerts.length, msgKey: 'msg_lim_risk', bg: 'bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800', icon: 'fa-bullseye' },
+                { count: aIncSoon.length, msgKey: 'rem_inc_soon', bg: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', icon: 'fa-clock' },
+                { count: aExpSoon.length, msgKey: 'rem_exp_soon', bg: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', icon: 'fa-clock' }
+            ];
+        }
+
+        function renderToolbarAlerts(groups, profile) {
+            const alertsZone = document.getElementById('global-toolbar-alerts');
+            if(!alertsZone || !groups) return;
+            
+            alertsZone.innerHTML = '';
+            const maxBadges = getMaxAlertBadges(profile);
+            let shown = 0;
+            let totalAlerts = 0;
+            let html = '';
+
+            groups.forEach(group => {
+                totalAlerts += group.count;
+                if (group.count > 0 && shown < maxBadges) {
+                    html += `<div class="${group.bg} px-2 py-1.5 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1.5 transition-colors shrink-0 whitespace-nowrap max-w-[150px] sm:max-w-[200px] overflow-hidden truncate"><i class="fa-solid ${group.icon} shrink-0"></i> <span class="truncate">${group.count} ${t(group.msgKey)}</span></div>`;
+                    shown++;
+                }
+            });
+
+            // Conta quantos alertas VISÍVEIS o usuário está vendo agora
+            let visibleAlerts = 0;
+            let countVisible = 0;
+            groups.forEach(group => {
+                if (group.count > 0 && countVisible < maxBadges) { visibleAlerts += group.count; countVisible++; }
+            });
+            
+            const hiddenCount = Math.max(totalAlerts - visibleAlerts, 0);
+
+            if (totalAlerts > 0) {
+                if (hiddenCount > 0) {
+                    html += `<button onclick="openAlertsModal()" class="shrink-0 px-2.5 py-1.5 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[11px] font-bold shadow-sm hover:bg-amber-200 dark:hover:bg-amber-900/50 transition flex items-center gap-1.5"> +${hiddenCount} <i class="fa-solid fa-bell"></i></button>`;
+                } else {
+                    html += `<button onclick="openAlertsModal()" class="shrink-0 px-2.5 py-1.5 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[11px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> ${t('btn_view')}</button>`;
+                }
+                alertsZone.innerHTML = html;
+            }
+        }
+        
         // ================= SAVE & LOAD =================
         function updateSaveTimestamp() {
             const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
@@ -1667,14 +1824,18 @@
         function manualSave() {
             saveState(); 
             const btn = document.getElementById('btn-manual-save'); 
-            const origHTML = `<i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span class="hidden md:inline" data-i18n="btn_save_data">${t('btn_save_data') || 'Salvar'}</span>`;
+            const textSpan = document.getElementById('save-btn-text');
+            const originalText = textSpan ? textSpan.innerText : t('btn_save_data');
+            const showTextClass = textSpan && textSpan.style.display !== 'none' ? 'inline' : 'none';
+            
+            const origHTML = `<i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span id="save-btn-text" style="display: ${showTextClass};" data-i18n="btn_save_data">${originalText}</span>`;
             
             // Estágio 1: Afundou e começa a girar (Carregando rápido)
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm"></i> <span class="hidden md:inline" data-i18n="btn_save_data">${t('btn_save_data') || 'Salvar'}</span>`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm"></i> <span style="display: ${showTextClass};" data-i18n="btn_save_data">${originalText}</span>`;
             
             setTimeout(() => {
                 // Estágio 2: Confirmação com POP de expansão
-                btn.innerHTML = `<i class="fa-solid fa-check text-base"></i> <span class="hidden md:inline font-bold">OK</span>`;
+                btn.innerHTML = `<i class="fa-solid fa-check text-base"></i> <span style="display: ${showTextClass};" class="font-bold">OK</span>`;
                 btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border-emerald-300', 'animate-save-pop');
                 btn.classList.remove('bg-slate-100', 'text-slate-600', 'border-slate-200', 'hover:bg-emerald-50', 'hover:text-emerald-700');
                 
@@ -1683,8 +1844,8 @@
                     btn.innerHTML = origHTML; 
                     btn.classList.remove('bg-emerald-100', 'text-emerald-700', 'border-emerald-300', 'animate-save-pop'); 
                     btn.classList.add('bg-slate-100', 'text-slate-600', 'border-slate-200', 'hover:bg-emerald-50', 'hover:text-emerald-700');
-                }, 1200); // Tempo exibindo o OK verde
-            }, 300); // Tempo do spinner girando
+                }, 1200); 
+            }, 300); 
             
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
         }
@@ -2121,82 +2282,9 @@
             const pplC = document.getElementById('people-summary-list'); pplC.innerHTML = '';
             for(let p in peopleMap) pplC.innerHTML += `<div class="py-2 flex justify-between items-center"><div class="font-semibold dark:text-slate-200">${p}<div class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</div></div><div class="text-right font-bold text-amber-600 dark:text-amber-400">${formatCurrency(peopleMap[p].pen)}</div></div>`;
 
-            // ALERTS E ORÇAMENTOS (SINO SUPERIOR)
-            const alerts = document.getElementById('alert-zone'); alerts.innerHTML = '';
-            let limitAlerts = [];
-            
-            if(userConfig.notificationsEnabled) {
-                let aIncSoon = [], aIncLate = [], aExpSoon = [], aExpLate = [];
-
-                state.transactions.forEach(trx => {
-                    if(trx.status !== 'pendente') return;
-                    const dueDate = getDueDate(trx); if(!dueDate) return;
-                    const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    
-                    if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) { trx.type === 'receita' ? aIncLate.push(trx) : aExpLate.push(trx); }
-                    else if (diffDays >= 0 && diffDays <= userConfig.reminderDays && diffDays !== 0) { trx.type === 'receita' ? aIncSoon.push(trx) : aExpSoon.push(trx); }
-                });
-
-                // Calcula silenciosamente se tem algum limite/orçamento em risco
-                if (state.limits && state.limits.length > 0) {
-                    const currentMonthTx = state.transactions.filter(t => {
-                        const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
-                        return cDate === state.currentMonth;
-                    });
-                    
-                    state.limits.forEach(lim => {
-                        let spent = 0;
-                        currentMonthTx.forEach(trx => {
-                            if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
-                                const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
-                                if(s) spent += s.value;
-                            } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
-                                let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
-                                spent += (trx.value - rSplit);
-                            } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
-                                let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
-                                spent += (trx.value - rSplit);
-                            }
-                        });
-                        const pct = (spent / lim.max) * 100;
-                        if(pct >= 90) limitAlerts.push({ lim, pct, spent }); // Entra no radar de alertas
-                    });
-                }
-
-                const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon, ...limitAlerts];
-                
-                if(allAlerts.length > 0) {
-                    // O "Controlador de Tráfego" inteligente de Alertas:
-                    let maxBadges = 1; // Padrão seguro para Celular Deitado (tudo espremido na mesma linha)
-                    if (window.innerWidth < 640) maxBadges = 2; // Celular em pé (ganha a linha de baixo inteira, cabe 2 folgado)
-                    if (window.innerWidth >= 768) maxBadges = 2; // Tablet/Notebook (Botão salvar ganha texto, espaço balanceado, cabe 2)
-                    if (window.innerWidth >= 1024) maxBadges = 3; // Telas de PC grandes (cabe 3 tranquilo)
-
-                    let html = ''; let shown = 0;
-                    const buildBadge = (arr, msgKey, colorClass, icon) => {
-                        if(arr.length > 0 && shown < maxBadges) { html += `<div class="${colorClass} px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`; shown++; }
-                    };
-                    buildBadge(aIncLate, 'rem_inc_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-circle-exclamation');
-                    buildBadge(aExpLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
-                    
-                    // Exibe a pílula de orçamento no topo se houver espaço
-                    if(limitAlerts.length > 0 && shown < maxBadges) {
-                        html += `<div class="bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800 px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid fa-bullseye"></i> <span>${limitAlerts.length} ${t('msg_lim_risk')}</span></div>`;
-                        shown++;
-                    }
-
-                    buildBadge(aIncSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
-                    buildBadge(aExpSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
-                    
-                    if(allAlerts.length > maxBadges) {
-                        html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 rounded text-[10px] font-bold shadow-sm hover:bg-amber-200 dark:hover:bg-amber-900/50 transition flex items-center gap-1.5"> +${allAlerts.length - maxBadges} <i class="fa-solid fa-bell"></i></button>`;
-                    } else {
-                        html += `<button onclick="openAlertsModal()" class="shrink-0 px-2 py-1 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold shadow-sm hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-solid fa-bell"></i> ${t('btn_view')}</button>`;
-                    }
-                    alerts.innerHTML = html;
-                }
-            }
+            // ALERTS E ORÇAMENTOS
+            currentAlertsData = collectAlerts();
+            updateGlobalToolbarResponsive(); // Chama a nova inteligência que desenha a barra
 
             renderDashboard(filtered);
         }

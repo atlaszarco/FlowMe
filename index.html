@@ -131,11 +131,13 @@
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (Filtros e Salvar) ================= -->    
     <section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-300">
-        <!-- Flexbox Responsivo: Centralizado. Wrap no mobile (itens caem pra linha de baixo) -->
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-x-4 gap-y-3 lg:gap-x-8">
+        <!-- Grid Inteligente: 
+             Mobile Retrato: 2 Colunas (Data na esq | Salvar na dir) e Alertas na linha 2.
+             Landscape/PC (sm:): 3 Colunas (Data | Alertas | Salvar) na mesma linha. -->
+        <div class="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-[auto_1fr_auto] gap-x-2 sm:gap-x-6 gap-y-3 items-center">
             
-            <!-- 1. FILTRO DE DATA (Ordem 1) -->
-            <div class="order-1 flex shrink-0 justify-center">
+            <!-- 1. FILTRO DE DATA (Gaveta Esquerda) -->
+            <div class="col-start-1 row-start-1 justify-self-start flex min-w-0">
                 <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
                     <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2 shrink-0">
                         <option value="month" data-i18n="opt_month">Mês:</option>
@@ -156,18 +158,18 @@
                 </div>
             </div>
             
-            <!-- 3. SALVAR (Ordem 2 no Mobile para ficar ao lado da Data. Ordem 3 no PC) -->
-            <div class="order-2 sm:order-3 flex items-center gap-3 shrink-0">
-                <span id="last-save-time" class="hidden sm:inline text-[10px] text-slate-400 font-medium tracking-wide">
+            <!-- 3. SALVAR (Gaveta Direita) -->
+            <div class="col-start-2 sm:col-start-3 row-start-1 justify-self-end flex items-center gap-3 shrink-0">
+                <span id="last-save-time" class="hidden md:inline text-[10px] text-slate-400 font-medium tracking-wide">
                     <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
                 </span>
-                <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9">
-                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span class="hidden sm:inline" data-i18n="btn_save_data">Salvar</span>
+                <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9 w-10 md:w-auto">
+                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span class="hidden md:inline" data-i18n="btn_save_data">Salvar</span>
                 </button>
             </div>
 
-            <!-- 2. ALERTAS (Ordem 3 no Mobile para cair pra linha de baixo. Ordem 2 no PC para ficar no meio) -->
-            <div id="alert-zone" class="order-3 sm:order-2 flex items-center justify-center gap-2 overflow-x-auto w-full sm:w-auto max-w-full [&::-webkit-scrollbar]:hidden transition-all"></div>
+            <!-- 2. ALERTAS (Gaveta do Meio ou Linha de Baixo) -->
+            <div id="alert-zone" class="col-span-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 flex items-center justify-center gap-2 overflow-x-auto w-full min-w-0 [&::-webkit-scrollbar]:hidden px-1"></div>
             
         </div>
     </section>
@@ -1201,7 +1203,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.3.3';
+        const FLOWME_VERSION = '2.3.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

@@ -194,7 +194,7 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL ================= -->
-<section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-300">
+<section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-500">
     <div id="global-toolbar-inner" class="max-w-7xl mx-auto">
 
         <!-- FILTRO -->
@@ -246,9 +246,9 @@
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
                         <i class="fa-solid fa-wallet text-emerald-500"></i> <span data-i18n="acc_summary">Resumo Financeiro</span>
                     </h2>
-                    <i id="acc-icon-resumo" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    <i id="acc-icon-resumo" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
                 </button>
-                <div id="acc-content-resumo" class="acc-content grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                <div id="acc-content-resumo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                     <div class="overflow-hidden">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                             <!-- Os 4 Cartões Ficam AQUI Dentro -->
@@ -294,7 +294,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start relative">
             <!-- Fundo embaçado para o formulário no celular -->
-            <div id="form-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden" onclick="toggleMobileForm(false)"></div>
+            <div id="form-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500 lg:hidden" onclick="toggleMobileForm(false)"></div>
 
                 <!-- O FORMULÁRIO EM SI -->
                 <div id="form-wrapper" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:sticky lg:top-24 transition-all overflow-hidden lg:block hidden">
@@ -452,10 +452,10 @@
                             <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
                                 <i class="fa-solid fa-list-ul text-blue-500"></i> <span data-i18n="acc_filters">Filtros e Histórico</span>
                             </h2>
-                            <i id="acc-icon-historico" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                            <i id="acc-icon-historico" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
                         </button>
                         
-                        <div id="acc-content-historico" class="acc-content grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div id="acc-content-historico" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                             <div class="overflow-hidden">
                                 <div class="mt-4 space-y-4">
                                     <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
@@ -516,9 +516,9 @@
                             <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
                                 <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
                             </h2>
-                            <i id="acc-icon-pessoas" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                            <i id="acc-icon-pessoas" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
                         </button>
-                        <div id="acc-content-pessoas" class="acc-content grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div id="acc-content-pessoas" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                             <div class="overflow-hidden">
                                 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
                                     <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700"></div>
@@ -594,11 +594,11 @@
                 <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-limits" onclick="toggleAccordion('dash-limits')">
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bullseye text-pink-500"></i> <span data-i18n="dash_limits">Orçamentos do Mês</span></h2>
                     <div class="flex gap-4 items-center">
-                        <span id="acc-action-dash-limits" onclick="event.stopPropagation(); switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="acc-action text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold px-3 py-1.5 rounded-lg shadow-sm transition-all duration-300 border border-slate-200 dark:border-slate-600" data-i18n="btn_config">Configurar</span>
-                        <i id="acc-icon-dash-limits" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        <span id="acc-action-dash-limits" onclick="event.stopPropagation(); switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="acc-action text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold px-3 py-1.5 rounded-lg shadow-sm transition-all duration-500 border border-slate-200 dark:border-slate-600" data-i18n="btn_config">Configurar</span>
+                        <i id="acc-icon-dash-limits" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
                     </div>
                 </button>
-                <div id="acc-content-dash-limits" class="acc-content grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                <div id="acc-content-dash-limits" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                     <div class="overflow-hidden">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
                             <div id="dashboard-limits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -673,10 +673,10 @@
 <!-- ================= BLOCO 7: ABA CONFIGURAÇÕES ================= -->
         <div id="content-backup" class="tab-content hidden max-w-4xl mx-auto flex flex-col min-h-[70vh]">
             
-            <<div class="columns-1 md:columns-2 gap-6 flex-1">
+            <div id="cfg-container" class="columns-1 md:columns-2 gap-6 flex-1">
                 
                 <!-- 1. Conta e Nuvem -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                <div id="cfg-wrap-cloud" class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
                     <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-cloud" onclick="toggleAccordion('cfg-cloud')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-brands fa-google text-blue-500"></i> <span data-i18n="cfg_acc_title">Conta e Nuvem</span></h2>
                         <i id="acc-icon-cfg-cloud" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
@@ -717,7 +717,7 @@
                 </div>
 
                 <!-- 2. Idioma e Moeda -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                <div id="cfg-wrap-lang" class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
                     <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-lang" onclick="toggleAccordion('cfg-lang')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-earth-americas text-emerald-500"></i> <span data-i18n="cfg_lang_curr">Idioma e Moeda</span></h2>
                         <i id="acc-icon-cfg-lang" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
@@ -748,7 +748,7 @@
                 </div>
 
                 <!-- 3. Aparência -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                <div id="cfg-wrap-app" class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
                     <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-app" onclick="toggleAccordion('cfg-app')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-palette text-amber-500"></i> <span data-i18n="cfg_appearance_title">Aparência</span></h2>
                         <i id="acc-icon-cfg-app" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
@@ -784,7 +784,7 @@
                 </div>
 
                 <!-- 4. Alertas e Lembretes -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                <div id="cfg-wrap-notif" class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
                     <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-notif" onclick="toggleAccordion('cfg-notif')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bell text-rose-500"></i> <span data-i18n="cfg_alerts_title">Alertas e Lembretes</span></h2>
                         <i id="acc-icon-cfg-notif" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
@@ -812,7 +812,7 @@
                 </div>
 
                 <!-- 5. Dados e Segurança -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                <div id="cfg-wrap-sec" class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
                     <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-sec" onclick="toggleAccordion('cfg-sec')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-shield-halved text-indigo-500"></i> <span data-i18n="cfg_title">Dados e Segurança</span></h2>
                         <i id="acc-icon-cfg-sec" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
@@ -851,8 +851,8 @@
                     </div>
                 </div>
 
-                <!-- 6. Orçamentos e Limites (AGORA INTEGRADO AO MASONRY!) -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                <!-- 6. Orçamentos e Limites -->
+                <div id="cfg-wrap-limits" class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
                     <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-limits" onclick="toggleAccordion('cfg-limits')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bullseye text-pink-500"></i> <span data-i18n="cfg_limits_title">Orçamentos e Limites</span></h2>
                         <div class="flex gap-4 items-center">
@@ -871,7 +871,7 @@
                     </div>
                 </div>
 
-            </div> <!-- Fim das Colunas Masonry -->
+            </div>
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
@@ -882,8 +882,8 @@
 
 <!-- ================= BLOCO 8: MODAIS (Alertas, Edição, etc) ================= -->
     <!-- MODALS: ALERTAS -->
-    <div id="modal-alerts" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-300 scale-95 translate-y-4 opacity-0">
+    <div id="modal-alerts" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> <span data-i18n="modal_alerts_title">Central de Alertas</span></h3>
                 <button onclick="closeModal('modal-alerts')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
@@ -893,8 +893,8 @@
     </div>
 
     <!-- MODAL: GERENCIAR GLOBAL -->
-    <div id="modal-global-edit" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-300 scale-95 translate-y-4 opacity-0">
+    <div id="modal-global-edit" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
                 <h3 id="global-edit-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm">Gerenciar</h3>
                 <button onclick="closeModal('modal-global-edit')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
@@ -912,8 +912,8 @@
     </div>
 
     <!-- MODAL: VENCIMENTO FATURA -->
-    <div id="modal-invoice-due" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-300 scale-95 translate-y-4 opacity-0">
+    <div id="modal-invoice-due" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_due_title">Vencimento da Fatura</h3>
                 <button onclick="closeModal('modal-invoice-due')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
@@ -934,8 +934,8 @@
     </div>
 
     <!-- MODAL: IMPORTADOR INTELIGENTE (CSV DO BANCO) -->
-    <div id="modal-smart-importer" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-300 scale-95 translate-y-4 opacity-0">
+    <div id="modal-smart-importer" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">
                     <i class="fa-solid fa-wand-magic-sparkles text-indigo-500 mr-2"></i> <span data-i18n="smart_import_title">Importador Inteligente</span>
@@ -980,8 +980,8 @@
     </div>
    
     <!-- MODAL: CRIAR LIMITE -->
-    <div id="modal-limit-form" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-300 scale-95 translate-y-4 opacity-0">
+    <div id="modal-limit-form" class="modal-wrapper hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_limit_title">Criar Limite</h3>
                 <button onclick="closeModal('modal-limit-form')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
@@ -1270,7 +1270,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.3.9';
+        const FLOWME_VERSION = '2.4.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1734,19 +1734,31 @@
 
         function updateGlobalToolbarResponsive() {
             const profile = getResponsiveProfile();
-            document.body.setAttribute('data-responsive', profile);
-
-            const saveText = document.getElementById('save-btn-text');
-            const saveTime = document.getElementById('last-save-time');
+            responsiveProfile = profile;
+            document.body.dataset.responsive = profile;
+            updateSaveDisplay(profile);
+            renderToolbarAlerts();
             
-            if (saveText && saveTime) {
-                const showText = profile === 'tablet' || profile === 'desktop';
-                const showTimestamp = profile === 'desktop';
-                saveText.style.display = showText ? 'inline' : 'none';
-                saveTime.style.display = showTimestamp ? 'inline' : 'none';
+            // Reordenação do Efeito Tetris nas Configurações
+            const cfgContainer = document.getElementById('cfg-container');
+            if (cfgContainer) {
+                const c1 = document.getElementById('cfg-wrap-cloud');
+                const c2 = document.getElementById('cfg-wrap-lang');
+                const c3 = document.getElementById('cfg-wrap-app');
+                const c4 = document.getElementById('cfg-wrap-notif');
+                const c5 = document.getElementById('cfg-wrap-sec');
+                const c6 = document.getElementById('cfg-wrap-limits');
+                
+                if (c1 && c2 && c3 && c4 && c5 && c6) {
+                    if (profile === 'tablet' || profile === 'desktop') {
+                        // Ordem intercalada para preencher colunas de cima pra baixo: 1, 3, 5 (Esq) e 2, 4, 6 (Dir)
+                        cfgContainer.append(c1, c3, c5, c2, c4, c6);
+                    } else {
+                        // Ordem natural empilhada no mobile: 1, 2, 3, 4, 5, 6
+                        cfgContainer.append(c1, c2, c3, c4, c5, c6);
+                    }
+                }
             }
-            
-            if(currentAlertsData) renderToolbarAlerts(currentAlertsData, profile);
         }
 
         window.addEventListener('resize', updateGlobalToolbarResponsive);
@@ -2046,7 +2058,7 @@
                 wrapper.classList.remove('hidden');
                 
                 // Formata o Wrapper como Pop-up (Modal) Centralizado
-                wrapper.classList.add('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95');
+                wrapper.classList.add('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
                 
                 // Aciona a animação fluída no próximo quadro (Frame)
                 requestAnimationFrame(() => {
@@ -2065,7 +2077,7 @@
                     wrapper.classList.add('hidden');
                     backdrop.classList.add('hidden');
                     // Limpa as classes do mobile para não dar erro se a pessoa girar o celular/tela
-                    wrapper.classList.remove('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-300', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
+                    wrapper.classList.remove('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-500', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
                 }, 300);
             }
         }
@@ -2091,7 +2103,7 @@
                 // Se estiver fechado, garante que fica escondido sem perder as formatações base
                 if (!isMobileFormOpen) {
                     wrapper.className = "hidden bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all overflow-hidden";
-                    if(backdrop) backdrop.className = "fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden";
+                    if(backdrop) backdrop.className = "fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500 lg:hidden";
                 }
             }
         }

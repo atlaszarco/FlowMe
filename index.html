@@ -433,17 +433,19 @@
                         </div>
                     </div>
 
-                    <!-- GAVETA 3: PESSOAS -->
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                        <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="pessoas" onclick="toggleAccordion('pessoas')">
-                            <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                   <!-- GAVETA 3: PESSOAS -->
+                    <div>
+                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="pessoas" onclick="toggleAccordion('pessoas')">
+                            <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
                                 <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
                             </h3>
                             <i id="acc-icon-pessoas" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                         </button>
                         <div id="acc-content-pessoas" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                             <div class="overflow-hidden">
-                                <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700 pt-3"></div>
+                                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors">
+                                    <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -511,31 +513,31 @@
         <div id="content-dashboard" class="tab-content hidden max-w-7xl mx-auto space-y-6">
         
             <!-- ORÇAMENTOS E LIMITES -->
-            <div id="dashboard-limits-section" class="hidden bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors mb-6">
-                <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-limits" onclick="toggleAccordion('dash-limits')">
-                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider"><i class="fa-solid fa-bullseye text-pink-500 mr-1"></i> <span data-i18n="dash_limits">Orçamentos do Mês</span></h3>
+            <div id="dashboard-limits-section" class="hidden mb-6">
+                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="dash-limits" onclick="toggleAccordion('dash-limits')">
+                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-bullseye text-pink-500"></i> <span data-i18n="dash_limits">Orçamentos do Mês</span></h3>
                     <div class="flex gap-3 items-center">
-                        <span onclick="event.stopPropagation(); switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="text-[10px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 px-2 py-1 rounded transition border border-slate-200 dark:border-slate-600" data-i18n="btn_config">Configurar</span>
+                        <span id="acc-action-dash-limits" onclick="event.stopPropagation(); switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="text-[10px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 px-2 py-1 rounded transition-all duration-300 border border-slate-200 dark:border-slate-600" data-i18n="btn_config">Configurar</span>
                         <i id="acc-icon-dash-limits" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </div>
                 </button>
                 <div id="acc-content-dash-limits" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                     <div class="overflow-hidden">
-                        <div id="dashboard-limits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4"></div>
+                        <div id="dashboard-limits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3"></div>
                     </div>
                 </div>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Gráfico 1: Fluxo de Caixa -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-fluxo" onclick="toggleAccordion('dash-fluxo')">
+                <div>
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="dash-fluxo" onclick="toggleAccordion('dash-fluxo')">
                         <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_cashflow">Fluxo de Caixa (Filtro Atual)</h3>
                         <i id="acc-icon-dash-fluxo" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </button>
                     <div id="acc-content-dash-fluxo" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="relative h-64 w-full pt-4">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors relative h-64 w-full">
                                 <canvas id="chart-cashflow"></canvas>
                             </div>
                         </div>
@@ -543,14 +545,14 @@
                 </div>
 
                 <!-- Gráfico 2: Despesas por Categoria -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-cat" onclick="toggleAccordion('dash-cat')">
+                <div>
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="dash-cat" onclick="toggleAccordion('dash-cat')">
                         <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_categories">Despesas por Categoria</h3>
                         <i id="acc-icon-dash-cat" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </button>
                     <div id="acc-content-dash-cat" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="relative h-64 w-full pt-4">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors relative h-64 w-full">
                                 <canvas id="chart-categories"></canvas>
                             </div>
                         </div>
@@ -558,14 +560,14 @@
                 </div>
 
                 <!-- Gráfico 3: Evolução 6 Meses -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-evo" onclick="toggleAccordion('dash-evo')">
+                <div>
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="dash-evo" onclick="toggleAccordion('dash-evo')">
                         <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_evolution">Evolução (Últimos 6 Meses)</h3>
                         <i id="acc-icon-dash-evo" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </button>
                     <div id="acc-content-dash-evo" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="relative h-64 w-full pt-4">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors relative h-64 w-full">
                                 <canvas id="chart-evolution"></canvas>
                             </div>
                         </div>
@@ -573,14 +575,14 @@
                 </div>
 
                 <!-- Gráfico 4: Gastos por Conta/Cartão -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-2" data-acc-id="dash-acc" onclick="toggleAccordion('dash-acc')">
+                <div>
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="dash-acc" onclick="toggleAccordion('dash-acc')">
                         <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider" data-i18n="chart_accounts">Gastos por Conta / Cartão</h3>
                         <i id="acc-icon-dash-acc" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </button>
                     <div id="acc-content-dash-acc" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="relative h-64 w-full pt-4">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors relative h-64 w-full">
                                 <canvas id="chart-accounts"></canvas>
                             </div>
                         </div>
@@ -594,14 +596,14 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
                 
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-cloud" onclick="toggleAccordion('cfg-cloud')">
+                <div class="flex flex-col">
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="cfg-cloud" onclick="toggleAccordion('cfg-cloud')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-brands fa-google text-blue-500 mr-2"></i> <span data-i18n="cfg_acc_title">Conta e Nuvem</span></h2>
                         <i id="acc-icon-cfg-cloud" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </button>
                     <div id="acc-content-cfg-cloud" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr] flex-1">
                         <div class="overflow-hidden flex flex-col h-full">
-                            <div class="pt-4 flex-1 flex flex-col justify-between">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors flex-1 flex flex-col justify-between">
                                 <div class="flex items-center gap-4 mb-4 opacity-50" id="cloud-user-info">
                                     <div class="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-400 overflow-hidden" id="cloud-user-avatar">
                                         <i class="fa-solid fa-user text-xl"></i>
@@ -634,76 +636,80 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-lang" onclick="toggleAccordion('cfg-lang')">
+                <div>
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="cfg-lang" onclick="toggleAccordion('cfg-lang')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-earth-americas text-emerald-500 mr-2"></i> <span data-i18n="cfg_lang_curr">Idioma e Moeda</span></h2>
                         <i id="acc-icon-cfg-lang" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </button>
                     <div id="acc-content-cfg-lang" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="pt-4 mb-5">
-                                <label id="lbl-language" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Idioma:</label>
-                                <div class="flex flex-wrap gap-2" id="lang-buttons">
-                                    <button onclick="setLanguage('pt')" id="btn-lang-pt" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇧🇷</span> <span class="lang-text">Português</span></button>
-                                    <button onclick="setLanguage('en')" id="btn-lang-en" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇦🇺</span> <span class="lang-text">Inglês</span></button>
-                                    <button onclick="setLanguage('es')" id="btn-lang-es" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇪🇸</span> <span class="lang-text">Espanhol</span></button>
-                                    <button onclick="setLanguage('fr')" id="btn-lang-fr" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇫🇷</span> <span class="lang-text">Francês</span></button>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors">
+                                <div class="mb-5">
+                                    <label id="lbl-language" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Idioma:</label>
+                                    <div class="flex flex-wrap gap-2" id="lang-buttons">
+                                        <button onclick="setLanguage('pt')" id="btn-lang-pt" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇧🇷</span> <span class="lang-text">Português</span></button>
+                                        <button onclick="setLanguage('en')" id="btn-lang-en" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇦🇺</span> <span class="lang-text">Inglês</span></button>
+                                        <button onclick="setLanguage('es')" id="btn-lang-es" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇪🇸</span> <span class="lang-text">Espanhol</span></button>
+                                        <button onclick="setLanguage('fr')" id="btn-lang-fr" class="flex items-center gap-2 px-3 py-2 border rounded-lg transition text-sm font-medium"><span class="text-lg">🇫🇷</span> <span class="lang-text">Francês</span></button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_currency">Moeda Padrão:</label>
-                                <select id="cfg-currency" onchange="setCurrency(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                    <option value="BRL" data-i18n="curr_brl">Real Brasileiro (R$)</option>
-                                    <option value="USD" data-i18n="curr_usd">Dólar Americano ($)</option>
-                                    <option value="EUR" data-i18n="curr_eur">Euro (€)</option>
-                                </select>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_currency">Moeda Padrão:</label>
+                                    <select id="cfg-currency" onchange="setCurrency(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        <option value="BRL" data-i18n="curr_brl">Real Brasileiro (R$)</option>
+                                        <option value="USD" data-i18n="curr_usd">Dólar Americano ($)</option>
+                                        <option value="EUR" data-i18n="curr_eur">Euro (€)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-6">
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
-                        <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-app" onclick="toggleAccordion('cfg-app')">
+                    <div>
+                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="cfg-app" onclick="toggleAccordion('cfg-app')">
                             <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-palette text-amber-500 mr-2"></i> <span data-i18n="cfg_appearance_title">Aparência</span></h2>
                             <i id="acc-icon-cfg-app" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                         </button>
                         <div id="acc-content-cfg-app" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                             <div class="overflow-hidden">
-                                <div class="pt-4">
-                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_theme">Tema do Aplicativo:</label>
-                                    <div class="flex flex-wrap gap-2" id="theme-buttons">
-                                        <button onclick="setTheme('light')" id="btn-theme-light" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-sun text-amber-500"></i> <span data-i18n="cfg_theme_light">Claro</span></button>
-                                        <button onclick="setTheme('dark')" id="btn-theme-dark" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-moon text-indigo-400"></i> <span data-i18n="cfg_theme_dark">Escuro</span></button>
-                                        <button onclick="setTheme('system')" id="btn-theme-system" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span></button>
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_theme">Tema do Aplicativo:</label>
+                                        <div class="flex flex-wrap gap-2" id="theme-buttons">
+                                            <button onclick="setTheme('light')" id="btn-theme-light" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-sun text-amber-500"></i> <span data-i18n="cfg_theme_light">Claro</span></button>
+                                            <button onclick="setTheme('dark')" id="btn-theme-dark" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-moon text-indigo-400"></i> <span data-i18n="cfg_theme_dark">Escuro</span></button>
+                                            <button onclick="setTheme('system')" id="btn-theme-system" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span></button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
-                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_tab_style">Estilo do Menu Principal:</label>
-                                    <select id="cfg-tab-style" onchange="setTabStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                        <option value="both" data-i18n="opt_tab_both">Ícone e Texto</option>
-                                        <option value="icons" data-i18n="opt_tab_icons">Apenas Ícones</option>
-                                    </select>
-                                </div>
-                                <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
-                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_panel_style">Estilo dos Painéis:</label>
-                                    <select id="cfg-panel-style" onchange="setPanelStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                        <option value="blocks" data-i18n="opt_panel_blocks">Blocos Expandidos</option>
-                                        <option value="accordion" data-i18n="opt_panel_accordion">Sanfonas (Recolhíveis)</option>
-                                    </select>
+                                    <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
+                                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_tab_style">Estilo do Menu Principal:</label>
+                                        <select id="cfg-tab-style" onchange="setTabStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                            <option value="both" data-i18n="opt_tab_both">Ícone e Texto</option>
+                                            <option value="icons" data-i18n="opt_tab_icons">Apenas Ícones</option>
+                                        </select>
+                                    </div>
+                                    <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
+                                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_panel_style">Estilo dos Painéis:</label>
+                                        <select id="cfg-panel-style" onchange="setPanelStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                            <option value="blocks" data-i18n="opt_panel_blocks">Blocos Expandidos</option>
+                                            <option value="accordion" data-i18n="opt_panel_accordion">Sanfonas (Recolhíveis)</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
-                        <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-notif" onclick="toggleAccordion('cfg-notif')">
+                    <div>
+                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="cfg-notif" onclick="toggleAccordion('cfg-notif')">
                             <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-bell text-rose-500 mr-2"></i> <span data-i18n="cfg_alerts_title">Alertas e Lembretes</span></h2>
                             <i id="acc-icon-cfg-notif" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                         </button>
                         <div id="acc-content-cfg-notif" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                             <div class="overflow-hidden">
-                                <div class="space-y-3 pt-4">
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors space-y-3">
                                     <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
                                         <input type="checkbox" id="cfg-notif" onchange="toggleNotifications(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
                                         <span data-i18n="cfg_notif">Ativar Notificações/Alertas</span>
@@ -724,14 +730,14 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-sec" onclick="toggleAccordion('cfg-sec')">
+                <div>
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="cfg-sec" onclick="toggleAccordion('cfg-sec')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-shield-halved text-indigo-500 mr-2"></i> <span data-i18n="cfg_title">Dados e Segurança</span></h2>
                         <i id="acc-icon-cfg-sec" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                     </button>
                     <div id="acc-content-cfg-sec" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="space-y-4 pt-4">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors space-y-4">
                                 <div class="p-3 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-800 flex justify-between items-center gap-2 transition-colors">
                                     <div><h3 class="text-[11px] font-bold text-emerald-900 dark:text-emerald-400" data-i18n="cfg_export_title">Exportar Planilha</h3></div>
                                     <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[10px] rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
@@ -763,18 +769,20 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col transition-colors md:col-span-2">
-                    <button class="accordion-header w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4" data-acc-id="cfg-limits" onclick="toggleAccordion('cfg-limits')">
+                <div class="flex flex-col md:col-span-2">
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="cfg-limits" onclick="toggleAccordion('cfg-limits')">
                         <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-bullseye text-pink-500 mr-2"></i> <span data-i18n="cfg_limits_title">Orçamentos e Limites</span></h2>
                         <div class="flex gap-4 items-center">
-                            <span onclick="event.stopPropagation(); openLimitModal()" class="text-xs bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 dark:hover:bg-pink-800 transition border border-pink-200 dark:border-pink-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></span>
+                            <span id="acc-action-cfg-limits" onclick="event.stopPropagation(); openLimitModal()" class="text-xs bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 dark:hover:bg-pink-800 transition-all duration-300 border border-pink-200 dark:border-pink-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></span>
                             <i id="acc-icon-cfg-limits" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                         </div>
                     </button>
                     <div id="acc-content-cfg-limits" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div id="settings-limits-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-4">
-                                <!-- Renderizado via JS -->
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors">
+                                <div id="settings-limits-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    <!-- Renderizado via JS -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1105,24 +1113,27 @@
         let accordionState = JSON.parse(localStorage.getItem('flowme_accordions')) || {};
 
         function toggleAccordion(id) {
-            if (userConfig.panelStyle !== 'accordion') return; // Se não for sanfona, ignora o clique
+            if (userConfig.panelStyle !== 'accordion') return; 
             
             const content = document.getElementById(`acc-content-${id}`);
             const icon = document.getElementById(`acc-icon-${id}`);
+            const actionBtn = document.getElementById(`acc-action-${id}`); // Procura botão extra se houver
+            
             const isOpen = content.classList.contains('[grid-template-rows:1fr]');
             
             if (isOpen) {
                 content.classList.remove('[grid-template-rows:1fr]');
                 content.classList.add('[grid-template-rows:0fr]');
                 icon.classList.remove('rotate-180');
+                if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = false;
             } else {
                 content.classList.remove('[grid-template-rows:0fr]');
                 content.classList.add('[grid-template-rows:1fr]');
                 icon.classList.add('rotate-180');
+                if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = true;
             }
-            // Salva na memória na mesma hora
             localStorage.setItem('flowme_accordions', JSON.stringify(accordionState));
         }
 
@@ -1133,24 +1144,26 @@
                 const id = header.getAttribute('data-acc-id');
                 const content = document.getElementById(`acc-content-${id}`);
                 const icon = document.getElementById(`acc-icon-${id}`);
+                const actionBtn = document.getElementById(`acc-action-${id}`);
                 
                 if (isAccordion) {
                     header.classList.add('cursor-pointer');
                     header.classList.remove('cursor-default');
                     if(icon) icon.classList.remove('hidden');
                     
-                    const shouldBeOpen = accordionState[id] !== false; // Se nunca foi mexido, abre por padrão
+                    const shouldBeOpen = accordionState[id] !== false; 
                     if (shouldBeOpen) {
                         content.classList.remove('[grid-template-rows:0fr]');
                         content.classList.add('[grid-template-rows:1fr]');
                         if(icon) icon.classList.add('rotate-180');
+                        if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                     } else {
                         content.classList.remove('[grid-template-rows:1fr]');
                         content.classList.add('[grid-template-rows:0fr]');
                         if(icon) icon.classList.remove('rotate-180');
+                        if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                     }
                 } else {
-                    // Força modo Blocos Expandidos (Ignora a memória e abre tudo)
                     header.classList.remove('cursor-pointer');
                     header.classList.add('cursor-default');
                     if(icon) icon.classList.add('hidden');
@@ -1158,18 +1171,18 @@
                     content.classList.remove('[grid-template-rows:0fr]');
                     content.classList.add('[grid-template-rows:1fr]');
                     if(icon) icon.classList.add('rotate-180');
+                    if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                 }
             });
         }
 
-        // Linca o botão de "Estilo dos Painéis"
         function setPanelStyle(style) {
             userConfig.panelStyle = style;
             localStorage.setItem('flowme_panel_style', style);
-            applyPanelStyle(); // Atualiza a tela ao vivo ao trocar
+            applyPanelStyle(); 
         }
         
-        const FLOWME_VERSION = '2.2.0';
+        const FLOWME_VERSION = '2.2.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

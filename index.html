@@ -54,6 +54,13 @@
             button:hover { filter: brightness(1.08); } /* Fica mais vivo no PC */
         }
         .dark button:hover { filter: brightness(1.15); } /* Brilha ainda mais no modo escuro */
+
+        /* Controle Mestre do Modo Blocos */
+        body.mode-blocks .acc-content { grid-template-rows: 1fr !important; }
+        body.mode-blocks .acc-icon { display: none !important; }
+        body.mode-blocks .acc-action { opacity: 1 !important; transform: scale(1) !important; pointer-events: auto !important; }
+        body.mode-blocks .accordion-header { cursor: default !important; pointer-events: none !important; }
+        body.mode-blocks .accordion-header .acc-action { pointer-events: auto !important; } /* Reativa cliques nos botões extra */
     </style>
 </head>
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">

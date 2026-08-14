@@ -131,11 +131,11 @@
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (Filtros e Salvar) ================= -->    
     <section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-300">
-        <!-- Grid no mobile: 2 colunas, 2 linhas. Flex no PC -->
-        <div class="max-w-7xl mx-auto grid grid-cols-[1fr_auto] gap-y-3 gap-x-2 md:flex md:flex-row md:justify-between md:items-center">
+        <!-- Flexbox Responsivo: Centralizado. Wrap no mobile (itens caem pra linha de baixo) -->
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-x-4 gap-y-3 lg:gap-x-8">
             
-            <!-- 1. FILTRO DE DATA (Celular: Topo Esquerda / PC: Esquerda) -->
-            <div class="flex justify-start w-full md:w-auto col-start-1 row-start-1">
+            <!-- 1. FILTRO DE DATA (Ordem 1) -->
+            <div class="order-1 flex shrink-0 justify-center">
                 <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
                     <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2 shrink-0">
                         <option value="month" data-i18n="opt_month">Mês:</option>
@@ -156,21 +156,22 @@
                 </div>
             </div>
             
-            <!-- 2. ALERTAS (Celular: Linha de Baixo inteira / PC: Centro) -->
-            <div id="alert-zone" class="flex items-center justify-start md:justify-center gap-2 overflow-x-auto w-full md:flex-1 md:px-6 col-start-1 col-end-3 row-start-2 [&::-webkit-scrollbar]:hidden"></div>
-            
-            <!-- 3. SALVAR (Celular: Topo Direita / PC: Direita) -->
-            <div class="flex items-center gap-3 shrink-0 col-start-2 row-start-1 justify-self-end">
-                <span id="last-save-time" class="hidden md:inline text-[10px] text-slate-400 font-medium tracking-wide">
+            <!-- 3. SALVAR (Ordem 2 no Mobile para ficar ao lado da Data. Ordem 3 no PC) -->
+            <div class="order-2 sm:order-3 flex items-center gap-3 shrink-0">
+                <span id="last-save-time" class="hidden sm:inline text-[10px] text-slate-400 font-medium tracking-wide">
                     <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
                 </span>
-                <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-medium shadow-sm w-10 md:w-auto h-9">
-                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span class="hidden md:inline" data-i18n="btn_save_data">Salvar</span>
+                <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9">
+                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> <span class="hidden sm:inline" data-i18n="btn_save_data">Salvar</span>
                 </button>
             </div>
+
+            <!-- 2. ALERTAS (Ordem 3 no Mobile para cair pra linha de baixo. Ordem 2 no PC para ficar no meio) -->
+            <div id="alert-zone" class="order-3 sm:order-2 flex items-center justify-center gap-2 overflow-x-auto w-full sm:w-auto max-w-full [&::-webkit-scrollbar]:hidden transition-all"></div>
             
         </div>
     </section>
+    
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 min-w-0">
 <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">
@@ -1200,7 +1201,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.3.2';
+        const FLOWME_VERSION = '2.3.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2164,9 +2165,9 @@
                 const allAlerts = [...aIncLate, ...aExpLate, ...aIncSoon, ...aExpSoon, ...limitAlerts];
                 
                 if(allAlerts.length > 0) {
-                    let maxBadges = 3;
-                    if(window.innerWidth < 640) maxBadges = 1;
-                    else if (window.innerWidth < 1024) maxBadges = 2;
+                    let maxBadges = 2; // Padrão: 2 alertas (Celular Retrato, Horizontal e PC pequeno)
+                    if(window.innerWidth >= 1024) maxBadges = 3; // Tela de PC Cheia
+                    if(window.innerWidth < 360) maxBadges = 1; // Proteção só para celulares muito pequenos
 
                     let html = ''; let shown = 0;
                     const buildBadge = (arr, msgKey, colorClass, icon) => {

@@ -125,7 +125,48 @@
         body[data-responsive="mobile-portrait"] #filter-mode {
             font-size: 11px;
         }
+
+        /* ===== AJUSTES EXTRAS PARA O FILTRO EM TELAS MUITO ESTREITAS ===== */
+        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div {
+            padding: 0.2rem 0.4rem;    /* reduz o padding interno */
+            gap: 0.2rem;              /* reduz o espaçamento entre os itens */
+            flex-wrap: nowrap;        /* impede que os itens quebrem para linha de baixo */
+        }
         
+        body[data-responsive="mobile-portrait"] #filter-mode {
+            font-size: 0.6rem;        /* fonte menor */
+            max-width: 55px;          /* largura máxima para caber */
+            padding: 0.1rem 0.2rem;
+            text-overflow: ellipsis;  /* corta o texto se ultrapassar */
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        body[data-responsive="mobile-portrait"] #global-month {
+            font-size: 0.65rem;
+            max-width: 70px;          /* já existe, mas reforçamos */
+            padding: 0.1rem 0.2rem;
+        }
+        
+        body[data-responsive="mobile-portrait"] #mode-month button {
+            padding: 0.1rem 0.2rem;   /* botões das setas menores */
+            font-size: 0.55rem;
+        }
+        
+        body[data-responsive="mobile-portrait"] #mode-range input[type="date"] {
+            font-size: 0.5rem;        /* data inputs menores */
+            padding: 0.1rem 0.2rem;
+            max-width: 60px;
+        }
+        
+        body[data-responsive="mobile-portrait"] #mode-range span {
+            font-size: 0.5rem;        /* texto "até" menor */
+            padding: 0 0.1rem;
+        }
+        
+        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner {
+            gap: 4px;                /* alertas mais juntos */
+        }
         
         /* =========================================================
            2. CELULAR HORIZONTAL
@@ -1430,7 +1471,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.3';
+        const FLOWME_VERSION = '2.4.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

@@ -70,72 +70,232 @@
         }
         .animate-save-pop i { animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* BARRA GLOBAL - LAYOUT RESPONSIVO */
-        #global-toolbar-inner { display: grid; align-items: center; }
-
-        /* --- MOBILE RETRATO --- */
+        /* =========================================================
+           BARRA GLOBAL - LAYOUT RESPONSIVO
+           ========================================================= */
+        
+        #global-toolbar-inner {
+            display: grid;
+            align-items: center;
+            width: 100%;
+        }
+        
+        
+        /* =========================================================
+           1. CELULAR RETRATO
+           Filtro + Salvar
+           Alertas em uma segunda linha
+           ========================================================= */
+        
         body[data-responsive="mobile-portrait"] #global-toolbar-inner {
             grid-template-columns: minmax(0, 1fr) auto;
-            grid-template-areas: "filter save" "alerts alerts";
+            grid-template-areas:
+                "filter save"
+                "alerts alerts";
             gap: 8px;
         }
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter { grid-area: filter; min-width: 0; }
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts { grid-area: alerts; }
-        body[data-responsive="mobile-portrait"] #global-toolbar-save { grid-area: save; }
-        body[data-responsive="mobile-portrait"] #global-month { max-width: 105px; }
-        body[data-responsive="mobile-portrait"] #filter-mode { font-size: 11px; }
-        body[data-responsive="mobile-portrait"] #last-save-time { display: none !important; }
-        body[data-responsive="mobile-portrait"] #btn-manual-save { width: 40px; }
-
-        /* --- MOBILE HORIZONTAL --- */
+        
+        body[data-responsive="mobile-portrait"] #global-toolbar-filter {
+            grid-area: filter;
+            min-width: 0;
+        }
+        
+        body[data-responsive="mobile-portrait"] #global-toolbar-alerts {
+            grid-area: alerts;
+            min-width: 0;
+        }
+        
+        body[data-responsive="mobile-portrait"] #global-toolbar-save {
+            grid-area: save;
+        }
+        
+        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner {
+            justify-content: flex-start;
+        }
+        
+        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div {
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        body[data-responsive="mobile-portrait"] #global-month {
+            max-width: 105px;
+        }
+        
+        body[data-responsive="mobile-portrait"] #filter-mode {
+            font-size: 11px;
+        }
+        
+        
+        /* =========================================================
+           2. CELULAR HORIZONTAL
+           Tudo em uma única linha
+           ========================================================= */
+        
         body[data-responsive="mobile-landscape"] #global-toolbar-inner {
-            grid-template-columns: minmax(0, 1fr) auto;
-            grid-template-areas: "filter save" "alerts alerts";
+            grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+            grid-template-areas:
+                "filter alerts save";
             gap: 8px 12px;
         }
-        body[data-responsive="mobile-landscape"] #global-toolbar-filter { grid-area: filter; min-width: 0; }
-        body[data-responsive="mobile-landscape"] #global-toolbar-alerts { grid-area: alerts; }
-        body[data-responsive="mobile-landscape"] #global-toolbar-save { grid-area: save; }
-        body[data-responsive="mobile-landscape"] #global-month { max-width: 125px; }
-        body[data-responsive="mobile-landscape"] #last-save-time { display: none !important; }
-        body[data-responsive="mobile-landscape"] #btn-manual-save { width: 40px; }
-
-        /* --- TABLET --- */
+        
+        body[data-responsive="mobile-landscape"] #global-toolbar-filter {
+            grid-area: filter;
+            min-width: 0;
+        }
+        
+        body[data-responsive="mobile-landscape"] #global-toolbar-alerts {
+            grid-area: alerts;
+            min-width: 0;
+        }
+        
+        body[data-responsive="mobile-landscape"] #global-toolbar-save {
+            grid-area: save;
+        }
+        
+        body[data-responsive="mobile-landscape"] #global-toolbar-alerts-inner {
+            justify-content: center;
+        }
+        
+        body[data-responsive="mobile-landscape"] #global-toolbar-filter > div {
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        body[data-responsive="mobile-landscape"] #global-month {
+            max-width: 125px;
+        }
+        
+        
+        /* =========================================================
+           3. TABLET
+           Tudo em uma linha
+           Alertas ocupam o espaço central
+           ========================================================= */
+        
         body[data-responsive="tablet"] #global-toolbar-inner {
             grid-template-columns: auto minmax(0, 1fr) auto;
-            grid-template-areas: "filter alerts save";
-            gap: 12px;
+            grid-template-areas:
+                "filter alerts save";
+            gap: 16px;
         }
-        body[data-responsive="tablet"] #global-toolbar-filter { grid-area: filter; min-width: 0; }
-        body[data-responsive="tablet"] #global-toolbar-alerts { grid-area: alerts; min-width: 0; }
-        body[data-responsive="tablet"] #global-toolbar-save { grid-area: save; }
-        body[data-responsive="tablet"] #last-save-time { display: none !important; }
-
-        /* --- DESKTOP --- */
+        
+        body[data-responsive="tablet"] #global-toolbar-filter {
+            grid-area: filter;
+            min-width: 0;
+        }
+        
+        body[data-responsive="tablet"] #global-toolbar-alerts {
+            grid-area: alerts;
+            min-width: 0;
+        }
+        
+        body[data-responsive="tablet"] #global-toolbar-save {
+            grid-area: save;
+        }
+        
+        body[data-responsive="tablet"] #global-toolbar-alerts-inner {
+            justify-content: center;
+        }
+        
+        
+        /* =========================================================
+           4. DESKTOP
+           Mais espaço e informações
+           ========================================================= */
+        
         body[data-responsive="desktop"] #global-toolbar-inner {
             grid-template-columns: auto minmax(0, 1fr) auto;
-            grid-template-areas: "filter alerts save";
+            grid-template-areas:
+                "filter alerts save";
             gap: 24px;
         }
-        body[data-responsive="desktop"] #global-toolbar-filter { grid-area: filter; }
-        body[data-responsive="desktop"] #global-toolbar-alerts { grid-area: alerts; min-width: 0; }
-        body[data-responsive="desktop"] #global-toolbar-save { grid-area: save; }
+        
+        body[data-responsive="desktop"] #global-toolbar-filter {
+            grid-area: filter;
+        }
+        
+        body[data-responsive="desktop"] #global-toolbar-alerts {
+            grid-area: alerts;
+            min-width: 0;
+        }
+        
+        body[data-responsive="desktop"] #global-toolbar-save {
+            grid-area: save;
+        }
+        
+        body[data-responsive="desktop"] #global-toolbar-alerts-inner {
+            justify-content: center;
+        }
+        
+        
+        /* =========================================================
+           ESTRUTURA INTERNA DOS ALERTAS
+           ========================================================= */
+        
+        #global-toolbar-alerts {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-width: 0;
+        }
+        
+        #global-toolbar-alerts-inner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+        }
+        
+        #global-toolbar-alerts-inner > * {
+            flex-shrink: 0;
+        }
+        
+        
+        /* =========================================================
+           FILTRO
+           ========================================================= */
+        
+        #global-toolbar-filter > div {
+            min-width: 0;
+        }
+        
+        
+        /* =========================================================
+           SALVAR
+           ========================================================= */
+        
+        #global-toolbar-save {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        
+        #last-save-time {
+            white-space: nowrap;
+        }
 
-        /* --- ALERTAS, FILTROS E SALVAR --- */
-        #global-toolbar-alerts { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-width: 0; }
-        #global-toolbar-alerts-inner { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-width: 0; overflow: hidden; }
-        #global-toolbar-alerts-inner > * { flex-shrink: 0; }
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner { justify-content: flex-start; }
-        body[data-responsive="mobile-landscape"] #global-toolbar-alerts-inner { justify-content: flex-start; }
-        body[data-responsive="tablet"] #global-toolbar-alerts-inner { justify-content: center; }
-        body[data-responsive="desktop"] #global-toolbar-alerts-inner { justify-content: center; }
-
-        #global-toolbar-filter > div { min-width: 0; }
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div, body[data-responsive="mobile-landscape"] #global-toolbar-filter > div { max-width: 100%; overflow-x: hidden; }
-
-        #global-toolbar-save { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-shrink: 0; }
-        #last-save-time { white-space: nowrap; }
-    
+        body[data-responsive="mobile-portrait"] #global-month {
+            width: 105px;
+        }
+        
+        body[data-responsive="mobile-landscape"] #global-month {
+            width: 125px;
+        }
+        
+        body[data-responsive="mobile-portrait"] #mode-range {
+            gap: 4px;
+        }
+        
+        body[data-responsive="mobile-landscape"] #mode-range {
+            gap: 6px;
+        }
+        
     </style>
 </head>
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
@@ -1838,29 +1998,35 @@
             const hiddenAlerts =
                 Math.max(totalAlerts - visibleAlerts, 0);
             
-            if (hiddenAlerts > 0) {
-                html += `
-                    <button
-                        type="button"
-                        onclick="openAlertsModal()"
-                        class="shrink-0 px-2 py-1
-                               bg-amber-100 text-amber-800
-                               border border-amber-200
-                               dark:bg-amber-900/30
-                               dark:text-amber-400
-                               dark:border-amber-800
-                               rounded text-[10px]
-                               font-bold shadow-sm
-                               hover:bg-amber-200
-                               transition
-                               flex items-center gap-1.5">
+            const hiddenBadge =
+                hiddenAlerts > 0
+                    ? `<span>${hiddenAlerts}</span>`
+                    : '';
             
-                        <i class="fa-solid fa-bell"></i>
+            html += `
+                <button
+                    type="button"
+                    onclick="openAlertsModal()"
+                    title="Abrir Central de Alertas"
+                    class="shrink-0 px-2 py-1
+                           bg-slate-100 text-slate-600
+                           border border-slate-200
+                           dark:bg-slate-800
+                           dark:text-slate-300
+                           dark:border-slate-700
+                           rounded text-[10px]
+                           font-bold shadow-sm
+                           hover:bg-slate-200
+                           dark:hover:bg-slate-700
+                           transition
+                           flex items-center gap-1.5">
             
-                        <span>${hiddenAlerts}</span>
+                    <i class="fa-solid fa-bell"></i>
             
-                    </button>
-                `;
+                    ${hiddenBadge}
+            
+                </button>
+            `;
             }
 
             alertsContainer.innerHTML = html;
@@ -2390,95 +2556,6 @@
             }
 
             renderDashboard(filtered);
-        }
-
-        // ================= ALERTS MODAL ATUALIZADO =================
-        function openAlertsModal() {
-            const c = document.getElementById('alerts-modal-content'); c.innerHTML = '';
-            const todayStr = new Date().toISOString().split('T')[0];
-            
-            let list = [];
-            state.transactions.forEach(trx => {
-                if(trx.status !== 'pendente') return; const dueDate = getDueDate(trx); if(!dueDate) return;
-                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00'); const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) list.push({t: trx, d: diffDays, late: true});
-                else if (diffDays > 0 && diffDays <= userConfig.reminderDays) list.push({t: trx, d: diffDays, late: false});
-            });
-
-            let modalLimits = [];
-            if (state.limits && state.limits.length > 0) {
-                const currentMonthTx = state.transactions.filter(t => {
-                    const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
-                    return cDate === state.currentMonth;
-                });
-                state.limits.forEach(lim => {
-                    let spent = 0;
-                    currentMonthTx.forEach(trx => {
-                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
-                            const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
-                            if(s) spent += s.value;
-                        } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
-                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
-                            spent += (trx.value - rSplit);
-                        } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
-                            let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
-                            spent += (trx.value - rSplit);
-                        }
-                    });
-                    const pct = (spent / lim.max) * 100;
-                    if(pct >= 90) modalLimits.push({ lim, pct, spent });
-                });
-            }
-
-            if(list.length === 0 && modalLimits.length === 0) { 
-                c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">' + t('msg_all_control') + '</p>'; 
-            } else {
-                modalLimits.sort((a,b) => b.pct - a.pct).forEach(item => {
-                    const isBusted = item.pct > 100;
-                    const bg = isBusted ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-pink-50 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800';
-                    const icon = isBusted ? '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>' : '<i class="fa-solid fa-bullseye text-pink-500"></i>';
-                    const rem = item.lim.max - item.spent;
-                    
-                    c.innerHTML += `
-                        <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
-                            <div class="flex items-center gap-3">
-                                <div class="text-lg">${icon}</div>
-                                <div>
-                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${t('str_budget')}${item.lim.target}</p>
-                                    <p class="text-[10px] font-medium ${isBusted ? 'text-rose-600' : 'text-pink-600'}">${isBusted ? t('lim_busted_alert') + ' ' + formatCurrency(Math.abs(rem)) : formatCurrency(rem) + ' ' + t('lim_remaining') + ' (' + item.pct.toFixed(0) + '% ' + t('lim_used') + ')'}</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <button onclick="closeModal('modal-alerts'); switchTab('dashboard');" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_dash')}</button>
-                            </div>
-                        </div>`;
-                });
-
-                list.sort((a,b) => a.d - b.d).forEach(item => {
-                    const trx = item.t;
-                    const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800';
-                    const icon = trx.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
-                    const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length>=3 ? `${dtPts[2]}/${dtPts[1]}` : '';
-                    
-                    const timeMsg = item.late ? t('msg_late').replace('X', Math.abs(item.d)) : t('msg_left').replace('X', item.d);
-                    
-                    c.innerHTML += `
-                        <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
-                            <div class="flex items-center gap-3">
-                                <div class="text-lg">${icon}</div>
-                                <div>
-                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${trx.description}</p>
-                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-amber-600'}">${dtF} •${timeMsg}</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-sm font-bold text-slate-900 dark:text-white">${formatCurrency(trx.value)}</p>
-                                <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_trx')}</button>
-                            </div>
-                        </div>`;
-                });
-            }
-            document.getElementById('modal-alerts').classList.remove('hidden');
         }
 
         // ================= IMPORTADOR INTELIGENTE (CSV BANCÁRIO) =================

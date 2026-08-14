@@ -41,19 +41,26 @@
         .dark tr:hover { background-color: #334155; }
         .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]), .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
 
-        /* Efeito global de clique físico e hover vibrante para botões */
+    /* Efeito global de clique físico e hover vibrante para botões */
         button { 
             transition: transform 0.1s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease; 
-            -webkit-tap-highlight-color: transparent; /* Remove o piscar cinza do celular */
-            touch-action: manipulation; /* Melhora a resposta ao toque */
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
         }
         button:active { 
-            transform: scale(0.93) !important; /* Faz o botão afundar fisicamente */
+            transform: scale(0.93) !important; 
         }
         @media (hover: hover) {
-            button:hover { filter: brightness(1.08); } /* Fica mais vivo no PC */
+            button:hover { filter: brightness(1.08); } 
         }
-        .dark button:hover { filter: brightness(1.15); } /* Brilha ainda mais no modo escuro */
+        .dark button:hover { filter: brightness(1.15); }
+
+        /* Controle Mestre do Modo Blocos */
+        body.mode-blocks .acc-content { grid-template-rows: 1fr !important; }
+        body.mode-blocks .acc-icon { display: none !important; }
+        body.mode-blocks .acc-action { opacity: 1 !important; transform: scale(1) !important; pointer-events: auto !important; }
+        body.mode-blocks .accordion-header { cursor: default !important; pointer-events: none !important; }
+        body.mode-blocks .accordion-header .acc-action { pointer-events: auto !important; } 
     </style>
 </head>
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
@@ -164,18 +171,18 @@
         <div id="content-transacoes" class="tab-content block">
             
             <!-- GAVETA 1: RESUMO FINANCEIRO -->
-            <div class="mb-6">
-                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="resumo" onclick="toggleAccordion('resumo')">
-                    <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+            <div class="flex flex-col mb-6">
+                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="resumo" onclick="toggleAccordion('resumo')">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
                         <i class="fa-solid fa-wallet text-emerald-500"></i> <span data-i18n="acc_summary">Resumo Financeiro</span>
-                    </h3>
-                    <i id="acc-icon-resumo" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </h2>
+                    <i id="acc-icon-resumo" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                 </button>
-                <div id="acc-content-resumo" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                <div id="acc-content-resumo" class="acc-content grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                     <div class="overflow-hidden">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                             <!-- Os 4 Cartões Ficam AQUI Dentro -->
-                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
                                 <div>
                                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_income">Receitas (Previsão)</p>
                                     <h3 id="summary-income" class="text-xl font-bold text-emerald-600 mt-1">0,00</h3>
@@ -184,7 +191,7 @@
                                 <div class="bg-emerald-50 dark:bg-emerald-900/30 h-10 w-10 flex items-center justify-center rounded-full text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-arrow-trend-up"></i></div>
                             </div>
                             
-                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
                                 <div>
                                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_expense">Despesas (Previsão)</p>
                                     <h3 id="summary-expense" class="text-xl font-bold text-rose-600 mt-1">0,00</h3>
@@ -193,7 +200,7 @@
                                 <div class="bg-rose-50 dark:bg-rose-900/30 h-10 w-10 flex items-center justify-center rounded-full text-rose-600 dark:text-rose-400"><i class="fa-solid fa-arrow-trend-down"></i></div>
                             </div>
                             
-                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
                                 <div>
                                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_balance">Balanço</p>
                                     <h3 id="summary-balance" class="text-xl font-bold mt-1 text-slate-800 dark:text-white">0,00</h3>
@@ -202,7 +209,7 @@
                                 <div class="bg-slate-100 dark:bg-slate-700 h-10 w-10 flex items-center justify-center rounded-full text-slate-600 dark:text-slate-300"><i class="fa-solid fa-scale-balanced"></i></div>
                             </div>
                             
-                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
                                 <div>
                                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider" data-i18n="card_splits">Rateios a Receber</p>
                                     <h3 id="summary-splits" class="text-xl font-bold text-amber-600 mt-1">0,00</h3>
@@ -367,18 +374,18 @@
 
                 <!-- TABELA TRANSAÇÕES -->
                 <!-- LADO DIREITO (TABELA E PESSOAS) -->
-                <div class="lg:col-span-2 space-y-4">
+                <div class="lg:col-span-2 flex flex-col gap-6">
                     
                     <!-- GAVETA 2: FILTROS E HISTÓRICO -->
-                    <div>
-                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="historico" onclick="toggleAccordion('historico')">
-                            <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                    <div class="flex flex-col">
+                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="historico" onclick="toggleAccordion('historico')">
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
                                 <i class="fa-solid fa-list-ul text-blue-500"></i> <span data-i18n="acc_filters">Filtros e Histórico</span>
-                            </h3>
-                            <i id="acc-icon-historico" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                            </h2>
+                            <i id="acc-icon-historico" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                         </button>
                         
-                        <div id="acc-content-historico" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div id="acc-content-historico" class="acc-content grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                             <div class="overflow-hidden">
                                 <div class="mt-4 space-y-4">
                                     <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
@@ -433,24 +440,23 @@
                         </div>
                     </div>
 
-                   <!-- GAVETA 3: PESSOAS -->
-                    <div>
-                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors" data-acc-id="pessoas" onclick="toggleAccordion('pessoas')">
-                            <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                    <!-- GAVETA 3: PESSOAS -->
+                    <div class="flex flex-col">
+                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="pessoas" onclick="toggleAccordion('pessoas')">
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
                                 <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
-                            </h3>
-                            <i id="acc-icon-pessoas" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                            </h2>
+                            <i id="acc-icon-pessoas" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                         </button>
-                        <div id="acc-content-pessoas" class="grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
+                        <div id="acc-content-pessoas" class="acc-content grid transition-all duration-300 ease-in-out [grid-template-rows:1fr]">
                             <div class="overflow-hidden">
-                                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-3 transition-colors">
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
                                     <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> 
-            </div>
+                </div>
             
             <!-- Botão Flutuante (FAB) -->
             <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-6 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-lg items-center justify-center text-2xl z-40 hover:bg-emerald-600 transition-transform active:scale-90 flex">
@@ -1117,20 +1123,20 @@
             
             const content = document.getElementById(`acc-content-${id}`);
             const icon = document.getElementById(`acc-icon-${id}`);
-            const actionBtn = document.getElementById(`acc-action-${id}`); // Procura botão extra se houver
+            const actionBtn = document.getElementById(`acc-action-${id}`); 
             
             const isOpen = content.classList.contains('[grid-template-rows:1fr]');
             
             if (isOpen) {
                 content.classList.remove('[grid-template-rows:1fr]');
                 content.classList.add('[grid-template-rows:0fr]');
-                icon.classList.remove('rotate-180');
+                if(icon) icon.classList.remove('rotate-180');
                 if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = false;
             } else {
                 content.classList.remove('[grid-template-rows:0fr]');
                 content.classList.add('[grid-template-rows:1fr]');
-                icon.classList.add('rotate-180');
+                if(icon) icon.classList.add('rotate-180');
                 if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = true;
             }
@@ -1139,17 +1145,14 @@
 
         function applyPanelStyle() {
             const isAccordion = userConfig.panelStyle === 'accordion';
+            document.body.classList.toggle('mode-blocks', !isAccordion); // Aciona o CSS Mestre
             
-            document.querySelectorAll('.accordion-header').forEach(header => {
-                const id = header.getAttribute('data-acc-id');
-                const content = document.getElementById(`acc-content-${id}`);
-                const icon = document.getElementById(`acc-icon-${id}`);
-                const actionBtn = document.getElementById(`acc-action-${id}`);
-                
-                if (isAccordion) {
-                    header.classList.add('cursor-pointer');
-                    header.classList.remove('cursor-default');
-                    if(icon) icon.classList.remove('hidden');
+            if (isAccordion) {
+                document.querySelectorAll('.accordion-header').forEach(header => {
+                    const id = header.getAttribute('data-acc-id');
+                    const content = document.getElementById(`acc-content-${id}`);
+                    const icon = document.getElementById(`acc-icon-${id}`);
+                    const actionBtn = document.getElementById(`acc-action-${id}`);
                     
                     const shouldBeOpen = accordionState[id] !== false; 
                     if (shouldBeOpen) {
@@ -1163,17 +1166,8 @@
                         if(icon) icon.classList.remove('rotate-180');
                         if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                     }
-                } else {
-                    header.classList.remove('cursor-pointer');
-                    header.classList.add('cursor-default');
-                    if(icon) icon.classList.add('hidden');
-                    
-                    content.classList.remove('[grid-template-rows:0fr]');
-                    content.classList.add('[grid-template-rows:1fr]');
-                    if(icon) icon.classList.add('rotate-180');
-                    if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
-                }
-            });
+                });
+            }
         }
 
         function setPanelStyle(style) {
@@ -1182,7 +1176,7 @@
             applyPanelStyle(); 
         }
         
-        const FLOWME_VERSION = '2.2.1';
+        const FLOWME_VERSION = '2.2.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

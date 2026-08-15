@@ -515,17 +515,37 @@
             <!-- Fundo embaçado para o formulário no celular -->
             <div id="form-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500 lg:hidden" onclick="toggleMobileForm(false)"></div>
 
-                <!-- O FORMULÁRIO EM SI -->
-                <div id="form-wrapper" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:sticky lg:top-24 transition-all overflow-hidden lg:block hidden">
-                    <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
-                        <div class="flex items-center gap-2">
-                            <h2 id="form-title" class="text-base font-bold text-slate-900 flex items-center gap-2">
-                                <i class="fa-solid fa-plus-circle text-emerald-500"></i> <span data-i18n="form_title_new">Nova Movimentação</span>
-                            </h2>
-                            <button id="btn-cancel-edit" onclick="cancelEdit()" class="hidden text-xs text-rose-500 hover:text-rose-700 font-medium transition ml-2"><i class="fa-solid fa-xmark"></i> <span data-i18n="btn_cancel">Cancelar</span></button>
-                        </div>
-                        <button id="btn-close-modal" onclick="toggleMobileForm(false)" type="button" class="hidden lg:hidden text-slate-400 hover:text-slate-600 text-xl px-2"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
+            <!-- GAVETA 4: NOVA MOVIMENTAÇÃO (DESKTOP) / MODAL (MOBILE) -->
+            <div class="flex flex-col lg:sticky lg:top-24 transition-all duration-500 z-30">
+                
+                <!-- ACCORDION HEADER (Exclusivo Desktop) -->
+                <button class="accordion-header hidden lg:flex w-full justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="form" onclick="toggleAccordion('form')">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                        <i id="desktop-form-icon" class="fa-solid fa-plus-circle text-emerald-500"></i> <span id="desktop-form-title" data-i18n="form_title_new">Nova Movimentação</span>
+                    </h2>
+                    <i id="acc-icon-form" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                </button>
+
+                <!-- ACCORDION CONTENT (No celular ele descola e vira modal) -->
+                <div id="acc-content-form" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr] lg:mt-4">
+                    <div class="overflow-hidden">
+                        <!-- O FORMULÁRIO EM SI -->
+                        <div id="form-wrapper" class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all overflow-hidden lg:block hidden">
+                            
+                            <!-- Cabeçalho visível apenas no Mobile (Modal) -->
+                            <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-2 lg:hidden">
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <i id="mobile-form-icon" class="fa-solid fa-plus-circle text-emerald-500"></i> <span id="mobile-form-title" data-i18n="form_title_new">Nova Movimentação</span>
+                                    </h2>
+                                </div>
+                                <button id="btn-close-modal" onclick="toggleMobileForm(false)" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl px-2"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            
+                            <!-- Botão cancelar edição geral -->
+                            <div id="btn-cancel-edit-container" class="hidden justify-end mb-3">
+                                <button onclick="cancelEdit()" class="text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 font-bold transition bg-rose-50 dark:bg-rose-900/30 px-3 py-1.5 rounded-lg border border-rose-200 dark:border-rose-800 flex items-center gap-1.5 shadow-sm w-full lg:w-auto justify-center"><i class="fa-solid fa-xmark"></i> <span data-i18n="btn_cancel">Cancelar Edição</span></button>
+                            </div>
                     
                     <form id="transaction-form" onsubmit="handleFormSubmit(event)" oninput="checkLimitsInRealTime()" onchange="checkLimitsInRealTime()" class="space-y-4">
                         <input type="hidden" id="edit-id">
@@ -566,7 +586,7 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label id="label-value" for="value" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_value">Valor</label>
-                                <input type="number" id="value" step="0.01" required placeholder="0.00" class="w-full p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                <input type="text" inputmode="numeric" id="value" required placeholder="0,00" oninput="maskCurrencyField(this); checkLimitsInRealTime()" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
                             </div>
                             <div>
                                 <label for="date" id="label-date" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_date_univ">Data</label>
@@ -1222,7 +1242,7 @@
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1" data-i18n="lbl_lim_val">Valor Máximo</label>
-                    <input type="number" id="limit-value" step="0.01" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
+                    <input type="text" inputmode="numeric" id="limit-value" placeholder="0,00" oninput="maskCurrencyField(this)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-pink-500">
                 </div>
                 <button onclick="saveLimit()" class="w-full py-2 mt-2 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-lg text-sm transition shadow-md"><span data-i18n="btn_save_rule">Salvar Regra</span></button>
             </div>
@@ -1489,7 +1509,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.5';
+        const FLOWME_VERSION = '2.4.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1616,6 +1636,28 @@
 
         function t(key) { return translations[userConfig.lang][key] || key; }
         function setCurrency(currency) { userConfig.currency = currency; localStorage.setItem('flowme_currency', currency); render(); }
+
+        // ================= MÁSCARA MONETÁRIA =================
+        function maskCurrencyField(input) {
+            let val = input.value.replace(/\D/g, ''); // Remove tudo que não é número
+            if (val === '') { input.value = ''; return; }
+            let floatVal = parseInt(val, 10) / 100;
+            input.value = floatVal.toLocaleString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function parseMaskedValue(valStr) {
+            if (!valStr) return 0;
+            if (userConfig.lang === 'en') {
+                return parseFloat(valStr.replace(/,/g, '')) || 0;
+            } else {
+                return parseFloat(valStr.replace(/\./g, '').replace(',', '.')) || 0;
+            }
+        }
+
+        function formatMaskedValue(num) {
+            if (num === undefined || num === null || num === '' || isNaN(num)) return '';
+            return parseFloat(num).toLocaleString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
         
         function updateThemeUI(theme) {
             const actCls = "flex items-center gap-1.5 px-3 py-2 border-2 border-amber-500 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-lg transition text-xs font-bold shadow-sm";
@@ -1788,12 +1830,12 @@
             const div = document.createElement('div'); div.id = rowId; div.className = "flex items-center gap-2 bg-white dark:bg-slate-800 p-1.5 rounded border border-slate-200 dark:border-slate-600 shadow-sm transition-colors";
             div.innerHTML = `
                 <input type="text" autocomplete="off" placeholder="${t('placeholder_name')}" value="${person}" list="people-list" class="split-person w-2/5 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
-                <input type="number" step="0.01" placeholder="0.00" value="${value}" class="split-value w-1/4 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
+                <input type="text" inputmode="numeric" placeholder="0,00" value="${value ? formatMaskedValue(value) : ''}" oninput="maskCurrencyField(this); checkLimitsInRealTime()" class="split-value w-1/4 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0 text-right">
                 <select class="split-status w-1/4 p-1 text-[10px] border border-slate-200 dark:border-slate-600 rounded bg-slate-50 dark:bg-slate-900 outline-none">
                     <option value="pendente" ${status === 'pendente' ? 'selected' : ''}>${t('str_split_pen')}</option>
                     <option value="pago" ${status === 'pago' ? 'selected' : ''}>${t('str_split_paid')}</option>
                 </select>
-                <button type="button" onclick="document.getElementById('${rowId}').remove()" class="text-rose-400 hover:text-rose-600 w-6 shrink-0 flex justify-center"><i class="fa-solid fa-xmark"></i></button>`;
+                <button type="button" onclick="document.getElementById('${rowId}').remove(); checkLimitsInRealTime()" class="text-rose-400 hover:text-rose-600 w-6 shrink-0 flex justify-center"><i class="fa-solid fa-xmark"></i></button>`;
             container.appendChild(div);
         }
 
@@ -2243,22 +2285,17 @@
         function applyFormMode() {
             const fab = document.getElementById('fab-form');
             const wrapper = document.getElementById('form-wrapper');
-            const btnCloseModal = document.getElementById('btn-close-modal');
             const backdrop = document.getElementById('form-backdrop');
 
             if (window.innerWidth >= 1024) { 
-                // Força o modo Desktop (coluna da direita) e permite scroll interno se a tela for baixinha
-                wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm lg:sticky lg:top-24 transition-all overflow-y-auto max-h-[85vh] block";
+                // Modo Desktop
+                wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all block";
                 if(fab) fab.classList.add('hidden');
-                if(btnCloseModal) btnCloseModal.classList.add('hidden');
                 if(backdrop) backdrop.classList.add('hidden', 'opacity-0');
                 isMobileFormOpen = false; 
             } else {
-                // Prepara os botões do Mobile
                 if(fab) fab.classList.remove('hidden');
-                if(btnCloseModal) btnCloseModal.classList.remove('hidden');
-                
-                // Se estiver fechado, garante que fica escondido sem perder as formatações base
+                // Mobile
                 if (!isMobileFormOpen) {
                     wrapper.className = "hidden bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all overflow-hidden";
                     if(backdrop) backdrop.className = "fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500 lg:hidden";
@@ -2275,7 +2312,7 @@
             const expType = type === 'despesa' ? document.querySelector('input[name="expType"]:checked').value : null;
             const invoiceMonth = expType === 'credito' ? document.getElementById('invoice-month').value : null;
             const description = document.getElementById('description').value.trim();
-            const rawValue = parseFloat(document.getElementById('value').value);
+            const rawValue = parseMaskedValue(document.getElementById('value').value);
             const dateStr = document.getElementById('date').value;
             const category = document.getElementById('category').value.trim();
             const paymentMethod = document.getElementById('payment-method').value.trim();
@@ -2284,8 +2321,10 @@
             let splits = [];
             if (type === 'despesa' && document.getElementById('has-split').checked) {
                 document.querySelectorAll('#split-rows > div').forEach(row => {
-                    const pName = row.querySelector('.split-person').value.trim(); const pVal = parseFloat(row.querySelector('.split-value').value); const pStat = row.querySelector('.split-status').value;
-                    if (pName && !isNaN(pVal)) splits.push({ person: pName, value: pVal, status: pStat });
+                    const pName = row.querySelector('.split-person').value.trim(); 
+                    const pVal = parseMaskedValue(row.querySelector('.split-value').value); 
+                    const pStat = row.querySelector('.split-status').value;
+                    if (pName && !isNaN(pVal) && pVal > 0) splits.push({ person: pName, value: pVal, status: pStat });
                 });
             }
 
@@ -2353,7 +2392,8 @@
         function editTransaction(id) {
             const trx = state.transactions.find(t => t.id === id); if (!trx) return;
             document.getElementById('edit-id').value = trx.id; document.getElementById('edit-group-id').value = trx.groupId || '';
-            document.getElementById('description').value = trx.description; document.getElementById('value').value = trx.value;
+            document.getElementById('description').value = trx.description; 
+            document.getElementById('value').value = formatMaskedValue(trx.value); // Applica máscara ao puxar valor
             document.getElementById('date').value = trx.date; document.getElementById('category').value = trx.category;
             document.getElementById('payment-method').value = trx.paymentMethod; document.getElementById('status').value = trx.status;
 
@@ -2362,24 +2402,29 @@
                 document.querySelector(`input[name="expType"][value="${trx.expenseType||'debito'}"]`).checked = true; toggleSubType(trx.expenseType||'debito');
                 if(trx.expenseType === 'credito') document.getElementById('invoice-month').value = trx.invoiceMonth || '';
             }
-            document.getElementById('installment-section').classList.add('hidden');
-            document.getElementById('split-rows').innerHTML = '';
+            document.getElementById('installment-section').classList.add('hidden'); document.getElementById('split-rows').innerHTML = '';
             if (trx.splits && trx.splits.length > 0 && trx.type === 'despesa') { document.getElementById('has-split').checked = true; toggleSplitSection(true); trx.splits.forEach(s => addSplitRow(s.person, s.value, s.status)); } else { document.getElementById('has-split').checked = false; toggleSplitSection(false); addSplitRow(); }
 
-            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> <span data-i18n="form_title_edit">${t('form_title_edit')}</span>`;
+            // Títulos Híbridos
+            document.getElementById('desktop-form-title').innerHTML = t('form_title_edit'); document.getElementById('mobile-form-title').innerHTML = t('form_title_edit');
+            document.getElementById('desktop-form-icon').className = 'fa-solid fa-pen text-amber-500'; document.getElementById('mobile-form-icon').className = 'fa-solid fa-pen text-amber-500';
             document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-check"></i> <span data-i18n="btn_submit_edit">${t('btn_submit_edit')}</span>`;
-            document.getElementById('btn-cancel-edit').classList.remove('hidden'); 
             
-            toggleMobileForm(true);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('btn-cancel-edit-container').classList.remove('hidden'); document.getElementById('btn-cancel-edit-container').classList.add('flex'); 
+            
+            toggleMobileForm(true); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function cancelEdit() {
             document.getElementById('edit-id').value = ''; document.getElementById('edit-group-id').value = ''; document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = '';
-            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-plus-circle text-emerald-500"></i> <span data-i18n="form_title_new">${t('form_title_new')}</span>`;
-            document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">${t('btn_submit')}</span>`;
-            document.getElementById('btn-cancel-edit').classList.add('hidden'); toggleTypeFields('receita'); addSplitRow();
             
+            // Títulos Híbridos
+            document.getElementById('desktop-form-title').innerHTML = t('form_title_new'); document.getElementById('mobile-form-title').innerHTML = t('form_title_new');
+            document.getElementById('desktop-form-icon').className = 'fa-solid fa-plus-circle text-emerald-500'; document.getElementById('mobile-form-icon').className = 'fa-solid fa-plus-circle text-emerald-500';
+            document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">${t('btn_submit')}</span>`;
+            
+            document.getElementById('btn-cancel-edit-container').classList.add('hidden'); document.getElementById('btn-cancel-edit-container').classList.remove('flex'); 
+            toggleTypeFields('receita'); addSplitRow();
             toggleMobileForm(false);
         }
 
@@ -2795,7 +2840,7 @@
             } else {
                 document.getElementById('limit-type').value = 'category';
                 document.getElementById('limit-target').value = '';
-                document.getElementById('limit-value').value = '';
+                document.getElementById('limit-value').value = lim ? formatMaskedValue(lim.max) : '';
             }
             updateLimitOptions(); // <--- Avisa a lista para se preencher ao abrir
             openModal('modal-limit-form');
@@ -2828,7 +2873,7 @@
             const editId = document.getElementById('edit-limit-id').value;
             const type = document.getElementById('limit-type').value;
             const target = document.getElementById('limit-target').value.trim();
-            const value = parseFloat(document.getElementById('limit-value').value);
+            const value = parseMaskedValue(document.getElementById('limit-value').value);
             
             if(!target || isNaN(value)) { alert(t('err_lim_fields')); return; }
             if(!state.limits) state.limits = [];
@@ -2865,7 +2910,7 @@
             if(!typeEl || typeEl.value !== 'despesa') { warningZone.classList.add('hidden'); return; }
             
             // Pega o que o usuário está digitando agora
-            const rawValue = parseFloat(document.getElementById('value').value) || 0;
+            const rawValue = parseMaskedValue(document.getElementById('value').value) || 0;
             const category = document.getElementById('category').value.trim().toLowerCase();
             const method = document.getElementById('payment-method').value.trim().toLowerCase();
             const isSplit = document.getElementById('has-split').checked;
@@ -2877,7 +2922,7 @@
                 let totalSplit = 0;
                 document.querySelectorAll('#split-rows > div').forEach(row => {
                     const pName = row.querySelector('.split-person').value.trim().toLowerCase();
-                    const pVal = parseFloat(row.querySelector('.split-value').value) || 0;
+                    const pVal = parseMaskedValue(row.querySelector('.split-value').value) || 0;
                     if(pName && pVal > 0) { splitData.push({person: pName, val: pVal}); totalSplit += pVal; }
                 });
                 myPart = rawValue - totalSplit;

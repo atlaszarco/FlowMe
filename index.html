@@ -468,7 +468,7 @@
                 </button>
                 <div id="acc-content-resumo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                     <div class="overflow-hidden">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
                             <!-- Os 4 Cartões Ficam AQUI Dentro -->
                             <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-between items-center transition-colors">
                                 <div>
@@ -510,7 +510,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start relative">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-6 items-start relative">
             <!-- Fundo embaçado para o formulário no celular -->
             <div id="form-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500 lg:hidden" onclick="toggleMobileForm(false)"></div>
 
@@ -526,7 +526,7 @@
                 </button>
 
                 <!-- ACCORDION CONTENT (No celular ele descola e vira modal) -->
-                <div id="acc-content-form" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr] lg:mt-4">
+                <div id="acc-content-form" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr] lg:mt-2">
                     <div class="overflow-hidden">
                         <!-- O FORMULÁRIO EM SI -->
                         <div id="form-wrapper" class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all overflow-hidden lg:block hidden">
@@ -546,228 +546,228 @@
                                 <button onclick="cancelEdit()" class="text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 font-bold transition bg-rose-50 dark:bg-rose-900/30 px-3 py-1.5 rounded-lg border border-rose-200 dark:border-rose-800 flex items-center gap-1.5 shadow-sm w-full lg:w-auto justify-center"><i class="fa-solid fa-xmark"></i> <span data-i18n="btn_cancel">Cancelar Edição</span></button>
                             </div>
                     
-                    <form id="transaction-form" onsubmit="handleFormSubmit(event)" oninput="checkLimitsInRealTime()" onchange="checkLimitsInRealTime()" class="space-y-4">
-                        <input type="hidden" id="edit-id">
-                        <input type="hidden" id="edit-group-id">
-                        
-                        <div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-emerald-50 border-emerald-500 text-emerald-700" id="label-type-income">
-                                    <input type="radio" name="type" value="receita" checked onchange="toggleTypeFields('receita')" class="sr-only">
-                                    <i class="fa-solid fa-arrow-up"></i> <span data-i18n="type_income">Receita</span>
-                                </label>
-                                <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 border-slate-200 cursor-pointer text-sm font-medium transition-all hover:bg-slate-50 text-slate-600 dark:hover:bg-slate-800" id="label-type-expense">
-                                    <input type="radio" name="type" value="despesa" onchange="toggleTypeFields('despesa')" class="sr-only">
-                                    <i class="fa-solid fa-arrow-down"></i> <span data-i18n="type_expense">Despesa</span>
-                                </label>
-                            </div>
-                            
-                            <div id="sub-type-section" class="hidden grid grid-cols-2 gap-2 mt-2">
-                                <label class="flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 transition-colors" id="label-exp-debito">
-                                    <input type="radio" name="expType" value="debito" checked onchange="toggleSubType('debito')" class="sr-only">
-                                    <i class="fa-solid fa-money-bill-transfer"></i> <span data-i18n="lbl_exp_deb">Débito/Pix</span>
-                                </label>
-                                <label class="flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 transition-colors" id="label-exp-credito">
-                                    <input type="radio" name="expType" value="credito" onchange="toggleSubType('credito')" class="sr-only">
-                                    <i class="fa-regular fa-credit-card"></i> <span data-i18n="lbl_exp_cred">Crédito</span>
-                                </label>
-                            </div>
-                        </div>
+                            <form id="transaction-form" onsubmit="handleFormSubmit(event)" oninput="checkLimitsInRealTime()" onchange="checkLimitsInRealTime()" class="space-y-4">
+                                <input type="hidden" id="edit-id">
+                                <input type="hidden" id="edit-group-id">
+                                
+                                <div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-emerald-50 border-emerald-500 text-emerald-700" id="label-type-income">
+                                            <input type="radio" name="type" value="receita" checked onchange="toggleTypeFields('receita')" class="sr-only">
+                                            <i class="fa-solid fa-arrow-up"></i> <span data-i18n="type_income">Receita</span>
+                                        </label>
+                                        <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 border-slate-200 cursor-pointer text-sm font-medium transition-all hover:bg-slate-50 text-slate-600 dark:hover:bg-slate-800" id="label-type-expense">
+                                            <input type="radio" name="type" value="despesa" onchange="toggleTypeFields('despesa')" class="sr-only">
+                                            <i class="fa-solid fa-arrow-down"></i> <span data-i18n="type_expense">Despesa</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div id="sub-type-section" class="hidden grid grid-cols-2 gap-2 mt-2">
+                                        <label class="flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 transition-colors" id="label-exp-debito">
+                                            <input type="radio" name="expType" value="debito" checked onchange="toggleSubType('debito')" class="sr-only">
+                                            <i class="fa-solid fa-money-bill-transfer"></i> <span data-i18n="lbl_exp_deb">Débito/Pix</span>
+                                        </label>
+                                        <label class="flex items-center justify-center gap-1.5 p-1.5 rounded border border-slate-300 cursor-pointer text-xs font-medium bg-white text-slate-500 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-400 transition-colors" id="label-exp-credito">
+                                            <input type="radio" name="expType" value="credito" onchange="toggleSubType('credito')" class="sr-only">
+                                            <i class="fa-regular fa-credit-card"></i> <span data-i18n="lbl_exp_cred">Crédito</span>
+                                        </label>
+                                    </div>
+                                </div>
 
-                        <div>
-                            <label for="description" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_desc">Descrição</label>
-                            <div class="flex gap-1 w-full">
-                                <input type="text" id="description" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
-                                <button type="button" onclick="openGlobalEdit('description')" class="..." data-i18n-title="tt_manage_desc"><i class="fa-solid fa-pen-to-square"></i></button>
-                            </div>
-                        </div>
+                                <div>
+                                    <label for="description" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_desc">Descrição</label>
+                                    <div class="flex gap-1 w-full">
+                                        <input type="text" id="description" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                        <button type="button" onclick="openGlobalEdit('description')" class="..." data-i18n-title="tt_manage_desc"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    </div>
+                                </div>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label id="label-value" for="value" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_value">Valor</label>
-                                <input type="text" inputmode="numeric" id="value" required placeholder="0,00" oninput="maskCurrencyField(this); checkLimitsInRealTime()" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                            </div>
-                            <div>
-                                <label for="date" id="label-date" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_date_univ">Data</label>
-                                <input type="date" id="date" required class="w-full p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
-                            </div>
-                        </div>
-
-                        <div id="invoice-month-section" class="hidden">
-                            <label for="invoice-month" class="block text-xs font-semibold text-indigo-600 mb-1" data-i18n="lbl_inv_month">Mês da Fatura</label>
-                            <input type="month" id="invoice-month" class="w-full p-2 border border-indigo-300 rounded-lg text-sm outline-none focus:border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 dark:border-indigo-700 dark:text-indigo-200 transition-colors">
-                        </div>
-
-                        <div id="installment-section" class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2 transition-colors">
-                            <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
-                                <input type="checkbox" id="is-installment" onchange="toggleInstallmentOptions(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                                <span id="label-installment-text" data-i18n="lbl_inst_inc">Repetir recebimento?</span>
-                            </label>
-                            <div id="installment-options" class="hidden space-y-2 pt-1 border-t border-slate-200 dark:border-slate-700 mt-2">
-                                <div class="grid grid-cols-2 gap-2 mt-2">
+                                <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-[10px] font-medium text-slate-500 uppercase" data-i18n="label_installments">Nº Vezes</label>
-                                        <input type="number" id="num-installments" min="2" value="2" class="w-full p-1.5 border border-slate-300 rounded-md text-xs bg-white outline-none transition-colors">
+                                        <label id="label-value" for="value" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_value">Valor</label>
+                                        <input type="text" inputmode="numeric" id="value" required placeholder="0,00" oninput="maskCurrencyField(this); checkLimitsInRealTime()" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
                                     </div>
                                     <div>
-                                        <label class="block text-[10px] font-medium text-slate-500 uppercase" data-i18n="label_logic">Lógica</label>
-                                        <select id="installment-logic" class="w-full p-1.5 border border-slate-300 rounded-md text-xs bg-white outline-none transition-colors">
-                                            <option value="per_month" data-i18n="logic_rep">Replicar Valor</option>
-                                            <option value="total" id="opt-logic-div" data-i18n="logic_div">Dividir Total</option>
+                                        <label for="date" id="label-date" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_date_univ">Data</label>
+                                        <input type="date" id="date" required class="w-full p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                    </div>
+                                </div>
+
+                                <div id="invoice-month-section" class="hidden">
+                                    <label for="invoice-month" class="block text-xs font-semibold text-indigo-600 mb-1" data-i18n="lbl_inv_month">Mês da Fatura</label>
+                                    <input type="month" id="invoice-month" class="w-full p-2 border border-indigo-300 rounded-lg text-sm outline-none focus:border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 dark:border-indigo-700 dark:text-indigo-200 transition-colors">
+                                </div>
+
+                                <div id="installment-section" class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2 transition-colors">
+                                    <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
+                                        <input type="checkbox" id="is-installment" onchange="toggleInstallmentOptions(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                        <span id="label-installment-text" data-i18n="lbl_inst_inc">Repetir recebimento?</span>
+                                    </label>
+                                    <div id="installment-options" class="hidden space-y-2 pt-1 border-t border-slate-200 dark:border-slate-700 mt-2">
+                                        <div class="grid grid-cols-2 gap-2 mt-2">
+                                            <div>
+                                                <label class="block text-[10px] font-medium text-slate-500 uppercase" data-i18n="label_installments">Nº Vezes</label>
+                                                <input type="number" id="num-installments" min="2" value="2" class="w-full p-1.5 border border-slate-300 rounded-md text-xs bg-white outline-none transition-colors">
+                                            </div>
+                                            <div>
+                                                <label class="block text-[10px] font-medium text-slate-500 uppercase" data-i18n="label_logic">Lógica</label>
+                                                <select id="installment-logic" class="w-full p-1.5 border border-slate-300 rounded-md text-xs bg-white outline-none transition-colors">
+                                                    <option value="per_month" data-i18n="logic_rep">Replicar Valor</option>
+                                                    <option value="total" id="opt-logic-div" data-i18n="logic_div">Dividir Total</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3 w-full">
+                                    <div>
+                                        <label for="category" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_category">Categoria</label>
+                                        <div class="flex gap-1">
+                                            <input type="text" id="category" list="categories-list" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                            <button type="button" onclick="openGlobalEdit('category')" class="..." data-i18n-title="tt_manage_cat"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        </div>
+                                        <datalist id="categories-list"></datalist>
+                                    </div>
+                                    <div>
+                                        <label for="payment-method" id="label-method" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_account">Conta</label>
+                                        <div class="flex gap-1">
+                                            <input type="text" id="payment-method" list="methods-list" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                            <button type="button" onclick="openGlobalEdit('paymentMethod')" class="..." data-i18n-title="tt_manage_acc"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        </div>
+                                        <datalist id="methods-list"></datalist>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_status">Status Inicial</label>
+                                    <select id="status" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white outline-none focus:border-emerald-500 transition-colors">
+                                        <option value="pago" selected id="opt-status-paid">Recebido</option>
+                                        <option value="pendente" id="opt-status-pending">Pendente (Previsão)</option>
+                                    </select>
+                                </div>
+
+                                <div id="split-section-wrapper" class="hidden bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2 transition-colors">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
+                                                <input type="checkbox" id="has-split" onchange="toggleSplitSection(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                                <span data-i18n="label_is_split">Dividir com alguém?</span>
+                                            </label>
+                                            <button type="button" onclick="openGlobalEdit('person')" class="..." data-i18n-title="tt_manage_person"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>
+                                        </div>
+                                        <button type="button" id="btn-add-split-row" onclick="addSplitRow()" class="hidden text-[10px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 text-slate-700 dark:text-slate-300 px-2 py-1 rounded shadow-sm transition">
+                                            <i class="fa-solid fa-plus"></i> <span data-i18n="btn_add_person">Pessoa</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div id="split-container" class="hidden space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700 mt-2">
+                                        <div id="split-rows" class="space-y-2">
+                                            <!-- JS injeta os inputs aqui -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- AVISO ANTI-SUSTO (LIMITES E ORÇAMENTOS) -->
+                                <div id="limit-warning-zone" class="hidden p-3 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-lg text-[10px] text-rose-700 dark:text-rose-400 font-semibold flex items-start gap-2 transition-all mt-2 mb-2">
+                                    <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+                                    <span id="limit-warning-text"></span>
+                                </div>
+
+                                <button type="submit" id="btn-submit" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg text-sm shadow-md transition-all flex items-center justify-center gap-2 mt-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">Salvar Movimentação</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELA TRANSAÇÕES -->
+            <!-- LADO DIREITO (TABELA E PESSOAS) -->
+            <div class="lg:col-span-2 flex flex-col gap-6">
+                
+                <!-- GAVETA 2: FILTROS E HISTÓRICO -->
+                <div class="flex flex-col">
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="historico" onclick="toggleAccordion('historico')">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                            <i class="fa-solid fa-list-ul text-blue-500"></i> <span data-i18n="acc_filters">Filtros e Histórico</span>
+                        </h2>
+                        <i id="acc-icon-historico" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                    </button>
+                    
+                    <div id="acc-content-historico" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="mt-2 space-y-4">
+                                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
+                                    <div class="relative flex-1">
+                                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
+                                        <input type="text" id="search-input" autocomplete="off" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                    </div>
+                                    <div class="flex items-center gap-2 overflow-x-auto">
+                                        <select id="filter-type" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                            <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
+                                            <option value="receita" data-i18n="flt_income">Receitas</option>
+                                            <option value="despesa" data-i18n="flt_expense">Despesas</option>
+                                        </select>
+                                        <select id="filter-status" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                            <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
+                                            <option value="pago" data-i18n="flt_paid">Pagos/Recebidos</option>
+                                            <option value="pendente" data-i18n="flt_pending">Pendentes</option>
+                                        </select>
+                                        <select id="filter-split" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                            <option value="todos" data-i18n="flt_all_splits">Todas</option>
+                                            <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3 w-full">
-                            <div>
-                                <label for="category" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_category">Categoria</label>
-                                <div class="flex gap-1">
-                                    <input type="text" id="category" list="categories-list" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
-                                    <button type="button" onclick="openGlobalEdit('category')" class="..." data-i18n-title="tt_manage_cat"><i class="fa-solid fa-pen-to-square"></i></button>
-                                </div>
-                                <datalist id="categories-list"></datalist>
-                            </div>
-                            <div>
-                                <label for="payment-method" id="label-method" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_account">Conta</label>
-                                <div class="flex gap-1">
-                                    <input type="text" id="payment-method" list="methods-list" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
-                                    <button type="button" onclick="openGlobalEdit('paymentMethod')" class="..." data-i18n-title="tt_manage_acc"><i class="fa-solid fa-pen-to-square"></i></button>
-                                </div>
-                                <datalist id="methods-list"></datalist>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_status">Status Inicial</label>
-                            <select id="status" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white outline-none focus:border-emerald-500 transition-colors">
-                                <option value="pago" selected id="opt-status-paid">Recebido</option>
-                                <option value="pendente" id="opt-status-pending">Pendente (Previsão)</option>
-                            </select>
-                        </div>
-
-                        <div id="split-section-wrapper" class="hidden bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2 transition-colors">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
-                                        <input type="checkbox" id="has-split" onchange="toggleSplitSection(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                                        <span data-i18n="label_is_split">Dividir com alguém?</span>
-                                    </label>
-                                    <button type="button" onclick="openGlobalEdit('person')" class="..." data-i18n-title="tt_manage_person"><i class="fa-solid fa-pen-to-square text-[10px]"></i></button>
-                                </div>
-                                <button type="button" id="btn-add-split-row" onclick="addSplitRow()" class="hidden text-[10px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 text-slate-700 dark:text-slate-300 px-2 py-1 rounded shadow-sm transition">
-                                    <i class="fa-solid fa-plus"></i> <span data-i18n="btn_add_person">Pessoa</span>
-                                </button>
-                            </div>
-                            
-                            <div id="split-container" class="hidden space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700 mt-2">
-                                <div id="split-rows" class="space-y-2">
-                                    <!-- JS injeta os inputs aqui -->
+            
+                                <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-colors">
+                                    <div class="overflow-x-auto w-full">
+                                        <table class="w-full text-left border-collapse min-w-[750px]">
+                                            <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 transition-colors">
+                                                <tr>
+                                                    <th class="p-3" data-i18n="th_date">Data</th>
+                                                    <th class="p-3" data-i18n="th_desc">Descrição & Categoria</th>
+                                                    <th class="p-3" data-i18n="th_method">Conta/Cartão</th>
+                                                    <th class="p-3" data-i18n="th_orig">Valor Orig.</th>
+                                                    <th class="p-3" data-i18n="th_cost">Seu Custo</th>
+                                                    <th class="p-3 text-center" data-i18n="th_status">Status</th>
+                                                    <th class="p-3 text-right" data-i18n="th_actions">Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="transactions-body" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-sm">
+                                                <!-- Injeção de dados via JS -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div id="empty-state" class="hidden flex flex-col items-center justify-center p-10 text-slate-400">
+                                        <i class="fa-solid fa-folder-open text-3xl mb-3 text-slate-300 dark:text-slate-600"></i>
+                                        <p class="text-sm" data-i18n="empty_state">Nenhuma movimentação encontrada.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- AVISO ANTI-SUSTO (LIMITES E ORÇAMENTOS) -->
-                        <div id="limit-warning-zone" class="hidden p-3 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-lg text-[10px] text-rose-700 dark:text-rose-400 font-semibold flex items-start gap-2 transition-all mt-2 mb-2">
-                            <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
-                            <span id="limit-warning-text"></span>
+                <!-- GAVETA 3: PESSOAS -->
+                <div class="flex flex-col">
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="pessoas" onclick="toggleAccordion('pessoas')">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                            <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
+                        </h2>
+                        <i id="acc-icon-pessoas" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                    </button>
+                    <div id="acc-content-pessoas" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
+                                <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700"></div>
+                            </div>
                         </div>
-
-                        <button type="submit" id="btn-submit" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg text-sm shadow-md transition-all flex items-center justify-center gap-2 mt-2">
-                            <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">Salvar Movimentação</span>
-                        </button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-                <!-- TABELA TRANSAÇÕES -->
-                <!-- LADO DIREITO (TABELA E PESSOAS) -->
-                <div class="lg:col-span-2 flex flex-col gap-6">
-                    
-                    <!-- GAVETA 2: FILTROS E HISTÓRICO -->
-                    <div class="flex flex-col">
-                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="historico" onclick="toggleAccordion('historico')">
-                            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                                <i class="fa-solid fa-list-ul text-blue-500"></i> <span data-i18n="acc_filters">Filtros e Histórico</span>
-                            </h2>
-                            <i id="acc-icon-historico" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
-                        </button>
-                        
-                        <div id="acc-content-historico" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
-                            <div class="overflow-hidden">
-                                <div class="mt-4 space-y-4">
-                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
-                                        <div class="relative flex-1">
-                                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
-                                            <input type="text" id="search-input" autocomplete="off" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                        </div>
-                                        <div class="flex items-center gap-2 overflow-x-auto">
-                                            <select id="filter-type" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                                <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
-                                                <option value="receita" data-i18n="flt_income">Receitas</option>
-                                                <option value="despesa" data-i18n="flt_expense">Despesas</option>
-                                            </select>
-                                            <select id="filter-status" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                                <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
-                                                <option value="pago" data-i18n="flt_paid">Pagos/Recebidos</option>
-                                                <option value="pendente" data-i18n="flt_pending">Pendentes</option>
-                                            </select>
-                                            <select id="filter-split" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                                <option value="todos" data-i18n="flt_all_splits">Todas</option>
-                                                <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                
-                                    <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-colors">
-                                        <div class="overflow-x-auto w-full">
-                                            <table class="w-full text-left border-collapse min-w-[750px]">
-                                                <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 transition-colors">
-                                                    <tr>
-                                                        <th class="p-3" data-i18n="th_date">Data</th>
-                                                        <th class="p-3" data-i18n="th_desc">Descrição & Categoria</th>
-                                                        <th class="p-3" data-i18n="th_method">Conta/Cartão</th>
-                                                        <th class="p-3" data-i18n="th_orig">Valor Orig.</th>
-                                                        <th class="p-3" data-i18n="th_cost">Seu Custo</th>
-                                                        <th class="p-3 text-center" data-i18n="th_status">Status</th>
-                                                        <th class="p-3 text-right" data-i18n="th_actions">Ações</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="transactions-body" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-sm">
-                                                    <!-- Injeção de dados via JS -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div id="empty-state" class="hidden flex flex-col items-center justify-center p-10 text-slate-400">
-                                            <i class="fa-solid fa-folder-open text-3xl mb-3 text-slate-300 dark:text-slate-600"></i>
-                                            <p class="text-sm" data-i18n="empty_state">Nenhuma movimentação encontrada.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- GAVETA 3: PESSOAS -->
-                    <div class="flex flex-col">
-                        <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="pessoas" onclick="toggleAccordion('pessoas')">
-                            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                                <i class="fa-solid fa-hand-holding-dollar text-amber-500"></i> <span data-i18n="res_people">Pessoas (Rateios)</span>
-                            </h2>
-                            <i id="acc-icon-pessoas" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
-                        </button>
-                        <div id="acc-content-pessoas" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
-                            <div class="overflow-hidden">
-                                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
-                                    <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             
             <!-- Botão Flutuante (FAB) -->
@@ -841,7 +841,7 @@
                 </button>
                 <div id="acc-content-dash-limits" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                     <div class="overflow-hidden">
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
                             <div id="dashboard-limits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                         </div>
                     </div>
@@ -857,7 +857,7 @@
                     </button>
                     <div id="acc-content-dash-fluxo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors relative h-64 w-full">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative h-64 w-full">
                                 <canvas id="chart-cashflow"></canvas>
                             </div>
                         </div>
@@ -872,7 +872,7 @@
                     </button>
                     <div id="acc-content-dash-cat" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors relative h-64 w-full">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative h-64 w-full">
                                 <canvas id="chart-categories"></canvas>
                             </div>
                         </div>
@@ -887,7 +887,7 @@
                     </button>
                     <div id="acc-content-dash-evo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors relative h-64 w-full">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative h-64 w-full">
                                 <canvas id="chart-evolution"></canvas>
                             </div>
                         </div>
@@ -902,7 +902,7 @@
                     </button>
                     <div id="acc-content-dash-acc" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors relative h-64 w-full">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative h-64 w-full">
                                 <canvas id="chart-accounts"></canvas>
                             </div>
                         </div>
@@ -924,7 +924,7 @@
                     </button>
                     <div id="acc-content-cfg-cloud" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr] flex-1">
                         <div class="overflow-hidden flex flex-col h-full">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors flex-1 flex flex-col justify-between">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors flex-1 flex flex-col justify-between">
                                 <div class="flex items-center gap-4 mb-4 opacity-50" id="cloud-user-info">
                                     <div class="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-400 overflow-hidden" id="cloud-user-avatar">
                                         <i class="fa-solid fa-user text-xl"></i>
@@ -965,7 +965,7 @@
                     </button>
                     <div id="acc-content-cfg-lang" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
                                 <div class="mb-5">
                                     <label id="lbl-language" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Idioma:</label>
                                     <div class="flex flex-wrap gap-2" id="lang-buttons">
@@ -996,7 +996,7 @@
                     </button>
                     <div id="acc-content-cfg-app" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_theme">Tema do Aplicativo:</label>
                                     <div class="flex flex-wrap gap-2" id="theme-buttons">
@@ -1032,7 +1032,7 @@
                     </button>
                     <div id="acc-content-cfg-notif" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors space-y-3">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors space-y-3">
                                 <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
                                     <input type="checkbox" id="cfg-notif" onchange="toggleNotifications(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
                                     <span data-i18n="cfg_notif">Ativar Notificações/Alertas</span>
@@ -1060,7 +1060,7 @@
                     </button>
                     <div id="acc-content-cfg-sec" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors space-y-4">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors space-y-4">
                                 <div class="p-3 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-800 flex justify-between items-center gap-2 transition-colors">
                                     <div><h3 class="text-[11px] font-bold text-emerald-900 dark:text-emerald-400" data-i18n="cfg_export_title">Exportar Planilha</h3></div>
                                     <button onclick="exportToCSV()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
@@ -1103,7 +1103,7 @@
                     </button>
                     <div id="acc-content-cfg-limits" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-4 transition-colors">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
                                 <div id="settings-limits-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                     <!-- Renderizado via JS -->
                                 </div>
@@ -1116,7 +1116,7 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span id="app-version-display" data-i18n="cfg_version">Versão</span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão</span> <span id="app-version-display" class="font-bold text-slate-500"></span></p>
             </div>
         </div>
     </main>
@@ -1511,7 +1511,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.7';
+        const FLOWME_VERSION = '2.4.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1552,7 +1552,11 @@
             
             state.currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
             document.getElementById('global-month').value = state.currentMonth;
-            document.getElementById('splash-version-display').textContent = FLOWME_VERSION;
+            
+            // PREENCHIMENTO DAS VERSÕES NA TELA:
+            if(document.getElementById('splash-version-display')) document.getElementById('splash-version-display').textContent = FLOWME_VERSION;
+            if(document.getElementById('app-version-display')) document.getElementById('app-version-display').textContent = FLOWME_VERSION;
+            
             document.getElementById('cfg-panel-style').value = userConfig.panelStyle;
             document.getElementById('cfg-currency').value = userConfig.currency;
             document.getElementById('cfg-reminder').value = userConfig.reminderDays;
@@ -1629,9 +1633,6 @@
             const editId = document.getElementById('edit-id').value;
             if(editId) { document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-check"></i> <span data-i18n="btn_submit_edit">${t('btn_submit_edit')}</span>`; document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> <span data-i18n="form_title_edit">${t('form_title_edit')}</span>`; } 
             else { document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">${t('btn_submit')}</span>`; document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-plus-circle text-emerald-500"></i> <span data-i18n="form_title_new">${t('form_title_new')}</span>`; }
-
-            const versionSpan = document.querySelector('[data-i18n="cfg_version"]');
-            if(versionSpan) versionSpan.innerHTML = t('cfg_version') + ' ' + FLOWME_VERSION;
             
             updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
         }

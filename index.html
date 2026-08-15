@@ -70,6 +70,17 @@
         }
         .animate-save-pop i { animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
+        /* Animação de Balanço e Expansão para o Sininho */
+        @keyframes bellRingPop {
+            0% { transform: scale(0.8) rotate(0deg); }
+            20% { transform: scale(1.15) rotate(15deg); }
+            40% { transform: scale(1.25) rotate(-10deg); }
+            60% { transform: scale(1.15) rotate(10deg); }
+            80% { transform: scale(1.05) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .animate-bell-pop i { animation: bellRingPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
         /* BARRA GLOBAL - LAYOUT RESPONSIVO */
         #global-toolbar-inner {
             display: grid;
@@ -1116,7 +1127,7 @@
 
             <div class="mt-8 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão</span> <span id="app-version-display" class="font-bold text-slate-500"></span></p>
+                <p>FlowMe - <span data-i18n="cfg_version">Versão</span> <span id="app-version-display"></span></p>
             </div>
         </div>
     </main>
@@ -1511,7 +1522,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.8';
+        const FLOWME_VERSION = '2.4.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1572,6 +1583,8 @@
             setLanguage(userConfig.lang);
             updateAutocompleteLists();
             addSplitRow();
+            toggleFilterMode();
+            changeGlobalMonth(state.currentMonth);
         });
 
         function showUpdateSuccess(version) {
@@ -2133,32 +2146,46 @@
             
             html += `
                 <button
+                    id="btn-alerts-bell"
                     type="button"
-                    onclick="openAlertsModal()"
+                    onclick="handleBellClick()"
                     title="Abrir Central de Alertas"
-                    class="shrink-0 px-2 py-1
-                           bg-slate-100 text-slate-600
-                           border border-slate-200
-                           dark:bg-slate-800
-                           dark:text-slate-300
-                           dark:border-slate-700
-                           rounded text-[10px]
+                    class="shrink-0 px-3 py-1.5
+                           bg-amber-100 text-amber-700
+                           border border-amber-300
+                           dark:bg-amber-900/40
+                           dark:text-amber-400
+                           dark:border-amber-800
+                           rounded-lg text-xs
                            font-bold shadow-sm
-                           hover:bg-slate-200
-                           dark:hover:bg-slate-700
-                           transition
-                           flex items-center gap-1.5">
+                           hover:bg-amber-200
+                           dark:hover:bg-amber-800
+                           transition-colors
+                           flex items-center justify-center gap-1.5 h-9">
             
                     <i class="fa-solid fa-bell"></i>
-            
-                    ${hiddenBadge}
-            
+                    ${hiddenAlerts > 0 ? `<span>${hiddenAlerts}</span>` : `<span class="hidden md:inline">${t('btn_view')}</span>`}
                 </button>
             `;
 
             alertsContainer.innerHTML = html;
         }
-        
+
+        function handleBellClick() {
+            const btn = document.getElementById('btn-alerts-bell');
+            if (btn) {
+                // Adiciona a animação de balanço
+                btn.classList.add('animate-bell-pop');
+                // Espera 500ms antes de abrir a central
+                setTimeout(() => {
+                    btn.classList.remove('animate-bell-pop');
+                    openAlertsModal();
+                }, 500);
+            } else {
+                openAlertsModal();
+            }
+        }
+
         // ================= SAVE & LOAD =================
         function updateSaveTimestamp() {
             const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});

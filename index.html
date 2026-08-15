@@ -70,22 +70,14 @@
         }
         .animate-save-pop i { animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* =========================================================
-           BARRA GLOBAL - LAYOUT RESPONSIVO
-           ========================================================= */
-        
+        /* BARRA GLOBAL - LAYOUT RESPONSIVO */
         #global-toolbar-inner {
             display: grid;
             align-items: center;
             width: 100%;
         }
         
-        
-        /* =========================================================
-           1. CELULAR RETRATO
-           Filtro + Salvar
-           Alertas em uma segunda linha
-           ========================================================= */
+        /* 1. CELULAR RETRATO */
         
         body[data-responsive="mobile-portrait"] #global-toolbar-inner {
             grid-template-columns: minmax(0, 1fr) auto;
@@ -168,10 +160,7 @@
             gap: 4px;                /* alertas mais juntos */
         }
         
-        /* =========================================================
-           2. CELULAR HORIZONTAL
-           Tudo em uma única linha
-           ========================================================= */
+        /* 2. CELULAR HORIZONTAL         Tudo em uma única linha */
         
         body[data-responsive="mobile-landscape"] #global-toolbar-inner {
             grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
@@ -208,11 +197,7 @@
         }
         
         
-        /* =========================================================
-           3. TABLET
-           Tudo em uma linha
-           Alertas ocupam o espaço central
-           ========================================================= */
+        /* 3. TABLET */
         
         body[data-responsive="tablet"] #global-toolbar-inner {
             grid-template-columns: auto minmax(0, 1fr) auto;
@@ -240,10 +225,7 @@
         }
         
         
-        /* =========================================================
-           4. DESKTOP
-           Mais espaço e informações
-           ========================================================= */
+        /* 4. DESKTOP */
         
         body[data-responsive="desktop"] #global-toolbar-inner {
             grid-template-columns: auto minmax(0, 1fr) auto;
@@ -270,9 +252,7 @@
         }
         
         
-        /* =========================================================
-           ESTRUTURA INTERNA DOS ALERTAS
-           ========================================================= */
+        /* ESTRUTURA INTERNA DOS ALERTAS */
         
         #global-toolbar-alerts {
             display: flex;
@@ -296,18 +276,14 @@
         }
         
         
-        /* =========================================================
-           FILTRO
-           ========================================================= */
+        /* FILTRO */
         
         #global-toolbar-filter > div {
             min-width: 0;
         }
         
         
-        /* =========================================================
-           SALVAR
-           ========================================================= */
+        /* SALVAR */
         
         #global-toolbar-save {
             display: flex;
@@ -335,6 +311,48 @@
         
         body[data-responsive="mobile-landscape"] #mode-range {
             gap: 6px;
+        }
+
+        /* MICRO-RESPONSIVIDADE (Telas Menores que 420px) */
+        @media (max-width: 420px) {
+            /* 1. Gavetas (Painéis, Transações e Configurações) */
+            .accordion-header { 
+                padding: 1rem 0.875rem !important; /* Reduz de p-5 para algo mais justo */
+            }
+            .accordion-header h2 { 
+                font-size: 0.95rem !important; /* Diminui de text-lg para ~text-base */
+                gap: 0.5rem !important; 
+                min-width: 0; /* Permite que a caixa encolha */
+            }
+            /* Blindagem anti-quebra de linha */
+            .accordion-header h2 span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            /* Protege os botões da direita (Novo, Configurar) para não serem esmagados */
+            .accordion-header > div { 
+                gap: 0.5rem !important; 
+                flex-shrink: 0; 
+            }
+            .accordion-header .acc-action { 
+                padding: 0.35rem 0.5rem !important; 
+                font-size: 0.65rem !important; 
+            }
+            
+            /* 2. Ajustes de Textos Numéricos Gigantes */
+            #invoice-total-value { 
+                font-size: 1.75rem !important; 
+            }
+            #summary-income, #summary-expense, #summary-balance, #summary-splits { 
+                font-size: 1.15rem !important; 
+            }
+            
+            /* 3. Abas de Navegação do Topo */
+            #tabs-nav button { 
+                font-size: 0.75rem !important; 
+                padding: 0.4rem 0.75rem !important; 
+            }
         }
         
     </style>
@@ -1471,7 +1489,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.4';
+        const FLOWME_VERSION = '2.4.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

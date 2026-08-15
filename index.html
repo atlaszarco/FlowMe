@@ -423,42 +423,42 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL ================= -->
-<section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-4 shadow-sm transition-all duration-500">
-    <div id="global-toolbar-inner" class="max-w-7xl mx-auto">
+<section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-4 shadow-sm transition-all duration-500 w-full overflow-hidden">
+    <div id="global-toolbar-inner" class="max-w-7xl mx-auto w-full">
 
         <!-- FILTRO -->
-        <div id="global-toolbar-filter" class="flex min-w-0 justify-self-start">
-            <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full">
-                <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-2 shrink-0">
+        <div id="global-toolbar-filter" class="flex min-w-0 justify-self-start w-full">
+            <div class="flex items-center gap-1 sm:gap-2 bg-slate-50 dark:bg-slate-800 px-2 h-9 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full overflow-hidden shrink-1">
+                <select id="filter-mode" onchange="toggleFilterMode()" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-1 sm:pr-2 shrink-0">
                     <option value="month" data-i18n="opt_month">Mês:</option>
                     <option value="range" data-i18n="opt_range">Período:</option>
                 </select>
-                <div id="mode-month" class="flex items-center gap-1 shrink-0">
-                    <button onclick="changeMonthOffset(-1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Mês Anterior"><i class="fa-solid fa-chevron-left"></i></button>
-                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-sm focus:ring-0 font-semibold cursor-pointer outline-none w-max text-center">
-                    <button onclick="changeMonthOffset(1)" class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition" title="Próximo Mês"><i class="fa-solid fa-chevron-right"></i></button>
+                <div id="mode-month" class="flex items-center gap-1 shrink-0 min-w-0">
+                    <button onclick="changeMonthOffset(-1)" class="px-1 sm:px-2 h-6 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition flex items-center justify-center" title="Mês Anterior"><i class="fa-solid fa-chevron-left text-[10px] sm:text-xs"></i></button>
+                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[11px] sm:text-sm focus:ring-0 font-semibold cursor-pointer outline-none w-max text-center px-0 sm:px-2 truncate">
+                    <button onclick="changeMonthOffset(1)" class="px-1 sm:px-2 h-6 bg-white dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded shadow-sm transition flex items-center justify-center" title="Próximo Mês"><i class="fa-solid fa-chevron-right text-[10px] sm:text-xs"></i></button>
                 </div>
-                <div id="mode-range" class="hidden items-center gap-2 shrink-0">
-                    <input type="date" id="date-start" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
-                    <span class="text-slate-400 text-xs font-medium" data-i18n="str_to">até</span>
-                    <input type="date" id="date-end" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-xs rounded px-2 py-1 outline-none">
+                <div id="mode-range" class="hidden items-center gap-1 sm:gap-2 shrink-0 min-w-0">
+                    <input type="date" id="date-start" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[10px] sm:text-xs rounded px-1 sm:px-2 h-6 outline-none">
+                    <span class="text-slate-400 text-[10px] sm:text-xs font-medium truncate" data-i18n="str_to">até</span>
+                    <input type="date" id="date-end" onchange="render()" class="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[10px] sm:text-xs rounded px-1 sm:px-2 h-6 outline-none">
                 </div>
             </div>
         </div>
 
         <!-- ALERTAS -->
-        <div id="global-toolbar-alerts">
-            <div id="global-toolbar-alerts-inner"></div>
+        <div id="global-toolbar-alerts" class="min-w-0 w-full overflow-hidden">
+            <div id="global-toolbar-alerts-inner" class="flex min-w-0 overflow-x-auto [&::-webkit-scrollbar]:hidden"></div>
         </div>
 
         <!-- SALVAR -->
-        <div id="global-toolbar-save">
-            <span id="last-save-time" class="text-[10px] text-slate-400 font-medium tracking-wide">
+        <div id="global-toolbar-save" class="shrink-0 flex items-center">
+            <span id="last-save-time" class="text-[10px] text-slate-400 font-medium tracking-wide mr-3 hidden md:inline">
                 <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
             </span>
-            <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm h-9">
+            <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 h-9 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm">
                 <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
-                <span data-i18n="btn_save_data">Salvar</span>
+                <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline">Salvar</span>
             </button>
         </div>
 
@@ -1125,7 +1125,7 @@
 
             </div>
 
-            <div class="mt-8 text-center text-xs text-slate-400 pb-4">
+            <div class="mt-auto pt-10 text-center text-xs text-slate-400 pb-4">
                 <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
                 <p>FlowMe - <span data-i18n="cfg_version">Versão</span> <span id="app-version-display"></span></p>
             </div>
@@ -1522,7 +1522,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.9';
+        const FLOWME_VERSION = '2.5.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1583,8 +1583,14 @@
             setLanguage(userConfig.lang);
             updateAutocompleteLists();
             addSplitRow();
-            toggleFilterMode();
-            changeGlobalMonth(state.currentMonth);
+
+            // GARANTE QUE AS TRANSAÇÕES APAREÇAM IMEDIATAMENTE NO CARREGAMENTO (Com leve atraso para a DOM montar)
+            setTimeout(() => {
+                toggleFilterMode();
+                changeGlobalMonth(state.currentMonth);
+                switchTab('transacoes'); // Acorda a interface
+                render();
+            }, 50);
         });
 
         function showUpdateSuccess(version) {
@@ -2091,7 +2097,8 @@
 
             const buildBadge = (arr, msgKey, colorClass, icon) => {
                 if (arr.length === 0 || shown >= maxBadges) return;
-                html += `<div class="${colorClass} px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`;
+                // Badges agora possuem altura exata de h-9 para alinhar
+                html += `<div class="${colorClass} px-2 h-9 rounded-lg text-[10px] font-bold border shadow-sm flex items-center justify-center gap-1 transition-colors shrink-0"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`;
                 shown++;
             };
 
@@ -2099,50 +2106,23 @@
             buildBadge(groups.expenseLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
             
             if (groups.limits.length > 0 && shown < maxBadges) {
-                html += `<div class="bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800 px-2 py-1 rounded text-[10px] font-bold border shadow-sm flex items-center gap-1 transition-colors shrink-0"><i class="fa-solid fa-bullseye"></i> <span>${groups.limits.length} ${t('msg_lim_risk')}</span></div>`;
+                html += `<div class="bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800 px-2 h-9 rounded-lg text-[10px] font-bold border shadow-sm flex items-center justify-center gap-1 transition-colors shrink-0"><i class="fa-solid fa-bullseye"></i> <span>${groups.limits.length} ${t('msg_lim_risk')}</span></div>`;
                 shown++;
             }
 
             buildBadge(groups.incomeSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
             buildBadge(groups.expenseSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
 
-            let visibleAlerts = 0;
-            let visibleGroups = 0;
+            let visibleAlerts = 0; let visibleGroups = 0;
+            groups.incomeLate.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.incomeLate.length, visibleGroups++) : null;
+            groups.expenseLate.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.expenseLate.length, visibleGroups++) : null;
+            groups.limits.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.limits.length, visibleGroups++) : null;
+            groups.incomeSoon.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.incomeSoon.length, visibleGroups++) : null;
+            groups.expenseSoon.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.expenseSoon.length, visibleGroups++) : null;
             
-            groups.incomeLate.length > 0 && visibleGroups < maxBadges
-                ? (visibleAlerts += groups.incomeLate.length, visibleGroups++)
-                : null;
-            
-            groups.expenseLate.length > 0 && visibleGroups < maxBadges
-                ? (visibleAlerts += groups.expenseLate.length, visibleGroups++)
-                : null;
-            
-            groups.limits.length > 0 && visibleGroups < maxBadges
-                ? (visibleAlerts += groups.limits.length, visibleGroups++)
-                : null;
-            
-            groups.incomeSoon.length > 0 && visibleGroups < maxBadges
-                ? (visibleAlerts += groups.incomeSoon.length, visibleGroups++)
-                : null;
-            
-            groups.expenseSoon.length > 0 && visibleGroups < maxBadges
-                ? (visibleAlerts += groups.expenseSoon.length, visibleGroups++)
-                : null;
-            
-            const totalAlerts =
-                groups.incomeLate.length +
-                groups.expenseLate.length +
-                groups.incomeSoon.length +
-                groups.expenseSoon.length +
-                groups.limits.length;
-            
-            const hiddenAlerts =
-                Math.max(totalAlerts - visibleAlerts, 0);
-            
-            const hiddenBadge =
-                hiddenAlerts > 0
-                    ? `<span>${hiddenAlerts}</span>`
-                    : '';
+            const totalAlerts = groups.incomeLate.length + groups.expenseLate.length + groups.incomeSoon.length + groups.expenseSoon.length + groups.limits.length;
+            const hiddenAlerts = Math.max(totalAlerts - visibleAlerts, 0);
+            const hiddenBadge = hiddenAlerts > 0 ? `<span>${hiddenAlerts}</span>` : '';
             
             html += `
                 <button
@@ -2150,7 +2130,7 @@
                     type="button"
                     onclick="handleBellClick()"
                     title="Abrir Central de Alertas"
-                    class="shrink-0 px-3 py-1.5
+                    class="shrink-0 px-3 h-9
                            bg-amber-100 text-amber-700
                            border border-amber-300
                            dark:bg-amber-900/40
@@ -2161,16 +2141,17 @@
                            hover:bg-amber-200
                            dark:hover:bg-amber-800
                            transition-colors
-                           flex items-center justify-center gap-1.5 h-9">
+                           flex items-center justify-center gap-1.5">
             
                     <i class="fa-solid fa-bell"></i>
-                    ${hiddenAlerts > 0 ? `<span>${hiddenAlerts}</span>` : `<span class="hidden md:inline">${t('btn_view')}</span>`}
+                    ${hiddenBadge}
                 </button>
             `;
 
             alertsContainer.innerHTML = html;
         }
 
+        // FUNÇÃO QUE EXECUTA A ANIMAÇÃO DO SINO AO CLICAR
         function handleBellClick() {
             const btn = document.getElementById('btn-alerts-bell');
             if (btn) {

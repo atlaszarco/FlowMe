@@ -354,7 +354,6 @@
                 padding: 0.4rem 0.75rem !important; 
             }
         }
-        
     </style>
 </head>
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
@@ -516,7 +515,7 @@
             <div id="form-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500 lg:hidden" onclick="toggleMobileForm(false)"></div>
 
             <!-- GAVETA 4: NOVA MOVIMENTAÇÃO (DESKTOP) / MODAL (MOBILE) -->
-            <div class="flex flex-col lg:sticky lg:top-24 transition-all duration-500 z-30">
+            <div class="flex flex-col lg:sticky lg:top-24 transition-all duration-500 lg:z-30">
                 
                 <!-- ACCORDION HEADER (Exclusivo Desktop) -->
                 <button class="accordion-header hidden lg:flex w-full justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="form" onclick="toggleAccordion('form')">
@@ -1512,7 +1511,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.4.6';
+        const FLOWME_VERSION = '2.4.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2838,14 +2837,14 @@
                 if(lim) {
                     document.getElementById('limit-type').value = lim.type;
                     document.getElementById('limit-target').value = lim.target;
-                    document.getElementById('limit-value').value = lim.max;
+                    document.getElementById('limit-value').value = lim.max ? formatMaskedValue(lim.max) : '';
                 }
             } else {
                 document.getElementById('limit-type').value = 'category';
                 document.getElementById('limit-target').value = '';
-                document.getElementById('limit-value').value = lim ? formatMaskedValue(lim.max) : '';
+                document.getElementById('limit-value').value = '';
             }
-            updateLimitOptions(); // <--- Avisa a lista para se preencher ao abrir
+            updateLimitOptions(); // Avisa a lista para se preencher ao abrir
             openModal('modal-limit-form');
         }
 

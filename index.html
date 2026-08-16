@@ -79,249 +79,7 @@
             80% { transform: scale(1.05) rotate(-5deg); }
             100% { transform: scale(1) rotate(0deg); }
         }
-        .animate-bell-pop i { animation: bellRingPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        
-        /* BARRA GLOBAL - LAYOUT RESPONSIVO */
-        #global-toolbar-inner {
-            display: grid;
-            align-items: center;
-            width: 100%;
-        }
-        
-        /* 1. CELULAR RETRATO */
-        body[data-responsive="mobile-portrait"] #global-toolbar-inner {
-            grid-template-columns: minmax(0, 1fr) auto;
-            grid-template-areas:
-                "alerts alerts"
-                "filter save";
-            gap: 8px;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter {
-            grid-area: filter;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner {
-            justify-content: flex-start;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div {
-            max-width: 100%;
-            overflow: hidden;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-month {
-            max-width: 105px;
-        }
-        
-        body[data-responsive="mobile-portrait"] #filter-mode {
-            font-size: 11px;
-        }
-
-        /* ===== AJUSTES EXTRAS PARA O FILTRO EM TELAS MUITO ESTREITAS ===== */
-        body[data-responsive="mobile-portrait"] #global-toolbar-filter > div {
-            padding: 0.2rem 0.4rem;    /* reduz o padding interno */
-            gap: 0.2rem;              /* reduz o espaçamento entre os itens */
-            flex-wrap: nowrap;        /* impede que os itens quebrem para linha de baixo */
-        }
-        
-        body[data-responsive="mobile-portrait"] #filter-mode {
-            font-size: 0.6rem;        /* fonte menor */
-            max-width: 55px;          /* largura máxima para caber */
-            padding: 0.1rem 0.2rem;
-            text-overflow: ellipsis;  /* corta o texto se ultrapassar */
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-month {
-            font-size: 0.65rem;
-            max-width: 70px;          /* já existe, mas reforçamos */
-            padding: 0.1rem 0.2rem;
-        }
-        
-        body[data-responsive="mobile-portrait"] #mode-month button {
-            padding: 0.1rem 0.2rem;   /* botões das setas menores */
-            font-size: 0.55rem;
-        }
-        
-        body[data-responsive="mobile-portrait"] #mode-range input[type="date"] {
-            font-size: 0.5rem;        /* data inputs menores */
-            padding: 0.1rem 0.2rem;
-            max-width: 60px;
-        }
-        
-        body[data-responsive="mobile-portrait"] #mode-range span {
-            font-size: 0.5rem;        /* texto "até" menor */
-            padding: 0 0.1rem;
-        }
-        
-        body[data-responsive="mobile-portrait"] #global-toolbar-alerts-inner {
-            gap: 4px;                /* alertas mais juntos */
-        }
-        
-        /* 2. CELULAR HORIZONTAL         Tudo em uma única linha */
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-inner {
-            grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
-            grid-template-areas:
-                "filter alerts save";
-            gap: 8px 12px;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-filter {
-            grid-area: filter;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-alerts-inner {
-            justify-content: center;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-toolbar-filter > div {
-            max-width: 100%;
-            overflow: hidden;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-month {
-            max-width: 125px;
-        }
-        
-        
-        /* 3. TABLET */
-        
-        body[data-responsive="tablet"] #global-toolbar-inner {
-            grid-template-columns: auto minmax(0, 1fr) auto;
-            grid-template-areas:
-                "filter alerts save";
-            gap: 16px;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-filter {
-            grid-area: filter;
-            min-width: 0;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="tablet"] #global-toolbar-alerts-inner {
-            justify-content: center;
-        }
-        
-        
-        /* 4. DESKTOP */
-        
-        body[data-responsive="desktop"] #global-toolbar-inner {
-            grid-template-columns: auto minmax(0, 1fr) auto;
-            grid-template-areas:
-                "filter alerts save";
-            gap: 24px;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-filter {
-            grid-area: filter;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-alerts {
-            grid-area: alerts;
-            min-width: 0;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-save {
-            grid-area: save;
-        }
-        
-        body[data-responsive="desktop"] #global-toolbar-alerts-inner {
-            justify-content: center;
-        }
-        
-        
-        /* ESTRUTURA INTERNA DOS ALERTAS */
-        
-        #global-toolbar-alerts {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            min-width: 0;
-        }
-        
-        #global-toolbar-alerts-inner {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-            min-width: 0;
-            overflow: hidden;
-        }
-        
-        #global-toolbar-alerts-inner > * {
-            flex-shrink: 0;
-        }
-        
-        
-        /* FILTRO */
-        
-        #global-toolbar-filter > div {
-            min-width: 0;
-        }
-        
-        
-        /* SALVAR */
-        
-        #global-toolbar-save {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-        
-        #last-save-time {
-            white-space: nowrap;
-        }
-
-        body[data-responsive="mobile-portrait"] #global-month {
-            width: 105px;
-        }
-        
-        body[data-responsive="mobile-landscape"] #global-month {
-            width: 125px;
-        }
-        
-        body[data-responsive="mobile-portrait"] #mode-range {
-            gap: 4px;
-        }
-        
-        body[data-responsive="mobile-landscape"] #mode-range {
-            gap: 6px;
-        }
+        .animate-bell-pop i { animation: bellRingPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }        
 
         /* MICRO-RESPONSIVIDADE (Telas Menores que 420px) */
         @media (max-width: 420px) {
@@ -421,44 +179,45 @@
         </div>
     </header>
 
-<!-- ================= BLOCO 3: BARRA GLOBAL ================= -->
-<section id="global-toolbar" class="fixed bottom-0 left-0 right-0 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)] transition-all duration-500 overflow-hidden z-40 lg:bottom-6 lg:left-1/2 lg:-translate-x-1/2 lg:w-[90%] lg:max-w-5xl lg:rounded-2xl lg:border lg:border-b-4 lg:shadow-2xl">    <div id="global-toolbar-inner" class="max-w-7xl mx-auto w-full">
+<!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
+<section id="global-toolbar" class="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-4xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 py-2 px-2 sm:px-3 shadow-2xl transition-all duration-500 overflow-visible z-40 rounded-2xl flex items-center h-14 sm:h-16">
+    <div id="global-toolbar-inner" class="flex items-center justify-between w-full gap-2">
 
-        <!-- FILTRO (Exatos h-9) -->
-        <div id="global-toolbar-filter" class="flex min-w-0 justify-self-start w-full">
-            <div class="flex items-center bg-slate-50 dark:bg-slate-800 h-9 rounded-lg border border-slate-200 dark:border-slate-700 max-w-full overflow-hidden shrink-1">
-                <select id="filter-mode" onchange="toggleFilterMode()" class="h-full text-[11px] sm:text-sm font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-2 pr-1 sm:pr-2 shrink-0">
-                    <option value="month" data-i18n="opt_month">Mês:</option>
-                    <option value="range" data-i18n="opt_range">Período:</option>
+        <!-- 1. FILTRO COMPACTO -->
+        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0">
+            <div class="flex items-center gap-1 sm:gap-2 bg-slate-100 dark:bg-slate-800 px-1 sm:px-2 h-10 sm:h-11 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-colors hover:bg-slate-200 dark:hover:bg-slate-700">
+                <select id="filter-mode" onchange="toggleFilterMode()" class="text-[10px] sm:text-xs font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-1 shrink-0 appearance-none text-center">
+                    <option value="month" data-i18n="opt_month">📅</option>
+                    <option value="range" data-i18n="opt_range">⧗</option>
                 </select>
                 
-                <div id="mode-month" class="flex items-center h-full shrink min-w-0 border-l border-slate-200 dark:border-slate-700">
-                    <button onclick="changeMonthOffset(-1)" class="px-2 h-full hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="h-full bg-transparent border-none text-slate-800 dark:text-slate-100 text-[11px] sm:text-sm focus:ring-0 font-semibold cursor-pointer outline-none w-full min-w-[70px] text-center px-1 shrink truncate">
-                    <button onclick="changeMonthOffset(1)" class="px-2 h-full hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                <div id="mode-month" class="flex items-center h-full min-w-0">
+                    <button onclick="changeMonthOffset(-1)" class="px-1 sm:px-2 h-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 transition hidden sm:flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[11px] sm:text-sm focus:ring-0 font-bold cursor-pointer outline-none w-max text-center px-0 sm:px-1 truncate [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full">
+                    <button onclick="changeMonthOffset(1)" class="px-1 sm:px-2 h-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 transition hidden sm:flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
                 </div>
                 
-                <div id="mode-range" class="hidden items-center h-full shrink min-w-0 border-l border-slate-200 dark:border-slate-700 px-1">
-                    <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[10px] sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-auto min-w-[70px] shrink">
-                    <span class="text-slate-400 text-[10px] sm:text-xs font-medium px-1 shrink-0" data-i18n="str_to">até</span>
-                    <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[10px] sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-auto min-w-[70px] shrink">
+                <div id="mode-range" class="hidden items-center h-full min-w-0">
+                    <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden">
+                    <span class="text-slate-400 text-[10px] font-bold px-0.5 shrink-0">~</span>
+                    <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden">
                 </div>
             </div>
         </div>
 
-        <!-- ALERTAS (Permite rolagem horizontal invisível se não couber tudo) -->
-        <div id="global-toolbar-alerts" class="min-w-0 w-full flex items-center">
-            <div id="global-toolbar-alerts-inner" class="flex items-center gap-1.5 sm:gap-2 w-full justify-start sm:justify-center overflow-x-auto [&::-webkit-scrollbar]:hidden"></div>
+        <!-- 2. ALERTA CENTRALIZADO UNIFICADO -->
+        <div id="global-toolbar-alerts" class="flex-1 flex justify-center min-w-0 px-1">
+            <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full"></div>
         </div>
 
-        <!-- SALVAR (Exatos h-9) -->
-        <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end">
-            <span id="last-save-time" class="text-[10px] text-slate-400 font-medium tracking-wide mr-3 hidden md:inline">
-                <i class="fa-solid fa-clock-rotate-left mr-1"></i> <span data-i18n="saved_time">Salvo: --:--</span>
+        <!-- 3. BOTÃO SALVAR (Status + Ação) -->
+        <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2">
+            <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide hidden">
+                <!-- JS injeta o tempo de forma inteligente aqui -->
             </span>
-            <button id="btn-manual-save" onclick="manualSave()" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-slate-600 border border-slate-200 px-3 h-9 rounded-lg transition-colors flex items-center justify-center gap-1.5 font-bold shadow-sm">
+            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 hover:bg-slate-800 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white dark:text-slate-950 border border-transparent dark:border-emerald-600 px-3 sm:px-4 h-10 sm:h-11 rounded-xl transition-all flex items-center justify-center gap-1.5 font-bold shadow-md">
                 <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
-                <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline">Salvar</span>
+                <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-xs sm:text-sm">Salvar</span>
             </button>
         </div>
 
@@ -1529,7 +1288,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.3';
+        const FLOWME_VERSION = '2.5.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2020,32 +1779,37 @@
             return 'desktop';
         }
 
-        function getMaxAlertBadges(profile) {
-            switch (profile) {
-                case 'mobile-portrait': return 2;
-                case 'mobile-landscape': return 1;
-                case 'tablet': return 2;
-                case 'desktop': return 3;
-                default: return 1;
-            }
-        }
-
+        // Nova Lógica de Degradação Progressiva do Botão Salvar
         function updateSaveDisplay(profile) {
             const saveText = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
             const saveTime = document.getElementById('last-save-time');
             const saveButton = document.getElementById('btn-manual-save');
             if (!saveText || !saveTime || !saveButton) return;
 
-            const showSaveText = profile === 'tablet' || profile === 'desktop';
-            const showSaveTimestamp = profile === 'desktop';
-
-            saveText.classList.toggle('hidden', !showSaveText);
-            saveTime.classList.toggle('hidden', !showSaveTimestamp);
-
-            if (profile === 'mobile-portrait' || profile === 'mobile-landscape') {
-                saveButton.classList.add('w-10'); saveButton.classList.remove('w-auto');
+            if (profile === 'desktop') {
+                saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
+                saveButton.classList.remove('px-0', 'w-10', 'w-11'); saveButton.classList.add('px-4');
+            } else if (profile === 'tablet' || profile === 'mobile-landscape') {
+                saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
+                saveButton.classList.remove('px-0', 'w-10', 'w-11'); saveButton.classList.add('px-3');
             } else {
-                saveButton.classList.remove('w-10'); saveButton.classList.add('w-auto');
+                // Mobile Portrait: Fica só o ícone da nuvem, esconde o horário
+                saveText.classList.add('hidden'); saveTime.classList.add('hidden');
+                saveButton.classList.remove('px-3', 'px-4'); saveButton.classList.add('px-0', 'w-10');
+            }
+        }
+
+        // Atualização Dinâmica do Horário Enxuto
+        function updateSaveTimestamp() {
+            const now = new Date(); 
+            const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit'}); // Removemos os segundos
+            const profile = responsiveProfile || getResponsiveProfile();
+            
+            // Se for desktop, mostra texto completo. Se não, só mostra "✓ 03:40"
+            if(profile === 'desktop') {
+                document.getElementById('last-save-time').innerHTML = `<i class="fa-solid fa-check text-emerald-500 mr-1"></i> <span data-i18n="saved_time">${t('saved_time')}</span> ${timeStr}`;
+            } else {
+                document.getElementById('last-save-time').innerHTML = `<i class="fa-solid fa-check text-emerald-500 mr-1"></i> <span>${timeStr}</span>`;
             }
         }
 
@@ -2054,120 +1818,74 @@
             responsiveProfile = profile;
             document.body.dataset.responsive = profile;
             updateSaveDisplay(profile);
+            updateSaveTimestamp(); // Atualiza a string de tempo
             renderToolbarAlerts();
             
-            // =========================================================
-            // REORDENAÇÃO INTELIGENTE (EFEITO TETRIS NAS CONFIGURAÇÕES)
-            // =========================================================
+            // Reordenação do Painel de Configurações (Efeito Tetris)
             const cfgContainer = document.getElementById('cfg-container');
             if (cfgContainer) {
-                const c1 = document.getElementById('cfg-wrap-cloud');
-                const c2 = document.getElementById('cfg-wrap-lang');
-                const c3 = document.getElementById('cfg-wrap-app');
-                const c4 = document.getElementById('cfg-wrap-notif');
-                const c5 = document.getElementById('cfg-wrap-sec');
-                const c6 = document.getElementById('cfg-wrap-limits');
-                
-                if (c1 && c2 && c3 && c4 && c5 && c6) {
-                    if (profile === 'tablet' || profile === 'desktop') {
-                        // Telas grandes: Força a DOM a ser 1, 3, 5, 2, 4, 6.
-                        // O CSS Columns empilha de cima pra baixo, resultando na leitura visual correta!
-                        cfgContainer.append(c1, c3, c5, c2, c4, c6);
-                    } else {
-                        // Mobile: Ordem natural padrão (1, 2, 3, 4, 5, 6) empilhada em 1 coluna.
-                        cfgContainer.append(c1, c2, c3, c4, c5, c6);
-                    }
+                const [c1, c2, c3, c4, c5, c6] = ['cloud', 'lang', 'app', 'notif', 'sec', 'limits'].map(id => document.getElementById(`cfg-wrap-${id}`));
+                if (c1 && c6) {
+                    if (profile === 'tablet' || profile === 'desktop') cfgContainer.append(c1, c3, c5, c2, c4, c6);
+                    else cfgContainer.append(c1, c2, c3, c4, c5, c6);
                 }
             }
         }
 
         window.addEventListener('resize', updateGlobalToolbarResponsive);
         window.addEventListener('orientationchange', updateGlobalToolbarResponsive);
-        document.addEventListener('DOMContentLoaded', updateGlobalToolbarResponsive);
 
+        // O Novo Sino Unificado
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
             if (!alertsContainer) return;
-            alertsContainer.innerHTML = '';
 
             const groups = currentAlertGroups;
-            const allAlerts = [...groups.incomeLate, ...groups.expenseLate, ...groups.incomeSoon, ...groups.expenseSoon, ...groups.limits];
-            if (allAlerts.length === 0) return;
-
-            const profile = responsiveProfile || getResponsiveProfile();
-            const maxBadges = getMaxAlertBadges(profile);
-
-            let html = ''; let shown = 0;
-
-            const buildBadge = (arr, msgKey, colorClass, icon) => {
-                if (arr.length === 0 || shown >= maxBadges) return;
-                html += `<div class="${colorClass} px-2 h-9 rounded-lg text-[10px] font-bold border shadow-sm flex items-center justify-center gap-1.5 transition-colors shrink-0 whitespace-nowrap"><i class="fa-solid ${icon}"></i> <span>${arr.length} ${t(msgKey)}</span></div>`;
-                shown++;
-            };
-
-            buildBadge(groups.incomeLate, 'rem_inc_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-circle-exclamation');
-            buildBadge(groups.expenseLate, 'rem_exp_late', 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:border-rose-800', 'fa-triangle-exclamation');
+            const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
             
-            if (groups.limits.length > 0 && shown < maxBadges) {
-                html += `<div class="bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800 px-2 h-9 rounded-lg text-[10px] font-bold border shadow-sm flex items-center justify-center gap-1 transition-colors shrink-0"><i class="fa-solid fa-bullseye"></i> <span>${groups.limits.length} ${t('msg_lim_risk')}</span></div>`;
-                shown++;
+            // Se não houver alertas, exibe "Tudo OK"
+            if (totalAlerts === 0) {
+                alertsContainer.innerHTML = `
+                    <button type="button" onclick="openAlertsModal()" class="flex items-center justify-center gap-1.5 px-3 h-9 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold text-[10px] sm:text-xs transition-colors hover:bg-slate-200 dark:hover:bg-slate-700">
+                        <i class="fa-solid fa-circle-check text-emerald-500"></i> <span class="hidden sm:inline" data-i18n="msg_all_control">${t('msg_all_control')}</span>
+                    </button>
+                `;
+                return;
             }
 
-            buildBadge(groups.incomeSoon, 'rem_inc_soon', 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800', 'fa-clock');
-            buildBadge(groups.expenseSoon, 'rem_exp_soon', 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800', 'fa-clock');
+            const profile = responsiveProfile || getResponsiveProfile();
+            const isMobile = profile === 'mobile-portrait';
+            
+            // Lógica de Sacrifício do Texto do Sino
+            const text = isMobile ? `${totalAlerts}` : `${totalAlerts} Alertas`;
+            
+            // Lê a gravidade para pintar o sino
+            const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
+            
+            const colorClass = hasCritical 
+                ? 'bg-rose-100 text-rose-700 border-rose-300 dark:bg-rose-900/40 dark:text-rose-400 dark:border-rose-800 hover:bg-rose-200' 
+                : 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-800 hover:bg-amber-200';
 
-            let visibleAlerts = 0; let visibleGroups = 0;
-            groups.incomeLate.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.incomeLate.length, visibleGroups++) : null;
-            groups.expenseLate.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.expenseLate.length, visibleGroups++) : null;
-            groups.limits.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.limits.length, visibleGroups++) : null;
-            groups.incomeSoon.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.incomeSoon.length, visibleGroups++) : null;
-            groups.expenseSoon.length > 0 && visibleGroups < maxBadges ? (visibleAlerts += groups.expenseSoon.length, visibleGroups++) : null;
-            
-            const totalAlerts = groups.incomeLate.length + groups.expenseLate.length + groups.incomeSoon.length + groups.expenseSoon.length + groups.limits.length;
-            const hiddenAlerts = Math.max(totalAlerts - visibleAlerts, 0);
-            const hiddenBadge = hiddenAlerts > 0 ? `<span>${hiddenAlerts}</span>` : '';
-            
-            html += `
+            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-500';
+
+            alertsContainer.innerHTML = `
                 <button
                     id="btn-alerts-bell"
                     type="button"
                     onclick="handleBellClick()"
-                    title="Abrir Central de Alertas"
-                    class="shrink-0 px-3 h-9
-                           bg-amber-100 text-amber-700
-                           border border-amber-300
-                           dark:bg-amber-900/40
-                           dark:text-amber-400
-                           dark:border-amber-800
-                           rounded-lg text-xs
-                           font-bold shadow-sm
-                           hover:bg-amber-200
-                           dark:hover:bg-amber-800
-                           transition-colors whitespace-nowrap
-                           flex items-center justify-center gap-1.5">
-            
-                    <i class="fa-solid fa-bell"></i>
-                    ${hiddenBadge}
+                    class="flex items-center justify-center gap-1.5 px-3 sm:px-4 h-10 sm:h-11 rounded-xl border font-bold text-xs sm:text-sm transition-colors shadow-sm ${colorClass}">
+                    <i class="fa-solid ${iconClass}"></i>
+                    <span>${text}</span>
                 </button>
             `;
-
-            alertsContainer.innerHTML = html;
         }
 
-        // FUNÇÃO QUE EXECUTA A ANIMAÇÃO DO SINO AO CLICAR
         function handleBellClick() {
             const btn = document.getElementById('btn-alerts-bell');
             if (btn) {
-                // Adiciona a animação de balanço
                 btn.classList.add('animate-bell-pop');
-                // Espera 500ms antes de abrir a central
-                setTimeout(() => {
-                    btn.classList.remove('animate-bell-pop');
-                    openAlertsModal();
-                }, 500);
-            } else {
-                openAlertsModal();
-            }
+                setTimeout(() => { btn.classList.remove('animate-bell-pop'); openAlertsModal(); }, 500);
+            } else { openAlertsModal(); }
         }
 
         // ================= SAVE & LOAD =================

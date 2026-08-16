@@ -127,7 +127,7 @@
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
     
     <!-- ================= BLOCO 0: SPLASH SCREEN (ONBOARDING) ================= -->
-    <div id="splash-screen" class="fixed inset-0 z-50 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div id="splash-screen" class="fixed inset-0 z-60 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="flex flex-col items-center text-center px-4">
             <div class="bg-emerald-500 p-4 rounded-2xl text-white font-bold text-4xl flex items-center justify-center w-20 h-20 shadow-lg mb-4">
                 <i class="fa-solid fa-dollar-sign"></i>
@@ -186,10 +186,9 @@
         <!-- 1. FILTRO (Preparação Visual para a Etapa de Expansão) -->
         <div id="global-toolbar-filter" class="flex items-center shrink min-w-0 h-full">
             <div class="flex items-center gap-1 sm:gap-2 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-900 px-2 sm:px-4 h-full rounded-full overflow-hidden transition-colors shadow-md w-full">
-                
-                <select id="filter-mode" onchange="toggleFilterMode()" class="text-[10px] sm:text-xs font-bold bg-transparent border-none outline-none cursor-pointer pl-1 pr-1 shrink-0 appearance-none text-center text-white dark:text-slate-900 [&>option]:text-slate-900">
-                    <option value="month" data-i18n="opt_month">📅</option>
-                    <option value="range" data-i18n="opt_range">⧗</option>
+                <select id="filter-mode" onchange="toggleFilterMode()" class="text-[10px] sm:text-xs font-bold bg-transparent border-none outline-none cursor-pointer pl-1 pr-1 shrink-0 appearance-none text-center text-white dark:text-slate-900">
+                    <option value="month" data-i18n="opt_month" class="text-slate-900 dark:text-white bg-white dark:bg-slate-800">📅</option>
+                    <option value="range" data-i18n="opt_range" class="text-slate-900 dark:text-white bg-white dark:bg-slate-800">⧗</option>
                 </select>
                 
                 <div id="mode-month" class="flex items-center h-full min-w-0">
@@ -214,8 +213,7 @@
         <!-- 3. BOTÃO SALVAR (Status + Ação) -->
         <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2 h-full">
             <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide hidden"></span>
-            
-            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-emerald-400 dark:hover:text-slate-900 px-3 sm:px-5 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 font-bold shadow-md">
+            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-3 sm:px-5 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 font-bold shadow-md">
                 <i class="fa-solid fa-cloud-arrow-up text-sm sm:text-base"></i>
                 <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-xs sm:text-sm">Salvar</span>
             </button>
@@ -1288,7 +1286,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.5';
+        const FLOWME_VERSION = '2.5.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1838,14 +1836,12 @@
             const groups = currentAlertGroups;
             const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
             
-            // SE NÃO HÁ ALERTAS, A PÍLULA ENCOLHE E ESCONDE O BOTÃO
             if (totalAlerts === 0) {
                 alertsWrapper.classList.add('hidden');
                 alertsContainer.innerHTML = '';
                 return;
             }
 
-            // SE TEM ALERTA, MOSTRA E ABRE ESPAÇO NA PÍLULA
             alertsWrapper.classList.remove('hidden');
 
             const profile = responsiveProfile || getResponsiveProfile();
@@ -1854,9 +1850,8 @@
             const text = isMobile ? `${totalAlerts}` : `${totalAlerts} Alertas`;
             const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
             
-            // Cores: Padrão = Preto (Light) / Verde (Dark). Hover = Amarelo!
             const colorClass = 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
-            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-500 dark:text-slate-900';
+            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-400';
 
             alertsContainer.innerHTML = `
                 <button
@@ -1893,28 +1888,27 @@
             saveState(); 
             const btn = document.getElementById('btn-manual-save'); 
             
-            // Verifica se o Gerenciador Responsivo escondeu o texto ou não
             const textSpan = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
             const isTextHidden = textSpan ? textSpan.classList.contains('hidden') : false;
             
-            // Monta o texto respeitando a visibilidade atual da tela
             const textHTML = `<span id="save-btn-text" class="${isTextHidden ? 'hidden' : ''}" data-i18n="btn_save_data">${t('btn_save_data') || 'Salvar'}</span>`;
-            const origHTML = `<i class="fa-solid fa-cloud-arrow-up text-sm"></i> ${textHTML}`;
+            const origHTML = `<i class="fa-solid fa-cloud-arrow-up text-sm sm:text-base"></i> ${textHTML}`;
             
-            // Estágio 1: Afundou e começa a girar (Carregando rápido)
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm"></i> ${textHTML}`;
+            // Estágio 1: Girando
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm sm:text-base"></i> ${textHTML}`;
             
             setTimeout(() => {
-                // Estágio 2: Confirmação com POP de expansão
+                // Estágio 2: Confirmação com POP. Remove a cor padrão e injeta Verde (Light) ou Branco (Dark)
                 btn.innerHTML = `<i class="fa-solid fa-check text-base"></i> <span class="${isTextHidden ? 'hidden' : ''} font-bold">OK</span>`;
-                btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border-emerald-300', 'animate-save-pop');
-                btn.classList.remove('bg-slate-100', 'text-slate-600', 'border-slate-200', 'hover:bg-emerald-50', 'hover:text-emerald-700');
+                
+                btn.classList.remove('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
+                btn.classList.add('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop');
                 
                 setTimeout(() => { 
                     // Estágio 3: Volta ao estado original
                     btn.innerHTML = origHTML; 
-                    btn.classList.remove('bg-emerald-100', 'text-emerald-700', 'border-emerald-300', 'animate-save-pop'); 
-                    btn.classList.add('bg-slate-100', 'text-slate-600', 'border-slate-200', 'hover:bg-emerald-50', 'hover:text-emerald-700');
+                    btn.classList.remove('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop'); 
+                    btn.classList.add('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
                 }, 1200); 
             }, 300); 
             

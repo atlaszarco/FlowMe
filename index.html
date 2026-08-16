@@ -89,12 +89,11 @@
         }
         
         /* 1. CELULAR RETRATO */
-        
         body[data-responsive="mobile-portrait"] #global-toolbar-inner {
             grid-template-columns: minmax(0, 1fr) auto;
             grid-template-areas:
-                "filter save"
-                "alerts alerts";
+                "alerts alerts"
+                "filter save";
             gap: 8px;
         }
         
@@ -423,8 +422,7 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL ================= -->
-<section id="global-toolbar" class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-4 shadow-sm transition-all duration-500 w-full overflow-hidden z-20 relative">
-    <div id="global-toolbar-inner" class="max-w-7xl mx-auto w-full">
+<section id="global-toolbar" class="fixed bottom-0 left-0 right-0 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)] transition-all duration-500 overflow-hidden z-40 lg:bottom-6 lg:left-1/2 lg:-translate-x-1/2 lg:w-[90%] lg:max-w-5xl lg:rounded-2xl lg:border lg:border-b-4 lg:shadow-2xl">    <div id="global-toolbar-inner" class="max-w-7xl mx-auto w-full">
 
         <!-- FILTRO (Exatos h-9) -->
         <div id="global-toolbar-filter" class="flex min-w-0 justify-self-start w-full">
@@ -467,7 +465,7 @@
     </div>
 </section>
     
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 min-w-0">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pb-28 lg:pb-32 min-w-0">
 <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">
             
@@ -784,7 +782,7 @@
             </div>
             
             <!-- Botão Flutuante (FAB) -->
-            <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-6 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-lg items-center justify-center text-2xl z-40 hover:bg-emerald-600 transition-transform active:scale-90 flex">
+            <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-lg items-center justify-center text-2xl z-40 hover:bg-emerald-600 transition-transform active:scale-90 flex">
                 <i class="fa-solid fa-plus"></i>
             </button>
         </div>
@@ -1531,7 +1529,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.2';
+        const FLOWME_VERSION = '2.5.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2478,7 +2476,7 @@
 
             const toast = document.createElement('div');
             toast.id = toastId;
-            toast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl z-[100] flex items-center gap-4 text-sm transition-all duration-500 opacity-0 translate-y-10 w-[90%] max-w-sm justify-between';
+            toast.className = 'fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl z-[100] flex items-center gap-4 text-sm transition-all duration-500 opacity-0 translate-y-10 w-[90%] max-w-sm justify-between';
             
             // Encurta o nome se for muito grande para não quebrar a barra
             const shortName = trx.description.length > 15 ? trx.description.substring(0, 15) + '...' : trx.description;
@@ -2813,7 +2811,7 @@
         function showImportSuccessToast(count, batchId) {
             const toast = document.createElement('div');
             toast.id = 'toast-' + batchId;
-            toast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl z-[100] flex items-center gap-4 text-sm transition-all duration-500 opacity-0 translate-y-10 w-[90%] max-w-sm justify-between';
+            toast.className = 'fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl z-[100] flex items-center gap-4 text-sm transition-all duration-500 opacity-0 translate-y-10 w-[90%] max-w-sm justify-between';
             toast.innerHTML = `
                 <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> <span class="font-medium">${count} ${t('msg_imported')}</span></div>
                 <button onclick="undoImport('${batchId}'); this.parentElement.remove()" class="shrink-0 text-amber-400 font-bold hover:text-amber-300 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded hover:bg-slate-700 transition border border-slate-600">${t('btn_undo')}</button>

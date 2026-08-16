@@ -182,25 +182,42 @@
 <section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[95%] bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
     <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full">
 
-        <!-- 1. FILTRO (Preparação Visual para a Etapa de Expansão) -->
-        <div id="global-toolbar-filter" class="flex items-center shrink min-w-0 h-full">
-            <div class="flex items-center gap-1 sm:gap-2 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-900 px-2 sm:px-4 h-full rounded-full overflow-hidden transition-colors shadow-md w-full">
-                <select id="filter-mode" onchange="toggleFilterMode()" class="text-[10px] sm:text-xs font-bold bg-transparent border-none outline-none cursor-pointer pl-1 pr-1 shrink-0 appearance-none text-center text-white dark:text-slate-900">
-                    <option value="month" data-i18n="opt_month" class="text-slate-900 dark:text-white bg-white dark:bg-slate-800">📅</option>
-                    <option value="range" data-i18n="opt_range" class="text-slate-900 dark:text-white bg-white dark:bg-slate-800">⧗</option>
-                </select>
+        <!-- 1. FILTRO EXPANSÍVEL (Animado) -->
+        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full">
+            <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md border border-transparent dark:border-emerald-600 relative overflow-hidden">
                 
-                <div id="mode-month" class="flex items-center h-full min-w-0">
-                    <button onclick="changeMonthOffset(-1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-[11px] sm:text-sm focus:ring-0 font-bold cursor-pointer outline-none w-max text-center px-0 sm:px-1 shrink truncate [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full text-white dark:text-slate-900">
-                    <button onclick="changeMonthOffset(1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                <!-- Ícone Alternador (Mês/Período) -->
+                <button type="button" onclick="toggleFilterMode(event)" class="px-3 sm:px-4 h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0">
+                    <i id="filter-icon-display" class="fa-regular fa-calendar text-sm sm:text-base"></i>
+                </button>
+
+                <!-- Conteúdo que Expande/Encolhe (Escondido no celular por padrão) -->
+                <div id="filter-content" class="flex items-center h-full transition-all duration-500 max-w-0 opacity-0 sm:max-w-xs sm:opacity-100">
+                    
+                    <!-- Módulo MÊS -->
+                    <div id="mode-month" class="flex items-center h-full min-w-0 whitespace-nowrap">
+                        <button onclick="changeMonthOffset(-1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                        
+                        <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-slate-800 dark:hover:bg-emerald-400 transition">
+                            <span id="month-display" class="text-xs sm:text-sm font-bold uppercase tracking-wide pointer-events-none"></span>
+                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        </div>
+                        
+                        <button onclick="changeMonthOffset(1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                    </div>
+                    
+                    <!-- Módulo PERÍODO -->
+                    <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1">
+                        <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[90px] font-bold text-white dark:text-slate-900 [&::-webkit-calendar-picker-indicator]:hidden">
+                        <span class="text-[10px] font-bold px-0.5">~</span>
+                        <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[90px] font-bold text-white dark:text-slate-900 [&::-webkit-calendar-picker-indicator]:hidden">
+                    </div>
                 </div>
-                
-                <div id="mode-range" class="hidden items-center h-full min-w-0">
-                    <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden text-white dark:text-slate-900">
-                    <span class="text-[10px] font-bold px-0.5 shrink-0">~</span>
-                    <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden text-white dark:text-slate-900">
-                </div>
+
+                <!-- Botão + para Mobile -->
+                <button id="btn-filter-expand" type="button" onclick="toggleMobileFilter(event)" class="px-3 sm:hidden h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 border-l border-slate-700 dark:border-emerald-600/50">
+                    <i id="filter-expand-icon" class="fa-solid fa-plus text-xs transition-transform duration-300"></i>
+                </button>
             </div>
         </div>
 
@@ -1285,7 +1302,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.6';
+        const FLOWME_VERSION = '2.5.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1339,7 +1356,6 @@
             addSplitRow();
 
             // 4. Acorda os Filtros e Renderiza a Tela Imediatamente
-            toggleFilterMode(); 
             switchTab('transacoes');
             setLanguage(userConfig.lang);
 
@@ -1532,27 +1548,79 @@
             });
         }
         
-        function toggleFilterMode() {
-            const mode = document.getElementById('filter-mode').value;
-            if (mode === 'month') {
-                document.getElementById('mode-month').classList.remove('hidden'); document.getElementById('mode-month').classList.add('flex');
-                document.getElementById('mode-range').classList.add('hidden'); document.getElementById('mode-range').classList.remove('flex');
+        // ================= FILTRO GLOBAL EXPANSÍVEL =================
+        let currentFilterMode = 'month';
+        let isFilterExpanded = false;
+
+        function toggleMobileFilter(event) {
+            if(event) event.stopPropagation();
+            isFilterExpanded = !isFilterExpanded;
+            const content = document.getElementById('filter-content');
+            const icon = document.getElementById('filter-expand-icon');
+            
+            if (isFilterExpanded) {
+                content.classList.remove('max-w-0', 'opacity-0');
+                content.classList.add('max-w-[250px]', 'opacity-100');
+                icon.classList.remove('fa-plus'); icon.classList.add('fa-xmark', 'rotate-90');
             } else {
-                document.getElementById('mode-month').classList.add('hidden'); document.getElementById('mode-month').classList.remove('flex');
-                document.getElementById('mode-range').classList.remove('hidden'); document.getElementById('mode-range').classList.add('flex');
+                content.classList.add('max-w-0', 'opacity-0');
+                content.classList.remove('max-w-[250px]', 'opacity-100');
+                icon.classList.remove('fa-xmark', 'rotate-90'); icon.classList.add('fa-plus');
+            }
+        }
+
+        // Fechar filtro ao clicar fora (no celular)
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('filter-wrapper');
+            if (wrapper && !wrapper.contains(e.target) && isFilterExpanded && window.innerWidth < 640) {
+                toggleMobileFilter();
+            }
+        });
+
+        function toggleFilterMode(event) {
+            if(event) event.stopPropagation();
+            currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
+            const icon = document.getElementById('filter-icon-display');
+            const modeMonth = document.getElementById('mode-month');
+            const modeRange = document.getElementById('mode-range');
+
+            if (currentFilterMode === 'month') {
+                icon.className = 'fa-regular fa-calendar text-sm sm:text-base';
+                modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
+                modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
+            } else {
+                icon.className = 'fa-solid fa-arrows-left-right text-sm sm:text-base';
+                modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
+                modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
                 if(!document.getElementById('date-start').value) {
                     const d = new Date();
                     document.getElementById('date-start').value = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
                     document.getElementById('date-end').value = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
                 }
             }
+            
+            if (window.innerWidth < 640 && !isFilterExpanded) toggleMobileFilter();
             render();
         }
 
         function changeGlobalMonth(value) {
             if(!value) return; state.currentMonth = value;
-            if (document.getElementById('filter-mode').value === 'month') { render(); if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); }
+            
+            // Cria o texto (Ex: AGO/26 ou Aug/26 dependendo do idioma)
+            const displaySpan = document.getElementById('month-display');
+            if(displaySpan) {
+                const [year, month] = value.split('-');
+                const date = new Date(year, parseInt(month) - 1, 1);
+                let monthName = date.toLocaleString(userConfig.lang, { month: 'short' }).replace('.', '');
+                displaySpan.textContent = `${monthName}/${year.substring(2)}`;
+            }
+            
+            if (currentFilterMode === 'month') { 
+                render(); 
+                if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); 
+            }
         }
+
         function changeMonthOffset(offset) {
             const current = document.getElementById('global-month').value; if(!current) return;
             const [year, month] = current.split('-'); const d = new Date(year, parseInt(month) - 1 + offset, 1);
@@ -2246,8 +2314,8 @@
         function render() {
             const search = document.getElementById('search-input').value.toLowerCase().trim();
             const fType = document.getElementById('filter-type').value; const fStatus = document.getElementById('filter-status').value; const fSplit = document.getElementById('filter-split').value;
-            const filterMode = document.getElementById('filter-mode').value;
-
+            const filterMode = currentFilterMode;
+            
             let filtered = state.transactions;
             if (filterMode === 'month') { const targetMonth = state.currentMonth; filtered = filtered.filter(trx => { if(trx.type === 'despesa' && trx.expenseType === 'credito') return trx.invoiceMonth === targetMonth; return trx.date && trx.date.substring(0, 7) === targetMonth; }); } 
             else {
@@ -2884,7 +2952,7 @@
             });
 
             // 4. Evolução (Dinâmica baseada no Filtro Global)
-            const filterMode = document.getElementById('filter-mode').value;
+            const filterMode = currentFilterMode;
             const months = [];
             
             if (filterMode === 'month') {

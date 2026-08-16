@@ -179,38 +179,39 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[95%] bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[95%] bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
     <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full">
 
         <!-- 1. FILTRO EXPANSÍVEL (Animado) -->
         <div id="global-toolbar-filter" class="flex items-center shrink min-w-0 h-full">
-            <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md border border-transparent dark:border-emerald-600 relative">
+            <!-- NOTA: O overflow-hidden aqui blinda o botão de vazar pelas bordas no hover -->
+            <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md border border-transparent dark:border-emerald-600 relative overflow-hidden">
                 
-                <!-- Ícone Mestre (Alternador e Expansor) -->
-                <button type="button" onclick="handleFilterIconClick(event)" class="px-3 sm:px-4 h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 z-10 relative rounded-full">
-                    <i id="filter-icon-display" class="fa-regular fa-calendar text-sm sm:text-base transition-transform duration-300"></i>
+                <!-- Ícone Mestre (Alternador e Expansor) - Mais largo (px-5) -->
+                <button type="button" onclick="handleFilterIconClick(event)" class="px-5 sm:px-6 h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 z-10 relative">
+                    <i id="filter-icon-display" class="fa-regular fa-calendar text-base sm:text-lg transition-transform duration-300"></i>
                 </button>
 
                 <!-- Conteúdo que Expande/Encolhe -->
-                <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden sm:max-w-xs sm:opacity-100">
+                <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden sm:max-w-[320px] sm:opacity-100">
                     
                     <!-- Módulo MÊS -->
                     <div id="mode-month" class="flex items-center h-full min-w-0 whitespace-nowrap">
-                        <button onclick="changeMonthOffset(-1)" class="px-2 sm:px-3 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                        <button onclick="changeMonthOffset(-1)" class="px-3 sm:px-4 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         
                         <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-slate-800 dark:hover:bg-emerald-400 transition">
-                            <span id="month-display" class="text-xs sm:text-sm font-bold uppercase tracking-wide pointer-events-none"></span>
+                            <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none"></span>
                             <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer dark:[color-scheme:light]">
                         </div>
                         
-                        <button onclick="changeMonthOffset(1)" class="px-2 sm:px-3 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
                     
-                    <!-- Módulo PERÍODO -->
+                    <!-- Módulo PERÍODO (Com inputs maiores) -->
                     <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1 sm:px-2">
-                        <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[100px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[115px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                         <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0">~</span>
-                        <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[100px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[115px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                     </div>
                 </div>
 
@@ -222,19 +223,20 @@
             <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
         </div>
 
-        <!-- 3. BOTÃO SALVAR (Status + Ação) -->
+        <!-- 3. BOTÃO SALVAR (Status + Ação) - Mais largo (px-5) -->
         <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2 h-full">
             <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide hidden"></span>
-            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-3 sm:px-5 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 font-bold shadow-md">
-                <i class="fa-solid fa-cloud-arrow-up text-sm sm:text-base"></i>
-                <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-xs sm:text-sm">Salvar</span>
+            
+            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-5 sm:px-6 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+                <i class="fa-solid fa-cloud-arrow-up text-base sm:text-lg"></i>
+                <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Salvar</span>
             </button>
         </div>
 
     </div>
 </section>
     
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pb-28 lg:pb-32 min-w-0">
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pb-28 lg:pb-32 min-w-0">
 <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">
             
@@ -1298,7 +1300,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.8';
+        const FLOWME_VERSION = '2.5.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1579,17 +1581,39 @@
             if (window.innerWidth < 640) {
                 if (isFilterExpanded) {
                     content.classList.remove('max-w-0', 'opacity-0');
-                    content.classList.add('max-w-[200px]', 'opacity-100'); 
-                    icon.classList.add('scale-110', 'text-amber-400'); // Destaque ao abrir
+                    content.classList.add('max-w-[320px]', 'opacity-100'); 
+                    icon.classList.add('scale-110', 'text-amber-400');
                 } else {
                     content.classList.add('max-w-0', 'opacity-0');
-                    content.classList.remove('max-w-[200px]', 'opacity-100');
+                    content.classList.remove('max-w-[320px]', 'opacity-100');
                     icon.classList.remove('scale-110', 'text-amber-400');
                 }
             } else {
-                // Limpeza gráfica pro Desktop
                 icon.classList.remove('scale-110', 'text-amber-400');
             }
+
+            // ALTERNÂNCIA DE MODO
+            if (currentFilterMode === 'month') {
+                icon.className = 'fa-regular fa-calendar text-base sm:text-lg transition-transform duration-300';
+                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
+                
+                modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
+                modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
+            } else {
+                icon.className = 'fa-solid fa-calendar-days text-base sm:text-lg transition-transform duration-300';
+                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
+                
+                modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
+                modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
+                
+                if(!document.getElementById('date-start').value) {
+                    const d = new Date();
+                    document.getElementById('date-start').value = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
+                    document.getElementById('date-end').value = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
+                }
+            }
+            render();
+        }
 
             // ALTERNÂNCIA DE MODO
             if (currentFilterMode === 'month') {
@@ -1879,11 +1903,11 @@
 
             if (profile === 'desktop' || profile === 'tablet' || profile === 'mobile-landscape') {
                 saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
-                saveButton.classList.remove('px-0', 'w-12'); saveButton.classList.add('px-3', 'sm:px-5');
+                saveButton.classList.add('px-5', 'sm:px-6');
             } else {
-                // Mobile Portrait extremo: Vira botão redondo puro, salva espaço.
                 saveText.classList.add('hidden'); saveTime.classList.add('hidden');
-                saveButton.classList.remove('px-3', 'sm:px-5'); saveButton.classList.add('px-0', 'w-12');
+                // No mobile portrait extremo, não removemos o padding. Deixamos ele alongado!
+                saveButton.classList.add('px-5');
             }
         }
 
@@ -1944,15 +1968,16 @@
             const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
             
             const colorClass = 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
-            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-400';
+            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-400 dark:text-slate-900';
 
+            // Sino
             alertsContainer.innerHTML = `
                 <button
                     id="btn-alerts-bell"
                     type="button"
                     onclick="handleBellClick()"
-                    class="flex items-center justify-center gap-1.5 px-3 sm:px-5 h-full w-full rounded-full font-bold text-xs sm:text-sm transition-all duration-300 shadow-md ${colorClass}">
-                    <i class="fa-solid ${iconClass}"></i>
+                    class="flex items-center justify-center gap-2 px-5 sm:px-6 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
+                    <i class="fa-solid ${iconClass} text-base sm:text-lg"></i>
                     <span class="whitespace-nowrap">${text}</span>
                 </button>
             `;

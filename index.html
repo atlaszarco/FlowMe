@@ -180,43 +180,43 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-4xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 py-2 px-2 sm:px-3 shadow-2xl transition-all duration-500 overflow-visible z-40 rounded-2xl flex items-center h-14 sm:h-16">
-    <div id="global-toolbar-inner" class="flex items-center justify-between w-full gap-2">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[95%] bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
+    <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full">
 
-        <!-- 1. FILTRO COMPACTO -->
-        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0">
-            <div class="flex items-center gap-1 sm:gap-2 bg-slate-100 dark:bg-slate-800 px-1 sm:px-2 h-10 sm:h-11 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-colors hover:bg-slate-200 dark:hover:bg-slate-700">
-                <select id="filter-mode" onchange="toggleFilterMode()" class="text-[10px] sm:text-xs font-bold text-slate-600 dark:text-slate-300 bg-transparent border-none outline-none cursor-pointer pl-1 pr-1 shrink-0 appearance-none text-center">
+        <!-- 1. FILTRO (Preparação Visual para a Etapa de Expansão) -->
+        <div id="global-toolbar-filter" class="flex items-center shrink min-w-0 h-full">
+            <div class="flex items-center gap-1 sm:gap-2 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-900 px-2 sm:px-4 h-full rounded-full overflow-hidden transition-colors shadow-md w-full">
+                
+                <select id="filter-mode" onchange="toggleFilterMode()" class="text-[10px] sm:text-xs font-bold bg-transparent border-none outline-none cursor-pointer pl-1 pr-1 shrink-0 appearance-none text-center text-white dark:text-slate-900 [&>option]:text-slate-900">
                     <option value="month" data-i18n="opt_month">📅</option>
                     <option value="range" data-i18n="opt_range">⧗</option>
                 </select>
                 
                 <div id="mode-month" class="flex items-center h-full min-w-0">
-                    <button onclick="changeMonthOffset(-1)" class="px-1 sm:px-2 h-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 transition hidden sm:flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[11px] sm:text-sm focus:ring-0 font-bold cursor-pointer outline-none w-max text-center px-0 sm:px-1 truncate [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full">
-                    <button onclick="changeMonthOffset(1)" class="px-1 sm:px-2 h-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 transition hidden sm:flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                    <button onclick="changeMonthOffset(-1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                    <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="bg-transparent border-none text-[11px] sm:text-sm focus:ring-0 font-bold cursor-pointer outline-none w-max text-center px-0 sm:px-1 shrink truncate [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full text-white dark:text-slate-900">
+                    <button onclick="changeMonthOffset(1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
                 </div>
                 
                 <div id="mode-range" class="hidden items-center h-full min-w-0">
-                    <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden">
-                    <span class="text-slate-400 text-[10px] font-bold px-0.5 shrink-0">~</span>
-                    <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-slate-800 dark:text-slate-100 text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden">
+                    <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden text-white dark:text-slate-900">
+                    <span class="text-[10px] font-bold px-0.5 shrink-0">~</span>
+                    <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[70px] sm:w-[95px] font-bold [&::-webkit-calendar-picker-indicator]:hidden text-white dark:text-slate-900">
                 </div>
             </div>
         </div>
 
-        <!-- 2. ALERTA CENTRALIZADO UNIFICADO -->
-        <div id="global-toolbar-alerts" class="flex-1 flex justify-center min-w-0 px-1">
-            <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full"></div>
+        <!-- 2. ALERTA DINÂMICO -->
+        <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full">
+            <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
         </div>
 
         <!-- 3. BOTÃO SALVAR (Status + Ação) -->
-        <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2">
-            <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide hidden">
-                <!-- JS injeta o tempo de forma inteligente aqui -->
-            </span>
-            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 hover:bg-slate-800 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white dark:text-slate-950 border border-transparent dark:border-emerald-600 px-3 sm:px-4 h-10 sm:h-11 rounded-xl transition-all flex items-center justify-center gap-1.5 font-bold shadow-md">
-                <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+        <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2 h-full">
+            <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide hidden"></span>
+            
+            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-emerald-400 dark:hover:text-slate-900 px-3 sm:px-5 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-1.5 font-bold shadow-md">
+                <i class="fa-solid fa-cloud-arrow-up text-sm sm:text-base"></i>
                 <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-xs sm:text-sm">Salvar</span>
             </button>
         </div>
@@ -1288,7 +1288,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.4';
+        const FLOWME_VERSION = '2.5.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1773,39 +1773,34 @@
         function getResponsiveProfile() {
             const width = window.innerWidth;
             const portrait = window.matchMedia('(orientation: portrait)').matches;
-            if (width < 640 && portrait) return 'mobile-portrait';
+            // Se a tela for menor que 520px, é celular apertado. Engole os textos para não colidir.
+            if (width < 520) return 'mobile-portrait';
             if (width < 768 && !portrait) return 'mobile-landscape';
             if (width < 1024) return 'tablet';
             return 'desktop';
         }
 
-        // Nova Lógica de Degradação Progressiva do Botão Salvar
         function updateSaveDisplay(profile) {
             const saveText = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
             const saveTime = document.getElementById('last-save-time');
             const saveButton = document.getElementById('btn-manual-save');
             if (!saveText || !saveTime || !saveButton) return;
 
-            if (profile === 'desktop') {
+            if (profile === 'desktop' || profile === 'tablet' || profile === 'mobile-landscape') {
                 saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
-                saveButton.classList.remove('px-0', 'w-10', 'w-11'); saveButton.classList.add('px-4');
-            } else if (profile === 'tablet' || profile === 'mobile-landscape') {
-                saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
-                saveButton.classList.remove('px-0', 'w-10', 'w-11'); saveButton.classList.add('px-3');
+                saveButton.classList.remove('px-0', 'w-12'); saveButton.classList.add('px-3', 'sm:px-5');
             } else {
-                // Mobile Portrait: Fica só o ícone da nuvem, esconde o horário
+                // Mobile Portrait extremo: Vira botão redondo puro, salva espaço.
                 saveText.classList.add('hidden'); saveTime.classList.add('hidden');
-                saveButton.classList.remove('px-3', 'px-4'); saveButton.classList.add('px-0', 'w-10');
+                saveButton.classList.remove('px-3', 'sm:px-5'); saveButton.classList.add('px-0', 'w-12');
             }
         }
 
-        // Atualização Dinâmica do Horário Enxuto
         function updateSaveTimestamp() {
             const now = new Date(); 
-            const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit'}); // Removemos os segundos
+            const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit'});
             const profile = responsiveProfile || getResponsiveProfile();
             
-            // Se for desktop, mostra texto completo. Se não, só mostra "✓ 03:40"
             if(profile === 'desktop') {
                 document.getElementById('last-save-time').innerHTML = `<i class="fa-solid fa-check text-emerald-500 mr-1"></i> <span data-i18n="saved_time">${t('saved_time')}</span> ${timeStr}`;
             } else {
@@ -1818,10 +1813,9 @@
             responsiveProfile = profile;
             document.body.dataset.responsive = profile;
             updateSaveDisplay(profile);
-            updateSaveTimestamp(); // Atualiza a string de tempo
+            updateSaveTimestamp();
             renderToolbarAlerts();
             
-            // Reordenação do Painel de Configurações (Efeito Tetris)
             const cfgContainer = document.getElementById('cfg-container');
             if (cfgContainer) {
                 const [c1, c2, c3, c4, c5, c6] = ['cloud', 'lang', 'app', 'notif', 'sec', 'limits'].map(id => document.getElementById(`cfg-wrap-${id}`));
@@ -1835,47 +1829,43 @@
         window.addEventListener('resize', updateGlobalToolbarResponsive);
         window.addEventListener('orientationchange', updateGlobalToolbarResponsive);
 
-        // O Novo Sino Unificado
+        // O NOVO SINO DINÂMICO E AUTO-ENCOLHÍVEL
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
-            if (!alertsContainer) return;
+            const alertsWrapper = document.getElementById('global-toolbar-alerts');
+            if (!alertsContainer || !alertsWrapper) return;
 
             const groups = currentAlertGroups;
             const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
             
-            // Se não houver alertas, exibe "Tudo OK"
+            // SE NÃO HÁ ALERTAS, A PÍLULA ENCOLHE E ESCONDE O BOTÃO
             if (totalAlerts === 0) {
-                alertsContainer.innerHTML = `
-                    <button type="button" onclick="openAlertsModal()" class="flex items-center justify-center gap-1.5 px-3 h-9 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold text-[10px] sm:text-xs transition-colors hover:bg-slate-200 dark:hover:bg-slate-700">
-                        <i class="fa-solid fa-circle-check text-emerald-500"></i> <span class="hidden sm:inline" data-i18n="msg_all_control">${t('msg_all_control')}</span>
-                    </button>
-                `;
+                alertsWrapper.classList.add('hidden');
+                alertsContainer.innerHTML = '';
                 return;
             }
+
+            // SE TEM ALERTA, MOSTRA E ABRE ESPAÇO NA PÍLULA
+            alertsWrapper.classList.remove('hidden');
 
             const profile = responsiveProfile || getResponsiveProfile();
             const isMobile = profile === 'mobile-portrait';
             
-            // Lógica de Sacrifício do Texto do Sino
             const text = isMobile ? `${totalAlerts}` : `${totalAlerts} Alertas`;
-            
-            // Lê a gravidade para pintar o sino
             const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
             
-            const colorClass = hasCritical 
-                ? 'bg-rose-100 text-rose-700 border-rose-300 dark:bg-rose-900/40 dark:text-rose-400 dark:border-rose-800 hover:bg-rose-200' 
-                : 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-800 hover:bg-amber-200';
-
-            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-500';
+            // Cores: Padrão = Preto (Light) / Verde (Dark). Hover = Amarelo!
+            const colorClass = 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
+            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-500 dark:text-slate-900';
 
             alertsContainer.innerHTML = `
                 <button
                     id="btn-alerts-bell"
                     type="button"
                     onclick="handleBellClick()"
-                    class="flex items-center justify-center gap-1.5 px-3 sm:px-4 h-10 sm:h-11 rounded-xl border font-bold text-xs sm:text-sm transition-colors shadow-sm ${colorClass}">
+                    class="flex items-center justify-center gap-1.5 px-3 sm:px-5 h-full w-full rounded-full font-bold text-xs sm:text-sm transition-all duration-300 shadow-md ${colorClass}">
                     <i class="fa-solid ${iconClass}"></i>
-                    <span>${text}</span>
+                    <span class="whitespace-nowrap">${text}</span>
                 </button>
             `;
         }

@@ -183,41 +183,37 @@
     <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full">
 
         <!-- 1. FILTRO EXPANSÍVEL (Animado) -->
-        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full">
-            <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md border border-transparent dark:border-emerald-600 relative overflow-hidden">
+        <div id="global-toolbar-filter" class="flex items-center shrink min-w-0 h-full">
+            <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md border border-transparent dark:border-emerald-600 relative">
                 
-                <!-- Ícone Alternador (Mês/Período) -->
-                <button type="button" onclick="toggleFilterMode(event)" class="px-3 sm:px-4 h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0">
-                    <i id="filter-icon-display" class="fa-regular fa-calendar text-sm sm:text-base"></i>
+                <!-- Ícone Mestre (Alternador e Expansor) -->
+                <button type="button" onclick="handleFilterIconClick(event)" class="px-3 sm:px-4 h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 z-10 relative rounded-full">
+                    <i id="filter-icon-display" class="fa-regular fa-calendar text-sm sm:text-base transition-transform duration-300"></i>
                 </button>
 
-                <!-- Conteúdo que Expande/Encolhe (Escondido no celular por padrão) -->
-                <div id="filter-content" class="flex items-center h-full transition-all duration-500 max-w-0 opacity-0 sm:max-w-xs sm:opacity-100">
+                <!-- Conteúdo que Expande/Encolhe -->
+                <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden sm:max-w-xs sm:opacity-100">
                     
                     <!-- Módulo MÊS -->
                     <div id="mode-month" class="flex items-center h-full min-w-0 whitespace-nowrap">
-                        <button onclick="changeMonthOffset(-1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                        <button onclick="changeMonthOffset(-1)" class="px-2 sm:px-3 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
                         
                         <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-slate-800 dark:hover:bg-emerald-400 transition">
                             <span id="month-display" class="text-xs sm:text-sm font-bold uppercase tracking-wide pointer-events-none"></span>
-                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer dark:[color-scheme:light]">
                         </div>
                         
-                        <button onclick="changeMonthOffset(1)" class="px-1 sm:px-2 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        <button onclick="changeMonthOffset(1)" class="px-2 sm:px-3 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
                     </div>
                     
                     <!-- Módulo PERÍODO -->
-                    <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1">
-                        <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[90px] font-bold text-white dark:text-slate-900 [&::-webkit-calendar-picker-indicator]:hidden">
-                        <span class="text-[10px] font-bold px-0.5">~</span>
-                        <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[90px] font-bold text-white dark:text-slate-900 [&::-webkit-calendar-picker-indicator]:hidden">
+                    <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1 sm:px-2">
+                        <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[100px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0">~</span>
+                        <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-[10px] sm:text-xs h-full outline-none p-0 cursor-pointer text-center w-[75px] sm:w-[100px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                     </div>
                 </div>
 
-                <!-- Botão + para Mobile -->
-                <button id="btn-filter-expand" type="button" onclick="toggleMobileFilter(event)" class="px-3 sm:hidden h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 border-l border-slate-700 dark:border-emerald-600/50">
-                    <i id="filter-expand-icon" class="fa-solid fa-plus text-xs transition-transform duration-300"></i>
-                </button>
             </div>
         </div>
 
@@ -1302,7 +1298,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.7';
+        const FLOWME_VERSION = '2.5.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1356,10 +1352,12 @@
             addSplitRow();
 
             // 4. Acorda os Filtros e Renderiza a Tela Imediatamente
+            updateFilterUI(); 
+            changeGlobalMonth(state.currentMonth);
             switchTab('transacoes');
             setLanguage(userConfig.lang);
 
-            // 5. Google Sync (Deixado por último para não atrapalhar o fluxo visual)
+            // 5. Google Sync
             setTimeout(() => {
                 if (typeof google === 'undefined') {
                     console.warn("Modo Offline/Adblock: Google não carregou.");
@@ -1548,71 +1546,99 @@
             });
         }
         
-        // ================= FILTRO GLOBAL EXPANSÍVEL =================
+        /// ================= FILTRO GLOBAL EXPANSÍVEL =================
         let currentFilterMode = 'month';
         let isFilterExpanded = false;
 
-        function toggleMobileFilter(event) {
+        function handleFilterIconClick(event) {
             if(event) event.stopPropagation();
-            isFilterExpanded = !isFilterExpanded;
-            const content = document.getElementById('filter-content');
-            const icon = document.getElementById('filter-expand-icon');
+            const isMobile = window.innerWidth < 640;
             
-            if (isFilterExpanded) {
-                content.classList.remove('max-w-0', 'opacity-0');
-                content.classList.add('max-w-[250px]', 'opacity-100');
-                icon.classList.remove('fa-plus'); icon.classList.add('fa-xmark', 'rotate-90');
+            if (isMobile) {
+                if (!isFilterExpanded) {
+                    // Celular: Se o filtro estiver fechado, apenas expande.
+                    isFilterExpanded = true;
+                } else {
+                    // Celular: Se já estiver expandido, alterna entre Mês e Período.
+                    currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
+                }
             } else {
-                content.classList.add('max-w-0', 'opacity-0');
-                content.classList.remove('max-w-[250px]', 'opacity-100');
-                icon.classList.remove('fa-xmark', 'rotate-90'); icon.classList.add('fa-plus');
+                // Desktop: Já está sempre expandido. Apenas alterna entre Mês e Período.
+                currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
             }
+            updateFilterUI();
         }
 
-        // Fechar filtro ao clicar fora (no celular)
-        document.addEventListener('click', (e) => {
-            const wrapper = document.getElementById('filter-wrapper');
-            if (wrapper && !wrapper.contains(e.target) && isFilterExpanded && window.innerWidth < 640) {
-                toggleMobileFilter();
-            }
-        });
-
-        function toggleFilterMode(event) {
-            if(event) event.stopPropagation();
-            currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
+        function updateFilterUI() {
+            const content = document.getElementById('filter-content');
             const icon = document.getElementById('filter-icon-display');
             const modeMonth = document.getElementById('mode-month');
             const modeRange = document.getElementById('mode-range');
+            
+            // FÍSICA DE EXPANSÃO (Mobile)
+            if (window.innerWidth < 640) {
+                if (isFilterExpanded) {
+                    content.classList.remove('max-w-0', 'opacity-0');
+                    content.classList.add('max-w-[200px]', 'opacity-100'); 
+                    icon.classList.add('scale-110', 'text-amber-400'); // Destaque ao abrir
+                } else {
+                    content.classList.add('max-w-0', 'opacity-0');
+                    content.classList.remove('max-w-[200px]', 'opacity-100');
+                    icon.classList.remove('scale-110', 'text-amber-400');
+                }
+            } else {
+                // Limpeza gráfica pro Desktop
+                icon.classList.remove('scale-110', 'text-amber-400');
+            }
 
+            // ALTERNÂNCIA DE MODO
             if (currentFilterMode === 'month') {
-                icon.className = 'fa-regular fa-calendar text-sm sm:text-base';
+                icon.className = 'fa-regular fa-calendar text-sm sm:text-base transition-transform duration-300';
+                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
+                
                 modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
                 modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
             } else {
-                icon.className = 'fa-solid fa-arrows-left-right text-sm sm:text-base';
+                // Ícone duplo para indicar Período
+                icon.className = 'fa-solid fa-calendar-days text-sm sm:text-base transition-transform duration-300';
+                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
+                
                 modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
                 modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
+                
                 if(!document.getElementById('date-start').value) {
                     const d = new Date();
                     document.getElementById('date-start').value = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
                     document.getElementById('date-end').value = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
                 }
             }
-            
-            if (window.innerWidth < 640 && !isFilterExpanded) toggleMobileFilter();
             render();
         }
 
+        // Fechar ao clicar fora (Mobile)
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('filter-wrapper');
+            if (wrapper && !wrapper.contains(e.target) && isFilterExpanded && window.innerWidth < 640) {
+                isFilterExpanded = false;
+                updateFilterUI();
+            }
+        });
+
         function changeGlobalMonth(value) {
-            if(!value) return; state.currentMonth = value;
+            if(!value) return; 
+            state.currentMonth = value;
             
-            // Cria o texto (Ex: AGO/26 ou Aug/26 dependendo do idioma)
             const displaySpan = document.getElementById('month-display');
             if(displaySpan) {
                 const [year, month] = value.split('-');
-                const date = new Date(year, parseInt(month) - 1, 1);
-                let monthName = date.toLocaleString(userConfig.lang, { month: 'short' }).replace('.', '');
-                displaySpan.textContent = `${monthName}/${year.substring(2)}`;
+                const date = new Date(parseInt(year), parseInt(month) - 1, 10);
+                
+                // Leitura do Tamanho da Tela para ditar a extensão do nome
+                const isMobile = window.innerWidth < 1024;
+                const monthStyle = isMobile ? 'short' : 'long';
+                
+                let monthName = date.toLocaleString(userConfig.lang, { month: monthStyle }).replace('.', '');
+                displaySpan.textContent = isMobile ? `${monthName}/${year.substring(2)}` : `${monthName} de ${year}`;
             }
             
             if (currentFilterMode === 'month') { 
@@ -1891,10 +1917,10 @@
             }
         }
 
-        window.addEventListener('resize', updateGlobalToolbarResponsive);
-        window.addEventListener('orientationchange', updateGlobalToolbarResponsive);
+        window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
+        window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
 
-        // O NOVO SINO DINÂMICO E AUTO-ENCOLHÍVEL
+        // SINO DINÂMICO E AUTO-ENCOLHÍVEL
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
             const alertsWrapper = document.getElementById('global-toolbar-alerts');

@@ -41,6 +41,14 @@
         .dark tr:hover { background-color: #334155; }
         .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]), .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
 
+        /* TEMA PRETO (OLED) */
+        html.theme-oled body { background-color: #000000; color: #f8fafc; }
+        html.theme-oled .bg-white, html.theme-oled .dark\:bg-slate-800 { background-color: #0a0a0a !important; border-color: #262626 !important; }
+        html.theme-oled .dark\:bg-slate-900, html.theme-oled .dark\:bg-slate-950 { background-color: #000000 !important; }
+        html.theme-oled input, html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #262626 !important; }
+        html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #171717 !important; }
+        html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #171717 !important; }
+        
     /* Efeito global de clique físico e hover vibrante para botões */
         button { 
             transition: transform 0.1s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease; 
@@ -179,7 +187,7 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/30 dark:bg-slate-900/40 backdrop-blur-lg border border-white/50 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
     <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full px-1 transition-all duration-500">
 
         <!-- 1. FILTRO EXPANSÍVEL (Animado em cascata) -->
@@ -782,6 +790,7 @@
                                     <div class="flex flex-wrap gap-2" id="theme-buttons">
                                         <button onclick="setTheme('light')" id="btn-theme-light" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-sun text-amber-500"></i> <span data-i18n="cfg_theme_light">Claro</span></button>
                                         <button onclick="setTheme('dark')" id="btn-theme-dark" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-moon text-indigo-400"></i> <span data-i18n="cfg_theme_dark">Escuro</span></button>
+                                        <button onclick="setTheme('oled')" id="btn-theme-oled" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-mobile-screen text-zinc-400"></i> <span data-i18n="cfg_theme_oled">Preto (OLED)</span></button>
                                         <button onclick="setTheme('system')" id="btn-theme-system" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span></button>
                                     </div>
                                 </div>
@@ -1298,7 +1307,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.6.5';
+        const FLOWME_VERSION = '2.6.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1458,10 +1467,19 @@
         function updateThemeUI(theme) {
             const actCls = "flex items-center gap-1.5 px-3 py-2 border-2 border-amber-500 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-lg transition text-xs font-bold shadow-sm";
             const inactCls = "flex items-center gap-1.5 px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition text-xs font-medium";
-            ['light', 'dark', 'system'].forEach(t => { document.getElementById('btn-theme-' + t).className = (t === theme) ? actCls : inactCls; });
+            ['light', 'dark', 'oled', 'system'].forEach(t => { 
+                const el = document.getElementById('btn-theme-' + t);
+                if(el) el.className = (t === theme) ? actCls : inactCls; 
+            });
         }
         function setTheme(theme) { userConfig.theme = theme; localStorage.setItem('flowme_theme', theme); updateThemeUI(theme); applyTheme(); }
-        function applyTheme() { const html = document.documentElement; if (userConfig.theme === 'dark' || (userConfig.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) { html.classList.add('dark'); } else { html.classList.remove('dark'); } }
+        function applyTheme() { 
+            const html = document.documentElement; 
+            html.classList.remove('dark', 'theme-oled');
+            if (userConfig.theme === 'dark') { html.classList.add('dark'); } 
+            else if (userConfig.theme === 'oled') { html.classList.add('dark', 'theme-oled'); }
+            else if (userConfig.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) { html.classList.add('dark'); } 
+        }
         
         function toggleNotifications(val) { userConfig.notificationsEnabled = val; localStorage.setItem('flowme_notif', val); render(); }
         function setReminderDays(days) { userConfig.reminderDays = parseInt(days) || 0; localStorage.setItem('flowme_reminder_days', userConfig.reminderDays); render(); }
@@ -1904,7 +1922,6 @@
         window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
 
-        // SINO DINÂMICO
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
             const alertsWrapper = document.getElementById('global-toolbar-alerts');
@@ -1913,34 +1930,49 @@
             const groups = currentAlertGroups;
             const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
             
-            if (totalAlerts === 0) {
-                alertsWrapper.classList.add('hidden');
-                alertsContainer.innerHTML = '';
-                return;
-            }
-
             alertsWrapper.classList.remove('hidden');
 
             const profile = responsiveProfile || getResponsiveProfile();
             const isMobile = profile === 'mobile-portrait';
-            
-            const text = isMobile ? `${totalAlerts}` : `${totalAlerts} Alertas`;
             const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
-            
-            const colorClass = 'group bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
-            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500 group-hover:text-slate-900' : 'fa-bell text-amber-400 dark:text-slate-900 group-hover:text-slate-900';
 
-            // ATENÇÃO: Adicionado id para o span para facilitar a troca de texto
-            alertsContainer.innerHTML = `
-                <button
-                    id="btn-alerts-bell"
-                    type="button"
-                    onclick="handleBellClick()"
-                    class="shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
-                    <i class="fa-solid ${iconClass} text-base sm:text-lg transition-colors"></i>
-                    <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${text}</span>
-                </button>
-            `;
+            let contentHtml = '';
+
+            if (totalAlerts === 0) {
+                // SINO VAZIO: Discreto, Pequeno no Mobile, com texto no Desktop.
+                const textStr = isMobile ? '' : (t('modal_alerts_title') || 'Central de Alertas');
+                const defaultIcon = 'fa-bell text-slate-500 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-900';
+                const defaultColor = 'group bg-white/40 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900 border border-slate-300/30 dark:border-slate-600/30';
+                
+                contentHtml = `
+                    <button
+                        id="btn-alerts-bell"
+                        type="button"
+                        onclick="handleBellClick()"
+                        class="shrink-0 flex items-center justify-center ${textStr ? 'gap-2 px-6 sm:px-8' : 'px-4 sm:px-6 w-14 sm:w-16'} h-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-sm ${defaultColor}">
+                        <i class="fa-regular ${defaultIcon} text-base sm:text-lg transition-colors"></i>
+                        <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
+                    </button>
+                `;
+            } else {
+                // SINO COM ALERTA: Amarelo vibrante, tremendo
+                const textStr = isMobile ? `${totalAlerts}` : `${totalAlerts} Alertas`;
+                const colorClass = 'group bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
+                const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500 group-hover:text-slate-900' : 'fa-bell text-amber-400 dark:text-slate-900 group-hover:text-slate-900';
+
+                contentHtml = `
+                    <button
+                        id="btn-alerts-bell"
+                        type="button"
+                        onclick="handleBellClick()"
+                        class="shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
+                        <i class="fa-solid ${iconClass} text-base sm:text-lg transition-colors"></i>
+                        <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
+                    </button>
+                `;
+            }
+
+            alertsContainer.innerHTML = contentHtml;
         }
 
         let isBellOpening = false;
@@ -1956,10 +1988,13 @@
                 const textSpan = document.getElementById('bell-text-span');
                 originalBellText = textSpan.innerHTML;
                 
-                // Cascata: Afunda as pontas antes de expandir o Sino
                 setToolbarFocus('global-toolbar-alerts', () => {
+                    // Preenche com o texto e reajusta as proporções caso fosse o sino vazio do mobile
                     textSpan.innerHTML = t('modal_alerts_title') || 'Central de Alertas';
-                    btn.classList.add('animate-bell-pop', 'pointer-events-none'); // Trava duplo clique
+                    btn.classList.remove('px-4', 'w-14');
+                    btn.classList.add('px-6', 'w-full', 'gap-2');
+
+                    btn.classList.add('animate-bell-pop', 'pointer-events-none');
                     
                     setTimeout(() => { 
                         btn.classList.remove('animate-bell-pop', 'pointer-events-none'); 
@@ -1974,13 +2009,19 @@
             }
         }
 
-        // Função chamada silenciosamente pelo closeModal()
         function revertBellState() {
             const btn = document.getElementById('btn-alerts-bell');
             if(btn && isBellOpening) {
                 const textSpan = document.getElementById('bell-text-span');
                 if(textSpan) textSpan.innerHTML = originalBellText;
-                setToolbarFocus(null); // Volta o foco e traz os botões de volta
+                
+                // Se era o sino vazio encolhido no mobile, devolve o formato de bolinha
+                if (originalBellText === '') {
+                    btn.classList.add('px-4', 'w-14');
+                    btn.classList.remove('px-6', 'w-full', 'gap-2');
+                }
+
+                setToolbarFocus(null); 
                 setTimeout(() => { isBellOpening = false; }, 500);
             }
         }

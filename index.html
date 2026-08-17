@@ -48,9 +48,12 @@
         html.theme-oled body { background-color: #000000; color: #f8fafc; }
         html.theme-oled .bg-white, html.theme-oled .dark\:bg-slate-800 { background-color: #0a0a0a !important; border-color: #262626 !important; }
         html.theme-oled .dark\:bg-slate-900, html.theme-oled .dark\:bg-slate-950 { background-color: #000000 !important; }
-        html.theme-oled input:not(.!bg-transparent), html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #262626 !important; }
-        html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #171717 !important; }
-        html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #171717 !important; }
+        html.theme-oled input:not(.!bg-transparent), html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #3f3f46 !important; }
+        html.theme-oled .border-slate-200, html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #333333 !important; }
+        html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #333333 !important; }
+        
+        /* Ajuste de Rolagem Global: impede que o topo das gavetas fique preso atrás do Header */
+        html { scroll-padding-top: 140px; }
 
         /* Variáveis para a Máscara Superior de Rolagem */
         body { --bg-mask: #f8fafc; }
@@ -164,9 +167,8 @@
         </div>
     </div>
     
-<!-- MÁSCARA DE DESFOQUE DO TOPO (Faz o conteúdo sumir suavemente ao rolar para cima) -->
-    <div class="fixed top-0 left-0 w-full h-28 z-30 pointer-events-none transition-colors duration-300" style="background: linear-gradient(to bottom, var(--bg-mask) 20%, transparent);"></div>
-
+    <!-- MÁSCARA DE DESFOQUE DO TOPO (Faz o conteúdo sumir suavemente ao rolar para cima) -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-32 sm:pt-40 pb-28 lg:pb-32 min-w-0">
 <!-- ================= BLOCO 2: HEADER E NAVEGAÇÃO ================= -->
     <header class="fixed top-0 left-0 w-full z-40 pointer-events-none px-4 py-4 sm:py-6 transition-all duration-500">
         <div class="max-w-7xl mx-auto flex justify-between items-start gap-4">
@@ -1088,12 +1090,11 @@
                 err_cloud: "Erro ao comunicar com a nuvem.", msg_cloud_empty: "Nenhum backup encontrado na nuvem.",
                 cfg_tab_style: "Estilo do Menu Principal:", opt_tab_both: "Ícone e Texto", opt_tab_icons: "Apenas Ícones",
                 chart_cashflow: "Fluxo de Caixa (Filtro Atual)", chart_categories: "Despesas por Categoria", chart_evolution: "Evolução (Últimos 6 Meses)", chart_accounts: "Gastos por Conta / Cartão", lbl_chart_inc: "Receitas", lbl_chart_exp: "Despesas",
-                btn_import_csv: "Importar",
-                lbl_alert: "Alerta", lbl_alerts: "Alertas",
-                smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação", dash_limits: "Orçamentos do Mês", btn_config: "Configurar", cfg_limits_title: "Orçamentos e Limites", btn_new: "Novo", modal_limit_title: "Criar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:", btn_view: "Ver", modal_alerts_title: "Central de Alertas", btn_view_trx: "Ver Conta", msg_late: "X dias atrasado", msg_left: "faltam X dias", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento",
+                btn_import_csv: "Importar", smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação", dash_limits: "Orçamentos do Mês", btn_config: "Configurar", cfg_limits_title: "Orçamentos e Limites", btn_new: "Novo", modal_limit_title: "Criar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:", btn_view: "Ver", modal_alerts_title: "Central de Alertas", btn_view_trx: "Ver Conta", msg_late: "X dias atrasado", msg_left: "faltam X dias", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento",
                 tt_manage_desc: "Gerenciar Nomes", tt_manage_cat: "Gerenciar Categorias", tt_manage_acc: "Gerenciar Contas/Cartões", tt_manage_person: "Gerenciar Pessoas",
                 err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar", btn_use: "Usar",
-                cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico"
+                cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico",
+                lbl_alert: "Alerta", lbl_alerts: "Alertas"            
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1201,7 +1202,6 @@
             userConfig.lang = lang; localStorage.setItem('flowme_lang', lang);
             document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (translations[lang][key]) el.innerHTML = translations[lang][key]; });
             
-            // TRADUÇÃO DINÂMICA DE TOOLTIPS
             document.querySelectorAll('[data-i18n-title]').forEach(el => { 
                 const key = el.getAttribute('data-i18n-title'); 
                 if (translations[lang][key]) el.title = translations[lang][key]; 
@@ -1236,7 +1236,12 @@
             const versionSpan = document.querySelector('[data-i18n="cfg_version"]');
             if(versionSpan) versionSpan.innerHTML = t('cfg_version') + ' ' + FLOWME_VERSION;
             
-            updateLangUI(lang); render(); renderLimitsSettings(); updateSaveTimestamp();
+            updateLangUI(lang); 
+            
+            changeGlobalMonth(state.currentMonth);
+            renderToolbarAlerts();
+            
+            render(); renderLimitsSettings(); updateSaveTimestamp();
         }
 
         // ================= SANFONA E ESTILO DOS PAINÉIS =================
@@ -1942,6 +1947,7 @@
         window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
 
+        // SINO DINÂMICO (SEMPRE VISÍVEL E SQUIRCLE)
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
             const alertsWrapper = document.getElementById('global-toolbar-alerts');
@@ -1957,11 +1963,14 @@
             const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
 
             let contentHtml = '';
+            
+            // LÓGICA DE TRADUÇÃO SEGURA E IMEDIATA
+            const alertWord = totalAlerts === 1 ? (t('lbl_alert') || 'Alerta') : (t('lbl_alerts') || 'Alertas');
+            const modalTitle = t('modal_alerts_title') || 'Central de Alertas';
 
             if (totalAlerts === 0) {
-                // SINO VAZIO: Discreto, Pequeno no Mobile, com texto no Desktop.
-                const alertWord = totalAlerts === 1 ? (t('lbl_alert') || 'Alerta') : (t('lbl_alerts') || 'Alertas');
-                const textStr = isMobile ? `${totalAlerts}` : `${totalAlerts} ${alertWord}`;
+                // SINO VAZIO
+                const textStr = isMobile ? '' : modalTitle;
                 const defaultIcon = 'fa-bell text-slate-500 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-900';
                 const defaultColor = 'group bg-white/40 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900 border border-slate-300/30 dark:border-slate-600/30';
                 
@@ -1970,14 +1979,14 @@
                         id="btn-alerts-bell"
                         type="button"
                         onclick="handleBellClick()"
-                        class="shrink-0 flex items-center justify-center ${textStr ? 'gap-2 px-6 sm:px-8' : 'px-4 sm:px-6 w-14 sm:w-16'} h-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-sm ${defaultColor}">
+                        class="shrink-0 flex items-center justify-center ${textStr ? 'gap-2 px-6 sm:px-8' : 'px-4 sm:px-6 w-14 sm:w-16'} h-full rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 shadow-sm ${defaultColor}">
                         <i class="fa-regular ${defaultIcon} text-base sm:text-lg transition-colors"></i>
                         <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
                     </button>
                 `;
             } else {
-                // SINO COM ALERTA: Amarelo vibrante, tremendo
-                const textStr = isMobile ? `${totalAlerts}` : `${totalAlerts} Alertas`;
+                // SINO COM ALERTA
+                const textStr = isMobile ? `${totalAlerts}` : `${totalAlerts} ${alertWord}`;
                 const colorClass = 'group bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
                 const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500 group-hover:text-slate-900' : 'fa-bell text-amber-400 dark:text-slate-900 group-hover:text-slate-900';
 
@@ -1986,7 +1995,7 @@
                         id="btn-alerts-bell"
                         type="button"
                         onclick="handleBellClick()"
-                        class="shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
+                        class="shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
                         <i class="fa-solid ${iconClass} text-base sm:text-lg transition-colors"></i>
                         <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
                     </button>

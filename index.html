@@ -41,15 +41,18 @@
         .dark tr:hover { background-color: #334155; }
         .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]), .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
 
+        /* Ajuste nativo para opções de Select no Modo Escuro */
+        html.dark select option { background-color: #1e293b; color: #f8fafc; }
+        
         /* TEMA PRETO (OLED) */
         html.theme-oled body { background-color: #000000; color: #f8fafc; }
         html.theme-oled .bg-white, html.theme-oled .dark\:bg-slate-800 { background-color: #0a0a0a !important; border-color: #262626 !important; }
         html.theme-oled .dark\:bg-slate-900, html.theme-oled .dark\:bg-slate-950 { background-color: #000000 !important; }
-        html.theme-oled input, html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #262626 !important; }
+        html.theme-oled input:not(.!bg-transparent), html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #262626 !important; }
         html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #171717 !important; }
         html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #171717 !important; }
-        
-    /* Efeito global de clique físico e hover vibrante para botões */
+
+        /* Efeito global de clique físico e hover vibrante para botões */
         button { 
             transition: transform 0.1s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease; 
             -webkit-tap-highlight-color: transparent; 
@@ -1046,7 +1049,7 @@
         const translations = {
             pt: {
                 subtitle: "Seu controle pessoal de fluxo financeiro", tab_transactions: "Transações", tab_invoices: "Faturas", tab_dashboard: "Painel", tab_settings: "Configurações",
-                period_label: "Período:", saved_time: "Salvo:", btn_save_data: "Salvar Dados",
+                period_label: "Período:", saved_time: "Salvo:", btn_save_data: "Salvar Dados", saved_at: "Salvo às",
                 card_income: "Receitas (Previsão)", card_expense: "Despesas (Previsão)", card_balance: "Balanço do Mês", card_splits: "Rateios a Receber",
                 form_title_new: "Nova Movimentação", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Receita", type_expense: "Despesa",
                 lbl_exp_deb: "Débito/Pix", lbl_exp_cred: "Crédito", lbl_inv_month: "Mês da Fatura",
@@ -1065,7 +1068,7 @@
                 cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Banco de Dados", btn_delete: "Apagar Tudo",
                 cfg_acc_title: "Conta e Nuvem", cfg_acc_user: "Usuário Desconectado", cfg_acc_sync: "Última sincronização:", cfg_acc_btn: "Integração Google em breve",
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
-                cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema",
+                cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Preto",
                 cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
                 cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
@@ -1085,14 +1088,13 @@
                 btn_import_csv: "Importar",
                 smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação", dash_limits: "Orçamentos do Mês", btn_config: "Configurar", cfg_limits_title: "Orçamentos e Limites", btn_new: "Novo", modal_limit_title: "Criar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:", btn_view: "Ver", modal_alerts_title: "Central de Alertas", btn_view_trx: "Ver Conta", msg_late: "X dias atrasado", msg_left: "faltam X dias", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento",
                 tt_manage_desc: "Gerenciar Nomes", tt_manage_cat: "Gerenciar Categorias", tt_manage_acc: "Gerenciar Contas/Cartões", tt_manage_person: "Gerenciar Pessoas",
-                err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar",
-                btn_use: "Usar",
-                cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)",
-                acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico"
+                err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar", btn_use: "Usar",
+                cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
-                period_label: "Period:", saved_time: "Saved:", btn_save_data: "Save Data", card_income: "Income (Forecast)", card_expense: "Expenses (Forecast)", card_balance: "Monthly Balance", card_splits: "Splits to Receive",
+                period_label: "Period:", saved_time: "Saved:", btn_save_data: "Save Data", saved_at: "Saved at",
+                card_income: "Income (Forecast)", card_expense: "Expenses (Forecast)", card_balance: "Monthly Balance", card_splits: "Splits to Receive",
                 form_title_new: "New Transaction", form_title_edit: "Editing", btn_cancel: "Cancel", type_income: "Income", type_expense: "Expense", lbl_exp_deb: "Debit/Cash", lbl_exp_cred: "Credit", lbl_inv_month: "Invoice Month",
                 label_desc: "Description / Name", placeholder_desc: "Ex: Salary, Bill...", label_value: "Value", label_date_univ: "Date", lbl_inst_inc: "Repeat income?", lbl_inst_exp: "Installments?",
                 label_is_installment: "Repeat / Installments?", label_installments: "Num", label_logic: "Logic", logic_rep: "Replicate", logic_div: "Divide Total",
@@ -1104,7 +1106,8 @@
                 empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)", dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
                 cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Database", btn_delete: "Wipe All",
                 cfg_acc_title: "Account & Cloud", cfg_acc_user: "Logged Out", cfg_acc_sync: "Last sync:", cfg_acc_btn: "Google Integration soon",
-                cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System",
+                cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:",
+                cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System", cfg_theme_oled: "Black",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)", opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
@@ -1117,14 +1120,13 @@
                 chart_cashflow: "Cash Flow (Current Filter)", chart_categories: "Expenses by Category", chart_evolution: "Evolution (Last 6 Months)", chart_accounts: "Expenses by Account / Card", lbl_chart_inc: "Income", lbl_chart_exp: "Expenses", btn_import_csv: "Import",
                 smart_import_title: "Smart Importer", smart_import_desc: "Verify column mapping and set the card name.", lbl_csv_card: "Card / Bank Name", ph_csv_card: "Ex: Chase, Amex...", lbl_csv_date: "DATE Column", lbl_csv_desc: "DESCRIPTION Column", lbl_csv_val: "VALUE Column", lbl_csv_invert: "Invert negative values?", desc_csv_invert: "Banks export expenses with a minus sign. Keep checked to convert to expenses.", btn_confirm_import: "Confirm Import", dash_limits: "Monthly Budgets", btn_config: "Configure", cfg_limits_title: "Budgets & Limits", btn_new: "New", modal_limit_title: "Create Limit", lbl_lim_type: "Limit Type", opt_lim_cat: "By Category", opt_lim_method: "By Account/Card", opt_lim_person: "By Person (Split)", lbl_lim_target: "Exact Name", ph_lim_target: "Type exact name...", lbl_lim_val: "Max Value", btn_save_rule: "Save Rule", lim_empty: "No limits registered.", lim_free: "Free:", lim_busted: "Busted:", lim_busted_alert: "Busted by", lim_remaining: "remaining", lim_used: "used", msg_lim_risk: "budgets at risk", msg_all_control: "Everything under control!", btn_view_dash: "View Panel", err_csv_card: "Please enter the Card/Bank name!", err_lim_fields: "Fill in name and value!", msg_imported: "bills imported!", btn_undo: "Undo", str_col: "Column", str_unnamed: "Unnamed", warn_busted: "⚠️ The budget for <b>TARGET</b> will be busted by <span class='font-bold'>VALUE</span>!", warn_near: "👀 Attention: This purchase will use PCT% of the budget for <b>TARGET</b>.", str_budget: "Budget:", btn_view: "View", modal_alerts_title: "Alerts Center", btn_view_trx: "View Trx", msg_late: "X days late", msg_left: "X days left", lbl_due_date: "Due Date", modal_due_title: "Invoice Due Date", lbl_due_day: "Due Day", lbl_apply_all: "Apply as default for all future invoices for this card.", btn_save_due: "Save Due Date",
                 tt_manage_desc: "Manage Names", tt_manage_cat: "Manage Categories", tt_manage_acc: "Manage Accounts", tt_manage_person: "Manage People",
-                err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save",
-                btn_use: "Use",
-                cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)",
-                acc_summary: "Financial Summary", acc_filters: "Filters & History"
+                err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save", btn_use: "Use",
+                cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)", acc_summary: "Financial Summary", acc_filters: "Filters & History"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
-                period_label: "Período:", saved_time: "Guardado:", btn_save_data: "Guardar Datos", card_income: "Ingresos (Previstos)", card_expense: "Gastos (Previstos)", card_balance: "Balance del Mes", card_splits: "Divisiones a Recibir",
+                period_label: "Período:", saved_time: "Guardado:", btn_save_data: "Guardar Datos", saved_at: "Guardado a las",
+                card_income: "Ingresos (Previstos)", card_expense: "Gastos (Previstos)", card_balance: "Balance del Mes", card_splits: "Divisiones a Recibir",
                 form_title_new: "Nueva Transacción", form_title_edit: "Editando", btn_cancel: "Cancelar", type_income: "Ingreso", type_expense: "Gasto", lbl_exp_deb: "Débito/Efectivo", lbl_exp_cred: "Crédito", lbl_inv_month: "Mes de Factura",
                 label_desc: "Descripción / Nombre", placeholder_desc: "Ej: Salario, Luz...", label_value: "Valor", label_date_univ: "Fecha", lbl_inst_inc: "¿Repetir ingreso?", lbl_inst_exp: "¿Compra en cuotas?",
                 label_is_installment: "¿Repetir / Cuotas?", label_installments: "Nº Veces", label_logic: "Lógica", logic_rep: "Replicar", logic_div: "Dividir Total",
@@ -1136,7 +1138,8 @@
                 empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)", dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
                 cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Base de Datos", btn_delete: "Borrar Todo",
                 cfg_acc_title: "Cuenta y Nube", cfg_acc_user: "Usuario Desconectado", cfg_acc_sync: "Última sincro:", cfg_acc_btn: "Integración Google pronto",
-                cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema",
+                cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:",
+                cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Negro",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)", opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
@@ -1149,14 +1152,13 @@
                 chart_cashflow: "Flujo de Caja (Filtro Actual)", chart_categories: "Gastos por Categoría", chart_evolution: "Evolución (Últimos 6 Meses)", chart_accounts: "Gastos por Cuenta / Tarjeta", lbl_chart_inc: "Ingresos", lbl_chart_exp: "Gastos", btn_import_csv: "Importar",
                 smart_import_title: "Importador Inteligente", smart_import_desc: "Verifica el mapeo de columnas y define el nombre.", lbl_csv_card: "Nombre de Tarjeta / Banco", ph_csv_card: "Ej: Santander, BBVA...", lbl_csv_date: "Columna FECHA", lbl_csv_desc: "Columna DESCRIPCIÓN", lbl_csv_val: "Columna VALOR", lbl_csv_invert: "¿Invertir valores negativos?", desc_csv_invert: "Los bancos exportan gastos con signo menos. Deja marcado para convertir.", btn_confirm_import: "Confirmar Importación", dash_limits: "Presupuestos", btn_config: "Configurar", cfg_limits_title: "Presupuestos y Límites", btn_new: "Nuevo", modal_limit_title: "Crear Límite", lbl_lim_type: "Tipo de Límite", opt_lim_cat: "Por Categoría", opt_lim_method: "Por Cuenta/Tarjeta", opt_lim_person: "Por Persona (División)", lbl_lim_target: "Nombre exacto", ph_lim_target: "Escribe nombre exacto...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Guardar Regla", lim_empty: "Sin límites.", lim_free: "Libre:", lim_busted: "Pasado:", lim_busted_alert: "Pasado en", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "presupuestos en riesgo", msg_all_control: "¡Todo bajo control!", btn_view_dash: "Ver Panel", err_csv_card: "¡Ingresa el nombre de la Tarjeta/Banco!", err_lim_fields: "¡Rellena nombre y valor!", msg_imported: "cuentas importadas!", btn_undo: "Deshacer", str_col: "Columna", str_unnamed: "Sin nombre", warn_busted: "⚠️ ¡El presupuesto de <b>TARGET</b> se excederá en <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atención: Esta compra usará PCT% del presupuesto de <b>TARGET</b>.", str_budget: "Presupuesto:", btn_view: "Ver", modal_alerts_title: "Centro de Alertas", btn_view_trx: "Ver Transacción", msg_late: "X días de retraso", msg_left: "faltan X días", lbl_due_date: "Vencimiento", modal_due_title: "Vencimiento de Factura", lbl_due_day: "Día de Vencimiento", lbl_apply_all: "Aplicar como predeterminado para facturas futuras.", btn_save_due: "Guardar Vencimiento",
                 tt_manage_desc: "Administrar Nombres", tt_manage_cat: "Administrar Categorías", tt_manage_acc: "Administrar Cuentas", tt_manage_person: "Administrar Personas",
-                err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar",
-                btn_use: "Usar",
-                cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)",
-                acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial"
+                err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar", btn_use: "Usar",
+                cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)", acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
-                period_label: "Période :", saved_time: "Enregistré :", btn_save_data: "Enregistrer les données", card_income: "Revenus (Prévision)", card_expense: "Dépenses (Prévision)", card_balance: "Bilan mensuel", card_splits: "Partages à recevoir",
+                period_label: "Période :", saved_time: "Enregistré :", btn_save_data: "Enregistrer les données", saved_at: "Enregistré à",
+                card_income: "Revenus (Prévision)", card_expense: "Dépenses (Prévision)", card_balance: "Bilan mensuel", card_splits: "Partages à recevoir",
                 form_title_new: "Nouvelle transaction", form_title_edit: "Modification", btn_cancel: "Annuler", type_income: "Revenu", type_expense: "Dépense", lbl_exp_deb: "Débit/Espèces", lbl_exp_cred: "Crédit", lbl_inv_month: "Mois de la facture",
                 label_desc: "Description / Nom", placeholder_desc: "Ex : Salaire, Électricité...", label_value: "Valeur", label_date_univ: "Date", lbl_inst_inc: "Répéter le revenu ?", lbl_inst_exp: "Achat en plusieurs fois ?",
                 label_is_installment: "Répéter / Échelonner ?", label_installments: "Nº Fois", label_logic: "Logique", logic_rep: "Répliquer", logic_div: "Diviser le total",
@@ -1168,7 +1170,8 @@
                 empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)", dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
                 cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer la base de données", btn_delete: "Tout effacer",
                 cfg_acc_title: "Compte et Cloud", cfg_acc_user: "Utilisateur déconnecté", cfg_acc_sync: "Dernière synchro :", cfg_acc_btn: "Intégration Google bientôt",
-                cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système",
+                cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :",
+                cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système", cfg_theme_oled: "Noir",
                 cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version",
                 curr_brl: "Réal brésilien (R$)", curr_usd: "Dollar américain ($)", curr_eur: "Euro (€)", opt_month: "Mois :", opt_range: "Période :", str_to: "à",
                 str_received: "Reçu :", str_paid: "Payé :", str_real: "Réel :", str_pending: "En attente :", str_split_pen: "En attente", str_split_paid: "Payé",
@@ -1181,10 +1184,8 @@
                 chart_cashflow: "Flux de trésorerie (Filtre actuel)", chart_categories: "Dépenses par catégorie", chart_evolution: "Évolution (6 derniers mois)", chart_accounts: "Dépenses par compte / carte", lbl_chart_inc: "Revenus", lbl_chart_exp: "Dépenses", btn_import_csv: "Importer",
                 smart_import_title: "Importateur Intelligent", smart_import_desc: "Vérifiez le mappage des colonnes et définissez le nom.", lbl_csv_card: "Nom de Carte / Banque", ph_csv_card: "Ex : Crédit Agricole...", lbl_csv_date: "Colonne DATE", lbl_csv_desc: "Colonne DESCRIPTION", lbl_csv_val: "Colonne VALEUR", lbl_csv_invert: "Inverser les valeurs négatives ?", desc_csv_invert: "Laissez coché pour convertir en dépenses.", btn_confirm_import: "Confirmer l'importation", dash_limits: "Budgets Mensuels", btn_config: "Configurer", cfg_limits_title: "Budgets et Limites", btn_new: "Nouveau", modal_limit_title: "Créer une limite", lbl_lim_type: "Type de Limite", opt_lim_cat: "Par Catégorie", opt_lim_method: "Par Compte/Carte", opt_lim_person: "Par Personne (Partage)", lbl_lim_target: "Nom exact", ph_lim_target: "Tapez le nom exact...", lbl_lim_val: "Valeur Max", btn_save_rule: "Enregistrer", lim_empty: "Aucune limite enregistrée.", lim_free: "Libre :", lim_busted: "Dépassé :", lim_busted_alert: "Dépassé de", lim_remaining: "restants", lim_used: "utilisé", msg_lim_risk: "budgets à risque", msg_all_control: "Tout est sous contrôle !", btn_view_dash: "Voir le Panel", err_csv_card: "Veuillez entrer le nom de la Carte/Banque !", err_lim_fields: "Remplissez le nom et la valeur !", msg_imported: "comptes importés !", btn_undo: "Annuler", str_col: "Colonne", str_unnamed: "Sans nom", warn_busted: "⚠️ Le budget de <b>TARGET</b> sera dépassé de <span class='font-bold'>VALUE</span> !", warn_near: "👀 Attention : Cet achat utilisera PCT% du budget de <b>TARGET</b>.", str_budget: "Budget :", btn_view: "Voir", modal_alerts_title: "Centre d'Alertes", btn_view_trx: "Voir Transac.", msg_late: "X jours de retard", msg_left: "il reste X jours", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance",
                 tt_manage_desc: "Gérer Noms", tt_manage_cat: "Gérer Catégories", tt_manage_acc: "Gérer Comptes", tt_manage_person: "Gérer Personnes",
-                err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer",
-                btn_use: "Utiliser",
-                cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)",
-                acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique"
+                err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer", btn_use: "Utiliser",
+                cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)", acc_summary: "Résumé Financier", acc_filters: "Filtros e Historique"
             }
         };
 
@@ -1307,7 +1308,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.6.6';
+        const FLOWME_VERSION = '2.6.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1378,13 +1379,12 @@
 
         function showUpdateSuccess(version) {
             const toast = document.createElement('div');
-            toast.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-5 py-2.5 rounded-full shadow-xl z-[100] flex items-center gap-2 text-sm font-bold transition-all duration-500 opacity-0 -translate-y-10';
-            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> FlowMe atualizado: v${version}`;
+            // Classes ajustadas para não quebrar a linha, centralizar e limitar a largura na tela 243px
+            toast.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-4 py-3 w-[90%] max-w-sm rounded-2xl shadow-xl z-[100] flex items-center justify-center text-center gap-2 text-sm font-bold transition-all duration-500 opacity-0 -translate-y-10';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>FlowMe atualizado: v${version}</span>`;
             document.body.appendChild(toast);
             
-            // Animação de descida
             setTimeout(() => toast.classList.remove('opacity-0', '-translate-y-10'), 100);
-            // Some após 4 segundos
             setTimeout(() => {
                 toast.classList.add('opacity-0', '-translate-y-10');
                 setTimeout(() => toast.remove(), 500);
@@ -1698,8 +1698,20 @@
                 const date = new Date(parseInt(year), parseInt(month) - 1, 10);
                 const isMobile = window.innerWidth < 1024;
                 const monthStyle = isMobile ? 'short' : 'long';
+                
+                // Puxa o nome do mês
                 let monthName = date.toLocaleString(userConfig.lang, { month: monthStyle }).replace('.', '');
-                displaySpan.textContent = isMobile ? `${monthName}/${year.substring(2)}` : `${monthName} de ${year}`;
+                monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+                
+                let yearStr = isMobile ? year.substring(2) : year;
+                
+                // Formatação fluida por idioma e tamanho de tela
+                if (isMobile) {
+                    displaySpan.textContent = `${monthName}/${yearStr}`;
+                } else {
+                    if (userConfig.lang === 'pt' || userConfig.lang === 'es') displaySpan.textContent = `${monthName} de ${yearStr}`;
+                    else displaySpan.textContent = `${monthName} ${yearStr}`;
+                }
             }
             if (currentFilterMode === 'month') { render(); if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); }
         }
@@ -2059,7 +2071,7 @@
                     const now = new Date(); 
                     const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
                     
-                    btn.innerHTML = `<i class="fa-solid fa-check text-base sm:text-lg"></i> <span class="font-bold text-sm sm:text-base ml-1 whitespace-nowrap">Salvo às ${timeStr}</span>`;
+                    btn.innerHTML = `<i class="fa-solid fa-check text-base sm:text-lg"></i> <span class="font-bold text-sm sm:text-base ml-1 whitespace-nowrap">${t('saved_at')} ${timeStr}</span>`;
                     
                     btn.classList.remove('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
                     btn.classList.add('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop');

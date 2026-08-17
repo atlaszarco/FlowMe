@@ -41,16 +41,17 @@
         .dark tr:hover { background-color: #334155; }
         .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]), .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
 
-        /* Ajuste nativo para opções de Select no Modo Escuro */
-        html.dark select option { background-color: #1e293b; color: #f8fafc; }
-        
-        /* TEMA PRETO (OLED) */
+        /* Ajuste nativo para opções de Select no Modo Escuro (Aba Faturas e Filtros) */
+        html.dark select option, html.theme-oled select option { background-color: #1e293b; color: #f8fafc; }
+
+        /* TEMA PRETO (OLED) COM BORDAS ILUMINADAS */
         html.theme-oled body { background-color: #000000; color: #f8fafc; }
         html.theme-oled .bg-white, html.theme-oled .dark\:bg-slate-800 { background-color: #0a0a0a !important; border-color: #262626 !important; }
         html.theme-oled .dark\:bg-slate-900, html.theme-oled .dark\:bg-slate-950 { background-color: #000000 !important; }
-        html.theme-oled input:not(.!bg-transparent), html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #3f3f46 !important; }
-        html.theme-oled .border-slate-200, html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #333333 !important; }
-        html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #333333 !important; }
+        /* Bordas mais claras (Cinza 400) para inputs e caixas ficarem bem legíveis */
+        html.theme-oled input:not(.!bg-transparent), html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #52525b !important; }
+        html.theme-oled .border-slate-200, html.theme-oled .border-slate-300, html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #3f3f46 !important; }
+        html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #3f3f46 !important; }
         
         /* Ajuste de Rolagem Global: impede que o topo das gavetas fique preso atrás do Header */
         html { scroll-padding-top: 100px; }
@@ -166,9 +167,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- MÁSCARA DE DESFOQUE DO TOPO (Faz o conteúdo sumir suavemente ao rolar para cima) -->
-    <div class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-32 sm:pt-40 pb-28 lg:pb-32 min-w-0"></div>
 <!-- ================= BLOCO 2: HEADER E NAVEGAÇÃO ================= -->
     <header class="fixed top-0 left-0 w-full z-40 pointer-events-none px-4 py-4 sm:py-6 transition-all duration-500">
         <div class="max-w-7xl mx-auto flex justify-between items-start gap-4">
@@ -250,7 +248,7 @@
     </div>
 </section>
     
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-28 sm:pt-32 pb-28 lg:pb-32 min-w-0">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-24 sm:pt-28 pb-28 lg:pb-32 min-w-0">
         
     <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">

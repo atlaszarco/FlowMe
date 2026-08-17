@@ -180,13 +180,13 @@
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
 <section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
-    <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full overflow-x-auto [&::-webkit-scrollbar]:hidden px-1">
+    <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full px-1 transition-all duration-500">
 
         <!-- 1. FILTRO EXPANSÍVEL (Animado) -->
-        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full">
+        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-left">
             <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md relative overflow-hidden shrink-0">
                 
-                <!-- Ícone Mestre (Alternador e Expansor) -->
+                <!-- Ícone Mestre -->
                 <button type="button" onclick="handleFilterIconClick(event)" class="px-6 sm:px-8 h-full rounded-full flex items-center justify-center bg-transparent hover:text-amber-400 dark:hover:text-white transition-colors shrink-0 z-10 relative">
                     <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
                 </button>
@@ -206,30 +206,30 @@
                         <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
                     
-                    <!-- Módulo PERÍODO (Forçando bg-transparent e texto escuro para matar o buraco negro) -->
+                    <!-- Módulo PERÍODO -->
                     <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1 sm:px-2">
                         <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                         <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0 text-white dark:text-slate-900">~</span>
                         <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                     </div>
                 </div>
-
             </div>
         </div>
 
         <!-- 2. ALERTA DINÂMICO -->
-        <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full">
+        <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-center">
             <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
         </div>
 
-        <!-- 3. BOTÃO SALVAR (Status + Ação) -->
-        <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2 h-full">
-            <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 font-bold tracking-wide hidden"></span>
-            
-            <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-6 sm:px-8 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
-                <i class="fa-solid fa-cloud-arrow-up text-base sm:text-xl"></i>
-                <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Salvar</span>
-            </button>
+        <!-- 3. BOTÃO SALVAR -->
+        <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-right">
+            <div class="flex items-center gap-2 h-full">
+                <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 font-bold tracking-wide hidden"></span>
+                <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-6 sm:px-8 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+                    <i class="fa-solid fa-cloud-arrow-up text-base sm:text-xl"></i>
+                    <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Salvar</span>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -1299,7 +1299,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.6.1';
+        const FLOWME_VERSION = '2.6.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1547,6 +1547,30 @@
             });
         }
         
+        // ================= MOTOR DE FOCO DA BARRA GLOBAL =================
+        function setToolbarFocus(focusId) {
+            const inner = document.getElementById('global-toolbar-inner');
+            const containers = ['global-toolbar-filter', 'global-toolbar-alerts', 'global-toolbar-save'];
+            
+            if (focusId) inner.classList.remove('gap-2', 'sm:gap-3');
+            else inner.classList.add('gap-2', 'sm:gap-3');
+
+            containers.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                
+                if (focusId && id !== focusId) {
+                    // AFUNDA OS ELEMENTOS NÃO FOCADOS
+                    el.classList.add('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
+                    el.classList.remove('max-w-[500px]', 'opacity-100', 'scale-100');
+                } else {
+                    // RESTAURA E EXPANDE
+                    el.classList.remove('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
+                    el.classList.add('max-w-[500px]', 'opacity-100', 'scale-100');
+                }
+            });
+        }
+
         // ================= FILTRO GLOBAL EXPANSÍVEL =================
         let currentFilterMode = 'month';
         let isFilterExpanded = false;
@@ -1556,11 +1580,8 @@
             const isMobile = window.innerWidth < 640;
             
             if (isMobile) {
-                if (!isFilterExpanded) {
-                    isFilterExpanded = true;
-                } else {
-                    currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
-                }
+                if (!isFilterExpanded) isFilterExpanded = true;
+                else currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
             } else {
                 currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
             }
@@ -1573,41 +1594,41 @@
             const modeMonth = document.getElementById('mode-month');
             const modeRange = document.getElementById('mode-range');
             
-            // FÍSICA DE EXPANSÃO (Mobile)
             if (window.innerWidth < 640) {
                 if (isFilterExpanded) {
+                    // FOCO ATIVADO: Oculte Salvar e Alertas no celular para expandir o Calendário
+                    setToolbarFocus('global-toolbar-filter');
+                    
                     content.classList.remove('max-w-0', 'opacity-0');
                     content.classList.add('max-w-[340px]', 'opacity-100'); 
-                    icon.classList.add('scale-110', 'text-amber-400'); // Destaque ao abrir
+                    icon.classList.add('scale-110', 'text-amber-400');
                 } else {
+                    // RESTAURA TUDO
+                    setToolbarFocus(null);
+                    
                     content.classList.add('max-w-0', 'opacity-0');
                     content.classList.remove('max-w-[340px]', 'opacity-100');
                     icon.classList.remove('scale-110', 'text-amber-400');
                 }
             } else {
+                setToolbarFocus(null);
                 icon.classList.remove('scale-110', 'text-amber-400');
             }
 
-            // ALTERNÂNCIA DE MODO
             if (currentFilterMode === 'month') {
                 icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
                 if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
-                
                 modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
                 modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
             } else {
                 icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
                 if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
-                
                 modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
                 modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
                 
-                // Setando as Datas Localmente
                 if(!document.getElementById('date-start').value) {
                     const d = new Date();
-                    const y = d.getFullYear();
-                    const m = String(d.getMonth() + 1).padStart(2, '0');
-                    const lastD = new Date(y, d.getMonth() + 1, 0).getDate();
+                    const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const lastD = new Date(y, d.getMonth() + 1, 0).getDate();
                     document.getElementById('date-start').value = `${y}-${m}-01`;
                     document.getElementById('date-end').value = `${y}-${m}-${lastD}`;
                 }
@@ -1615,7 +1636,6 @@
             render();
         }
 
-        // Fechar ao clicar fora (Mobile)
         document.addEventListener('click', (e) => {
             const wrapper = document.getElementById('filter-wrapper');
             if (wrapper && !wrapper.contains(e.target) && isFilterExpanded && window.innerWidth < 640) {
@@ -1627,23 +1647,16 @@
         function changeGlobalMonth(value) {
             if(!value) return; 
             state.currentMonth = value;
-            
             const displaySpan = document.getElementById('month-display');
             if(displaySpan) {
                 const [year, month] = value.split('-');
                 const date = new Date(parseInt(year), parseInt(month) - 1, 10);
-                
                 const isMobile = window.innerWidth < 1024;
                 const monthStyle = isMobile ? 'short' : 'long';
-                
                 let monthName = date.toLocaleString(userConfig.lang, { month: monthStyle }).replace('.', '');
                 displaySpan.textContent = isMobile ? `${monthName}/${year.substring(2)}` : `${monthName} de ${year}`;
             }
-            
-            if (currentFilterMode === 'month') { 
-                render(); 
-                if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); 
-            }
+            if (currentFilterMode === 'month') { render(); if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); }
         }
 
         function changeMonthOffset(offset) {
@@ -1663,20 +1676,16 @@
             if (type === 'receita') {
                 lInc.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-emerald-50 border-emerald-500 text-emerald-700";
                 lExp.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 border-slate-200 cursor-pointer text-sm font-medium transition-all hover:bg-slate-50 text-slate-600 dark:hover:bg-slate-800 dark:border-slate-600";
-                
                 subSec.classList.add('hidden'); invMonthSec.classList.add('hidden');
                 splitW.classList.add('hidden'); document.getElementById('has-split').checked = false; toggleSplitSection(false);
-                
                 instSec.classList.remove('hidden'); lblInst.textContent = t('lbl_inst_inc');
                 document.getElementById('opt-status-paid').textContent = t('status_rec'); document.getElementById('opt-status-pending').textContent = t('status_pen_rec');
                 document.getElementById('opt-logic-div').classList.add('hidden'); document.getElementById('installment-logic').value = 'per_month';
             } else {
                 lExp.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-rose-50 border-rose-500 text-rose-700";
                 lInc.className = "flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 border-slate-200 cursor-pointer text-sm font-medium transition-all hover:bg-slate-50 text-slate-600 dark:hover:bg-slate-800 dark:border-slate-600";
-                
                 subSec.classList.remove('hidden'); subSec.classList.add('grid');
                 toggleSubType(document.querySelector('input[name="expType"]:checked').value);
-                
                 splitW.classList.remove('hidden'); instSec.classList.remove('hidden'); lblInst.textContent = t('lbl_inst_exp');
                 document.getElementById('opt-status-paid').textContent = t('status_pag'); document.getElementById('opt-status-pending').textContent = t('status_pen_pag');
                 document.getElementById('opt-logic-div').classList.remove('hidden');
@@ -1720,31 +1729,18 @@
             const m = document.getElementById(id);
             const inner = m.querySelector('.modal-inner');
             m.classList.remove('hidden');
-            
-            // Força o navegador a reconhecer que a caixa não está mais "hidden" antes de animar
             requestAnimationFrame(() => {
                 m.classList.remove('opacity-0');
-                if(inner) {
-                    inner.classList.remove('scale-95', 'translate-y-4', 'opacity-0');
-                    inner.classList.add('scale-100', 'translate-y-0', 'opacity-100');
-                }
+                if(inner) { inner.classList.remove('scale-95', 'translate-y-4', 'opacity-0'); inner.classList.add('scale-100', 'translate-y-0', 'opacity-100'); }
             });
         }
 
         function closeModal(id) {
             const m = document.getElementById(id);
             const inner = m.querySelector('.modal-inner');
-            
             m.classList.add('opacity-0');
-            if(inner) {
-                inner.classList.remove('scale-100', 'translate-y-0', 'opacity-100');
-                inner.classList.add('scale-95', 'translate-y-4', 'opacity-0');
-            }
-            
-            // Espera exatos 300ms (duração da transição do tailwind) para sumir com a caixa
-            setTimeout(() => {
-                m.classList.add('hidden');
-            }, 300);
+            if(inner) { inner.classList.remove('scale-100', 'translate-y-0', 'opacity-100'); inner.classList.add('scale-95', 'translate-y-4', 'opacity-0'); }
+            setTimeout(() => { m.classList.add('hidden'); }, 300);
         }
         
         function filterGlobalEdit() {
@@ -1759,16 +1755,9 @@
             const field = document.getElementById('global-edit-field').value;
             const newVal = document.getElementById('global-edit-new').value.trim();
             if(!newVal) return;
-            
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
             if(!state.customData[field]) state.customData[field] = [];
-            
-            if(!state.customData[field].includes(newVal)) {
-                state.customData[field].push(newVal);
-                saveState();
-                updateAutocompleteLists();
-                openGlobalEdit(field); // Recarrega a tela já com o item
-            }
+            if(!state.customData[field].includes(newVal)) { state.customData[field].push(newVal); saveState(); updateAutocompleteLists(); openGlobalEdit(field); }
             document.getElementById('global-edit-new').value = '';
         }
         
@@ -1778,15 +1767,12 @@
             document.getElementById('global-edit-search').value = '';
             if(document.getElementById('global-edit-new')) document.getElementById('global-edit-new').value = '';
             document.getElementById('global-edit-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-500 mr-2"></i> ${t('title_manage')}`;
-            
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
-            
             let items = [];
             if(field === 'category') items = [...new Set([...state.transactions.map(t => t.category), ...(state.customData.category||[])])].filter(Boolean);
             else if (field === 'paymentMethod') items = [...new Set([...state.transactions.map(t => t.paymentMethod), ...(state.customData.paymentMethod||[])])].filter(Boolean);
             else if (field === 'description') items = [...new Set([...state.transactions.map(t => t.description.replace(/\s*\(\d+\/\d+\)$/, '')), ...(state.customData.description||[])])].filter(Boolean);
             else if (field === 'person') items = [...new Set([...state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []), ...(state.customData.person||[])])].filter(Boolean);
-
             c.innerHTML = '';
             if(items.length === 0) { c.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Nenhum item salvo ainda.</p>'; }
             else {
@@ -1794,13 +1780,9 @@
                     const rowId = 'ge-' + Math.random().toString(36).substr(2,6);
                     const div = document.createElement('div'); div.className = "flex items-center gap-2 p-2 border border-slate-200 dark:border-slate-700 rounded bg-slate-50 dark:bg-slate-900";
                     div.innerHTML = `
-                        <button onclick="selectGlobalItem('${it.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 shrink-0 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/60 dark:hover:bg-emerald-700 dark:text-emerald-300 rounded text-[10px] font-bold transition active:scale-95 border border-emerald-200 dark:border-emerald-800" title="${t('btn_use') || 'Usar'}">
-                            <i class="fa-solid fa-check"></i>
-                        </button>
+                        <button onclick="selectGlobalItem('${it.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 shrink-0 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/60 dark:hover:bg-emerald-700 dark:text-emerald-300 rounded text-[10px] font-bold transition active:scale-95 border border-emerald-200 dark:border-emerald-800" title="${t('btn_use') || 'Usar'}"><i class="fa-solid fa-check"></i></button>
                         <input type="text" id="${rowId}" value="${it}" class="flex-1 p-1 text-xs border border-transparent focus:border-indigo-400 bg-transparent outline-none dark:text-slate-200 transition min-w-0">
-                        <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="px-3 py-1.5 shrink-0 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/60 dark:hover:bg-indigo-700 dark:text-indigo-300 rounded text-[10px] font-bold transition active:scale-95 border border-indigo-200 dark:border-indigo-800">
-                            ${t('btn_save')}
-                        </button>`;
+                        <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="px-3 py-1.5 shrink-0 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/60 dark:hover:bg-indigo-700 dark:text-indigo-300 rounded text-[10px] font-bold transition active:scale-95 border border-indigo-200 dark:border-indigo-800">${t('btn_save')}</button>`;
                     c.appendChild(div);
                 });
             }
@@ -1809,48 +1791,24 @@
 
         function selectGlobalItem(val) {
             const field = document.getElementById('global-edit-field').value;
-            
-            if (field === 'description') {
-                document.getElementById('description').value = val;
-            } else if (field === 'category') {
-                document.getElementById('category').value = val;
-            } else if (field === 'paymentMethod') {
-                document.getElementById('payment-method').value = val;
-            } else if (field === 'person') {
-                // Procura o primeiro campo de pessoa vazio no rateio
+            if (field === 'description') document.getElementById('description').value = val;
+            else if (field === 'category') document.getElementById('category').value = val;
+            else if (field === 'paymentMethod') document.getElementById('payment-method').value = val;
+            else if (field === 'person') {
                 const emptyInputs = Array.from(document.querySelectorAll('.split-person')).filter(inp => !inp.value.trim());
-                if (emptyInputs.length > 0) {
-                    emptyInputs[0].value = val;
-                } else {
-                    // Se não tiver nenhum vazio, cria uma nova linha já preenchida
-                    addSplitRow(val);
-                }
+                if (emptyInputs.length > 0) emptyInputs[0].value = val; else addSplitRow(val);
             }
-            
-            // Dispara a verificação anti-susto de limites e fecha o modal
-            checkLimitsInRealTime();
-            closeModal('modal-global-edit');
+            checkLimitsInRealTime(); closeModal('modal-global-edit');
         }
 
         function saveGlobalEdit(oldVal, newVal, field) {
             newVal = newVal.trim(); if(!newVal || oldVal === newVal) return;
-            
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
-            if(state.customData[field]) {
-                const idx = state.customData[field].indexOf(oldVal);
-                if(idx !== -1) state.customData[field][idx] = newVal;
-            }
-
+            if(state.customData[field]) { const idx = state.customData[field].indexOf(oldVal); if(idx !== -1) state.customData[field][idx] = newVal; }
             state.transactions.forEach(t => {
-                if(field === 'description') {
-                    const match = t.description.match(/(.*)(\s+\(\d+\/\d+\))$/);
-                    if(match && match[1] === oldVal) t.description = newVal + match[2];
-                    else if (t.description === oldVal) t.description = newVal;
-                } else if (field === 'person') {
-                    if(t.splits) t.splits.forEach(s => { if(s.person === oldVal) s.person = newVal; });
-                } else if(t[field] === oldVal) {
-                    t[field] = newVal;
-                }
+                if(field === 'description') { const match = t.description.match(/(.*)(\s+\(\d+\/\d+\))$/); if(match && match[1] === oldVal) t.description = newVal + match[2]; else if (t.description === oldVal) t.description = newVal; } 
+                else if (field === 'person') { if(t.splits) t.splits.forEach(s => { if(s.person === oldVal) s.person = newVal; }); } 
+                else if(t[field] === oldVal) t[field] = newVal;
             });
             saveState(); updateAutocompleteLists(); render(); openGlobalEdit(field);
             if(field !== 'person' && document.getElementById(field).value === oldVal) document.getElementById(field).value = newVal;
@@ -1869,16 +1827,18 @@
             return 'desktop';
         }
 
-        // Simplificado: as bordas (px-6, px-8) agora são nativas do HTML. Só escondemos o texto!
         function updateSaveDisplay(profile) {
             const saveText = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
             const saveTime = document.getElementById('last-save-time');
-            if (!saveText || !saveTime) return;
+            const saveButton = document.getElementById('btn-manual-save');
+            if (!saveText || !saveTime || !saveButton) return;
 
             if (profile === 'desktop' || profile === 'tablet' || profile === 'mobile-landscape') {
                 saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
+                saveButton.classList.add('px-5', 'sm:px-8'); saveButton.classList.remove('px-6');
             } else {
                 saveText.classList.add('hidden'); saveTime.classList.add('hidden');
+                saveButton.classList.add('px-6'); saveButton.classList.remove('px-5', 'sm:px-8');
             }
         }
 
@@ -1960,6 +1920,7 @@
                 setTimeout(() => { btn.classList.remove('animate-bell-pop'); openAlertsModal(); }, 500);
             } else { openAlertsModal(); }
         }
+
         // ================= SAVE & LOAD =================
         function updateSaveTimestamp() {
             const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
@@ -1978,25 +1939,31 @@
             const textSpan = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
             const isTextHidden = textSpan ? textSpan.classList.contains('hidden') : false;
             
-            const textHTML = `<span id="save-btn-text" class="${isTextHidden ? 'hidden' : ''}" data-i18n="btn_save_data">${t('btn_save_data') || 'Salvar'}</span>`;
-            const origHTML = `<i class="fa-solid fa-cloud-arrow-up text-sm sm:text-base"></i> ${textHTML}`;
+            const origHTML = btn.innerHTML;
             
-            // Estágio 1: Girando
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm sm:text-base"></i> ${textHTML}`;
+            // Estágio 1: Girando (Preparação)
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base sm:text-lg"></i> <span class="${isTextHidden ? 'hidden' : ''} text-sm sm:text-base font-bold">Salvar</span>`;
             
             setTimeout(() => {
-                // Estágio 2: Confirmação com POP. Remove a cor padrão e injeta Verde (Light) ou Branco (Dark)
-                btn.innerHTML = `<i class="fa-solid fa-check text-base"></i> <span class="${isTextHidden ? 'hidden' : ''} font-bold">OK</span>`;
+                // FOCO ATIVADO: Se estiver no celular, o botão Salvar manda os outros afundarem!
+                const isMobile = window.innerWidth < 640;
+                if (isMobile) setToolbarFocus('global-toolbar-save');
+
+                // Força a mensagem "Salvo!" aparecer mesmo em telas minúsculas para criar o efeito de expansão
+                btn.innerHTML = `<i class="fa-solid fa-check text-base sm:text-lg"></i> <span class="font-bold text-sm sm:text-base ml-1">Salvo!</span>`;
                 
-                btn.classList.remove('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
-                btn.classList.add('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop');
+                btn.classList.remove('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950', 'px-6');
+                btn.classList.add('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop', 'px-6', 'sm:px-8', 'w-auto');
                 
                 setTimeout(() => { 
-                    // Estágio 3: Volta ao estado original
+                    // ESTÁGIO FINAL: Restaura tudo para o estado original
                     btn.innerHTML = origHTML; 
-                    btn.classList.remove('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop'); 
-                    btn.classList.add('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
-                }, 1200); 
+                    btn.classList.remove('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop', 'px-6', 'sm:px-8', 'w-auto'); 
+                    btn.classList.add('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950', 'px-6');
+
+                    // Desfaz o foco e traz todos os botões de volta
+                    if (isMobile) setToolbarFocus(null);
+                }, 1800); 
             }, 300); 
             
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 

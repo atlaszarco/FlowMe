@@ -53,7 +53,7 @@
         html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #333333 !important; }
         
         /* Ajuste de Rolagem Global: impede que o topo das gavetas fique preso atrás do Header */
-        html { scroll-padding-top: 140px; }
+        html { scroll-padding-top: 100px; }
 
         /* Variáveis para a Máscara Superior de Rolagem */
         body { --bg-mask: #f8fafc; }
@@ -168,7 +168,7 @@
     </div>
     
     <!-- MÁSCARA DE DESFOQUE DO TOPO (Faz o conteúdo sumir suavemente ao rolar para cima) -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-32 sm:pt-40 pb-28 lg:pb-32 min-w-0">
+    <div class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-32 sm:pt-40 pb-28 lg:pb-32 min-w-0"></div>
 <!-- ================= BLOCO 2: HEADER E NAVEGAÇÃO ================= -->
     <header class="fixed top-0 left-0 w-full z-40 pointer-events-none px-4 py-4 sm:py-6 transition-all duration-500">
         <div class="max-w-7xl mx-auto flex justify-between items-start gap-4">
@@ -1239,9 +1239,9 @@
             updateLangUI(lang); 
             
             changeGlobalMonth(state.currentMonth);
-            renderToolbarAlerts();
-            
-            render(); renderLimitsSettings(); updateSaveTimestamp();
+            render();
+            renderLimitsSettings(); 
+            updateSaveTimestamp();
         }
 
         // ================= SANFONA E ESTILO DOS PAINÉIS =================
@@ -1321,7 +1321,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.6.8';
+        const FLOWME_VERSION = '2.7.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

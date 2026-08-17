@@ -179,15 +179,15 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-[92%] sm:w-max max-w-4xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
-    <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
+    <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full overflow-x-auto [&::-webkit-scrollbar]:hidden px-1">
 
         <!-- 1. FILTRO EXPANSÍVEL (Animado) -->
-        <div id="global-toolbar-filter" class="flex items-center shrink min-w-0 h-full">
-            <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md border border-transparent dark:border-emerald-600 relative overflow-hidden">
+        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full">
+            <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md relative overflow-hidden shrink-0">
                 
                 <!-- Ícone Mestre (Alternador e Expansor) -->
-                <button type="button" onclick="handleFilterIconClick(event)" class="px-6 sm:px-8 h-full rounded-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 z-10 relative">
+                <button type="button" onclick="handleFilterIconClick(event)" class="px-6 sm:px-8 h-full rounded-full flex items-center justify-center bg-transparent hover:text-amber-400 dark:hover:text-white transition-colors shrink-0 z-10 relative">
                     <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
                 </button>
 
@@ -196,21 +196,21 @@
                     
                     <!-- Módulo MÊS -->
                     <div id="mode-month" class="flex items-center h-full min-w-0 whitespace-nowrap">
-                        <button onclick="changeMonthOffset(-1)" class="px-3 sm:px-4 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button onclick="changeMonthOffset(-1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         
-                        <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-slate-800 dark:hover:bg-emerald-400 transition">
+                        <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-white/20 transition">
                             <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none"></span>
-                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer dark:[color-scheme:light]">
+                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer dark:[color-scheme:light] !bg-transparent">
                         </div>
                         
-                        <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                        <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
                     
-                    <!-- Módulo PERÍODO (Com inputs maiores e gatilho de popup nativo) -->
+                    <!-- Módulo PERÍODO (Forçando bg-transparent e texto escuro para matar o buraco negro) -->
                     <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1 sm:px-2">
-                        <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
-                        <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0">~</span>
-                        <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0 text-white dark:text-slate-900">~</span>
+                        <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                     </div>
                 </div>
 
@@ -226,7 +226,7 @@
         <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2 h-full">
             <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 font-bold tracking-wide hidden"></span>
             
-            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-6 sm:px-8 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+            <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-6 sm:px-8 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
                 <i class="fa-solid fa-cloud-arrow-up text-base sm:text-xl"></i>
                 <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Salvar</span>
             </button>
@@ -1299,7 +1299,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.6.0';
+        const FLOWME_VERSION = '2.6.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1869,21 +1869,16 @@
             return 'desktop';
         }
 
+        // Simplificado: as bordas (px-6, px-8) agora são nativas do HTML. Só escondemos o texto!
         function updateSaveDisplay(profile) {
             const saveText = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
             const saveTime = document.getElementById('last-save-time');
-            const saveButton = document.getElementById('btn-manual-save');
-            if (!saveText || !saveTime || !saveButton) return;
+            if (!saveText || !saveTime) return;
 
             if (profile === 'desktop' || profile === 'tablet' || profile === 'mobile-landscape') {
                 saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
-                saveButton.classList.add('px-5', 'sm:px-8');
-                saveButton.classList.remove('px-6');
             } else {
                 saveText.classList.add('hidden'); saveTime.classList.add('hidden');
-                // Mantém botão alongado e gordinho no Celular em Pé
-                saveButton.classList.add('px-6');
-                saveButton.classList.remove('px-5', 'sm:px-8');
             }
         }
 
@@ -1920,7 +1915,7 @@
         window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
 
-        // SINO DINÂMICO E AUTO-ENCOLHÍVEL
+        // SINO DINÂMICO
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
             const alertsWrapper = document.getElementById('global-toolbar-alerts');
@@ -1951,7 +1946,7 @@
                     id="btn-alerts-bell"
                     type="button"
                     onclick="handleBellClick()"
-                    class="flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
+                    class="shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
                     <i class="fa-solid ${iconClass} text-base sm:text-lg"></i>
                     <span class="whitespace-nowrap">${text}</span>
                 </button>
@@ -1965,7 +1960,6 @@
                 setTimeout(() => { btn.classList.remove('animate-bell-pop'); openAlertsModal(); }, 500);
             } else { openAlertsModal(); }
         }
-
         // ================= SAVE & LOAD =================
         function updateSaveTimestamp() {
             const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});

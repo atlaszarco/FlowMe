@@ -1298,7 +1298,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.6.4';
+        const FLOWME_VERSION = '2.6.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1576,7 +1576,7 @@
                 inner.classList.remove('gap-2', 'sm:gap-3');
                 lastFocusId = focusId;
                 
-                // O mais distante cai primeiro.
+                // ONDA DE SUMIÇO: O mais distante cai primeiro.
                 if (focusId === 'global-toolbar-filter') {
                     hide(save);
                     focusSequenceTimer1 = setTimeout(() => { hide(alerts); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
@@ -1584,13 +1584,14 @@
                     hide(filter);
                     focusSequenceTimer1 = setTimeout(() => { hide(alerts); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
                 } else if (focusId === 'global-toolbar-alerts') {
-                    hide(filter); hide(save);
-                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
+                    // CASCATA DO SINO: O Filtro (Esquerda) cai primeiro. 150ms depois, o Salvar (Direita) cai.
+                    hide(filter);
+                    focusSequenceTimer1 = setTimeout(() => { hide(save); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
                 }
             } else {
                 inner.classList.add('gap-2', 'sm:gap-3');
                 
-                // O mais perto de quem estava focado surge primeiro.
+                // ONDA DE VOLTA (REBOTE): O mais perto de quem estava focado surge primeiro.
                 if (lastFocusId === 'global-toolbar-filter') {
                     show(alerts);
                     focusSequenceTimer1 = setTimeout(() => { show(save); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
@@ -1598,13 +1599,13 @@
                     show(alerts);
                     focusSequenceTimer1 = setTimeout(() => { show(filter); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
                 } else {
-                    show(filter); show(save);
-                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
+                    // CASCATA DO SINO (VOLTA): O Salvar (Direita) volta primeiro. 150ms depois, o Filtro (Esquerda) volta.
+                    show(save);
+                    focusSequenceTimer1 = setTimeout(() => { show(filter); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
                 }
                 lastFocusId = null;
             }
         }
-
         // ================= FILTRO GLOBAL EXPANSÍVEL =================
         let currentFilterMode = 'month';
         let isFilterExpanded = false;

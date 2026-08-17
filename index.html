@@ -54,7 +54,7 @@
         html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #3f3f46 !important; }
         
         /* Ajuste de Rolagem Global: impede que o topo das gavetas fique preso atrás do Header */
-        html { scroll-padding-top: 100px; }
+        html { scroll-padding-top: 70px; }
 
         /* Variáveis para a Máscara Superior de Rolagem */
         body { --bg-mask: #f8fafc; }
@@ -171,13 +171,13 @@
     <header class="fixed top-0 left-0 w-full z-40 pointer-events-none px-4 py-4 sm:py-6 transition-all duration-500">
         <div class="max-w-7xl mx-auto flex justify-between items-start gap-4">
             
-            <!-- Logo Flutuante -->
-            <div class="flex items-center gap-3 shrink-0 pointer-events-auto bg-white/30 dark:bg-slate-900/40 backdrop-blur-lg p-1.5 pr-4 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/50 dark:border-white/10 transition-all duration-300">
-                <div class="bg-emerald-500 p-2 rounded-xl text-white font-bold text-xl flex items-center justify-center w-10 h-10 shadow-sm">
+            <!-- Logo Flutuante (Com animação de encolhimento do texto) -->
+            <div class="flex items-center shrink-0 pointer-events-auto bg-white/30 dark:bg-slate-900/40 backdrop-blur-lg p-1.5 pr-3 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/50 dark:border-white/10 transition-all duration-300">
+                <div class="bg-emerald-500 p-2 rounded-xl text-white font-bold text-xl flex items-center justify-center w-10 h-10 shadow-sm shrink-0 z-10 relative">
                     <i class="fa-solid fa-dollar-sign"></i>
                 </div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-white transition-colors">FlowMe</h1>
+                <div id="header-logo-text" class="transition-all duration-500 ease-in-out overflow-hidden max-w-[100px] opacity-100 ml-3">
+                    <h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-white whitespace-nowrap">FlowMe</h1>
                 </div>
             </div>
             
@@ -212,18 +212,31 @@
                 </button>
 
                 <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden sm:max-w-[340px] sm:opacity-100">
-                    <div id="mode-month" class="flex items-center h-full min-w-0 whitespace-nowrap">
-                        <button onclick="changeMonthOffset(-1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                        <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-white/20 transition">
-                            <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none"></span>
-                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer dark:[color-scheme:light] !bg-transparent">
+                    
+                    <div class="relative h-full flex-1 flex items-center justify-center min-w-[190px] sm:min-w-[240px]">
+        
+                        <!-- Módulo MÊS -->
+                        <div id="mode-month" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10">
+                            <button onclick="changeMonthOffset(-1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-xs text-slate-800 dark:text-white"></i></button>
+                            <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-white/20 transition rounded-xl">
+                                <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none text-slate-800 dark:text-white"></span>
+                                <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
+                            <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs text-slate-800 dark:text-white"></i></button>
                         </div>
-                        <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-                    </div>
-                    <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1 sm:px-2">
-                        <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
-                        <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0 text-white dark:text-slate-900">~</span>
-                        <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        
+                        <!-- Módulo PERÍODO (Com clique invisível de bloco) -->
+                        <div id="mode-range" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap px-1 transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0">
+                            <div class="relative flex items-center justify-center px-2 h-full cursor-pointer hover:bg-white/20 transition rounded-xl">
+                                <span id="date-start-display" class="text-sm sm:text-base font-bold pointer-events-none text-slate-800 dark:text-white">--/--/--</span>
+                                <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
+                            <span class="text-[10px] sm:text-xs font-bold shrink-0 text-slate-800 dark:text-white">~</span>
+                            <div class="relative flex items-center justify-center px-2 h-full cursor-pointer hover:bg-white/20 transition rounded-xl">
+                                <span id="date-end-display" class="text-sm sm:text-base font-bold pointer-events-none text-slate-800 dark:text-white">--/--/--</span>
+                                <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -937,12 +950,12 @@
                 <button onclick="closeModal('modal-global-edit')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-4 overflow-y-auto max-h-[60vh] flex flex-col">
-                <div class="flex gap-2 mb-3">
+                <div class="flex gap-2 mb-2">
                     <input type="text" id="global-edit-new" autocomplete="off" data-i18n="ph_add_new" placeholder="Adicionar novo..." class="flex-1 p-2 text-xs border border-slate-300 dark:border-slate-600 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500 dark:text-white transition">
-                    <button onclick="addGlobalItem()" data-i18n="btn_add" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md">Adicionar</button>
+                    <button onclick="addGlobalItem()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition shadow-md"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <input type="text" id="global-edit-search" autocomplete="off" oninput="filterGlobalEdit()" data-i18n="placeholder_search" placeholder="Pesquisar..." class="w-full p-2 mb-3 text-xs border border-slate-300 dark:border-slate-600 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500 dark:text-white transition">
-                <div id="global-edit-content" class="space-y-2 flex-1 overflow-y-auto"></div>
+                <input type="text" id="global-edit-search" autocomplete="off" oninput="filterGlobalEdit()" data-i18n="placeholder_search" placeholder="Pesquisar..." class="w-full p-2 mb-2 text-xs border border-slate-300 dark:border-slate-600 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500 dark:text-white transition">
+                <div id="global-edit-content" class="space-y-1.5 flex-1 overflow-y-auto"></div>
             </div>
             <input type="hidden" id="global-edit-field">
         </div>
@@ -1334,7 +1347,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.7.0';
+        const FLOWME_VERSION = '2.7.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1673,12 +1686,20 @@
             const applyVisuals = () => {
                 if (currentFilterMode === 'month') {
                     icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
-                    modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
-                    modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
+                    // Modo Mês Ativo (Fade in / Scale 100)
+                    modeMonth.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
+                    modeMonth.classList.add('opacity-100', 'scale-100', 'z-10');
+                    // Modo Período Inativo (Fade out / Scale 95)
+                    modeRange.classList.remove('opacity-100', 'scale-100', 'z-10');
+                    modeRange.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                 } else {
                     icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
-                    modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
-                    modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
+                    // Modo Mês Inativo
+                    modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10');
+                    modeMonth.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
+                    // Modo Período Ativo
+                    modeRange.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
+                    modeRange.classList.add('opacity-100', 'scale-100', 'z-10');
                     
                     if(!document.getElementById('date-start').value) {
                         const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const lastD = new Date(y, d.getMonth() + 1, 0).getDate();
@@ -1866,11 +1887,12 @@
             else {
                 items.sort().forEach(it => {
                     const rowId = 'ge-' + Math.random().toString(36).substr(2,6);
-                    const div = document.createElement('div'); div.className = "flex items-center gap-2 p-2 border border-slate-200 dark:border-slate-700 rounded bg-slate-50 dark:bg-slate-900";
+                    const div = document.createElement('div'); div.className = "flex items-center gap-2 p-1.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/50";
                     div.innerHTML = `
-                        <button onclick="selectGlobalItem('${it.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 shrink-0 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/60 dark:hover:bg-emerald-700 dark:text-emerald-300 rounded text-[10px] font-bold transition active:scale-95 border border-emerald-200 dark:border-emerald-800" title="${t('btn_use') || 'Usar'}"><i class="fa-solid fa-check"></i></button>
                         <input type="text" id="${rowId}" value="${it}" class="flex-1 p-1 text-xs border border-transparent focus:border-indigo-400 bg-transparent outline-none dark:text-slate-200 transition min-w-0">
-                        <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="px-3 py-1.5 shrink-0 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/60 dark:hover:bg-indigo-700 dark:text-indigo-300 rounded text-[10px] font-bold transition active:scale-95 border border-indigo-200 dark:border-indigo-800">${t('btn_save')}</button>`;
+                        <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="px-2.5 py-1.5 shrink-0 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/60 dark:hover:bg-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-bold transition active:scale-95 border border-indigo-200 dark:border-indigo-800"><i class="fa-solid fa-floppy-disk"></i></button>
+                        <button onclick="selectGlobalItem('${it.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 shrink-0 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/60 dark:hover:bg-emerald-700 dark:text-emerald-300 rounded-lg text-sm font-bold transition active:scale-95 border border-emerald-200 dark:border-emerald-800"><i class="fa-solid fa-check"></i></button>
+                    `;
                     c.appendChild(div);
                 });
             }
@@ -1953,6 +1975,18 @@
                 if (c1 && c6) {
                     if (profile === 'tablet' || profile === 'desktop') cfgContainer.append(c1, c3, c5, c2, c4, c6);
                     else cfgContainer.append(c1, c2, c3, c4, c5, c6);
+                }
+            }
+
+            // Animação de Gota d'Água do Logo (FlowMe)
+            const logoText = document.getElementById('header-logo-text');
+            if (logoText) {
+                if (profile === 'mobile-portrait' && userConfig.tabStyle !== 'icons') {
+                    logoText.classList.add('max-w-0', 'opacity-0', '!ml-0');
+                    logoText.classList.remove('max-w-[100px]', 'opacity-100', 'ml-3');
+                } else {
+                    logoText.classList.remove('max-w-0', 'opacity-0', '!ml-0');
+                    logoText.classList.add('max-w-[100px]', 'opacity-100', 'ml-3');
                 }
             }
         }
@@ -2461,6 +2495,11 @@
 
         // ================= RENDER TRANSAÇÕES =================
         function render() {
+            const ds = document.getElementById('date-start')?.value;
+            const de = document.getElementById('date-end')?.value;
+            if(ds) { const [y,m,d] = ds.split('-'); document.getElementById('date-start-display').textContent = `${d}/${m}/${y.substring(2)}`; }
+            if(de) { const [y,m,d] = de.split('-'); document.getElementById('date-end-display').textContent = `${d}/${m}/${y.substring(2)}`; }
+
             const search = document.getElementById('search-input').value.toLowerCase().trim();
             const fType = document.getElementById('filter-type').value; const fStatus = document.getElementById('filter-status').value; const fSplit = document.getElementById('filter-split').value;
             const filterMode = currentFilterMode;

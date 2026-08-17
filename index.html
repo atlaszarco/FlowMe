@@ -179,21 +179,20 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[95%] bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-[92%] sm:w-max max-w-4xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
     <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full">
 
         <!-- 1. FILTRO EXPANSÍVEL (Animado) -->
         <div id="global-toolbar-filter" class="flex items-center shrink min-w-0 h-full">
-            <!-- NOTA: O overflow-hidden aqui blinda o botão de vazar pelas bordas no hover -->
             <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md border border-transparent dark:border-emerald-600 relative overflow-hidden">
                 
-                <!-- Ícone Mestre (Alternador e Expansor) - Mais largo (px-5) -->
-                <button type="button" onclick="handleFilterIconClick(event)" class="px-5 sm:px-6 h-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 z-10 relative">
-                    <i id="filter-icon-display" class="fa-regular fa-calendar text-base sm:text-lg transition-transform duration-300"></i>
+                <!-- Ícone Mestre (Alternador e Expansor) -->
+                <button type="button" onclick="handleFilterIconClick(event)" class="px-6 sm:px-8 h-full rounded-full flex items-center justify-center hover:bg-slate-800 dark:hover:bg-emerald-400 hover:text-amber-400 dark:hover:text-slate-900 transition-colors shrink-0 z-10 relative">
+                    <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
                 </button>
 
                 <!-- Conteúdo que Expande/Encolhe -->
-                <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden sm:max-w-[320px] sm:opacity-100">
+                <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden sm:max-w-[340px] sm:opacity-100">
                     
                     <!-- Módulo MÊS -->
                     <div id="mode-month" class="flex items-center h-full min-w-0 whitespace-nowrap">
@@ -201,17 +200,17 @@
                         
                         <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-slate-800 dark:hover:bg-emerald-400 transition">
                             <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none"></span>
-                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer dark:[color-scheme:light]">
+                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer dark:[color-scheme:light]">
                         </div>
                         
                         <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-slate-800 dark:hover:bg-emerald-400 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
                     
-                    <!-- Módulo PERÍODO (Com inputs maiores) -->
+                    <!-- Módulo PERÍODO (Com inputs maiores e gatilho de popup nativo) -->
                     <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1 sm:px-2">
-                        <input type="date" id="date-start" onchange="render()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[115px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                         <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0">~</span>
-                        <input type="date" id="date-end" onchange="render()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[115px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
+                        <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                     </div>
                 </div>
 
@@ -223,12 +222,12 @@
             <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
         </div>
 
-        <!-- 3. BOTÃO SALVAR (Status + Ação) - Mais largo (px-5) -->
+        <!-- 3. BOTÃO SALVAR (Status + Ação) -->
         <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end gap-2 h-full">
-            <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide hidden"></span>
+            <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 font-bold tracking-wide hidden"></span>
             
-            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-5 sm:px-6 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
-                <i class="fa-solid fa-cloud-arrow-up text-base sm:text-lg"></i>
+            <button id="btn-manual-save" onclick="manualSave()" class="bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-6 sm:px-8 h-full rounded-full transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+                <i class="fa-solid fa-cloud-arrow-up text-base sm:text-xl"></i>
                 <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Salvar</span>
             </button>
         </div>
@@ -1300,7 +1299,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.5.9';
+        const FLOWME_VERSION = '2.6.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1327,11 +1326,9 @@
             if (savedVersion && savedVersion !== FLOWME_VERSION) { showUpdateSuccess(FLOWME_VERSION); }
             localStorage.setItem('flowme_version', FLOWME_VERSION);
 
-            // 1. Dita as Variáveis Mestras (Mês Atual)
             const today = new Date();
             state.currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
             
-            // 2. Alimenta a Interface Básica
             document.getElementById('global-month').value = state.currentMonth;
             if(document.getElementById('splash-version-display')) document.getElementById('splash-version-display').textContent = FLOWME_VERSION;
             if(document.getElementById('app-version-display')) document.getElementById('app-version-display').textContent = FLOWME_VERSION;
@@ -1343,7 +1340,6 @@
             document.getElementById('cfg-notif').checked = userConfig.notificationsEnabled;
             document.getElementById('cfg-tab-style').value = userConfig.tabStyle;
             
-            // 3. Carrega o Banco de Dados e Estilizações (SEM TIMEOUTS)
             loadState();
             applyFormMode();
             applyTabStyle();
@@ -1353,13 +1349,16 @@
             updateAutocompleteLists();
             addSplitRow();
 
-            // 4. Acorda os Filtros e Renderiza a Tela Imediatamente
+            // INICIALIZAÇÃO BLINDADA
+            currentFilterMode = 'month';
             updateFilterUI(); 
             changeGlobalMonth(state.currentMonth);
             switchTab('transacoes');
             setLanguage(userConfig.lang);
+            
+            // Failsafe
+            setTimeout(() => { render(); }, 150);
 
-            // 5. Google Sync
             setTimeout(() => {
                 if (typeof google === 'undefined') {
                     console.warn("Modo Offline/Adblock: Google não carregou.");
@@ -1548,7 +1547,7 @@
             });
         }
         
-        /// ================= FILTRO GLOBAL EXPANSÍVEL =================
+        // ================= FILTRO GLOBAL EXPANSÍVEL =================
         let currentFilterMode = 'month';
         let isFilterExpanded = false;
 
@@ -1558,14 +1557,11 @@
             
             if (isMobile) {
                 if (!isFilterExpanded) {
-                    // Celular: Se o filtro estiver fechado, apenas expande.
                     isFilterExpanded = true;
                 } else {
-                    // Celular: Se já estiver expandido, alterna entre Mês e Período.
                     currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
                 }
             } else {
-                // Desktop: Já está sempre expandido. Apenas alterna entre Mês e Período.
                 currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
             }
             updateFilterUI();
@@ -1581,11 +1577,11 @@
             if (window.innerWidth < 640) {
                 if (isFilterExpanded) {
                     content.classList.remove('max-w-0', 'opacity-0');
-                    content.classList.add('max-w-[320px]', 'opacity-100'); 
-                    icon.classList.add('scale-110', 'text-amber-400');
+                    content.classList.add('max-w-[340px]', 'opacity-100'); 
+                    icon.classList.add('scale-110', 'text-amber-400'); // Destaque ao abrir
                 } else {
                     content.classList.add('max-w-0', 'opacity-0');
-                    content.classList.remove('max-w-[320px]', 'opacity-100');
+                    content.classList.remove('max-w-[340px]', 'opacity-100');
                     icon.classList.remove('scale-110', 'text-amber-400');
                 }
             } else {
@@ -1594,46 +1590,26 @@
 
             // ALTERNÂNCIA DE MODO
             if (currentFilterMode === 'month') {
-                icon.className = 'fa-regular fa-calendar text-base sm:text-lg transition-transform duration-300';
+                icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
                 if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
                 
                 modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
                 modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
             } else {
-                icon.className = 'fa-solid fa-calendar-days text-base sm:text-lg transition-transform duration-300';
+                icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
                 if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
                 
                 modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
                 modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
                 
+                // Setando as Datas Localmente
                 if(!document.getElementById('date-start').value) {
                     const d = new Date();
-                    document.getElementById('date-start').value = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
-                    document.getElementById('date-end').value = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
-                }
-            }
-            render();
-        }
-
-            // ALTERNÂNCIA DE MODO
-            if (currentFilterMode === 'month') {
-                icon.className = 'fa-regular fa-calendar text-sm sm:text-base transition-transform duration-300';
-                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
-                
-                modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
-                modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
-            } else {
-                // Ícone duplo para indicar Período
-                icon.className = 'fa-solid fa-calendar-days text-sm sm:text-base transition-transform duration-300';
-                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
-                
-                modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
-                modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
-                
-                if(!document.getElementById('date-start').value) {
-                    const d = new Date();
-                    document.getElementById('date-start').value = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
-                    document.getElementById('date-end').value = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
+                    const y = d.getFullYear();
+                    const m = String(d.getMonth() + 1).padStart(2, '0');
+                    const lastD = new Date(y, d.getMonth() + 1, 0).getDate();
+                    document.getElementById('date-start').value = `${y}-${m}-01`;
+                    document.getElementById('date-end').value = `${y}-${m}-${lastD}`;
                 }
             }
             render();
@@ -1657,7 +1633,6 @@
                 const [year, month] = value.split('-');
                 const date = new Date(parseInt(year), parseInt(month) - 1, 10);
                 
-                // Leitura do Tamanho da Tela para ditar a extensão do nome
                 const isMobile = window.innerWidth < 1024;
                 const monthStyle = isMobile ? 'short' : 'long';
                 
@@ -1888,7 +1863,6 @@
         function getResponsiveProfile() {
             const width = window.innerWidth;
             const portrait = window.matchMedia('(orientation: portrait)').matches;
-            // Se a tela for menor que 520px, é celular apertado. Engole os textos para não colidir.
             if (width < 520) return 'mobile-portrait';
             if (width < 768 && !portrait) return 'mobile-landscape';
             if (width < 1024) return 'tablet';
@@ -1903,11 +1877,13 @@
 
             if (profile === 'desktop' || profile === 'tablet' || profile === 'mobile-landscape') {
                 saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
-                saveButton.classList.add('px-5', 'sm:px-6');
+                saveButton.classList.add('px-5', 'sm:px-8');
+                saveButton.classList.remove('px-6');
             } else {
                 saveText.classList.add('hidden'); saveTime.classList.add('hidden');
-                // No mobile portrait extremo, não removemos o padding. Deixamos ele alongado!
-                saveButton.classList.add('px-5');
+                // Mantém botão alongado e gordinho no Celular em Pé
+                saveButton.classList.add('px-6');
+                saveButton.classList.remove('px-5', 'sm:px-8');
             }
         }
 
@@ -1970,13 +1946,12 @@
             const colorClass = 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
             const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-400 dark:text-slate-900';
 
-            // Sino
             alertsContainer.innerHTML = `
                 <button
                     id="btn-alerts-bell"
                     type="button"
                     onclick="handleBellClick()"
-                    class="flex items-center justify-center gap-2 px-5 sm:px-6 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
+                    class="flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
                     <i class="fa-solid ${iconClass} text-base sm:text-lg"></i>
                     <span class="whitespace-nowrap">${text}</span>
                 </button>

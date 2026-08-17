@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowme-v2.1.8';
+const CACHE_NAME = 'flowme-v2.6.1';
 const urlsToCache = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',];
 
 // Instala e guarda a versão inicial

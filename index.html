@@ -182,19 +182,18 @@
 <section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500 z-50 rounded-full flex items-center h-16 sm:h-20">
     <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full px-1 transition-all duration-500">
 
-        <!-- 1. FILTRO EXPANSÍVEL (Animado) -->
+        <!-- 1. FILTRO EXPANSÍVEL (Animado em cascata) -->
         <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-left">
             <div id="filter-wrapper" class="flex items-center bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 h-full rounded-full transition-all duration-500 shadow-md relative overflow-hidden shrink-0">
                 
-                <!-- Ícone Mestre -->
-                <button type="button" onclick="handleFilterIconClick(event)" class="px-6 sm:px-8 h-full rounded-full flex items-center justify-center bg-transparent hover:text-amber-400 dark:hover:text-white transition-colors shrink-0 z-10 relative">
+                <!-- Ícone Mestre (Hover Branco/Escuro e Destaque Fluido) -->
+                <button type="button" onclick="handleFilterIconClick(event)" class="px-6 sm:px-8 h-full rounded-full flex items-center justify-center bg-transparent hover:text-slate-400 dark:hover:text-white transition-colors shrink-0 z-10 relative">
                     <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
                 </button>
 
                 <!-- Conteúdo que Expande/Encolhe -->
                 <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden sm:max-w-[340px] sm:opacity-100">
                     
-                    <!-- Módulo MÊS -->
                     <div id="mode-month" class="flex items-center h-full min-w-0 whitespace-nowrap">
                         <button onclick="changeMonthOffset(-1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         
@@ -206,22 +205,22 @@
                         <button onclick="changeMonthOffset(1)" class="px-3 sm:px-4 h-full hover:bg-white/20 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
                     
-                    <!-- Módulo PERÍODO -->
                     <div id="mode-range" class="hidden items-center h-full min-w-0 whitespace-nowrap px-1 sm:px-2">
                         <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                         <span class="text-[10px] sm:text-xs font-bold px-1 shrink-0 text-white dark:text-slate-900">~</span>
                         <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="!bg-transparent border-none text-xs sm:text-sm h-full outline-none p-0 cursor-pointer text-center w-[105px] sm:w-[125px] font-bold text-white dark:!text-slate-900 dark:[color-scheme:light] [&::-webkit-calendar-picker-indicator]:hidden">
                     </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- 2. ALERTA DINÂMICO -->
+        <!-- 2. ALERTA DINÂMICO (Cascata e Max-W nativo) -->
         <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-center">
             <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
         </div>
 
-        <!-- 3. BOTÃO SALVAR -->
+        <!-- 3. BOTÃO SALVAR (Cascata + Status Bloqueado) -->
         <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-right">
             <div class="flex items-center gap-2 h-full">
                 <span id="last-save-time" class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 font-bold tracking-wide hidden"></span>
@@ -1299,7 +1298,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.6.2';
+        const FLOWME_VERSION = '2.6.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1547,28 +1546,54 @@
             });
         }
         
-        // ================= MOTOR DE FOCO DA BARRA GLOBAL =================
+        // ================= MOTOR DE FOCO DA BARRA GLOBAL (EFEITO ONDA/CASCATA) =================
+        let focusSequenceTimer = null;
+        
         function setToolbarFocus(focusId) {
+            clearTimeout(focusSequenceTimer);
             const inner = document.getElementById('global-toolbar-inner');
-            const containers = ['global-toolbar-filter', 'global-toolbar-alerts', 'global-toolbar-save'];
+            const filter = document.getElementById('global-toolbar-filter');
+            const alerts = document.getElementById('global-toolbar-alerts');
+            const save = document.getElementById('global-toolbar-save');
             
-            if (focusId) inner.classList.remove('gap-2', 'sm:gap-3');
-            else inner.classList.add('gap-2', 'sm:gap-3');
-
-            containers.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                
-                if (focusId && id !== focusId) {
-                    // AFUNDA OS ELEMENTOS NÃO FOCADOS
+            const hide = (el) => {
+                if(el) {
                     el.classList.add('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
                     el.classList.remove('max-w-[500px]', 'opacity-100', 'scale-100');
-                } else {
-                    // RESTAURA E EXPANDE
+                }
+            };
+            const show = (el) => {
+                if(el) {
                     el.classList.remove('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
                     el.classList.add('max-w-[500px]', 'opacity-100', 'scale-100');
                 }
-            });
+            };
+
+            // Remove distanciamento para a pílula não quebrar o layout enquanto os itens somem
+            if (focusId) inner.classList.remove('gap-2', 'sm:gap-3');
+            else inner.classList.add('gap-2', 'sm:gap-3');
+
+            if (focusId === 'global-toolbar-filter') {
+                hide(save); // O mais longe (Salvar) some primeiro
+                focusSequenceTimer = setTimeout(() => hide(alerts), 150); // O do meio (Sino) some depois
+                show(filter);
+            } else if (focusId === 'global-toolbar-save') {
+                hide(filter); // O mais longe (Filtro) some primeiro
+                focusSequenceTimer = setTimeout(() => hide(alerts), 150); // O do meio (Sino) some depois
+                show(save);
+            } else if (focusId === 'global-toolbar-alerts') {
+                // Oculta as duas pontas simultaneamente
+                hide(filter);
+                hide(save);
+                show(alerts);
+            } else {
+                // Voltando ao Normal: Quem estava mais perto reaparece primeiro
+                show(alerts);
+                focusSequenceTimer = setTimeout(() => {
+                    show(filter);
+                    show(save);
+                }, 150);
+            }
         }
 
         // ================= FILTRO GLOBAL EXPANSÍVEL =================
@@ -1596,33 +1621,30 @@
             
             if (window.innerWidth < 640) {
                 if (isFilterExpanded) {
-                    // FOCO ATIVADO: Oculte Salvar e Alertas no celular para expandir o Calendário
                     setToolbarFocus('global-toolbar-filter');
-                    
                     content.classList.remove('max-w-0', 'opacity-0');
                     content.classList.add('max-w-[340px]', 'opacity-100'); 
-                    icon.classList.add('scale-110', 'text-amber-400');
+                    icon.classList.add('scale-110', 'text-slate-400', 'dark:text-white');
                 } else {
-                    // RESTAURA TUDO
                     setToolbarFocus(null);
-                    
                     content.classList.add('max-w-0', 'opacity-0');
                     content.classList.remove('max-w-[340px]', 'opacity-100');
-                    icon.classList.remove('scale-110', 'text-amber-400');
+                    icon.classList.remove('scale-110', 'text-slate-400', 'dark:text-white');
                 }
             } else {
-                setToolbarFocus(null);
-                icon.classList.remove('scale-110', 'text-amber-400');
+                icon.classList.remove('scale-110', 'text-slate-400', 'dark:text-white');
             }
 
             if (currentFilterMode === 'month') {
                 icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
-                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
+                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-slate-400', 'dark:text-white');
+                
                 modeMonth.classList.remove('hidden'); modeMonth.classList.add('flex');
                 modeRange.classList.add('hidden'); modeRange.classList.remove('flex');
             } else {
                 icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
-                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-amber-400');
+                if(window.innerWidth < 640 && isFilterExpanded) icon.classList.add('scale-110', 'text-slate-400', 'dark:text-white');
+                
                 modeMonth.classList.add('hidden'); modeMonth.classList.remove('flex');
                 modeRange.classList.remove('hidden'); modeRange.classList.add('flex');
                 
@@ -1875,7 +1897,7 @@
         window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
 
-        // SINO DINÂMICO
+        // SINO DINÂMICO (AGORA RESPONSIVO, COM CORRIGIDOS)
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
             const alertsWrapper = document.getElementById('global-toolbar-alerts');
@@ -1898,8 +1920,9 @@
             const text = isMobile ? `${totalAlerts}` : `${totalAlerts} Alertas`;
             const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
             
-            const colorClass = 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
-            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500' : 'fa-bell text-amber-400 dark:text-slate-900';
+            // O Group Hover garante que o ícone do sino sempre mude com o fundo do botão
+            const colorClass = 'group bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900';
+            const iconClass = hasCritical ? 'fa-bell fa-shake text-rose-500 group-hover:text-slate-900' : 'fa-bell text-amber-400 dark:text-slate-900 group-hover:text-slate-900';
 
             alertsContainer.innerHTML = `
                 <button
@@ -1907,18 +1930,50 @@
                     type="button"
                     onclick="handleBellClick()"
                     class="shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-md ${colorClass}">
-                    <i class="fa-solid ${iconClass} text-base sm:text-lg"></i>
-                    <span class="whitespace-nowrap">${text}</span>
+                    <i class="fa-solid ${iconClass} text-base sm:text-lg transition-colors"></i>
+                    <span class="whitespace-nowrap transition-all duration-300">${text}</span>
                 </button>
             `;
         }
 
+        let isBellOpening = false;
         function handleBellClick() {
+            if(isBellOpening) return;
             const btn = document.getElementById('btn-alerts-bell');
-            if (btn) {
-                btn.classList.add('animate-bell-pop');
-                setTimeout(() => { btn.classList.remove('animate-bell-pop'); openAlertsModal(); }, 500);
-            } else { openAlertsModal(); }
+            const isMobile = window.innerWidth < 640;
+            
+            if (btn && isMobile) {
+                isBellOpening = true;
+                
+                // Expande o Sino e afunda os botões da ponta
+                setToolbarFocus('global-toolbar-alerts');
+                
+                const textSpan = btn.querySelector('span');
+                const origText = textSpan.innerHTML;
+                
+                // Transforma o texto
+                textSpan.innerHTML = t('modal_alerts_title') || 'Central de Alertas';
+                
+                // Efeito Físico Desabilitando cliques
+                btn.classList.add('animate-bell-pop', 'pointer-events-none');
+                
+                setTimeout(() => { 
+                    btn.classList.remove('animate-bell-pop', 'pointer-events-none'); 
+                    openAlertsModal();
+                    
+                    // Retrair ao fechar o pop-up
+                    setTimeout(() => {
+                        textSpan.innerHTML = origText;
+                        setToolbarFocus(null);
+                        setTimeout(() => { isBellOpening = false; }, 500);
+                    }, 500); 
+                }, 800);
+            } else { 
+                if(btn) {
+                    btn.classList.add('animate-bell-pop', 'pointer-events-none');
+                    setTimeout(() => { btn.classList.remove('animate-bell-pop', 'pointer-events-none'); openAlertsModal(); }, 500);
+                } else openAlertsModal();
+            }
         }
 
         // ================= SAVE & LOAD =================
@@ -1932,38 +1987,48 @@
             updateSaveTimestamp(); 
         }
         
+        let isSaving = false;
         function manualSave() {
+            if(isSaving) return;
+            isSaving = true;
             saveState(); 
-            const btn = document.getElementById('btn-manual-save'); 
             
+            const btn = document.getElementById('btn-manual-save'); 
             const textSpan = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
             const isTextHidden = textSpan ? textSpan.classList.contains('hidden') : false;
             
             const origHTML = btn.innerHTML;
             
-            // Estágio 1: Girando (Preparação)
+            // Estágio 1: Girando com Bloqueio de Clique Extra
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base sm:text-lg"></i> <span class="${isTextHidden ? 'hidden' : ''} text-sm sm:text-base font-bold">Salvar</span>`;
+            btn.classList.add('pointer-events-none');
             
             setTimeout(() => {
-                // FOCO ATIVADO: Se estiver no celular, o botão Salvar manda os outros afundarem!
                 const isMobile = window.innerWidth < 640;
+                // Ativa a Cascata
                 if (isMobile) setToolbarFocus('global-toolbar-save');
 
-                // Força a mensagem "Salvo!" aparecer mesmo em telas minúsculas para criar o efeito de expansão
-                btn.innerHTML = `<i class="fa-solid fa-check text-base sm:text-lg"></i> <span class="font-bold text-sm sm:text-base ml-1">Salvo!</span>`;
+                const now = new Date(); 
+                const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
                 
-                btn.classList.remove('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950', 'px-6');
-                btn.classList.add('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop', 'px-6', 'sm:px-8', 'w-auto');
+                // Formato exigido: "Salvo às HH:MM:SS"
+                btn.innerHTML = `<i class="fa-solid fa-check text-base sm:text-lg"></i> <span class="font-bold text-sm sm:text-base ml-1 whitespace-nowrap">Salvo às ${timeStr}</span>`;
+                
+                btn.classList.remove('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
+                btn.classList.add('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop');
                 
                 setTimeout(() => { 
-                    // ESTÁGIO FINAL: Restaura tudo para o estado original
+                    // Volta ao estado original
                     btn.innerHTML = origHTML; 
-                    btn.classList.remove('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop', 'px-6', 'sm:px-8', 'w-auto'); 
-                    btn.classList.add('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950', 'px-6');
+                    btn.classList.remove('bg-emerald-500', 'dark:bg-white', 'dark:text-emerald-600', 'animate-save-pop', 'pointer-events-none'); 
+                    btn.classList.add('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
 
-                    // Desfaz o foco e traz todos os botões de volta
+                    // Desfaz Cascata
                     if (isMobile) setToolbarFocus(null);
-                }, 1800); 
+                    
+                    // Libera clique só depois da animação acabar
+                    setTimeout(() => { isSaving = false; }, 500); 
+                }, 2500); // 2.5s permite leitura
             }, 300); 
             
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 

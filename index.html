@@ -211,7 +211,7 @@
 
         <!-- 1. FILTRO EXPANSÍVEL -->
         <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-left">
-            <div id="filter-wrapper" class="group flex items-center bg-slate-900 dark:bg-slate-800 h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 hover:bg-indigo-600 dark:hover:bg-indigo-500 text-white cursor-pointer" onclick="handleFilterIconClick(event)">
+            <div id="filter-wrapper" class="group flex items-center bg-slate-900 dark:bg-emerald-500 h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 hover:bg-indigo-600 dark:hover:bg-indigo-500 text-white dark:text-slate-950 hover:text-white dark:hover:text-white cursor-pointer" onclick="handleFilterIconClick(event)">
                 
                 <button type="button" class="px-4 sm:px-5 h-full flex items-center justify-center bg-transparent shrink-0 z-10 relative pointer-events-none transition-colors">
                     <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
@@ -222,12 +222,12 @@
                     <div id="filter-content-inner" class="relative h-full flex items-center justify-center transition-all duration-500 pr-2">
                         <!-- Módulo MÊS -->
                         <div id="mode-month" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10">
-                            <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                            <div class="relative flex items-center justify-center px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition">
+                            <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="relative z-20 px-3 sm:px-4 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                            <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition">
                                 <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none"></span>
                                 <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="event.stopPropagation(); this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
-                            <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                            <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="relative z-20 px-3 sm:px-4 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                         </div>
                         
                         <!-- Módulo PERÍODO -->
@@ -1366,7 +1366,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.7.8';
+        const FLOWME_VERSION = '2.7.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1757,8 +1757,11 @@
                 if (collapsedText) {
                     collapsedText.classList.remove('max-w-0', 'opacity-0', '!ml-0');
                     collapsedText.classList.add('max-w-[150px]', 'opacity-100', 'ml-2');
-                    if (currentFilterMode === 'month') collapsedText.textContent = document.getElementById('month-display').textContent;
-                    else collapsedText.textContent = t('period_label') || 'Período';
+                    if (currentFilterMode === 'month') {
+                        collapsedText.textContent = document.getElementById('month-display').textContent;
+                    } else {
+                        collapsedText.textContent = (t('period_label') || 'Período').replace(':', '');
+                    }
                 }
             }
             render();
@@ -2049,11 +2052,11 @@
             const isActive = totalAlerts > 0 || isAlertsModalOpen;
             
             const baseColor = isActive 
-                ? 'bg-amber-400 text-slate-900 dark:bg-amber-400 dark:text-slate-900 shadow-md' 
-                : 'bg-white/40 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900 border border-slate-300/30 dark:border-slate-600/30';
+                ? 'bg-amber-400 text-slate-900 shadow-md' 
+                : 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900 shadow-sm transition-colors';
             
             const iconType = isActive ? 'fa-solid fa-bell' : 'fa-regular fa-bell';
-            const iconColor = isActive ? 'text-slate-900' : 'text-slate-500 dark:text-slate-300 group-hover:text-slate-900';
+            const iconColor = isActive ? 'text-slate-900' : 'text-amber-400 dark:text-slate-900 group-hover:text-slate-900';
             const shakeClass = hasCritical ? 'fa-shake' : '';
 
             if (!isActive && isMobile && !isAlertsModalOpen) {
@@ -2080,7 +2083,7 @@
         function handleBellClick() {
             if(isBellOpening) return;
             isAlertsModalOpen = true; 
-            renderToolbarAlerts();
+            renderToolbarAlerts(); 
             
             const newBtn = document.getElementById('btn-alerts-bell');
             if (newBtn) {
@@ -2116,10 +2119,10 @@
             
             const btn = document.getElementById('btn-manual-save'); 
             const origHTML = btn.innerHTML;
-            const origClassName = btn.className;
+            const origClassName = btn.className; 
             
             btn.className = "shrink-0 bg-emerald-500 text-white px-6 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md pointer-events-none";
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base sm:text-lg"></i> <span class="text-sm sm:text-base font-bold">Salvar</span>`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base sm:text-lg"></i> <span class="hidden sm:inline text-sm sm:text-base font-bold">${t('btn_save') || 'Salvar'}</span>`;
             
             setTimeout(() => {
                 const executeSaveVisuals = () => {

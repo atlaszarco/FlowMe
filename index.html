@@ -690,7 +690,7 @@
                         <div class="overflow-hidden">
                             <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
                                 <div class="min-w-[240px] h-64 relative">
-                                    <canvas id="chart-cashflow"></canvas>
+                                    <canvas id="chart-category"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -707,7 +707,7 @@
                         <div class="overflow-hidden">
                             <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
                                 <div class="min-w-[240px] h-64 relative">
-                                    <canvas id="chart-cashflow"></canvas>
+                                    <canvas id="chart-evolution"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -724,7 +724,7 @@
                         <div class="overflow-hidden">
                             <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
                                 <div class="min-w-[240px] h-64 relative">
-                                    <canvas id="chart-cashflow"></canvas>
+                                    <canvas id="chart-accounts"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -1224,13 +1224,7 @@
             userConfig.lang = lang; 
             localStorage.setItem('flowme_lang', lang);
 
-            // Blindagem: Atualiza a Pílula e Modais ANTES de tentar buscar IDs que podem estar ocultos
-            changeGlobalMonth(state.currentMonth);
-            if (typeof renderToolbarAlerts === 'function') renderToolbarAlerts();
-            if (typeof renderLimitsSettings === 'function') renderLimitsSettings();
-            if (typeof updateSaveTimestamp === 'function') updateSaveTimestamp();
-
-            // Atualização de todos os textos
+            // 1. Atualização de todos os textos base
             document.querySelectorAll('[data-i18n]').forEach(el => { 
                 const key = el.getAttribute('data-i18n'); 
                 if (translations[lang][key]) el.innerHTML = translations[lang][key]; 
@@ -1241,7 +1235,7 @@
                 if (translations[lang][key]) el.title = translations[lang][key]; 
             });
             
-            // Formulários e placeholders
+            // 2. Formulários e placeholders
             const dDesc = document.getElementById('description'); if(dDesc) dDesc.placeholder = t('placeholder_desc'); 
             const dCat = document.getElementById('category'); if(dCat) dCat.placeholder = t('placeholder_cat'); 
             const dPay = document.getElementById('payment-method'); if(dPay) dPay.placeholder = t('placeholder_acc'); 
@@ -1282,8 +1276,14 @@
             
             if (typeof updateLangUI === 'function') updateLangUI(lang); 
             if (typeof render === 'function') render(); 
-        }
 
+            // 3. Atualização Reativa
+            if (typeof changeGlobalMonth === 'function') changeGlobalMonth(state.currentMonth);
+            if (typeof renderToolbarAlerts === 'function') renderToolbarAlerts();
+            if (typeof renderLimitsSettings === 'function') renderLimitsSettings();
+            if (typeof updateSaveTimestamp === 'function') updateSaveTimestamp();
+        }
+        
         // ================= SANFONA E ESTILO DOS PAINÉIS =================
         let accordionState = JSON.parse(localStorage.getItem('flowme_accordions')) || {};
 
@@ -1361,7 +1361,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.7.3';
+        const FLOWME_VERSION = '2.7.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1596,40 +1596,7 @@
         }
 
         // ================= GESTOS (SWIPE) PARA ABAS =================
-        let touchStartX = 0; let touchStartY = 0;
-        document.addEventListener('touchstart', e => {
-            // Ignora o arraste do dedo se for dentro de tabelas, gráficos, pílulas ou pop-ups
-            if (e.target.closest('.overflow-x-auto') || e.target.closest('#global-toolbar') || e.target.closest('.modal-wrapper') || e.target.closest('canvas')) return;
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
-        }, {passive: true});
-
-        document.addEventListener('touchend', e => {
-            if (!touchStartX) return;
-            const touchEndX = e.changedTouches[0].screenX;
-            const touchEndY = e.changedTouches[0].screenY;
-            
-            const deltaX = touchEndX - touchStartX;
-            const deltaY = touchEndY - touchStartY;
-            
-            // Aceita o Swipe apenas se o movimento horizontal for bem maior que o vertical
-            if (Math.abs(deltaX) > 60 && Math.abs(deltaY) < 40) {
-                let currentTab = '';
-                document.querySelectorAll('.tab-content').forEach(el => {
-                    if (!el.classList.contains('hidden')) currentTab = el.id.replace('content-', '');
-                });
-                
-                const currentIndex = tabsOrder.indexOf(currentTab);
-                if (currentIndex === -1) return;
-
-                if (deltaX < 0 && currentIndex < tabsOrder.length - 1) {
-                    switchTab(tabsOrder[currentIndex + 1]); // Deslizou para a esquerda (Avança)
-                } else if (deltaX > 0 && currentIndex > 0) {
-                    switchTab(tabsOrder[currentIndex - 1]); // Deslizou para a direita (Volta)
-                }
-            }
-            touchStartX = 0;
-        }, {passive: true});
+        // O swipe de arrastar a tela foi desativado para priorizar a navegação fixa e evitar conflitos.
 
         // ================= DRAG TO SCROLL (MENU DE ABAS NO PC) =================
         const tabsNav = document.getElementById('tabs-nav');
@@ -1912,6 +1879,7 @@
 
         function closeModal(id) {
             const m = document.getElementById(id);
+            if(!m) return;
             const inner = m.querySelector('.modal-inner');
             m.classList.add('opacity-0');
             if(inner) { inner.classList.remove('scale-100', 'translate-y-0', 'opacity-100'); inner.classList.add('scale-95', 'translate-y-4', 'opacity-0'); }
@@ -1922,6 +1890,13 @@
 
             setTimeout(() => { m.classList.add('hidden'); }, 300);
         }
+
+        // FECHAR MODAIS AO CLICAR FORA
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-wrapper')) {
+                closeModal(e.target.id);
+            }
+        });
         
         function filterGlobalEdit() {
             const term = document.getElementById('global-edit-search').value.toLowerCase();
@@ -2235,7 +2210,7 @@
                 
             }, 300); 
             
-            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true, true); 
         }
         
         function loadState() {
@@ -3708,8 +3683,11 @@
             }
         }
 
-        async function saveToCloud(silent = false) {
+        async function saveToCloud(silent = false, forceManual = false) {
             if(!accessToken) return;
+
+            if(silent && !forceManual) return;
+            
             const btn = document.querySelector('button[onclick="saveToCloud()"]'); let origHTML;
             if(!silent && btn) { origHTML = btn.innerHTML; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>${t('msg_sync_saving')}</span>`; }
 
@@ -3718,15 +3696,13 @@
                 let existingFile = await findCloudFile();
                 
                 if (existingFile) {
-                    // Atualiza o arquivo existente onde quer que ele esteja
                     await fetch('https://www.googleapis.com/upload/drive/v3/files/' + existingFile.id + '?uploadType=media', {
                         method: 'PATCH', headers: new Headers({ 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' }), body: fileContent
                     });
                 } else {
-                    // Cria o arquivo novo DENTRO da pasta
                     const folderId = await findOrCreateAppFolder();
                     const metadata = { name: 'flowme_backup.json', mimeType: 'application/json' };
-                    if (folderId) metadata.parents = [folderId]; // Diz ao Drive para colocar na pasta
+                    if (folderId) metadata.parents = [folderId]; 
 
                     const boundary = '-------314159265358979323846';
                     const delimiter = "\r\n--" + boundary + "\r\n"; const close_delim = "\r\n--" + boundary + "--";

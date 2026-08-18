@@ -579,7 +579,7 @@
             </div>
             
             <!-- Botão Flutuante (FAB) -->
-            <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
+            <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
                 <i class="fa-solid fa-plus"></i>
             </button>
         </div>
@@ -730,7 +730,7 @@
 <!-- ================= BLOCO 7: ABA CONFIGURAÇÕES ================= -->
         <div id="content-backup" class="tab-content hidden max-w-4xl mx-auto flex flex-col min-h-[calc(100vh-160px)]">
             
-            <div id="cfg-container" class="columns-1 md:columns-2 gap-6 flex-1">
+            <div id="cfg-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start flex-1 w-full">
                 
                 <!-- 1. Conta e Nuvem -->
                 <div id="cfg-wrap-cloud" class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
@@ -959,12 +959,12 @@
             </div>
             <div class="p-4 overflow-y-auto max-h-[60vh] flex flex-col">
                 <div class="flex gap-2 mb-2">
-                    <input type="text" id="global-edit-new" autocomplete="off" data-i18n="ph_add_new" placeholder="Adicionar novo..." class="flex-1 p-2 text-xs border border-slate-300 dark:border-transparent dark:hover:border-slate-700 focus:border-indigo-500 dark:focus:border-indigo-500 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none dark:text-white transition">
+                    <input type="text" id="global-edit-new" autocomplete="off" data-i18n="ph_add_new" placeholder="Adicionar novo..." class="flex-1 p-2 text-xs border-2 !border-transparent hover:!border-slate-200 dark:hover:!border-slate-700 focus:!border-indigo-500 dark:focus:!border-indigo-500 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none dark:text-white transition">
                     <div class="flex gap-2 w-[88px] shrink-0 justify-end">
                         <button onclick="addGlobalItem()" class="w-10 h-8 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition shadow-md"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
-                <input type="text" id="global-edit-search" autocomplete="off" oninput="filterGlobalEdit()" data-i18n="placeholder_search" placeholder="Pesquisar..." class="w-full p-2 mb-2 text-xs border border-slate-300 dark:border-transparent dark:hover:border-slate-700 focus:border-indigo-500 dark:focus:border-indigo-500 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none dark:text-white transition">
+                <input type="text" id="global-edit-search" autocomplete="off" oninput="filterGlobalEdit()" data-i18n="placeholder_search" placeholder="Pesquisar..." class="w-full p-2 mb-2 text-xs border-2 !border-transparent hover:!border-slate-200 dark:hover:!border-slate-700 focus:!border-indigo-500 dark:focus:!border-indigo-500 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none dark:text-white transition">
                 <div id="global-edit-content" class="space-y-1.5 flex-1 overflow-y-auto"></div>
             </div>
             <input type="hidden" id="global-edit-field">
@@ -1366,7 +1366,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.8.0';
+        const FLOWME_VERSION = '2.8.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1923,7 +1923,7 @@
                     const rowId = 'ge-' + Math.random().toString(36).substr(2,6);
                     const div = document.createElement('div'); div.className = "flex items-center gap-2 p-1.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/50";
                     div.innerHTML = `
-                        <input type="text" id="${rowId}" value="${it}" class="flex-1 p-1 px-2 text-xs border border-transparent dark:hover:border-slate-600 focus:border-indigo-400 dark:focus:border-indigo-400 bg-transparent outline-none dark:text-slate-200 transition min-w-0 text-ellipsis rounded-lg">
+                        <input type="text" id="${rowId}" value="${it}" class="flex-1 p-1 px-2 text-xs border-2 !border-transparent hover:!border-slate-200 dark:hover:!border-slate-600 focus:!border-indigo-400 dark:focus:!border-indigo-400 bg-transparent outline-none dark:text-slate-200 transition min-w-0 text-ellipsis rounded-lg">
                         <div class="flex gap-1.5 shrink-0 w-[88px] justify-end">
                             <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="w-10 h-8 flex items-center justify-center bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/60 dark:hover:bg-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-bold transition active:scale-95 border border-indigo-200 dark:border-indigo-800"><i class="fa-solid fa-floppy-disk"></i></button>
                             <button onclick="selectGlobalItem('${it.replace(/'/g, "\\'")}')" class="w-10 h-8 flex items-center justify-center bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/60 dark:hover:bg-emerald-700 dark:text-emerald-300 rounded-lg text-sm font-bold transition active:scale-95 border border-emerald-200 dark:border-emerald-800"><i class="fa-solid fa-check"></i></button>
@@ -2004,15 +2004,6 @@
             updateSaveDisplay(profile);
             updateSaveTimestamp();
             renderToolbarAlerts();
-            
-            const cfgContainer = document.getElementById('cfg-container');
-            if (cfgContainer) {
-                const [c1, c2, c3, c4, c5, c6] = ['cloud', 'lang', 'app', 'notif', 'sec', 'limits'].map(id => document.getElementById(`cfg-wrap-${id}`));
-                if (c1 && c6) {
-                    if (profile === 'tablet' || profile === 'desktop') cfgContainer.append(c1, c3, c5, c2, c4, c6);
-                    else cfgContainer.append(c1, c2, c3, c4, c5, c6);
-                }
-            }
 
             // Animação de Gota d'Água do Logo (FlowMe)
             const logoText = document.getElementById('header-logo-text');
@@ -2196,7 +2187,7 @@
         let isMobileFormOpen = false;
         
         function toggleMobileForm(forceOpen = null) {
-            if (window.innerWidth >= 1024) return; // Ignora a animação se for desktop
+            if (window.innerWidth >= 1024) return; 
             
             if (forceOpen !== null) isMobileFormOpen = forceOpen;
             else isMobileFormOpen = !isMobileFormOpen;
@@ -2205,31 +2196,25 @@
             const backdrop = document.getElementById('form-backdrop');
             
             if (isMobileFormOpen) {
-                // Liga os elementos na tela
                 backdrop.classList.remove('hidden');
                 wrapper.classList.remove('hidden');
                 
-                // Formata o Wrapper como Pop-up (Modal) Centralizado
-                wrapper.classList.add('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                wrapper.classList.add('fixed', 'z-50', 'inset-0', 'm-auto', 'w-[90%]', 'max-w-md', 'h-max', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
                 
-                // Aciona a animação fluída no próximo quadro (Frame)
                 requestAnimationFrame(() => {
                     backdrop.classList.remove('opacity-0');
                     wrapper.classList.remove('opacity-0', 'scale-95');
                     wrapper.classList.add('opacity-100', 'scale-100');
                 });
             } else {
-                // Retrai a animação (Soma o Scale e Opacidade)
                 backdrop.classList.add('opacity-0');
                 wrapper.classList.remove('opacity-100', 'scale-100');
                 wrapper.classList.add('opacity-0', 'scale-95');
                 
-                // Espera 300ms (tempo do CSS) para esconder o código
                 setTimeout(() => {
                     wrapper.classList.add('hidden');
                     backdrop.classList.add('hidden');
-                    // Limpa as classes do mobile para não dar erro se a pessoa girar o celular/tela
-                    wrapper.classList.remove('fixed', 'z-50', 'left-1/2', 'top-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transform', 'transition-all', 'duration-500', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
+                    wrapper.classList.remove('fixed', 'z-50', 'inset-0', 'm-auto', 'w-[90%]', 'max-w-md', 'h-max', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
                 }, 300);
             }
         }

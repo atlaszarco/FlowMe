@@ -209,36 +209,35 @@
 <section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/30 dark:bg-slate-900/40 backdrop-blur-lg border border-white/50 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 z-50 rounded-3xl flex items-center h-16 sm:h-20">
     <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full px-2 py-2 transition-all duration-500">
 
-        <!-- 1. FILTRO EXPANSÍVEL (Largura Dinâmica) -->
+        <!-- 1. FILTRO EXPANSÍVEL -->
         <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-left">
-            <div id="filter-wrapper" class="group flex items-center bg-slate-900 dark:bg-emerald-500 h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 hover:bg-amber-400 dark:hover:bg-amber-400 text-white dark:text-slate-950 hover:text-slate-900 dark:hover:text-slate-900 cursor-pointer" onclick="handleFilterIconClick(event)">
+            <div id="filter-wrapper" class="group flex items-center bg-slate-900 dark:bg-slate-800 h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 hover:bg-indigo-600 dark:hover:bg-indigo-500 text-white cursor-pointer" onclick="handleFilterIconClick(event)">
                 
-                <button type="button" class="px-5 sm:px-6 h-full flex items-center justify-center bg-transparent shrink-0 z-10 relative pointer-events-none">
+                <button type="button" class="px-4 sm:px-5 h-full flex items-center justify-center bg-transparent shrink-0 z-10 relative pointer-events-none transition-colors">
                     <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
+                    <span id="filter-collapsed-text" class="hidden sm:inline max-w-[150px] overflow-hidden ml-2 text-sm font-bold whitespace-nowrap transition-all duration-500 opacity-100"></span>
                 </button>
 
-                <!-- Container do conteúdo que muda de tamanho -->
                 <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden">
                     <div id="filter-content-inner" class="relative h-full flex items-center justify-center transition-all duration-500 pr-2">
-        
                         <!-- Módulo MÊS -->
                         <div id="mode-month" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10">
-                            <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="px-2 h-full hover:bg-black/10 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                            <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-black/10 dark:hover:bg-white/20 transition">
+                            <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                            <div class="relative flex items-center justify-center px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition">
                                 <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none"></span>
                                 <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="event.stopPropagation(); this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
-                            <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="px-2 h-full hover:bg-black/10 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                            <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                         </div>
                         
                         <!-- Módulo PERÍODO -->
                         <div id="mode-range" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0">
-                            <div class="relative flex items-center justify-center px-2 h-full cursor-pointer hover:bg-black/10 dark:hover:bg-white/20 transition rounded-xl" onclick="event.stopPropagation()">
+                            <div class="relative flex items-center justify-center px-1.5 sm:px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition rounded-xl" onclick="event.stopPropagation()">
                                 <span id="date-start-display" class="text-sm sm:text-base font-bold pointer-events-none">--/--/--</span>
                                 <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
-                            <span class="text-[10px] sm:text-xs font-bold shrink-0">~</span>
-                            <div class="relative flex items-center justify-center px-2 h-full cursor-pointer hover:bg-black/10 dark:hover:bg-white/20 transition rounded-xl" onclick="event.stopPropagation()">
+                            <span class="text-[10px] sm:text-xs font-bold shrink-0 mx-0.5">~</span>
+                            <div class="relative flex items-center justify-center px-1.5 sm:px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition rounded-xl" onclick="event.stopPropagation()">
                                 <span id="date-end-display" class="text-sm sm:text-base font-bold pointer-events-none">--/--/--</span>
                                 <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
@@ -1367,7 +1366,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.7.7';
+        const FLOWME_VERSION = '2.7.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1687,17 +1686,15 @@
 
         function handleFilterIconClick(event) {
             if(event) event.stopPropagation();
-            
             if (!isFilterExpanded) {
                 isFilterExpanded = true;
-                setToolbarFocus('global-toolbar-filter'); // Aplica a cascata em TODOS os dispositivos
+                setToolbarFocus('global-toolbar-filter'); 
             } else {
                 currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
             }
             updateFilterUI();
         }
 
-        // Se clicar fora do filtro, ele recolhe
         document.addEventListener('click', (e) => {
             const wrapper = document.getElementById('filter-wrapper');
             if (wrapper && !wrapper.contains(e.target) && isFilterExpanded) {
@@ -1711,37 +1708,39 @@
             const content = document.getElementById('filter-content');
             const innerContent = document.getElementById('filter-content-inner');
             const icon = document.getElementById('filter-icon-display');
+            const collapsedText = document.getElementById('filter-collapsed-text');
             const modeMonth = document.getElementById('mode-month');
             const modeRange = document.getElementById('mode-range');
             
             const isMicro = window.innerWidth < 300;
-            const wMonth = isMicro ? 'w-[100px]' : 'w-[140px]';
-            const wRange = isMicro ? 'w-[150px]' : 'w-[230px]';
+            const wMonth = isMicro ? 'w-[120px]' : 'w-[160px]';
+            const wRange = isMicro ? 'w-[160px]' : 'w-[230px]';
 
             if (isFilterExpanded) {
                 content.classList.remove('max-w-0', 'opacity-0');
                 content.classList.add('opacity-100');
                 
+                if (collapsedText) {
+                    collapsedText.classList.add('max-w-0', 'opacity-0', '!ml-0');
+                    collapsedText.classList.remove('max-w-[150px]', 'opacity-100', 'ml-2');
+                }
+                
                 if (currentFilterMode === 'month') {
-                    // MODO MÊS: Encolhe largura, mostra mês
                     content.classList.remove(wRange); content.classList.add(wMonth, 'max-w-[200px]');
                     innerContent.classList.remove(wRange); innerContent.classList.add(wMonth);
                     
                     icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300 scale-110';
                     modeMonth.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                     modeMonth.classList.add('opacity-100', 'scale-100', 'z-10');
-                    
                     modeRange.classList.remove('opacity-100', 'scale-100', 'z-10');
                     modeRange.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                 } else {
-                    // MODO PERÍODO: Expande largura, mostra datas
                     content.classList.remove(wMonth, 'max-w-[200px]'); content.classList.add(wRange, 'max-w-[340px]');
                     innerContent.classList.remove(wMonth); innerContent.classList.add(wRange);
                     
                     icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300 scale-110';
                     modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10');
                     modeMonth.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
-                    
                     modeRange.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                     modeRange.classList.add('opacity-100', 'scale-100', 'z-10');
                     
@@ -1754,17 +1753,16 @@
                 content.classList.add('max-w-0', 'opacity-0');
                 content.classList.remove('opacity-100', wMonth, wRange, 'max-w-[200px]', 'max-w-[340px]');
                 icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
+                
+                if (collapsedText) {
+                    collapsedText.classList.remove('max-w-0', 'opacity-0', '!ml-0');
+                    collapsedText.classList.add('max-w-[150px]', 'opacity-100', 'ml-2');
+                    if (currentFilterMode === 'month') collapsedText.textContent = document.getElementById('month-display').textContent;
+                    else collapsedText.textContent = t('period_label') || 'Período';
+                }
             }
             render();
         }
-
-        document.addEventListener('click', (e) => {
-            const wrapper = document.getElementById('filter-wrapper');
-            if (wrapper && !wrapper.contains(e.target) && isFilterExpanded && window.innerWidth < 640) {
-                isFilterExpanded = false;
-                updateFilterUI();
-            }
-        });
 
         function changeGlobalMonth(value) {
             if(!value) return; 
@@ -1774,21 +1772,16 @@
                 const [year, month] = value.split('-');
                 const date = new Date(parseInt(year), parseInt(month) - 1, 10);
                 const isMobile = window.innerWidth < 1024;
-                const monthStyle = isMobile ? 'short' : 'long';
                 
-                // Puxa o nome do mês
-                let monthName = date.toLocaleString(userConfig.lang, { month: monthStyle }).replace('.', '');
+                let monthName = date.toLocaleString(userConfig.lang, { month: isMobile ? 'short' : 'long' }).replace('.', '');
                 monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-                
                 let yearStr = isMobile ? year.substring(2) : year;
                 
-                // Formatação fluida por idioma e tamanho de tela
-                if (isMobile) {
-                    displaySpan.textContent = `${monthName}/${yearStr}`;
-                } else {
-                    if (userConfig.lang === 'pt' || userConfig.lang === 'es') displaySpan.textContent = `${monthName} de ${yearStr}`;
-                    else displaySpan.textContent = `${monthName} ${yearStr}`;
-                }
+                if (isMobile) displaySpan.textContent = `${monthName}/${yearStr}`;
+                else displaySpan.textContent = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${monthName} de ${yearStr}` : `${monthName} ${yearStr}`;
+                
+                const collapsedText = document.getElementById('filter-collapsed-text');
+                if (collapsedText && !isFilterExpanded && currentFilterMode === 'month') collapsedText.textContent = displaySpan.textContent;
             }
             if (currentFilterMode === 'month') { render(); if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); }
         }
@@ -2053,31 +2046,28 @@
             const modalTitle = t('modal_alerts_title') || 'Central de Alertas';
 
             let contentHtml = '';
-            
             const isActive = totalAlerts > 0 || isAlertsModalOpen;
             
             const baseColor = isActive 
                 ? 'bg-amber-400 text-slate-900 dark:bg-amber-400 dark:text-slate-900 shadow-md' 
-                : 'bg-slate-900 text-amber-400 dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900 shadow-sm';
+                : 'bg-white/40 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900 border border-slate-300/30 dark:border-slate-600/30';
             
-            const iconColor = isActive ? 'text-slate-900' : (hasCritical ? 'text-rose-500 fa-shake group-hover:text-slate-900' : 'text-amber-400 dark:text-slate-950 group-hover:text-slate-900');
             const iconType = isActive ? 'fa-solid fa-bell' : 'fa-regular fa-bell';
+            const iconColor = isActive ? 'text-slate-900' : 'text-slate-500 dark:text-slate-300 group-hover:text-slate-900';
+            const shakeClass = hasCritical ? 'fa-shake' : '';
 
-            if (!isActive && isMobile) {
-                // Sino vazio e fechado no celular (Bolinha encolhida)
+            if (!isActive && isMobile && !isAlertsModalOpen) {
                 contentHtml = `
                     <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 ${baseColor}">
-                        <i class="${iconType} ${iconColor} text-base sm:text-lg transition-colors"></i>
-                        <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300"></span>
+                        <i class="${iconType} ${iconColor} ${shakeClass} text-base sm:text-lg transition-colors"></i>
+                        <span id="bell-text-span" class="hidden overflow-hidden transition-all duration-300"></span>
                     </button>
                 `;
             } else {
-                // Sino ativo ou Desktop
-                const textStr = isMobile ? (totalAlerts > 0 ? `${totalAlerts}` : '') : (totalAlerts > 0 ? `${totalAlerts} ${alertWord}` : modalTitle);
-                
+                const textStr = isMobile ? (totalAlerts > 0 ? `${totalAlerts}` : modalTitle) : (totalAlerts > 0 ? `${totalAlerts} ${alertWord}` : modalTitle);
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-full rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 ${baseColor}">
-                        <i class="${iconType} ${iconColor} text-base sm:text-lg transition-colors"></i>
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-max rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 ${baseColor}">
+                        <i class="${iconType} ${iconColor} ${shakeClass} text-base sm:text-lg transition-colors"></i>
                         <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
                     </button>
                 `;
@@ -2085,16 +2075,19 @@
             alertsContainer.innerHTML = contentHtml;
         }
 
+        let isBellOpening = false;
+
         function handleBellClick() {
-            const btn = document.getElementById('btn-alerts-bell');
-            if (btn) {
-                isAlertsModalOpen = true;
-                renderToolbarAlerts();
-                
+            if(isBellOpening) return;
+            isAlertsModalOpen = true; 
+            renderToolbarAlerts();
+            
+            const newBtn = document.getElementById('btn-alerts-bell');
+            if (newBtn) {
                 setToolbarFocus('global-toolbar-alerts', () => {
-                    btn.classList.add('animate-bell-pop', 'pointer-events-none');
+                    newBtn.classList.add('animate-bell-pop', 'pointer-events-none');
                     setTimeout(() => { 
-                        btn.classList.remove('animate-bell-pop', 'pointer-events-none'); 
+                        newBtn.classList.remove('animate-bell-pop', 'pointer-events-none'); 
                         openAlertsModal(); 
                     }, 500);
                 });
@@ -2104,7 +2097,7 @@
         function revertBellState() {
             isAlertsModalOpen = false;
             setToolbarFocus(null); 
-            renderToolbarAlerts();
+            renderToolbarAlerts(); 
         }
 
         // ================= SAVE & LOAD =================
@@ -2122,15 +2115,11 @@
             saveState(); 
             
             const btn = document.getElementById('btn-manual-save'); 
-            const textSpan = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
-            const isTextHidden = textSpan ? textSpan.classList.contains('hidden') : false;
-            
             const origHTML = btn.innerHTML;
+            const origClassName = btn.className;
             
-            btn.classList.remove('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
-            btn.classList.add('bg-emerald-500', 'dark:bg-white', 'text-white', 'dark:text-emerald-600', 'pointer-events-none');
-            
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base sm:text-lg"></i> <span class="${isTextHidden ? 'hidden' : ''} text-sm sm:text-base font-bold">Salvar</span>`;
+            btn.className = "shrink-0 bg-emerald-500 text-white px-6 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md pointer-events-none";
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base sm:text-lg"></i> <span class="text-sm sm:text-base font-bold">Salvar</span>`;
             
             setTimeout(() => {
                 const executeSaveVisuals = () => {
@@ -2141,10 +2130,8 @@
                     btn.classList.add('animate-save-pop');
                     
                     setTimeout(() => { 
-                        // Restaura botão original
+                        btn.className = origClassName;
                         btn.innerHTML = origHTML; 
-                        btn.classList.remove('bg-emerald-500', 'dark:bg-white', 'text-white', 'dark:text-emerald-600', 'animate-save-pop'); 
-                        btn.classList.add('bg-slate-900', 'dark:bg-emerald-500', 'dark:text-slate-950');
 
                         setToolbarFocus(null, () => {
                             btn.classList.remove('pointer-events-none');

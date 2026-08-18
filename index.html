@@ -1224,7 +1224,6 @@
             userConfig.lang = lang; 
             localStorage.setItem('flowme_lang', lang);
 
-            // 1. Atualização de todos os textos base
             document.querySelectorAll('[data-i18n]').forEach(el => { 
                 const key = el.getAttribute('data-i18n'); 
                 if (translations[lang][key]) el.innerHTML = translations[lang][key]; 
@@ -1235,7 +1234,6 @@
                 if (translations[lang][key]) el.title = translations[lang][key]; 
             });
             
-            // 2. Formulários e placeholders
             const dDesc = document.getElementById('description'); if(dDesc) dDesc.placeholder = t('placeholder_desc'); 
             const dCat = document.getElementById('category'); if(dCat) dCat.placeholder = t('placeholder_cat'); 
             const dPay = document.getElementById('payment-method'); if(dPay) dPay.placeholder = t('placeholder_acc'); 
@@ -1270,6 +1268,20 @@
                     if(mFormTitle) mFormTitle.innerHTML = t('form_title_new');
                 }
             }
+
+            const versionSpan = document.querySelector('[data-i18n="cfg_version"]');
+            if(versionSpan) versionSpan.innerHTML = t('cfg_version') + ' ' + FLOWME_VERSION;
+            if (typeof updateLangUI === 'function') updateLangUI(lang); 
+
+            if (typeof changeGlobalMonth === 'function') changeGlobalMonth(state.currentMonth);
+            if (typeof renderToolbarAlerts === 'function') renderToolbarAlerts();
+            if (typeof renderLimitsSettings === 'function') renderLimitsSettings();
+            if (typeof updateSaveTimestamp === 'function') updateSaveTimestamp();
+
+            setTimeout(() => {
+                if (typeof render === 'function') render(); 
+            }, 50);
+        }
 
             const versionSpan = document.querySelector('[data-i18n="cfg_version"]');
             if(versionSpan) versionSpan.innerHTML = t('cfg_version') + ' ' + FLOWME_VERSION;
@@ -1361,7 +1373,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.7.5';
+        const FLOWME_VERSION = '2.7.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

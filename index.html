@@ -67,6 +67,14 @@
         .slide-right { animation: slideInRight 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         .slide-left { animation: slideInLeft 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 
+        /* Animações Orgânicas (Efeito Mitose e Absorção) */
+        @keyframes pilulaReact {
+            0% { transform: translateX(-50%) scaleY(1); }
+            40% { transform: translateX(-50%) scaleY(1.15) translateY(-6px); border-radius: 40px; }
+            100% { transform: translateX(-50%) scaleY(1) translateY(0); border-radius: 24px; }
+        }
+        .animate-pilula-react { animation: pilulaReact 0.5s ease-out forwards; }
+        
         /* Efeito global de clique físico e hover vibrante para botões */
         button { 
             transition: transform 0.1s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease; 
@@ -1380,7 +1388,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.8.2';
+        const FLOWME_VERSION = '2.8.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2379,7 +2387,7 @@
             toggleMobileForm(false);
         }
 
-        // ================= SISTEMA DE EXCLUSÃO COM DESFAZER (UNDO) =================
+        // ================= SISTEMA DE EXCLUSÃO COM DESFAZER (UNDO E MITOSE) =================
         let pendingDeletions = {};
 
         function deleteTransaction(id) { 
@@ -2400,40 +2408,53 @@
         function showDeleteToast(trx) {
             const toastId = 'toast-del-' + trx.id;
             const existing = document.getElementById(toastId);
-            if(existing) existing.remove();
+            if(existing) { clearTimeout(existing.dataset.timeout); existing.remove(); }
+
+            // 1. Reação da Pílula (Estica e divide)
+            const toolbar = document.getElementById('global-toolbar');
+            if (toolbar && !toolbar.classList.contains('hidden')) {
+                toolbar.classList.remove('animate-pilula-react');
+                void toolbar.offsetWidth; // Força o reflow do CSS
+                toolbar.classList.add('animate-pilula-react');
+            }
 
             const toast = document.createElement('div');
             toast.id = toastId;
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-2xl shadow-2xl z-40 flex items-center gap-4 text-sm transition-all duration-500 ease-in-out opacity-0 scale-50 translate-y-4 w-[90%] max-w-sm justify-between';
+            
+            // Vidro inteligente, Z-[100] e cor baseada no tema
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 scale-75 translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
             
             const shortName = trx.description.length > 15 ? trx.description.substring(0, 15) + '...' : trx.description;
 
             toast.innerHTML = `
                 <div class="flex items-center gap-2 min-w-0">
-                    <i class="fa-solid fa-trash-can text-rose-400 text-lg shrink-0"></i> 
-                    <span class="font-medium truncate">Excluída: ${shortName}</span>
+                    <i class="fa-solid fa-trash-can text-rose-500 shrink-0"></i> 
+                    <span class="font-bold truncate">${shortName} excl.</span>
                 </div>
-                <button onclick="undoDelete('${trx.id}'); this.parentElement.remove()" class="shrink-0 text-amber-400 font-bold hover:text-amber-300 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl hover:bg-slate-700 transition border border-slate-600">${t('btn_undo')}</button>
+                <button onclick="undoDelete('${trx.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-slate-200/50 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
             `;
             document.body.appendChild(toast);
             
-            // "Gota" se desprendendo da pílula e subindo
+            // "Gota" saltando para fora da pílula e piscando
             setTimeout(() => {
-                toast.classList.remove('opacity-0', 'scale-50', 'translate-y-4');
+                toast.classList.remove('opacity-0', 'scale-75', 'translate-y-0');
                 toast.classList.add('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
+                setTimeout(() => { toast.classList.add('brightness-125'); setTimeout(() => toast.classList.remove('brightness-125'), 200); }, 300);
             }, 50);
             
             pendingDeletions[trx.id] = trx;
 
-            // Sugando de volta
-            setTimeout(() => {
+            // Retorno (Sendo sugada de volta pela pílula)
+            toast.dataset.timeout = setTimeout(() => {
                 if(document.body.contains(toast)) {
+                    if (toolbar && !toolbar.classList.contains('hidden')) {
+                        toolbar.classList.remove('animate-pilula-react');
+                        void toolbar.offsetWidth;
+                        toolbar.classList.add('animate-pilula-react');
+                    }
                     toast.classList.remove('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
                     toast.classList.add('opacity-0', 'scale-50', 'translate-y-4');
-                    setTimeout(() => {
-                        toast.remove();
-                        delete pendingDeletions[trx.id];
-                    }, 500);
+                    setTimeout(() => { toast.remove(); delete pendingDeletions[trx.id]; }, 500);
                 }
             }, 6000);
         }
@@ -2441,12 +2462,71 @@
         function undoDelete(id) {
             const trx = pendingDeletions[id];
             if (!trx) return; 
+            
+            // Efeito de Absorção do Botão Desfazer
+            const toast = document.getElementById('toast-del-' + id);
+            if (toast) {
+                clearTimeout(toast.dataset.timeout);
+                toast.style.transformOrigin = "right center";
+                toast.style.transform = "translateY(-80px) scale(0) translateX(50px)";
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 400);
+            }
+
             state.transactions.push(trx);
             delete pendingDeletions[id];
             
             saveState(); render(); 
             if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas();
             updateAutocompleteLists(); 
+            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+
+        // ================= SISTEMA DE TOAST (DESFAZER IMPORTAÇÃO) =================
+        function showImportSuccessToast(count, batchId) {
+            const toast = document.createElement('div');
+            toast.id = 'toast-' + batchId;
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 scale-75 translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+            
+            toast.innerHTML = `
+                <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i> <span class="font-bold">${count} ${t('msg_imported')}</span></div>
+                <button onclick="undoImport('${batchId}');" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-slate-200/50 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
+            `;
+            document.body.appendChild(toast);
+            
+            const toolbar = document.getElementById('global-toolbar');
+            if (toolbar && !toolbar.classList.contains('hidden')) {
+                toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react');
+            }
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'scale-75', 'translate-y-0');
+                toast.classList.add('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
+                setTimeout(() => { toast.classList.add('brightness-125'); setTimeout(() => toast.classList.remove('brightness-125'), 200); }, 300);
+            }, 50);
+            
+            toast.dataset.timeout = setTimeout(() => {
+                if(document.body.contains(toast)) {
+                    if (toolbar && !toolbar.classList.contains('hidden')) { toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react'); }
+                    toast.classList.remove('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
+                    toast.classList.add('opacity-0', 'scale-50', 'translate-y-4');
+                    setTimeout(() => toast.remove(), 500);
+                }
+            }, 8000);
+        }
+
+        function undoImport(batchId) {
+            const toast = document.getElementById('toast-' + batchId);
+            if (toast) {
+                clearTimeout(toast.dataset.timeout);
+                toast.style.transformOrigin = "right center";
+                toast.style.transform = "translateY(-80px) scale(0) translateX(50px)";
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 400);
+            }
+
+            state.transactions = state.transactions.filter(t => t.groupId !== batchId);
+            saveState(); populateInvoiceCards(); renderFaturas(); render(); updateAutocompleteLists();
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
         
@@ -2934,40 +3014,38 @@
         function showLimitDeleteToast(lim) {
             const toastId = 'toast-lim-' + lim.id;
             const existing = document.getElementById(toastId);
-            if(existing) existing.remove();
+            if(existing) { clearTimeout(existing.dataset.timeout); existing.remove(); }
 
             const toast = document.createElement('div');
             toast.id = toastId;
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-2xl shadow-2xl z-40 flex items-center gap-4 text-sm transition-all duration-500 ease-in-out opacity-0 scale-50 translate-y-4 w-[90%] max-w-sm justify-between';
+            
+            // Nasce do chão (como a Pílula não está visível aqui)
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 translate-y-10 scale-90 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
             
             const shortName = lim.target.length > 15 ? lim.target.substring(0, 15) + '...' : lim.target;
 
             toast.innerHTML = `
                 <div class="flex items-center gap-2 min-w-0">
-                    <i class="fa-solid fa-bullseye text-pink-400 text-lg shrink-0"></i> 
-                    <span class="font-medium truncate">Excluído: ${shortName}</span>
+                    <i class="fa-solid fa-bullseye text-pink-500 shrink-0"></i> 
+                    <span class="font-bold truncate">${shortName} excl.</span>
                 </div>
-                <button onclick="undoLimitDelete('${lim.id}'); this.parentElement.remove()" class="shrink-0 text-amber-400 font-bold hover:text-amber-300 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl hover:bg-slate-700 transition border border-slate-600">${t('btn_undo')}</button>
+                <button onclick="undoLimitDelete('${lim.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-slate-200/50 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
             `;
             document.body.appendChild(toast);
             
-            // Gota saltando
             setTimeout(() => {
-                toast.classList.remove('opacity-0', 'scale-50', 'translate-y-4');
-                toast.classList.add('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
+                toast.classList.remove('opacity-0', 'translate-y-10', 'scale-90');
+                toast.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+                setTimeout(() => { toast.classList.add('brightness-125'); setTimeout(() => toast.classList.remove('brightness-125'), 200); }, 300);
             }, 50);
             
             pendingLimitDeletions[lim.id] = lim;
 
-            // Sendo sugada
-            setTimeout(() => {
+            toast.dataset.timeout = setTimeout(() => {
                 if(document.body.contains(toast)) {
-                    toast.classList.remove('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
-                    toast.classList.add('opacity-0', 'scale-50', 'translate-y-4');
-                    setTimeout(() => {
-                        toast.remove();
-                        delete pendingLimitDeletions[lim.id];
-                    }, 500);
+                    toast.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
+                    toast.classList.add('opacity-0', 'translate-y-10', 'scale-90');
+                    setTimeout(() => { toast.remove(); delete pendingLimitDeletions[lim.id]; }, 500);
                 }
             }, 6000);
         }
@@ -2975,6 +3053,17 @@
         function undoLimitDelete(id) {
             const lim = pendingLimitDeletions[id];
             if (!lim) return;
+            
+            // Efeito de Absorção
+            const toast = document.getElementById('toast-lim-' + id);
+            if (toast) {
+                clearTimeout(toast.dataset.timeout);
+                toast.style.transformOrigin = "right center";
+                toast.style.transform = "scale(0) translateX(50px)";
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 400);
+            }
+
             state.limits.push(lim);
             delete pendingLimitDeletions[id];
             

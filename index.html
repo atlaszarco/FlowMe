@@ -1282,19 +1282,6 @@
                 if (typeof render === 'function') render(); 
             }, 50);
         }
-
-            const versionSpan = document.querySelector('[data-i18n="cfg_version"]');
-            if(versionSpan) versionSpan.innerHTML = t('cfg_version') + ' ' + FLOWME_VERSION;
-            
-            if (typeof updateLangUI === 'function') updateLangUI(lang); 
-            if (typeof render === 'function') render(); 
-
-            // 3. Atualização Reativa
-            if (typeof changeGlobalMonth === 'function') changeGlobalMonth(state.currentMonth);
-            if (typeof renderToolbarAlerts === 'function') renderToolbarAlerts();
-            if (typeof renderLimitsSettings === 'function') renderLimitsSettings();
-            if (typeof updateSaveTimestamp === 'function') updateSaveTimestamp();
-        }
         
         // ================= SANFONA E ESTILO DOS PAINÉIS =================
         let accordionState = JSON.parse(localStorage.getItem('flowme_accordions')) || {};

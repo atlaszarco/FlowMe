@@ -41,25 +41,18 @@
         .dark tr:hover { background-color: #334155; }
         .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]), .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
 
-        /* Ajuste nativo para opções de Select no Modo Escuro (Aba Faturas e Filtros) */
         html.dark select option, html.theme-oled select option { background-color: #1e293b; color: #f8fafc; }
 
-        /* TEMA PRETO (OLED) COM BORDAS ILUMINADAS */
+        /* TEMA PRETO (OLED) */
         html.theme-oled body { background-color: #000000; color: #f8fafc; }
         html.theme-oled .bg-white, html.theme-oled .dark\:bg-slate-800 { background-color: #0a0a0a !important; border-color: #262626 !important; }
         html.theme-oled .dark\:bg-slate-900, html.theme-oled .dark\:bg-slate-950 { background-color: #000000 !important; }
-        /* Bordas mais claras (Cinza 400) para inputs e caixas ficarem bem legíveis */
         html.theme-oled input:not(.!bg-transparent), html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #52525b !important; }
         html.theme-oled .border-slate-200, html.theme-oled .border-slate-300, html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #3f3f46 !important; }
         html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #3f3f46 !important; }
         
-        /* Ajuste de Rolagem Global: impede que o topo das gavetas fique preso atrás do Header */
-        html { scroll-padding-top: 70px; }
-
-        /* Variáveis para a Máscara Superior de Rolagem */
-        body { --bg-mask: #f8fafc; }
-        html.dark body { --bg-mask: #0f172a; }
-        html.theme-oled body { --bg-mask: #000000; }
+        /* Ajuste de Rolagem Global para conteúdo passar por baixo do Header Squircles */
+        html { scroll-padding-top: 100px; }
 
         /* Animações de Swipe para as Abas */
         @keyframes slideInRight { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -67,7 +60,18 @@
         .slide-right { animation: slideInRight 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         .slide-left { animation: slideInLeft 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 
-        /* Animações Orgânicas (Efeito Mitose e Absorção) */
+        /* Animações da Mitose (Header e Pílula) */
+        @keyframes squircleExtract {
+            0% { transform: translateX(-100%) scale(0.5); opacity: 0; filter: blur(10px); }
+            50% { transform: translateX(-20%) scale(1.1); filter: blur(0px); }
+            100% { transform: translateX(0) scale(1); opacity: 1; filter: blur(0px); }
+        }
+        @keyframes squircleMerge {
+            0% { transform: translateX(0) scale(1); opacity: 1; filter: blur(0px); }
+            50% { transform: translateX(-20%) scale(1.1); filter: blur(0px); }
+            100% { transform: translateX(-100%) scale(0.5); opacity: 0; filter: blur(10px); pointer-events: none; }
+        }
+        
         @keyframes pilulaReact {
             0% { transform: translateX(-50%) scaleY(1); }
             40% { transform: translateX(-50%) scaleY(1.15) translateY(-6px); border-radius: 40px; }
@@ -75,93 +79,59 @@
         }
         .animate-pilula-react { animation: pilulaReact 0.5s ease-out forwards; }
         
-        /* Efeito global de clique físico e hover vibrante para botões */
+        /* Mitose de Exclusão (Toast saindo da pílula) */
+        @keyframes mitosisUp {
+            0% { transform: translate(-50%, 40px) scale(0.5); opacity: 0; border-radius: 40px; }
+            50% { transform: translate(-50%, -10px) scale(1.05); opacity: 1; border-radius: 20px; }
+            100% { transform: translate(-50%, 0) scale(1); opacity: 1; border-radius: 16px; }
+        }
+        
+        /* Efeito global de clique físico */
         button { 
             transition: transform 0.1s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease; 
-            -webkit-tap-highlight-color: transparent; 
-            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent; touch-action: manipulation; 
         }
-        button:active { 
-            transform: scale(0.93) !important; 
-        }
-        @media (hover: hover) {
-            button:hover { filter: brightness(1.08); } 
-        }
+        button:active { transform: scale(0.93) !important; }
+        @media (hover: hover) { button:hover { filter: brightness(1.08); } }
         .dark button:hover { filter: brightness(1.15); }
 
-        /* Controle Mestre do Modo Blocos */
         body.mode-blocks .acc-content { grid-template-rows: 1fr !important; }
         body.mode-blocks .acc-icon { display: none !important; }
         body.mode-blocks .acc-action { opacity: 1 !important; transform: scale(1) !important; pointer-events: auto !important; }
         body.mode-blocks .accordion-header { cursor: default !important; pointer-events: none !important; }
         body.mode-blocks .accordion-header .acc-action { pointer-events: auto !important; } 
 
-        /* Animação de Pop (Expansão) para o Botão Salvar */
-        @keyframes savePop {
-            0% { transform: scale(0.8); }
-            40% { transform: scale(1.25); }
-            100% { transform: scale(1); }
-        }
-        .animate-save-pop i { animation: savePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        /* CORES PERSONALIZADAS: Botão Filtro */
+        .btn-filter-light { background-color: #0f172a; color: #ffffff; }
+        .btn-filter-light:hover { background-color: #4f46e5; color: #ffffff; }
+        
+        .dark .btn-filter-dark { background-color: #10b981; color: #020617; }
+        .dark .btn-filter-dark:hover { background-color: #ffffff; color: #020617; }
 
-        /* Animação de Balanço e Expansão para o Sininho */
-        @keyframes bellRingPop {
-            0% { transform: scale(0.8) rotate(0deg); }
-            20% { transform: scale(1.15) rotate(15deg); }
-            40% { transform: scale(1.25) rotate(-10deg); }
-            60% { transform: scale(1.15) rotate(10deg); }
-            80% { transform: scale(1.05) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-        .animate-bell-pop i { animation: bellRingPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }        
-
-        /* MICRO-RESPONSIVIDADE (Telas Menores que 420px) */
+        /* MICRO-RESPONSIVIDADE (< 420px e < 300px) */
         @media (max-width: 420px) {
-            /* 1. Gavetas (Painéis, Transações e Configurações) */
-            .accordion-header { 
-                padding: 1rem 0.875rem !important; /* Reduz de p-5 para algo mais justo */
-            }
-            .accordion-header h2 { 
-                font-size: 0.95rem !important; /* Diminui de text-lg para ~text-base */
-                gap: 0.5rem !important; 
-                min-width: 0; /* Permite que a caixa encolha */
-            }
-            /* Blindagem anti-quebra de linha */
-            .accordion-header h2 span {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            /* Protege os botões da direita (Novo, Configurar) para não serem esmagados */
-            .accordion-header > div { 
-                gap: 0.5rem !important; 
-                flex-shrink: 0; 
-            }
-            .accordion-header .acc-action { 
-                padding: 0.35rem 0.5rem !important; 
-                font-size: 0.65rem !important; 
-            }
-            
-            /* 2. Ajustes de Textos Numéricos Gigantes */
-            #invoice-total-value { 
-                font-size: 1.75rem !important; 
-            }
-            #summary-income, #summary-expense, #summary-balance, #summary-splits { 
-                font-size: 1.15rem !important; 
-            }
-            
-            /* 3. Abas de Navegação do Topo */
-            #tabs-nav button { 
-                font-size: 0.75rem !important; 
-                padding: 0.4rem 0.75rem !important; 
-            }
+            .accordion-header { padding: 1rem 0.875rem !important; }
+            .accordion-header h2 { font-size: 0.95rem !important; gap: 0.5rem !important; min-width: 0; }
+            .accordion-header h2 span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .accordion-header > div { gap: 0.5rem !important; flex-shrink: 0; }
+            .accordion-header .acc-action { padding: 0.35rem 0.5rem !important; font-size: 0.65rem !important; }
+            #invoice-total-value { font-size: 1.75rem !important; }
+            #summary-income, #summary-expense, #summary-balance, #summary-splits { font-size: 1.15rem !important; }
+            #tabs-nav button { font-size: 0.75rem !important; padding: 0.4rem 0.75rem !important; }
+        }
+
+        @media (max-width: 300px) {
+            /* Força botões menores no filtro e pílula na tela minúscula */
+            .micro-shrink { padding-left: 0.5rem !important; padding-right: 0.5rem !important; font-size: 0.7rem !important; }
+            .micro-icon { font-size: 0.9rem !important; }
         }
     </style>
 </head>
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
     
 <!-- ================= BLOCO 0: SPLASH SCREEN (ONBOARDING) ================= -->
-    <div id="splash-screen" class="fixed inset-0 z-[60] bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">        <div class="flex flex-col items-center text-center px-4">
+    <div id="splash-screen" class="fixed inset-0 z-[60] bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="flex flex-col items-center text-center px-4">
             <div class="bg-emerald-500 p-4 rounded-2xl text-white font-bold text-4xl flex items-center justify-center w-20 h-20 shadow-lg mb-4">
                 <i class="fa-solid fa-dollar-sign"></i>
             </div>
@@ -169,12 +139,8 @@
             <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="subtitle">Seu controle pessoal de fluxo financeiro</p>
             <p class="text-[9px] text-slate-400 mt-2 font-bold tracking-widest uppercase mb-10">VERSÃO <span id="splash-version-display"></span></p>
             
-            <!-- Container interativo (Carregando ou Botão de Login) -->
             <div id="splash-interactive" class="h-12 flex items-center justify-center">
-                <!-- Spinner de carregamento automático -->
                 <i id="splash-spinner" class="fa-solid fa-circle-notch fa-spin text-3xl text-emerald-500"></i>
-                
-                <!-- Botão de Login (Oculto até confirmar que não há login salvo) -->
                 <button id="splash-login-btn" onclick="handleAuthClick()" class="hidden py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl border border-blue-700 shadow-md transition-colors flex items-center justify-center gap-3">
                     <i class="fa-brands fa-google text-xl"></i> <span data-i18n="btn_cloud_connect">Conectar com Google</span>
                 </button>
@@ -182,43 +148,42 @@
         </div>
     </div>
     
-<!-- ================= BLOCO 2: HEADER E NAVEGAÇÃO ================= -->
-    <header id="main-header" class="fixed top-0 left-0 w-full z-40 transition-all duration-500 pointer-events-none px-3 py-4 sm:px-4 sm:py-6">
-        <div id="main-header-bg" class="absolute inset-0 bg-slate-50/80 dark:bg-slate-900/80 theme-oled:bg-[#000000]/80 backdrop-blur-md shadow-sm border-b border-slate-200/50 dark:border-slate-800/50 opacity-0 transition-opacity duration-300"></div>
-        
-        <div class="relative max-w-7xl mx-auto flex justify-between items-center gap-2 sm:gap-4 px-4 py-3 pointer-events-none">
+<!-- ================= BLOCO 2: HEADER (SQUIRCLES) ================= -->
+    <!-- Sem fundo de tela, apenas os elementos flutuantes -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-40 pointer-events-none px-3 py-4 sm:px-4 sm:py-6">
+        <div class="relative max-w-7xl mx-auto flex justify-between items-center gap-2 px-2 py-1 pointer-events-none h-14 sm:h-16">
             
-            <!-- AGRUPAMENTO ESQUERDO -->
-            <div class="flex items-center h-12 sm:h-14 shrink-0 relative">
+            <!-- AGRUPAMENTO ESQUERDO (Logo + Texto Mitose) -->
+            <div class="flex items-center h-full shrink-0 relative">
                 
-                <!-- ILHA 1: LOGO -->
-                <div class="h-full w-12 sm:w-14 pointer-events-auto bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm flex items-center justify-center shrink-0 relative z-20 transition-transform">
-                    <div class="bg-emerald-500 w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-white shadow-sm">
-                        <i class="fa-solid fa-dollar-sign text-lg sm:text-xl font-bold"></i>
+                <!-- ILHA 1: LOGO (NÃO CLICÁVEL) -->
+                <div class="h-full w-14 sm:w-16 pointer-events-auto bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm flex items-center justify-center shrink-0 relative z-20">
+                    <div class="bg-emerald-500 w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white shadow-sm">
+                        <i class="fa-solid fa-dollar-sign text-xl sm:text-2xl font-bold"></i>
                     </div>
                 </div>
 
-                <!-- ILHA 2: NOME FLOWME -->
-                <div id="island-name" class="h-full flex items-center pointer-events-auto bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm shrink-0 relative z-10 overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] max-w-0 opacity-0 -ml-12 scale-90">
-                    <div class="px-4 sm:px-5">
-                        <h1 class="text-lg sm:text-xl font-bold tracking-tight text-slate-800 dark:text-white whitespace-nowrap">FlowMe</h1>
+                <!-- ILHA 2: NOME FLOWME (Nasce da Logo) -->
+                <div id="island-name" class="h-full flex items-center bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm shrink-0 relative z-10 overflow-hidden transform -translate-x-full scale-50 opacity-0 blur-sm pointer-events-none ml-2">
+                    <div class="px-5 sm:px-6">
+                        <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-800 dark:text-white whitespace-nowrap">FlowMe</h1>
                     </div>
                 </div>
 
             </div>
             
-            <!-- ILHA 3: PÍLULA DE ABAS -->
-            <nav id="island-tabs" class="h-12 sm:h-14 ml-auto w-max max-w-full pointer-events-auto bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl p-1 rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm overflow-x-auto min-w-0 cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transition-all duration-500 flex justify-start items-center origin-right">
-                <button onclick="switchTab('transacoes')" id="tab-transacoes" class="h-full px-3 sm:px-4 rounded-xl text-[11px] sm:text-sm font-medium transition-all duration-200 bg-emerald-500 text-white dark:text-slate-950 shadow-sm whitespace-nowrap flex items-center gap-1.5">
+            <!-- ILHA 3: PÍLULA DE ABAS (Direita) -->
+            <nav id="island-tabs" class="h-full pointer-events-auto bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl p-1.5 rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm overflow-x-auto min-w-0 cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden transition-transform duration-500 flex justify-start items-center origin-right ml-auto">
+                <button onclick="switchTab('transacoes')" id="tab-transacoes" class="h-full px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 bg-emerald-500 text-white dark:text-slate-950 shadow-sm whitespace-nowrap flex items-center gap-1.5">
                     <i class="fa-solid fa-list-ul"></i> <span data-i18n="tab_transactions">Transações</span>
                 </button>
-                <button onclick="switchTab('faturas')" id="tab-faturas" class="h-full px-3 sm:px-4 rounded-xl text-[11px] sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('faturas')" id="tab-faturas" class="h-full px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white whitespace-nowrap flex items-center gap-1.5">
                     <i class="fa-solid fa-credit-card"></i> <span data-i18n="tab_invoices">Faturas</span>
                 </button>
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="h-full px-3 sm:px-4 rounded-xl text-[11px] sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="h-full px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white whitespace-nowrap flex items-center gap-1.5">
                     <i class="fa-solid fa-chart-pie"></i> <span data-i18n="tab_dashboard">Painel</span>
                 </button>
-                <button onclick="switchTab('backup')" id="tab-backup" class="h-full px-3 sm:px-4 rounded-xl text-[11px] sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white whitespace-nowrap flex items-center gap-1.5">
+                <button onclick="switchTab('backup')" id="tab-backup" class="h-full px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white whitespace-nowrap flex items-center gap-1.5">
                     <i class="fa-solid fa-gear"></i> <span data-i18n="tab_settings">Configurações</span>
                 </button>
             </nav>
@@ -227,64 +192,64 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/30 dark:bg-slate-900/40 backdrop-blur-lg border border-white/50 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 z-50 rounded-3xl flex items-center h-16 sm:h-20">
-    <div id="global-toolbar-inner" class="flex items-center justify-center w-full gap-2 sm:gap-3 h-full px-2 py-2 transition-all duration-500">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/40 dark:bg-slate-900/50 theme-oled:bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/60 dark:border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 z-50 rounded-3xl flex items-center h-16 sm:h-20 p-2 gap-2">
+    
+    <!-- 1. FILTRO EXPANSÍVEL (CENTRALIZADO QUANDO ABERTO) -->
+    <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-left">
+        <div id="filter-wrapper" class="group flex items-center justify-center btn-filter-light dark:btn-filter-dark h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 cursor-pointer" onclick="handleFilterIconClick(event)">
+            
+            <button type="button" class="px-4 sm:px-5 h-full flex items-center justify-center bg-transparent shrink-0 z-10 relative pointer-events-none transition-colors">
+                <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-all duration-300"></i>
+                <span id="filter-collapsed-text" class="hidden sm:inline max-w-[150px] overflow-hidden ml-2 text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
+            </button>
 
-        <!-- 1. FILTRO EXPANSÍVEL -->
-        <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-left">
-            <div id="filter-wrapper" class="group flex items-center bg-slate-900 dark:bg-emerald-500 h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 hover:bg-indigo-600 dark:hover:bg-indigo-500 text-white dark:text-slate-950 hover:text-white dark:hover:text-white cursor-pointer" onclick="handleFilterIconClick(event)">
-                
-                <button type="button" class="px-4 sm:px-5 h-full flex items-center justify-center bg-transparent shrink-0 z-10 relative pointer-events-none transition-colors">
-                    <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
-                    <span id="filter-collapsed-text" class="hidden sm:inline max-w-[150px] overflow-hidden ml-2 text-sm font-bold whitespace-nowrap transition-all duration-500 opacity-100"></span>
-                </button>
-
-                <div id="filter-content" class="flex items-center h-full transition-all duration-500 ease-in-out max-w-0 opacity-0 overflow-hidden">
-                    <div id="filter-content-inner" class="relative h-full flex items-center justify-center transition-all duration-500 pr-2">
-                        <!-- Módulo MÊS -->
-                        <div id="mode-month" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10">
-                            <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="relative z-20 pl-3 pr-4 sm:pl-4 sm:pr-5 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                            <div class="relative flex items-center justify-center px-1 sm:px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition">
-                                <span id="month-display" class="text-sm sm:text-base font-bold uppercase tracking-wide pointer-events-none"></span>
-                                <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="event.stopPropagation(); this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            </div>
-                            <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="relative z-20 pl-3 pr-4 sm:pl-4 sm:pr-5 h-full hover:bg-black/20 dark:hover:bg-black/40 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+            <!-- CONTEÚDO DO FILTRO (MÊS OU PERÍODO) -->
+            <div id="filter-content" class="flex items-center justify-center h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] max-w-0 opacity-0 overflow-hidden">
+                <div id="filter-content-inner" class="relative h-full flex items-center justify-center transition-all duration-500 px-2 w-full">
+                    
+                    <!-- Módulo MÊS -->
+                    <div id="mode-month" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10 w-full">
+                        <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="micro-shrink relative z-20 px-3 sm:px-4 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left micro-icon"></i></button>
+                        <div class="relative flex items-center justify-center px-2 sm:px-4 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition flex-1">
+                            <span id="month-display" class="text-xs sm:text-sm font-bold uppercase tracking-wide pointer-events-none text-center"></span>
+                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="event.stopPropagation(); this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                         </div>
-                        
-                        <!-- Módulo PERÍODO -->
-                        <div id="mode-range" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0">
-                            <div class="relative flex items-center justify-center px-1.5 sm:px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition rounded-xl" onclick="event.stopPropagation()">
-                                <span id="date-start-display" class="text-sm sm:text-base font-bold pointer-events-none">--/--/--</span>
-                                <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            </div>
-                            <span class="text-[10px] sm:text-xs font-bold shrink-0 mx-0.5">~</span>
-                            <div class="relative flex items-center justify-center px-1.5 sm:px-2 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-black/40 transition rounded-xl" onclick="event.stopPropagation()">
-                                <span id="date-end-display" class="text-sm sm:text-base font-bold pointer-events-none">--/--/--</span>
-                                <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            </div>
+                        <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="micro-shrink relative z-20 px-3 sm:px-4 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right micro-icon"></i></button>
+                    </div>
+                    
+                    <!-- Módulo PERÍODO -->
+                    <div id="mode-range" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0 w-full">
+                        <div class="relative flex items-center justify-center px-2 sm:px-3 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1" onclick="event.stopPropagation()">
+                            <span id="date-start-display" class="text-[11px] sm:text-sm font-bold pointer-events-none text-center">--/--/--</span>
+                            <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        </div>
+                        <span class="text-[10px] sm:text-xs font-bold shrink-0 mx-1">~</span>
+                        <div class="relative flex items-center justify-center px-2 sm:px-3 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1" onclick="event.stopPropagation()">
+                            <span id="date-end-display" class="text-[11px] sm:text-sm font-bold pointer-events-none text-center">--/--/--</span>
+                            <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- 2. ALERTA DINÂMICO -->
-        <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-center">
-            <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
-        </div>
-
-        <!-- 3. BOTÃO SALVAR -->
-        <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 ease-in-out overflow-hidden max-w-[500px] opacity-100 scale-100 origin-right">
-            <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-emerald-500 hover:text-white dark:hover:bg-white dark:hover:text-emerald-600 px-6 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
-                <i class="fa-solid fa-cloud-arrow-up text-base sm:text-xl"></i>
-                <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Salvar</span>
-            </button>
-        </div>
-
     </div>
+
+    <!-- 2. ALERTA DINÂMICO -->
+    <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-center">
+        <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
+    </div>
+
+    <!-- 3. BOTÃO SALVAR (NUVEM) -->
+    <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-right">
+        <button id="btn-manual-save" onclick="saveToCloud(false, true)" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-500 hover:!text-white px-5 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+            <i class="fa-solid fa-cloud-arrow-up text-lg sm:text-xl"></i>
+            <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Sincronizar Nuvem</span>
+        </button>
+    </div>
+
 </section>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-24 sm:pt-28 pb-28 lg:pb-32 min-w-0">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pt-24 sm:pt-28 pb-32 lg:pb-36 min-w-0">
     <!-- ================= BLOCO 4: ABA TRANSAÇÕES E FORMULÁRIO ================= -->
         <div id="content-transacoes" class="tab-content block">
             
@@ -1397,7 +1362,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.8.6';
+        const FLOWME_VERSION = '2.8.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

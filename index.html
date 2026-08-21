@@ -1397,7 +1397,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.8.5';
+        const FLOWME_VERSION = '2.8.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1627,7 +1627,7 @@
                 if (!isDraggingTabs) return;
                 e.preventDefault();
                 const x = e.pageX - tabsNav.offsetLeft;
-                const walk = (x - startXTabs) * 2; 
+                const walk = (x - startXTabs) * 2; // O "* 2" controla a velocidade do arraste
                 tabsNav.scrollLeft = scrollLeftTabs - walk;
             });
         }

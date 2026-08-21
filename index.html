@@ -1854,7 +1854,7 @@
         }
 
 // ================= BLOCO 10: JAVASCRIPT - LÓGICA PRINCIPAL (Transações, Renders) =================
-        // ================= GLOBAL EDIT MODALS & ANIMAÇÕES =================
+        // ================= GLOBAL EDIT MODALS & ANIMAÇÕES (CLIQUE FORA E BORDAS) =================
         function openModal(id) {
             const m = document.getElementById(id);
             const inner = m.querySelector('.modal-inner');
@@ -1879,12 +1879,16 @@
             setTimeout(() => { m.classList.add('hidden'); }, 300);
         }
 
-        // FECHAR MODAIS AO CLICAR FORA
-        document.addEventListener('click', (e) => {
+        // FECHAR TODOS OS MODAIS AO CLICAR NA ÁREA ESCURA (Fora do inner)
+        document.addEventListener('mousedown', (e) => {
+            // Ignora o clique se não for no fundo opaco
             if (e.target.classList.contains('modal-wrapper')) {
                 closeModal(e.target.id);
             }
         });
+        
+        // Efeito de rolagem na aba transações para o Modal Nova Movimentação
+        document.getElementById('form-backdrop').addEventListener('mousedown', () => toggleMobileForm(false));
         
         function filterGlobalEdit() {
             const term = document.getElementById('global-edit-search').value.toLowerCase();
@@ -2001,15 +2005,13 @@
             const profile = getResponsiveProfile();
             responsiveProfile = profile;
             document.body.dataset.responsive = profile;
-            updateSaveDisplay(profile);
-            updateSaveTimestamp();
             renderToolbarAlerts();
         }
 
         window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
-
-        // SINO DINÂMICO
+        
+        // ================= SINO DINÂMICO (CORES E TRADUÇÃO) =================
         let isAlertsModalOpen = false;
 
         function renderToolbarAlerts() {
@@ -2032,12 +2034,15 @@
             let contentHtml = '';
             const isActive = totalAlerts > 0 || isAlertsModalOpen;
             
+            // Regra de Cores Solicitada: 
+            // - Sem alerta = Cor Padrão (Fundo da Pílula) / Sino Amarelo
+            // - Com alerta ou Clicado = Fundo Amarelo / Sino Preto
             const baseColor = isActive 
-                ? 'bg-amber-400 text-slate-900 dark:bg-amber-400 dark:text-slate-900 shadow-md' 
-                : 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 hover:bg-amber-400 hover:text-slate-900 dark:hover:bg-amber-400 dark:hover:text-slate-900 shadow-sm transition-colors';
+                ? 'bg-amber-400 text-slate-900 shadow-md' 
+                : 'btn-filter-light dark:btn-filter-dark shadow-sm transition-colors hover:opacity-80';
             
             const iconType = isActive ? 'fa-solid fa-bell' : 'fa-regular fa-bell';
-            const iconColor = isActive ? 'text-slate-900 dark:text-slate-900' : 'text-amber-400 dark:text-slate-900 group-hover:text-slate-900';
+            const iconColor = isActive ? 'text-slate-900' : 'text-amber-400';
             const shakeClass = hasCritical ? 'fa-shake' : '';
 
             if (!isActive && isMobile && !isAlertsModalOpen) {
@@ -2062,7 +2067,7 @@
         let isBellOpening = false;
 
         function handleBellClick() {
-            if(isBellOpening) return;
+            if(isBellOpening || isAlertsModalOpen) return;
             isAlertsModalOpen = true; 
             renderToolbarAlerts(); 
             
@@ -2351,7 +2356,7 @@
             toggleMobileForm(false);
         }
 
-        // ================= SISTEMA DE EXCLUSÃO COM DESFAZER (UNDO E MITOSE) =================
+        // ================= SISTEMA DE EXCLUSÃO COM DESFAZER (UNDO E MITOSE DA PÍLULA) =================
         let pendingDeletions = {};
 
         function deleteTransaction(id) { 
@@ -2376,7 +2381,9 @@
 
             // 1. Reação da Pílula (Estica e divide)
             const toolbar = document.getElementById('global-toolbar');
-            if (toolbar && !toolbar.classList.contains('hidden')) {
+            const useMitosis = toolbar && !toolbar.classList.contains('hidden');
+
+            if (useMitosis) {
                 toolbar.classList.remove('animate-pilula-react');
                 void toolbar.offsetWidth; // Força o reflow do CSS
                 toolbar.classList.add('animate-pilula-react');
@@ -2385,8 +2392,8 @@
             const toast = document.createElement('div');
             toast.id = toastId;
             
-            // Vidro inteligente, Z-[100] e cor baseada no tema
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 scale-75 translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+            // Visual do Alerta Baseado no Tema (Frosted Glass Persistente)
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between transition-all ease-[cubic-bezier(0.34,1.56,0.64,1)] ' + (useMitosis ? 'opacity-0 scale-50 translate-y-0 rounded-[40px] duration-500' : 'opacity-0 scale-90 translate-y-10 rounded-[16px] duration-400');
             
             const shortName = trx.description.length > 15 ? trx.description.substring(0, 15) + '...' : trx.description;
 
@@ -2399,28 +2406,44 @@
             `;
             document.body.appendChild(toast);
             
-            // "Gota" saltando para fora da pílula e piscando
-            setTimeout(() => {
-                toast.classList.remove('opacity-0', 'scale-75', 'translate-y-0');
-                toast.classList.add('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
-                setTimeout(() => { toast.classList.add('brightness-125'); setTimeout(() => toast.classList.remove('brightness-125'), 200); }, 300);
-            }, 50);
-            
             pendingDeletions[trx.id] = trx;
 
-            // Retorno (Sendo sugada de volta pela pílula)
-            toast.dataset.timeout = setTimeout(() => {
-                if(document.body.contains(toast)) {
-                    if (toolbar && !toolbar.classList.contains('hidden')) {
-                        toolbar.classList.remove('animate-pilula-react');
-                        void toolbar.offsetWidth;
-                        toolbar.classList.add('animate-pilula-react');
+            if (useMitosis) {
+                // "Gota" saltando para fora da pílula (Animação MitosisUp)
+                toast.style.animation = 'mitosisUp 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards';
+                
+                // Pisca (Expansão) ao separar
+                setTimeout(() => { 
+                    toast.classList.add('brightness-125', 'scale-105'); 
+                    setTimeout(() => toast.classList.remove('brightness-125', 'scale-105'), 250); 
+                }, 400);
+
+                // Retorno (Sendo sugada de volta pela pílula)
+                toast.dataset.timeout = setTimeout(() => {
+                    if(document.body.contains(toast)) {
+                        toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react');
+                        toast.style.animation = 'none'; // Quebra a animação de entrada
+                        toast.classList.add('opacity-0', 'scale-50', 'translate-y-4');
+                        toast.classList.remove('-translate-y-20', 'sm:-translate-y-24', 'scale-100');
+                        setTimeout(() => { toast.remove(); delete pendingDeletions[trx.id]; }, 500);
                     }
-                    toast.classList.remove('opacity-100', 'scale-100', '-translate-y-20', 'sm:-translate-y-24');
-                    toast.classList.add('opacity-0', 'scale-50', 'translate-y-4');
-                    setTimeout(() => { toast.remove(); delete pendingDeletions[trx.id]; }, 500);
-                }
-            }, 6000);
+                }, 6000);
+            } else {
+                // Animação Normal (Sem pílula - Aba Configurações)
+                setTimeout(() => {
+                    toast.classList.remove('opacity-0', 'translate-y-10', 'scale-90');
+                    toast.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+                    setTimeout(() => { toast.classList.add('brightness-125', 'scale-105'); setTimeout(() => toast.classList.remove('brightness-125', 'scale-105'), 250); }, 300);
+                }, 50);
+
+                toast.dataset.timeout = setTimeout(() => {
+                    if(document.body.contains(toast)) {
+                        toast.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
+                        toast.classList.add('opacity-0', 'translate-y-10', 'scale-90');
+                        setTimeout(() => { toast.remove(); delete pendingDeletions[trx.id]; }, 400);
+                    }
+                }, 6000);
+            }
         }
 
         function undoDelete(id) {
@@ -2431,8 +2454,9 @@
             const toast = document.getElementById('toast-del-' + id);
             if (toast) {
                 clearTimeout(toast.dataset.timeout);
+                toast.style.animation = 'none';
                 toast.style.transformOrigin = "right center";
-                toast.style.transform = "translateY(-80px) scale(0) translateX(50px)";
+                toast.style.transform = "scale(0) translateX(50px)";
                 toast.style.opacity = "0";
                 setTimeout(() => toast.remove(), 400);
             }
@@ -2961,6 +2985,7 @@
             }
         }
         
+       // ================= ANIMAÇÃO DE EXCLUIR LIMITES (SEM PÍLULA) =================
         let pendingLimitDeletions = {};
 
         function deleteLimit(id) {
@@ -2983,8 +3008,8 @@
             const toast = document.createElement('div');
             toast.id = toastId;
             
-            // Nasce do chão (como a Pílula não está visível aqui)
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 translate-y-10 scale-90 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+            // Nasce do chão (como a Pílula não está visível aqui) - Mesma aparência persistente
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 translate-y-10 scale-90 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
             
             const shortName = lim.target.length > 15 ? lim.target.substring(0, 15) + '...' : lim.target;
 
@@ -3000,7 +3025,7 @@
             setTimeout(() => {
                 toast.classList.remove('opacity-0', 'translate-y-10', 'scale-90');
                 toast.classList.add('opacity-100', 'translate-y-0', 'scale-100');
-                setTimeout(() => { toast.classList.add('brightness-125'); setTimeout(() => toast.classList.remove('brightness-125'), 200); }, 300);
+                setTimeout(() => { toast.classList.add('brightness-125', 'scale-105'); setTimeout(() => toast.classList.remove('brightness-125', 'scale-105'), 250); }, 300);
             }, 50);
             
             pendingLimitDeletions[lim.id] = lim;
@@ -3009,7 +3034,7 @@
                 if(document.body.contains(toast)) {
                     toast.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
                     toast.classList.add('opacity-0', 'translate-y-10', 'scale-90');
-                    setTimeout(() => { toast.remove(); delete pendingLimitDeletions[lim.id]; }, 500);
+                    setTimeout(() => { toast.remove(); delete pendingLimitDeletions[lim.id]; }, 400);
                 }
             }, 6000);
         }
@@ -3609,14 +3634,17 @@
             
             isLogoExpanded = true;
             
-            islandName.classList.remove('max-w-0', 'opacity-0', '-ml-12', 'scale-90');
-            islandName.classList.add('max-w-[150px]', 'opacity-100', 'ml-2', 'scale-100');
+            // Mitose: Texto sai de dentro da logo
+            islandName.classList.remove('-translate-x-full', 'scale-50', 'opacity-0', 'blur-sm', 'pointer-events-none');
+            islandName.classList.add('translate-x-0', 'scale-100', 'opacity-100', 'blur-none', 'pointer-events-auto');
             
             if (isMobile) {
+                // Encolhimento rápido das abas se a tela for pequena
                 if(islandTabs && window.innerWidth < 420) {
                     islandTabs.classList.add('scale-90');
                 }
 
+                // Agenda o recolhimento automático
                 clearTimeout(logoTimer);
                 logoTimer = setTimeout(collapseLogo, 3000);
             }
@@ -3630,8 +3658,9 @@
             const islandTabs = document.getElementById('island-tabs');
             
             if (islandName) {
-                islandName.classList.add('max-w-0', 'opacity-0', '-ml-12', 'scale-90');
-                islandName.classList.remove('max-w-[150px]', 'opacity-100', 'ml-2', 'scale-100');
+                // Mitose Inversa: Texto volta para dentro da logo
+                islandName.classList.remove('translate-x-0', 'scale-100', 'opacity-100', 'blur-none', 'pointer-events-auto');
+                islandName.classList.add('-translate-x-full', 'scale-50', 'opacity-0', 'blur-sm', 'pointer-events-none');
             }
             if(islandTabs) {
                 islandTabs.classList.remove('scale-90');
@@ -3640,6 +3669,7 @@
             isLogoExpanded = false;
         }
 
+        // Recolhe o texto ao iniciar o scroll (apenas no celular)
         window.addEventListener('scroll', () => {
             if (window.scrollY > 10 && isLogoExpanded) {
                 collapseLogo();

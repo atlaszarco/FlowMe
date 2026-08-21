@@ -1594,7 +1594,7 @@
             if (activeBtn) activeBtn.className = actCls;
             
             // Centralizar a pílula de cima
-            const nav = document.getElementById('tabs-nav');
+            const nav = document.getElementById('island-tabs');
             if (nav && activeBtn) {
                 const navRect = nav.getBoundingClientRect();
                 const btnRect = activeBtn.getBoundingClientRect();
@@ -1611,24 +1611,26 @@
         // O swipe de arrastar a tela foi desativado para priorizar a navegação fixa e evitar conflitos.
 
         // ================= DRAG TO SCROLL (MENU DE ABAS NO PC) =================
-        const tabsNav = document.getElementById('tabs-nav');
+        const tabsNav = document.getElementById('island-tabs');
         let isDraggingTabs = false;
         let startXTabs, scrollLeftTabs;
 
-        tabsNav.addEventListener('mousedown', (e) => {
-            isDraggingTabs = true;
-            startXTabs = e.pageX - tabsNav.offsetLeft;
-            scrollLeftTabs = tabsNav.scrollLeft;
-        });
-        tabsNav.addEventListener('mouseleave', () => { isDraggingTabs = false; });
-        tabsNav.addEventListener('mouseup', () => { isDraggingTabs = false; });
-        tabsNav.addEventListener('mousemove', (e) => {
-            if (!isDraggingTabs) return;
-            e.preventDefault();
-            const x = e.pageX - tabsNav.offsetLeft;
-            const walk = (x - startXTabs) * 2; // O "* 2" controla a velocidade do arraste
-            tabsNav.scrollLeft = scrollLeftTabs - walk;
-        });
+        if (tabsNav) {
+            tabsNav.addEventListener('mousedown', (e) => {
+                isDraggingTabs = true;
+                startXTabs = e.pageX - tabsNav.offsetLeft;
+                scrollLeftTabs = tabsNav.scrollLeft;
+            });
+            tabsNav.addEventListener('mouseleave', () => { isDraggingTabs = false; });
+            tabsNav.addEventListener('mouseup', () => { isDraggingTabs = false; });
+            tabsNav.addEventListener('mousemove', (e) => {
+                if (!isDraggingTabs) return;
+                e.preventDefault();
+                const x = e.pageX - tabsNav.offsetLeft;
+                const walk = (x - startXTabs) * 2; 
+                tabsNav.scrollLeft = scrollLeftTabs - walk;
+            });
+        }
 
         // ================= TAB STYLE CONTROLS =================
         function setTabStyle(style) {

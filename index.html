@@ -2037,6 +2037,7 @@
             updateSaveDisplay(profile);
             updateSaveTimestamp();
             renderToolbarAlerts();
+        }
 
         window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });

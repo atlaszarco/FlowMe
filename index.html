@@ -50,6 +50,45 @@
         html.theme-oled input:not(.!bg-transparent), html.theme-oled select, html.theme-oled textarea { background-color: #0a0a0a !important; border-color: #52525b !important; }
         html.theme-oled .border-slate-200, html.theme-oled .border-slate-300, html.theme-oled .dark\:border-slate-700, html.theme-oled .dark\:border-slate-600 { border-color: #3f3f46 !important; }
         html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #3f3f46 !important; }
+
+        /* ================= PADRÃO GLASSMORPHISM GLOBAL ================= */
+        /* 1. Painéis Comuns (Cartões, Gavetas, Faturas, Gráficos) */
+        .bg-white, .dark\:bg-slate-800 {
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+        }
+        .bg-white { 
+            background-color: rgba(255, 255, 255, 0.7) !important; 
+            border-color: rgba(255, 255, 255, 0.5) !important; 
+        }
+        .dark .bg-white, .dark .dark\:bg-slate-800 { 
+            background-color: rgba(30, 41, 59, 0.6) !important; 
+            border-color: rgba(51, 65, 85, 0.5) !important; 
+        }
+        html.theme-oled .bg-white, html.theme-oled .dark\:bg-slate-800 { 
+            background-color: rgba(10, 10, 10, 0.6) !important; 
+            border-color: rgba(38, 38, 38, 0.5) !important; 
+        }
+
+        /* 2. Elementos Flutuantes (Modais, Ilhas do Header, Pílula e Pop-up Mobile) */
+        .modal-inner, #main-header > div > div, #island-tabs, #global-toolbar, #form-wrapper.fixed {
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+        }
+        .modal-inner, #form-wrapper.fixed { 
+            background-color: rgba(255, 255, 255, 0.8) !important; 
+        }
+        .dark .modal-inner, .dark #main-header > div > div, .dark #island-tabs, .dark #global-toolbar, .dark #form-wrapper.fixed {
+            background-color: rgba(15, 23, 42, 0.75) !important; 
+            border-color: rgba(51, 65, 85, 0.5) !important; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+        }
+        html.theme-oled .modal-inner, html.theme-oled #main-header > div > div, html.theme-oled #island-tabs, html.theme-oled #global-toolbar, html.theme-oled #form-wrapper.fixed {
+            background-color: rgba(0, 0, 0, 0.75) !important; 
+            border-color: rgba(38, 38, 38, 0.5) !important; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
+        }
         
         /* Ajuste de Rolagem Global para conteúdo passar por baixo do Header Squircles */
         html { scroll-padding-top: 130px; }
@@ -1340,7 +1379,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.9.3';
+        const FLOWME_VERSION = '2.9.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2172,10 +2211,16 @@
             
             const wrapper = document.getElementById('form-wrapper');
             const backdrop = document.getElementById('form-backdrop');
+            const originalParent = document.querySelector('#acc-content-form .overflow-hidden');
             
             if (isMobileFormOpen) {
+                // Remove da sanfona e joga direto no Body
+                document.body.appendChild(backdrop);
+                document.body.appendChild(wrapper);
+
                 backdrop.classList.remove('hidden');
                 wrapper.classList.remove('hidden');
+                
                 wrapper.classList.add('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
                 
                 requestAnimationFrame(() => {
@@ -2192,6 +2237,12 @@
                     wrapper.classList.add('hidden');
                     backdrop.classList.add('hidden');
                     wrapper.classList.remove('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
+                    
+                    // Devolve o formulário para a gaveta do Desktop
+                    if (originalParent) {
+                        originalParent.appendChild(backdrop);
+                        originalParent.appendChild(wrapper);
+                    }
                 }, 300);
             }
         }
@@ -2200,11 +2251,17 @@
             const fab = document.getElementById('fab-form');
             const wrapper = document.getElementById('form-wrapper');
             const backdrop = document.getElementById('form-backdrop');
+            const originalParent = document.querySelector('#acc-content-form .overflow-hidden');
 
             if (window.innerWidth >= 1024) { 
-                wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all block";
+                wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all block";
                 if(fab) fab.classList.add('hidden');
                 if(backdrop) backdrop.classList.add('hidden', 'opacity-0');
+                // Se redimensionar pro PC com ele aberto, devolve pra gaveta
+                if (originalParent && wrapper.parentNode === document.body) {
+                    originalParent.appendChild(backdrop);
+                    originalParent.appendChild(wrapper);
+                }
                 isMobileFormOpen = false; 
             } else {
                 if(fab) fab.classList.remove('hidden');

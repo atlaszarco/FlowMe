@@ -118,7 +118,7 @@
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
     
 <!-- ================= BLOCO 0: SPLASH SCREEN (ONBOARDING) ================= -->
-    <div id="splash-screen" class="fixed inset-0 z-[60] bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div id="splash-screen" class="fixed inset-0 z-[70] bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="flex flex-col items-center text-center px-4">
             <div class="bg-emerald-500 p-4 rounded-2xl text-white font-bold text-4xl flex items-center justify-center w-20 h-20 shadow-lg mb-4">
                 <i class="fa-solid fa-dollar-sign"></i>
@@ -569,13 +569,14 @@
                 </div>
             </div>
 
-            <div class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-md p-4 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
+            <!-- Barra de Pesquisa e Filtros -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
                 <div class="relative flex-1">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-sm"></i>
-                    <input type="text" id="invoice-search-input" autocomplete="off" oninput="renderFaturas()" data-i18n="placeholder_search" placeholder="Buscar..." class="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
+                    <input type="text" id="invoice-search-input" autocomplete="off" oninput="renderFaturas()" data-i18n="placeholder_search" placeholder="Buscar..." class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
                 </div>
                 <div class="flex items-center gap-2 overflow-x-auto">
-                    <select id="invoice-filter-status" onchange="renderFaturas()" class="p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
+                    <select id="invoice-filter-status" onchange="renderFaturas()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
                         <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
                         <option value="pago" data-i18n="flt_paid">Pagos</option>
                         <option value="pendente" data-i18n="flt_pending">Pendentes</option>
@@ -583,17 +584,18 @@
                 </div>
             </div>
 
-            <div class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-md rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-colors">
+            <!-- Tabela de Faturas -->
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-colors">
                 <div class="overflow-x-auto w-full [&::-webkit-scrollbar]:hidden">
                     <table class="w-full text-left border-collapse min-w-[750px]">
-                        <thead class="bg-slate-100/50 dark:bg-slate-900/50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 transition-colors">
+                        <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 transition-colors">
                             <tr>
-                                <th class="p-3 pl-5" data-i18n="th_date_purchase">Data da Compra</th>
+                                <th class="p-3" data-i18n="th_date_purchase">Data da Compra</th>
                                 <th class="p-3" data-i18n="th_desc">Descrição & Categoria</th>
                                 <th class="p-3" data-i18n="th_orig">Valor Orig.</th>
                                 <th class="p-3" data-i18n="th_cost">Seu Custo</th>
                                 <th class="p-3 text-center" data-i18n="th_status">Status</th>
-                                <th class="p-3 pr-5 text-right" data-i18n="th_actions">Ações</th>
+                                <th class="p-3 text-right" data-i18n="th_actions">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="invoice-transactions-body" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-sm">
@@ -601,7 +603,7 @@
                     </table>
                 </div>
                 <div id="invoice-empty-state" class="hidden flex flex-col items-center justify-center p-10 text-slate-400">
-                    <i class="fa-regular fa-credit-card text-3xl mb-3 text-slate-300 dark:text-slate-600"></i>
+                    <i class="fa-solid fa-folder-open text-3xl mb-3 text-slate-300 dark:text-slate-600"></i>
                     <p class="text-sm" data-i18n="invoice_empty">Nenhuma compra no crédito para este cartão neste mês.</p>
                 </div>
             </div>
@@ -1338,7 +1340,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.9.2';
+        const FLOWME_VERSION = '2.9.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2174,8 +2176,7 @@
             if (isMobileFormOpen) {
                 backdrop.classList.remove('hidden');
                 wrapper.classList.remove('hidden');
-                
-                wrapper.classList.add('fixed', 'z-50', 'inset-0', 'm-auto', 'w-[90%]', 'max-w-md', 'h-max', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                wrapper.classList.add('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
                 
                 requestAnimationFrame(() => {
                     backdrop.classList.remove('opacity-0');
@@ -2190,7 +2191,7 @@
                 setTimeout(() => {
                     wrapper.classList.add('hidden');
                     backdrop.classList.add('hidden');
-                    wrapper.classList.remove('fixed', 'z-50', 'inset-0', 'm-auto', 'w-[90%]', 'max-w-md', 'h-max', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
+                    wrapper.classList.remove('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
                 }, 300);
             }
         }
@@ -3364,7 +3365,7 @@
 
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                            <td class="p-3 pl-5 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">${dateFormatted}</td>
+                            <td class="p-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">${dateFormatted}</td>
                             <td class="p-3">
                                 <div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${trx.description}</div>
                                 <div class="mt-1"><span class="inline-flex items-center px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 rounded text-[9px] font-bold uppercase tracking-wider dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300"><i class="fa-solid fa-tag mr-1 text-slate-400"></i> ${trx.category || '--'}</span></div>
@@ -3377,7 +3378,7 @@
                                     ${t(trx.status === 'pago' ? 'status_pag' : 'status_pen').toUpperCase()}
                                 </button>
                             </td>
-                            <td class="p-3 pr-5 whitespace-nowrap text-right space-x-1">
+                            <td class="p-3 whitespace-nowrap text-right space-x-1">
                                 <button onclick="switchTab('transacoes'); editTransaction('${trx.id}')" title="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
                                 <button onclick="deleteTransaction('${trx.id}'); renderFaturas();" title="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
                             </td>

@@ -234,7 +234,7 @@
             <div id="filter-dynamic-area" class="relative h-full flex-1 flex items-center overflow-hidden">
                 
                 <!-- VISTA FECHADA (Apenas Texto) -->
-                <div id="filter-collapsed-view" class="absolute inset-0 left-12 sm:left-14 flex items-center pr-4 sm:pr-5 pointer-events-none transition-all duration-500 opacity-100 scale-100 origin-left">
+                <div id="filter-collapsed-view" class="absolute inset-0 left-12 sm:left-14 flex items-center justify-center pr-2 pointer-events-none transition-all duration-500 opacity-100 scale-100 origin-left">
                     <span id="filter-collapsed-text" class="text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
                 </div>
 
@@ -1407,7 +1407,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.8';
+        const FLOWME_VERSION = 'beta-3.0.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1766,28 +1766,8 @@
         function changeGlobalMonth(value) {
             if(!value) return; 
             state.currentMonth = value;
-            const displaySpan = document.getElementById('month-display');
             
-            if(displaySpan) {
-                const [year, month] = value.split('-');
-                const date = new Date(parseInt(year), parseInt(month) - 1, 10);
-                
-                const isMicro = window.innerWidth < 350;
-                
-                let monthName = date.toLocaleString(userConfig.lang, { month: isMicro ? 'short' : 'long' }).replace('.', '');
-                monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-                let yearStr = isMicro ? year.substring(2) : year;
-                
-                if (isMicro) {
-                    displaySpan.textContent = `${monthName}/${yearStr}`;
-                } else {
-                    displaySpan.textContent = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${monthName} de ${yearStr}` : `${monthName} ${yearStr}`;
-                }
-            }
-            
-            if (typeof updateFilterUI === 'function') {
-                updateFilterUI();
-            }
+            if (typeof updateFilterUI === 'function') updateFilterUI();
 
             if (currentFilterMode === 'month') { 
                 if (typeof render === 'function') render(); 
@@ -1812,14 +1792,36 @@
             const isMicro = window.innerWidth < 350;
             const isMobile = window.innerWidth < 1024;
 
-            if (currentFilterMode === 'month') {
-                icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
-                if (collapsedText) collapsedText.textContent = isMicro ? '' : (document.getElementById('month-display').textContent || '');
-            } else {
-                icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
-                if (collapsedText) collapsedText.textContent = isMicro ? '' : (t('period_label') || 'Período').replace(':', '');
+            // 1. GERAÇÃO DE TEXTO
+            let monthTextLong = '';
+            let monthTextShort = '';
+            if (state.currentMonth) {
+                const [year, month] = state.currentMonth.split('-');
+                const date = new Date(parseInt(year), parseInt(month) - 1, 10);
+                
+                let mNameLong = date.toLocaleString(userConfig.lang, { month: 'long' }).replace('.', '');
+                mNameLong = mNameLong.charAt(0).toUpperCase() + mNameLong.slice(1);
+                let mNameShort = date.toLocaleString(userConfig.lang, { month: 'short' }).replace('.', '');
+                mNameShort = mNameShort.charAt(0).toUpperCase() + mNameShort.slice(1);
+                
+                monthTextLong = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${mNameLong} de ${year}` : `${mNameLong} ${year}`;
+                monthTextShort = `${mNameShort}/${year.substring(2)}`;
             }
 
+            const rangeText = (t('period_label') || 'Período').replace(':', '');
+
+            // 2. APLICAÇÃO DOS TEXTOS E ÍCONES
+            if (currentFilterMode === 'month') {
+                icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
+                if (collapsedText) collapsedText.textContent = isMicro ? '' : monthTextLong;
+                const md = document.getElementById('month-display');
+                if (md) md.textContent = isMicro ? monthTextShort : monthTextLong;
+            } else {
+                icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                if (collapsedText) collapsedText.textContent = isMicro ? '' : rangeText;
+            }
+
+            // 3. ANIMAÇÃO DE LARGURA E VIDRO
             if (isFilterExpanded) {
                 if(catcher) catcher.classList.add('hidden'); 
                 
@@ -1833,8 +1835,8 @@
                 content.classList.add('opacity-100', 'pointer-events-auto');
                 
                 if (currentFilterMode === 'month') {
-                    const monthTextLen = (document.getElementById('month-display').textContent || '').length;
-                    const wMonth = isMicro ? '180px' : `${140 + (monthTextLen * 11)}px`;
+                    const len = isMicro ? monthTextShort.length : monthTextLong.length;
+                    const wMonth = isMicro ? '160px' : `${110 + (len * 8.5)}px`;
                     wrapper.style.width = wMonth;
                     
                     modeMonth.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
@@ -1842,7 +1844,7 @@
                     modeRange.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
                     modeRange.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                 } else {
-                    const wRange = isMicro ? '210px' : (isMobile ? '260px' : '290px');
+                    const wRange = isMicro ? '200px' : '260px';
                     wrapper.style.width = wRange;
                     
                     modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
@@ -1865,8 +1867,8 @@
                 if (isMicro) {
                     wCollapsed = '48px'; 
                 } else {
-                    const textLen = (collapsedText.textContent || '').length;
-                    wCollapsed = isMobile ? `${76 + (textLen * 9.5)}px` : `${90 + (textLen * 10.5)}px`;
+                    const len = (collapsedText.textContent || '').length;
+                    wCollapsed = isMobile ? `${66 + (len * 8)}px` : `${74 + (len * 8.5)}px`;
                 }
                 wrapper.style.width = wCollapsed;
                 

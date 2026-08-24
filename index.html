@@ -1415,7 +1415,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.5';
+        const FLOWME_VERSION = 'beta-3.0.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1786,19 +1786,18 @@
             const isMicro = window.innerWidth < 350;
             const isMobile = window.innerWidth < 1024;
             
-            const wMonth = isMicro ? '180px' : '230px'; 
-            const wRange = isMicro ? '240px' : '280px';
-
+            // 1. Define os textos corretos de acordo com o modo
             if (currentFilterMode === 'month') {
                 icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
-                if (collapsedText) collapsedText.textContent = document.getElementById('month-display').textContent || '';
+                if (collapsedText) collapsedText.textContent = isMicro ? '' : (document.getElementById('month-display').textContent || '');
             } else {
                 icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
-                if (collapsedText) collapsedText.textContent = (t('period_label') || 'Período').replace(':', '');
+                if (collapsedText) collapsedText.textContent = isMicro ? '' : (t('period_label') || 'Período').replace(':', '');
             }
 
+            // 2. Aplica as classes e larguras dependendo se está aberto ou fechado
             if (isFilterExpanded) {
-                if(catcher) catcher.classList.add('hidden'); // Desliga a camada de vidro, liberando as setas e ícone
+                if(catcher) catcher.classList.add('hidden'); // Desliga a camada isolante
                 
                 iconBtn.classList.add('bg-black/10', 'dark:bg-white/10'); 
                 iconBtn.classList.remove('pointer-events-none'); 
@@ -1810,6 +1809,9 @@
                 content.classList.add('opacity-100', 'pointer-events-auto');
                 
                 if (currentFilterMode === 'month') {
+                    // ADAPTAÇÃO DINÂMICA: Lê o tamanho do mês completo e soma com o espaço das setas (130px)
+                    const monthTextLen = (document.getElementById('month-display').textContent || '').length;
+                    const wMonth = isMicro ? '180px' : `${130 + (monthTextLen * 8.5)}px`;
                     wrapper.style.width = wMonth;
                     
                     modeMonth.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
@@ -1817,6 +1819,7 @@
                     modeRange.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
                     modeRange.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                 } else {
+                    const wRange = isMicro ? '240px' : '280px';
                     wrapper.style.width = wRange;
                     
                     modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
@@ -1830,13 +1833,19 @@
                     }
                 }
             } else {
-                if(catcher) catcher.classList.remove('hidden'); // Liga a camada de vidro. Clicar em qualquer lugar aciona o botão
+                if(catcher) catcher.classList.remove('hidden'); // Liga a camada isolante
                 
                 iconBtn.classList.remove('bg-black/10', 'dark:bg-white/10');
                 iconBtn.classList.add('pointer-events-none');
                 
-                const textLen = collapsedText.textContent.length;
-                const wCollapsed = isMobile ? `${68 + (textLen * 7.5)}px` : `${72 + (textLen * 8.5)}px`;
+                // Exceção: Telas super pequenas mostram apenas o ícone
+                let wCollapsed;
+                if (isMicro) {
+                    wCollapsed = '56px'; 
+                } else {
+                    const textLen = (collapsedText.textContent || '').length;
+                    wCollapsed = isMobile ? `${64 + (textLen * 7.5)}px` : `${72 + (textLen * 8.5)}px`;
+                }
                 wrapper.style.width = wCollapsed;
                 
                 content.classList.add('opacity-0', 'pointer-events-none');
@@ -1845,30 +1854,47 @@
                 collapsedView.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                 collapsedView.classList.add('opacity-100', 'scale-100');
             }
-            render();
+            
+            // Evita loops duplos chamando render apenas se for estritamente necessário
+            if (typeof render === 'function') render();
         }
-
+        
         function changeGlobalMonth(value) {
             if(!value) return; 
             state.currentMonth = value;
             const displaySpan = document.getElementById('month-display');
+            
             if(displaySpan) {
                 const [year, month] = value.split('-');
                 const date = new Date(parseInt(year), parseInt(month) - 1, 10);
-                const isMobile = window.innerWidth < 1024;
                 
-                let monthName = date.toLocaleString(userConfig.lang, { month: isMobile ? 'short' : 'long' }).replace('.', '');
+                // Exceção para telas super pequenas (< 350px)
+                const isMicro = window.innerWidth < 350;
+                
+                // Usa 'long' no celular normal e PC, usa 'short' apenas no micro
+                let monthName = date.toLocaleString(userConfig.lang, { month: isMicro ? 'short' : 'long' }).replace('.', '');
                 monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-                let yearStr = isMobile ? year.substring(2) : year;
+                let yearStr = isMicro ? year.substring(2) : year;
                 
-                if (isMobile) displaySpan.textContent = `${monthName}/${yearStr}`;
-                else displaySpan.textContent = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${monthName} de ${yearStr}` : `${monthName} ${yearStr}`;
+                if (isMicro) {
+                    displaySpan.textContent = `${monthName}/${yearStr}`;
+                } else {
+                    displaySpan.textContent = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${monthName} de ${yearStr}` : `${monthName} ${yearStr}`;
+                }
             }
             
-            // Dispara atualização visual automática para o texto recolhido
-            if (!isFilterExpanded) updateFilterUI();
+            // Dispara atualização visual automática para a largura do botão após gerar a string
+            if (!isFilterExpanded && typeof updateFilterUI === 'function') {
+                updateFilterUI();
+            }
 
-            if (currentFilterMode === 'month') { render(); if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); }
+            if (currentFilterMode === 'month') { 
+                if (typeof render === 'function') render(); 
+                const faturasContent = document.getElementById('content-faturas');
+                if (faturasContent && !faturasContent.classList.contains('hidden') && typeof renderFaturas === 'function') {
+                    renderFaturas();
+                }
+            }
         }
 
         function changeMonthOffset(offset) {

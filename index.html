@@ -225,17 +225,17 @@
             <!-- CAMADA INVISÍVEL (Captura o clique quando fechado e protege os inputs) -->
             <div id="filter-closed-catcher" class="absolute inset-0 z-30 cursor-pointer" onclick="openFilter()"></div>
 
-            <!-- Botão do Ícone (Esquerda) -->
+            <!-- Botão do Ícone Fixo (Esquerda) -->
             <button id="btn-filter-icon" onclick="toggleFilterMode(event)" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-none">
                 <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
             </button>
 
-            <!-- Área de Conteúdo Dinâmico (Direita) -->
-            <div id="filter-dynamic-area" class="relative h-full flex-1 flex items-center overflow-hidden">
+            <!-- Área de Conteúdo Dinâmico (Direita) - Isolada do Ícone -->
+            <div id="filter-dynamic-area" class="absolute inset-0 left-12 sm:left-14 flex items-center overflow-hidden">
                 
-                <!-- VISTA FECHADA (Apenas Texto) -->
-                <div id="filter-collapsed-view" class="absolute inset-0 left-12 sm:left-14 flex items-center justify-center pr-2 pointer-events-none transition-all duration-500 opacity-100 scale-100 origin-left">
-                    <span id="filter-collapsed-text" class="text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
+                <!-- VISTA FECHADA (Texto 100% Centralizado no espaço restante) -->
+                <div id="filter-collapsed-view" class="absolute inset-0 flex items-center justify-center pr-2 sm:pr-3 pointer-events-none transition-all duration-500 opacity-100 scale-100 origin-left">
+                    <span id="filter-collapsed-text" class="text-[13px] sm:text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
                 </div>
 
                 <!-- VISTA ABERTA (Mês ou Período) -->
@@ -245,7 +245,7 @@
                     <div id="mode-month" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10 w-full pr-1">
                         <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
                         <div class="relative flex items-center justify-center h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition flex-1 min-w-0" onclick="event.stopPropagation()">
-                            <span id="month-display" class="text-[11px] sm:text-sm font-bold uppercase tracking-wide pointer-events-none text-center truncate px-1"></span>
+                            <span id="month-display" class="text-[11px] sm:text-sm font-bold uppercase tracking-wider pointer-events-none text-center truncate px-1"></span>
                             <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                         </div>
                         <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
@@ -1407,7 +1407,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.9';
+        const FLOWME_VERSION = 'beta-3.1.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1792,25 +1792,25 @@
             const isMicro = window.innerWidth < 350;
             const isMobile = window.innerWidth < 1024;
 
-            // 1. GERAÇÃO DE TEXTO
-            let monthTextLong = '';
-            let monthTextShort = '';
-            if (state.currentMonth) {
-                const [year, month] = state.currentMonth.split('-');
-                const date = new Date(parseInt(year), parseInt(month) - 1, 10);
-                
-                let mNameLong = date.toLocaleString(userConfig.lang, { month: 'long' }).replace('.', '');
-                mNameLong = mNameLong.charAt(0).toUpperCase() + mNameLong.slice(1);
-                let mNameShort = date.toLocaleString(userConfig.lang, { month: 'short' }).replace('.', '');
-                mNameShort = mNameShort.charAt(0).toUpperCase() + mNameShort.slice(1);
-                
-                monthTextLong = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${mNameLong} de ${year}` : `${mNameLong} ${year}`;
-                monthTextShort = `${mNameShort}/${year.substring(2)}`;
+            // 1. GERAÇÃO BLINDADA DO TEXTO (Garante que nunca fique vazio)
+            if (!state.currentMonth) {
+                const d = new Date();
+                state.currentMonth = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
             }
 
+            const [year, month] = state.currentMonth.split('-');
+            const date = new Date(parseInt(year), parseInt(month) - 1, 10);
+            
+            let mNameLong = date.toLocaleString(userConfig.lang, { month: 'long' }).replace('.', '');
+            mNameLong = mNameLong.charAt(0).toUpperCase() + mNameLong.slice(1);
+            let mNameShort = date.toLocaleString(userConfig.lang, { month: 'short' }).replace('.', '');
+            mNameShort = mNameShort.charAt(0).toUpperCase() + mNameShort.slice(1);
+            
+            const monthTextLong = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${mNameLong} de ${year}` : `${mNameLong} ${year}`;
+            const monthTextShort = `${mNameShort}/${year.substring(2)}`;
             const rangeText = (t('period_label') || 'Período').replace(':', '');
 
-            // 2. APLICAÇÃO DOS TEXTOS E ÍCONES
+            // 2. APLICAÇÃO DOS TEXTOS
             if (currentFilterMode === 'month') {
                 icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
                 if (collapsedText) collapsedText.textContent = isMicro ? '' : monthTextLong;
@@ -1836,7 +1836,7 @@
                 
                 if (currentFilterMode === 'month') {
                     const len = isMicro ? monthTextShort.length : monthTextLong.length;
-                    const wMonth = isMicro ? '160px' : `${110 + (len * 8.5)}px`;
+                    const wMonth = isMicro ? '180px' : (isMobile ? `${120 + (len * 10)}px` : `${130 + (len * 11)}px`);
                     wrapper.style.width = wMonth;
                     
                     modeMonth.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
@@ -1844,7 +1844,7 @@
                     modeRange.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
                     modeRange.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                 } else {
-                    const wRange = isMicro ? '200px' : '260px';
+                    const wRange = isMicro ? '200px' : (isMobile ? '230px' : '260px');
                     wrapper.style.width = wRange;
                     
                     modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
@@ -1868,7 +1868,7 @@
                     wCollapsed = '48px'; 
                 } else {
                     const len = (collapsedText.textContent || '').length;
-                    wCollapsed = isMobile ? `${66 + (len * 8)}px` : `${74 + (len * 8.5)}px`;
+                    wCollapsed = isMobile ? `${68 + (len * 8.5)}px` : `${80 + (len * 9.5)}px`;
                 }
                 wrapper.style.width = wCollapsed;
                 

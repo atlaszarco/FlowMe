@@ -1415,7 +1415,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.4';
+        const FLOWME_VERSION = 'beta-3.0.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1743,6 +1743,17 @@
         let currentFilterMode = 'month';
         let isFilterExpanded = false;
 
+        // Responsável por fechar a pílula ao clicar fora
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('filter-wrapper');
+            if (wrapper && !wrapper.contains(e.target) && isFilterExpanded) {
+                isFilterExpanded = false;
+                setToolbarFocus(null);
+                updateFilterUI();
+            }
+        });
+
+        // Abre a pílula quando clica na camada de vidro
         function openFilter() {
             if (!isFilterExpanded) {
                 isFilterExpanded = true;
@@ -1751,6 +1762,7 @@
             }
         }
 
+        // Troca entre Mês e Período (só funciona se já estiver aberto)
         function toggleFilterMode(event) {
             if(event) event.stopPropagation();
             if (isFilterExpanded) {
@@ -1759,6 +1771,7 @@
             }
         }
 
+        // Controla o visual, as larguras e o vidro
         function updateFilterUI() {
             const wrapper = document.getElementById('filter-wrapper');
             const collapsedView = document.getElementById('filter-collapsed-view');

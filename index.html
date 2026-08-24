@@ -222,13 +222,16 @@
     <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-center">
         <div id="filter-wrapper" class="group flex items-center justify-start btn-filter-light dark:btn-filter-dark h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0" style="width: 130px;">
             
+            <!-- CAMADA INVISÍVEL (Captura o clique quando fechado e protege os inputs) -->
+            <div id="filter-closed-catcher" class="absolute inset-0 z-30 cursor-pointer" onclick="openFilter()"></div>
+
             <!-- Botão do Ícone (Esquerda) -->
-            <button id="btn-filter-icon" onclick="handleIconClick(event)" class="h-full px-4 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer">
+            <button id="btn-filter-icon" onclick="toggleFilterMode(event)" class="h-full px-4 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-none">
                 <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
             </button>
 
             <!-- Área de Conteúdo Dinâmico (Direita) -->
-            <div id="filter-dynamic-area" class="relative h-full flex-1 flex items-center overflow-hidden cursor-pointer" onclick="handleAreaClick(event)">
+            <div id="filter-dynamic-area" class="relative h-full flex-1 flex items-center overflow-hidden">
                 
                 <!-- VISTA FECHADA (Apenas Texto) -->
                 <div id="filter-collapsed-view" class="absolute inset-0 flex items-center pr-4 pointer-events-none transition-all duration-500 opacity-100 scale-100 origin-left">
@@ -1328,6 +1331,7 @@
             if (typeof renderToolbarAlerts === 'function') renderToolbarAlerts();
             if (typeof renderLimitsSettings === 'function') renderLimitsSettings();
             if (typeof updateSaveTimestamp === 'function') updateSaveTimestamp();
+            if (typeof updateFilterUI === 'function') updateFilterUI();
 
             setTimeout(() => {
                 if (typeof render === 'function') render(); 
@@ -1411,7 +1415,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.3';
+        const FLOWME_VERSION = 'beta-3.0.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1739,35 +1743,21 @@
         let currentFilterMode = 'month';
         let isFilterExpanded = false;
 
-        function handleIconClick(event) {
-            if(event) event.stopPropagation();
+        function openFilter() {
             if (!isFilterExpanded) {
                 isFilterExpanded = true;
                 setToolbarFocus('global-toolbar-filter'); 
-            } else {
-                // Se já estiver aberto, o clique no ícone troca entre Mês e Período
+                updateFilterUI();
+            }
+        }
+
+        function toggleFilterMode(event) {
+            if(event) event.stopPropagation();
+            if (isFilterExpanded) {
                 currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
-            }
-            updateFilterUI();
-        }
-
-        function handleAreaClick(event) {
-            if(event) event.stopPropagation();
-            if (!isFilterExpanded) {
-                isFilterExpanded = true;
-                setToolbarFocus('global-toolbar-filter'); 
                 updateFilterUI();
             }
         }
-
-        document.addEventListener('click', (e) => {
-            const wrapper = document.getElementById('filter-wrapper');
-            if (wrapper && !wrapper.contains(e.target) && isFilterExpanded) {
-                isFilterExpanded = false;
-                setToolbarFocus(null);
-                updateFilterUI();
-            }
-        });
 
         function updateFilterUI() {
             const wrapper = document.getElementById('filter-wrapper');
@@ -1778,15 +1768,14 @@
             const modeMonth = document.getElementById('mode-month');
             const modeRange = document.getElementById('mode-range');
             const iconBtn = document.getElementById('btn-filter-icon');
+            const catcher = document.getElementById('filter-closed-catcher');
             
             const isMicro = window.innerWidth < 350;
             const isMobile = window.innerWidth < 1024;
             
-            // Larguras exatas calculadas para evitar esmagamento das setas (Ícone ocupa ~50px)
             const wMonth = isMicro ? '180px' : '230px'; 
             const wRange = isMicro ? '240px' : '280px';
 
-            // Define os rótulos e ícones com base no modo atual
             if (currentFilterMode === 'month') {
                 icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
                 if (collapsedText) collapsedText.textContent = document.getElementById('month-display').textContent || '';
@@ -1796,7 +1785,10 @@
             }
 
             if (isFilterExpanded) {
-                iconBtn.classList.add('bg-black/10', 'dark:bg-white/10'); // Indica que o ícone se tornou um botão de alternância
+                if(catcher) catcher.classList.add('hidden'); // Desliga a camada de vidro, liberando as setas e ícone
+                
+                iconBtn.classList.add('bg-black/10', 'dark:bg-white/10'); 
+                iconBtn.classList.remove('pointer-events-none'); 
                 
                 collapsedView.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                 collapsedView.classList.remove('opacity-100', 'scale-100');
@@ -1825,9 +1817,11 @@
                     }
                 }
             } else {
-                iconBtn.classList.remove('bg-black/10', 'dark:bg-white/10');
+                if(catcher) catcher.classList.remove('hidden'); // Liga a camada de vidro. Clicar em qualquer lugar aciona o botão
                 
-                // Cálculo inteligente da largura recolhida (Ícone + margens + texto dinâmico)
+                iconBtn.classList.remove('bg-black/10', 'dark:bg-white/10');
+                iconBtn.classList.add('pointer-events-none');
+                
                 const textLen = collapsedText.textContent.length;
                 const wCollapsed = isMobile ? `${68 + (textLen * 7.5)}px` : `${72 + (textLen * 8.5)}px`;
                 wrapper.style.width = wCollapsed;

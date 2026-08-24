@@ -216,42 +216,41 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/40 dark:bg-slate-900/50 theme-oled:bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/60 dark:border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 z-50 rounded-3xl flex items-center h-16 sm:h-20 p-2 gap-2">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/40 dark:bg-slate-900/50 theme-oled:bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/60 dark:border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 z-50 rounded-3xl flex justify-center items-center h-16 sm:h-20 p-2 gap-2">
     
     <!-- 1. FILTRO EXPANSÍVEL (CENTRALIZADO QUANDO ABERTO) -->
-    <div id="global-toolbar-filter" class="flex items-center shrink-0 min-w-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-left">
-        <div id="filter-wrapper" class="group flex items-center justify-center btn-filter-light dark:btn-filter-dark h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 cursor-pointer" onclick="handleFilterIconClick(event)">
+    <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-center">
+        <div id="filter-wrapper" class="group flex items-center justify-center btn-filter-light dark:btn-filter-dark h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 cursor-pointer" style="width: 130px;" onclick="handleFilterIconClick(event)">
             
-            <button type="button" class="px-4 sm:px-5 h-full flex items-center justify-center bg-transparent shrink-0 z-10 relative pointer-events-none transition-colors">
-                <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-all duration-300"></i>
-                <span id="filter-collapsed-text" class="hidden sm:inline max-w-[150px] overflow-hidden ml-2 text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
-            </button>
+            <!-- VISTA FECHADA (Ícone + Texto) -->
+            <div id="filter-collapsed-view" class="absolute inset-0 flex items-center justify-center px-4 pointer-events-none transition-all duration-500 opacity-100 scale-100">
+                <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
+                <span id="filter-collapsed-text" class="ml-2 text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
+            </div>
 
-            <!-- CONTEÚDO DO FILTRO (MÊS OU PERÍODO) -->
-            <div id="filter-content" class="flex items-center justify-center h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] max-w-0 opacity-0 overflow-hidden">
-                <div id="filter-content-inner" class="relative h-full flex items-center justify-center transition-all duration-500 px-2 w-full">
-                    
-                    <!-- Módulo MÊS -->
-                    <div id="mode-month" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10 w-full">
-                        <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="micro-shrink relative z-20 px-3 sm:px-4 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left micro-icon"></i></button>
-                        <div class="relative flex items-center justify-center px-2 sm:px-4 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition flex-1">
-                            <span id="month-display" class="text-xs sm:text-sm font-bold uppercase tracking-wide pointer-events-none text-center"></span>
-                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="event.stopPropagation(); this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        </div>
-                        <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="micro-shrink relative z-20 px-3 sm:px-4 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right micro-icon"></i></button>
+            <!-- VISTA ABERTA (Mês ou Período) -->
+            <div id="filter-content" class="absolute inset-0 flex items-center justify-center transition-all duration-500 opacity-0 pointer-events-none">
+                
+                <!-- Módulo MÊS -->
+                <div id="mode-month" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10 w-full px-1">
+                    <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="relative z-20 px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left"></i></button>
+                    <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition flex-1 min-w-0">
+                        <span id="month-display" class="text-[11px] sm:text-sm font-bold uppercase tracking-wide pointer-events-none text-center truncate"></span>
+                        <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="event.stopPropagation(); this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                     </div>
-                    
-                    <!-- Módulo PERÍODO -->
-                    <div id="mode-range" class="absolute inset-0 flex items-center justify-center h-full whitespace-nowrap transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0 w-full">
-                        <div class="relative flex items-center justify-center px-2 sm:px-3 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1" onclick="event.stopPropagation()">
-                            <span id="date-start-display" class="text-[11px] sm:text-sm font-bold pointer-events-none text-center">--/--/--</span>
-                            <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        </div>
-                        <span class="text-[10px] sm:text-xs font-bold shrink-0 mx-1">~</span>
-                        <div class="relative flex items-center justify-center px-2 sm:px-3 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1" onclick="event.stopPropagation()">
-                            <span id="date-end-display" class="text-[11px] sm:text-sm font-bold pointer-events-none text-center">--/--/--</span>
-                            <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        </div>
+                    <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="relative z-20 px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                
+                <!-- Módulo PERÍODO -->
+                <div id="mode-range" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0 w-full px-2">
+                    <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1 min-w-0" onclick="event.stopPropagation()">
+                        <span id="date-start-display" class="text-[10px] sm:text-xs font-bold pointer-events-none text-center truncate">--/--/--</span>
+                        <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                    </div>
+                    <span class="text-[10px] sm:text-xs font-bold shrink-0 mx-1">~</span>
+                    <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1 min-w-0" onclick="event.stopPropagation()">
+                        <span id="date-end-display" class="text-[10px] sm:text-xs font-bold pointer-events-none text-center truncate">--/--/--</span>
+                        <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                     </div>
                 </div>
             </div>
@@ -1404,7 +1403,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.9.6';
+        const FLOWME_VERSION = '2.9.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1677,7 +1676,7 @@
         function setToolbarFocus(focusId, callback = null) {
             clearTimeout(focusSequenceTimer1); clearTimeout(focusSequenceTimer2);
             
-            const inner = document.getElementById('global-toolbar-inner');
+            const inner = document.getElementById('global-toolbar');
             const filter = document.getElementById('global-toolbar-filter');
             const alerts = document.getElementById('global-toolbar-alerts');
             const save = document.getElementById('global-toolbar-save');
@@ -1685,13 +1684,13 @@
             const hide = (el) => {
                 if(el) {
                     el.classList.add('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
-                    el.classList.remove('max-w-[500px]', 'opacity-100', 'scale-100');
+                    el.classList.remove('opacity-100', 'scale-100');
                 }
             };
             const show = (el) => {
                 if(el) {
                     el.classList.remove('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
-                    el.classList.add('max-w-[500px]', 'opacity-100', 'scale-100');
+                    el.classList.add('opacity-100', 'scale-100');
                 }
             };
 
@@ -1699,34 +1698,21 @@
                 inner.classList.remove('gap-2', 'sm:gap-3');
                 lastFocusId = focusId;
                 
-                // ONDA DE SUMIÇO: O mais distante cai primeiro.
                 if (focusId === 'global-toolbar-filter') {
-                    hide(save);
-                    focusSequenceTimer1 = setTimeout(() => { hide(alerts); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
+                    hide(save); hide(alerts);
+                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
                 } else if (focusId === 'global-toolbar-save') {
-                    hide(filter);
-                    focusSequenceTimer1 = setTimeout(() => { hide(alerts); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
+                    hide(filter); hide(alerts);
+                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
                 } else if (focusId === 'global-toolbar-alerts') {
-                    // CASCATA DO SINO: O Filtro (Esquerda) cai primeiro. 150ms depois, o Salvar (Direita) cai.
-                    hide(filter);
-                    focusSequenceTimer1 = setTimeout(() => { hide(save); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
+                    hide(filter); hide(save);
+                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
                 }
             } else {
                 inner.classList.add('gap-2', 'sm:gap-3');
-                
-                // ONDA DE VOLTA (REBOTE): O mais perto de quem estava focado surge primeiro.
-                if (lastFocusId === 'global-toolbar-filter') {
-                    show(alerts);
-                    focusSequenceTimer1 = setTimeout(() => { show(save); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
-                } else if (lastFocusId === 'global-toolbar-save') {
-                    show(alerts);
-                    focusSequenceTimer1 = setTimeout(() => { show(filter); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
-                } else {
-                    // CASCATA DO SINO (VOLTA): O Salvar (Direita) volta primeiro. 150ms depois, o Filtro (Esquerda) volta.
-                    show(save);
-                    focusSequenceTimer1 = setTimeout(() => { show(filter); if(callback) focusSequenceTimer2 = setTimeout(callback, 300); }, 150);
-                }
+                show(filter); show(alerts); show(save);
                 lastFocusId = null;
+                if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
             }
         }
         // ================= FILTRO GLOBAL EXPANSÍVEL =================
@@ -1754,44 +1740,53 @@
         });
 
         function updateFilterUI() {
+            const wrapper = document.getElementById('filter-wrapper');
+            const collapsedView = document.getElementById('filter-collapsed-view');
             const content = document.getElementById('filter-content');
-            const innerContent = document.getElementById('filter-content-inner');
             const icon = document.getElementById('filter-icon-display');
             const collapsedText = document.getElementById('filter-collapsed-text');
             const modeMonth = document.getElementById('mode-month');
             const modeRange = document.getElementById('mode-range');
             
-            const isMicro = window.innerWidth < 300;
-            const wMonth = isMicro ? 'w-[120px]' : 'w-[160px]';
-            const wRange = isMicro ? 'w-[160px]' : 'w-[230px]';
+            const isMicro = window.innerWidth < 350;
+            const isMobile = window.innerWidth < 1024;
+            
+            // Larguras exatas calculadas para animação super suave
+            const wMonth = isMicro ? '150px' : '190px';
+            const wRange = isMicro ? '200px' : '260px';
+
+            // Atualiza o texto da vista fechada antecipadamente
+            if (collapsedText) {
+                if (currentFilterMode === 'month') {
+                    icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
+                    collapsedText.textContent = document.getElementById('month-display').textContent || '';
+                } else {
+                    icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                    collapsedText.textContent = (t('period_label') || 'Período').replace(':', '');
+                }
+            }
 
             if (isFilterExpanded) {
-                content.classList.remove('max-w-0', 'opacity-0');
-                content.classList.add('opacity-100');
+                collapsedView.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
+                collapsedView.classList.remove('opacity-100', 'scale-100');
                 
-                if (collapsedText) {
-                    collapsedText.classList.add('max-w-0', 'opacity-0', '!ml-0');
-                    collapsedText.classList.remove('max-w-[150px]', 'opacity-100', 'ml-2');
-                }
+                content.classList.remove('opacity-0', 'pointer-events-none');
+                content.classList.add('opacity-100', 'pointer-events-auto');
                 
                 if (currentFilterMode === 'month') {
-                    content.classList.remove(wRange); content.classList.add(wMonth, 'max-w-[200px]');
-                    innerContent.classList.remove(wRange); innerContent.classList.add(wMonth);
+                    wrapper.style.width = wMonth;
                     
-                    icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300 scale-110';
                     modeMonth.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
-                    modeMonth.classList.add('opacity-100', 'scale-100', 'z-10');
-                    modeRange.classList.remove('opacity-100', 'scale-100', 'z-10');
+                    modeMonth.classList.add('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
+                    modeRange.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
                     modeRange.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                 } else {
-                    content.classList.remove(wMonth, 'max-w-[200px]'); content.classList.add(wRange, 'max-w-[340px]');
-                    innerContent.classList.remove(wMonth); innerContent.classList.add(wRange);
+                    wrapper.style.width = wRange;
                     
-                    icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300 scale-110';
-                    modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10');
+                    modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
                     modeMonth.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                     modeRange.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
-                    modeRange.classList.add('opacity-100', 'scale-100', 'z-10');
+                    modeRange.classList.add('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
                     
                     if(!document.getElementById('date-start').value) {
                         const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const lastD = new Date(y, d.getMonth() + 1, 0).getDate();
@@ -1799,19 +1794,16 @@
                     }
                 }
             } else {
-                content.classList.add('max-w-0', 'opacity-0');
-                content.classList.remove('opacity-100', wMonth, wRange, 'max-w-[200px]', 'max-w-[340px]');
-                icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
+                // Cálculo inteligente da largura recolhida baseado no tamanho do texto
+                const textLen = collapsedText.textContent.length;
+                const wCollapsed = isMobile ? `${60 + (textLen * 7)}px` : `${70 + (textLen * 8)}px`;
+                wrapper.style.width = wCollapsed;
                 
-                if (collapsedText) {
-                    collapsedText.classList.remove('max-w-0', 'opacity-0', '!ml-0');
-                    collapsedText.classList.add('max-w-[150px]', 'opacity-100', 'ml-2');
-                    if (currentFilterMode === 'month') {
-                        collapsedText.textContent = document.getElementById('month-display').textContent;
-                    } else {
-                        collapsedText.textContent = (t('period_label') || 'Período').replace(':', '');
-                    }
-                }
+                content.classList.add('opacity-0', 'pointer-events-none');
+                content.classList.remove('opacity-100', 'pointer-events-auto');
+                
+                collapsedView.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
+                collapsedView.classList.add('opacity-100', 'scale-100');
             }
             render();
         }
@@ -1831,10 +1823,11 @@
                 
                 if (isMobile) displaySpan.textContent = `${monthName}/${yearStr}`;
                 else displaySpan.textContent = (userConfig.lang === 'pt' || userConfig.lang === 'es') ? `${monthName} de ${yearStr}` : `${monthName} ${yearStr}`;
-                
-                const collapsedText = document.getElementById('filter-collapsed-text');
-                if (collapsedText && !isFilterExpanded && currentFilterMode === 'month') collapsedText.textContent = displaySpan.textContent;
             }
+            
+            // Dispara atualização visual automática para o texto recolhido
+            if (!isFilterExpanded) updateFilterUI();
+
             if (currentFilterMode === 'month') { render(); if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas(); }
         }
 

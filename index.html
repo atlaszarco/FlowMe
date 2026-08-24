@@ -54,39 +54,48 @@
         /* ================= PADRÃO GLASSMORPHISM GLOBAL ================= */
         /* 1. Painéis Comuns (Cartões, Gavetas, Faturas, Gráficos) */
         .bg-white, .dark\:bg-slate-800 {
-            backdrop-filter: blur(16px) !important;
-            -webkit-backdrop-filter: blur(16px) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            border-width: 1px !important;
         }
+        /* TEMA CLARO */
         .bg-white { 
-            background-color: rgba(255, 255, 255, 0.7) !important; 
-            border-color: rgba(255, 255, 255, 0.5) !important; 
+            background-color: rgba(255, 255, 255, 0.45) !important; 
+            border-color: rgba(0, 0, 0, 0.12) !important; 
         }
+        /* TEMA ESCURO */
         .dark .bg-white, .dark .dark\:bg-slate-800 { 
-            background-color: rgba(30, 41, 59, 0.6) !important; 
-            border-color: rgba(51, 65, 85, 0.5) !important; 
+            background-color: rgba(30, 41, 59, 0.45) !important; 
+            border-color: rgba(255, 255, 255, 0.1) !important; 
         }
+        /* TEMA PRETO */
         html.theme-oled .bg-white, html.theme-oled .dark\:bg-slate-800 { 
-            background-color: rgba(10, 10, 10, 0.6) !important; 
-            border-color: rgba(38, 38, 38, 0.5) !important; 
+            background-color: rgba(0, 0, 0, 0.4) !important; 
+            border-color: rgba(255, 255, 255, 0.15) !important; 
         }
 
         /* 2. Elementos Flutuantes (Modais, Ilhas do Header, Pílula e Pop-up Mobile) */
         .modal-inner, #main-header > div > div, #island-tabs, #global-toolbar, #form-wrapper.fixed {
-            backdrop-filter: blur(24px) !important;
-            -webkit-backdrop-filter: blur(24px) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+            border-width: 1px !important;
         }
-        .modal-inner, #form-wrapper.fixed { 
-            background-color: rgba(255, 255, 255, 0.8) !important; 
+        /* TEMA CLARO */
+        .modal-inner, #main-header > div > div, #island-tabs, #global-toolbar, #form-wrapper.fixed { 
+            background-color: rgba(255, 255, 255, 0.6) !important; 
+            border-color: rgba(0, 0, 0, 0.15) !important;
         }
+        /* TEMA ESCURO */
         .dark .modal-inner, .dark #main-header > div > div, .dark #island-tabs, .dark #global-toolbar, .dark #form-wrapper.fixed {
-            background-color: rgba(15, 23, 42, 0.75) !important; 
-            border-color: rgba(51, 65, 85, 0.5) !important; 
+            background-color: rgba(15, 23, 42, 0.55) !important; 
+            border-color: rgba(255, 255, 255, 0.15) !important; 
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
         }
+        /* TEMA PRETO */
         html.theme-oled .modal-inner, html.theme-oled #main-header > div > div, html.theme-oled #island-tabs, html.theme-oled #global-toolbar, html.theme-oled #form-wrapper.fixed {
-            background-color: rgba(0, 0, 0, 0.75) !important; 
-            border-color: rgba(38, 38, 38, 0.5) !important; 
+            background-color: rgba(0, 0, 0, 0.5) !important; 
+            border-color: rgba(255, 255, 255, 0.25) !important; 
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
         }
         
@@ -953,7 +962,7 @@
 
 <!-- ================= BLOCO 8: MODAIS (Alertas, Edição, etc) ================= -->
     <!-- MODALS: ALERTAS -->
-    <div id="modal-alerts" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+    <div id="modal-alerts" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> <span data-i18n="modal_alerts_title">Central de Alertas</span></h3>
@@ -964,7 +973,7 @@
     </div>
 
     <!-- MODAL: GERENCIAR GLOBAL -->
-    <div id="modal-global-edit" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+    <div id="modal-global-edit" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 id="global-edit-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm">Gerenciar</h3>
@@ -985,7 +994,7 @@
     </div>
 
     <!-- MODAL: VENCIMENTO FATURA -->
-    <div id="modal-invoice-due" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+    <div id="modal-invoice-due" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_due_title">Vencimento da Fatura</h3>
@@ -1007,7 +1016,7 @@
     </div>
 
     <!-- MODAL: IMPORTADOR INTELIGENTE -->
-    <div id="modal-smart-importer" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+    <div id="modal-smart-importer" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">
@@ -1052,7 +1061,7 @@
     </div>
    
     <!-- MODAL: CRIAR LIMITE -->
-    <div id="modal-limit-form" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+    <div id="modal-limit-form" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 id="limit-modal-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_limit_title">Criar Limite</h3>
@@ -1379,7 +1388,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.9.4';
+        const FLOWME_VERSION = '2.9.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

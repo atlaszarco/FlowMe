@@ -533,7 +533,7 @@
                                             <option value="pendente" data-i18n="flt_pending">Pendentes</option>
                                         </select>
                                         <select id="filter-split" onchange="render()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                            <option value="todos" data-i18n="flt_all_splits">Todas pessoas</option>
+                                            <option value="todos" data-i18n="flt_all_splits">Todas</option>
                                             <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
                                         </select>
                                     </div>
@@ -624,13 +624,18 @@
                     <input type="text" id="invoice-search-input" autocomplete="off" oninput="renderFaturas()" data-i18n="placeholder_search" placeholder="Buscar..." class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
                 </div>
                 <div class="flex items-center gap-2 overflow-x-auto">
+                    <select id="invoice-filter-type" onchange="renderFaturas()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
+                        <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
+                        <option value="receita" data-i18n="flt_income">Receitas</option>
+                        <option value="despesa" data-i18n="flt_expense">Despesas</option>
+                    </select>
                     <select id="invoice-filter-status" onchange="renderFaturas()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
                         <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
                         <option value="pago" data-i18n="flt_paid">Pagos</option>
                         <option value="pendente" data-i18n="flt_pending">Pendentes</option>
                     </select>
                     <select id="invoice-filter-split" onchange="renderFaturas()" class="p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
-                        <option value="todos" data-i18n="flt_all_splits">Todas pessoas</option>
+                        <option value="todos" data-i18n="flt_all_splits">Todas</option>
                         <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
                     </select>
                 </div>
@@ -1112,7 +1117,7 @@
                 label_status: "Status Inicial", status_rec: "Recebido", status_pen_rec: "Pendente (Previsão)", status_pag: "Pago", status_pen_pag: "Pendente (Vencimento)", status_pen: "Pendente",
                 label_is_split: "Dividir com alguém?", btn_add_person: "Pessoa", btn_submit: "Salvar Movimentação", btn_submit_edit: "Atualizar Conta",
                 placeholder_search: "Buscar...", flt_all_types: "Todos os Tipos", flt_income: "Receitas", flt_expense: "Despesas", flt_all_status: "Todos os Status", flt_paid: "Pagos/Recebidos", flt_pending: "Pendentes",
-                flt_all_splits: "Todas pessoas", flt_only_splits: "Apenas Rateios",
+                flt_all_splits: "Todas", flt_only_splits: "Apenas Rateios",
                 th_date: "Data", th_date_purchase: "Data da Compra", th_desc: "Descrição & Cat.", th_method: "Conta/Cartão", th_orig: "Valor Orig.", th_cost: "Seu Custo", th_status: "Status", th_actions: "Ações",
                 empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)",
                 dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
@@ -1156,7 +1161,7 @@
                 label_status: "Initial Status", status_rec: "Received", status_pen_rec: "Pending (Expected)", status_pag: "Paid", status_pen_pag: "Pending (Due)", status_pen: "Pending",
                 label_is_split: "Split with someone?", btn_add_person: "Person", btn_submit: "Save Transaction", btn_submit_edit: "Update Transaction",
                 placeholder_search: "Search...", flt_all_types: "All Types", flt_income: "Income", flt_expense: "Expenses", flt_all_status: "All Status", flt_paid: "Paid/Received", flt_pending: "Pending",
-                flt_all_splits: "All people", flt_only_splits: "Only Splits", th_date: "Date", th_date_purchase: "Purchase Date", th_desc: "Description & Cat.", th_method: "Account/Card", th_orig: "Orig. Value", th_cost: "Your Cost", th_status: "Status", th_actions: "Actions",
+                flt_all_splits: "All", flt_only_splits: "Only Splits", th_date: "Date", th_date_purchase: "Purchase Date", th_desc: "Description & Cat.", th_method: "Account/Card", th_orig: "Orig. Value", th_cost: "Your Cost", th_status: "Status", th_actions: "Actions",
                 empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)", dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
                 cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Database", btn_delete: "Wipe All",
                 cfg_acc_title: "Account & Cloud", cfg_acc_user: "Logged Out", cfg_acc_sync: "Last sync:", cfg_acc_btn: "Google Integration soon",
@@ -1189,7 +1194,7 @@
                 label_status: "Estado Inicial", status_rec: "Recibido", status_pen_rec: "Pendiente (Esperado)", status_pag: "Pagado", status_pen_pag: "Pendiente (Venc.)", status_pen: "Pendiente",
                 label_is_split: "¿Dividir gasto?", btn_add_person: "Persona", btn_submit: "Guardar Transacción", btn_submit_edit: "Actualizar Cuenta",
                 placeholder_search: "Buscar...", flt_all_types: "Todos los Tipos", flt_income: "Ingresos", flt_expense: "Gastos", flt_all_status: "Todos los Estados", flt_paid: "Pagados/Recibidos", flt_pending: "Pendientes",
-                flt_all_splits: "Todas personas", flt_only_splits: "Solo Divisiones", th_date: "Fecha", th_date_purchase: "Fecha de Compra", th_desc: "Descripción y Cat.", th_method: "Cuenta/Tarjeta", th_orig: "Valor Orig.", th_cost: "Tu Costo", th_status: "Estado", th_actions: "Acciones",
+                flt_all_splits: "Todas", flt_only_splits: "Solo Divisiones", th_date: "Fecha", th_date_purchase: "Fecha de Compra", th_desc: "Descripción y Cat.", th_method: "Cuenta/Tarjeta", th_orig: "Valor Orig.", th_cost: "Tu Costo", th_status: "Estado", th_actions: "Acciones",
                 empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)", dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
                 cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Base de Datos", btn_delete: "Borrar Todo",
                 cfg_acc_title: "Cuenta y Nube", cfg_acc_user: "Usuario Desconectado", cfg_acc_sync: "Última sincro:", cfg_acc_btn: "Integración Google pronto",
@@ -1222,7 +1227,7 @@
                 label_status: "Statut initial", status_rec: "Reçu", status_pen_rec: "En attente (Prévu)", status_pag: "Payé", status_pen_pag: "En attente (Échéance)", status_pen: "En attente",
                 label_is_split: "Diviser avec quelqu'un ?", btn_add_person: "Personne", btn_submit: "Enregistrer la transaction", btn_submit_edit: "Mettre à jour le compte",
                 placeholder_search: "Rechercher...", flt_all_types: "Tous les types", flt_income: "Revenus", flt_expense: "Dépenses", flt_all_status: "Tous les statuts", flt_paid: "Payés/Reçus", flt_pending: "En attente",
-                flt_all_splits: "Toutes les personnes", flt_only_splits: "Partages uniquement", th_date: "Date", th_date_purchase: "Date d'achat", th_desc: "Description & Cat.", th_method: "Compte/Carte", th_orig: "Valeur Orig.", th_cost: "Votre coût", th_status: "Statut", th_actions: "Actions",
+                flt_all_splits: "Toutes", flt_only_splits: "Partages uniquement", th_date: "Date", th_date_purchase: "Date d'achat", th_desc: "Description & Cat.", th_method: "Compte/Carte", th_orig: "Valeur Orig.", th_cost: "Votre coût", th_status: "Statut", th_actions: "Actions",
                 empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)", dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
                 cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer la base de données", btn_delete: "Tout effacer",
                 cfg_acc_title: "Compte et Cloud", cfg_acc_user: "Utilisateur déconnecté", cfg_acc_sync: "Dernière synchro :", cfg_acc_btn: "Intégration Google bientôt",
@@ -3407,8 +3412,6 @@
                 document.getElementById('invoice-due-date-display').textContent = `${t('lbl_due_date')}: --/--/----`; 
                 return; 
             }
-
-            let filtered = state.transactions.filter(trx => trx.type === 'despesa' && trx.expenseType === 'credito' && trx.paymentMethod === card && trx.invoiceMonth === month);
             
             const search = (document.getElementById('invoice-search-input')?.value || '').toLowerCase().trim();
             const fType = document.getElementById('invoice-filter-type')?.value || 'todos';
@@ -3429,6 +3432,7 @@
             
             filtered = filtered.filter(trx => {
                 const matchSearch = (trx.description||'').toLowerCase().includes(search) || (trx.category||'').toLowerCase().includes(search) || (trx.splits && trx.splits.some(s => (s.person||'').toLowerCase().includes(search)));
+                const matchType = (fType === 'todos' || trx.type === fType); // Na Fatura sempre será despesa, mas a lógica opera com segurança
                 const matchStatus = (fStatus === 'todos' || trx.status === fStatus);
                 const matchSplit = (fSplit === 'todos' || (fSplit === 'rateio' && trx.splits && trx.splits.length > 0));
                 return matchSearch && matchType && matchStatus && matchSplit;

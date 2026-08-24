@@ -538,12 +538,12 @@
                 </div>
             </div>
             </div>
-            
-            <!-- Botão Flutuante (FAB) -->
-            <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
-                <i class="fa-solid fa-plus"></i>
-            </button>
         </div>
+            
+        <!-- Botão Flutuante (FAB) -->
+        <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
+            <i class="fa-solid fa-plus"></i>
+        </button>
 
 <!-- ================= BLOCO 5: ABA FATURAS ================= -->
         <div id="content-faturas" class="tab-content hidden max-w-5xl mx-auto space-y-4">
@@ -1338,7 +1338,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.9.1';
+        const FLOWME_VERSION = '2.9.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1544,8 +1544,17 @@
             const toolbar = document.getElementById('global-toolbar');
             if(tabId === 'backup') toolbar.classList.add('hidden'); else toolbar.classList.remove('hidden');
             if(tabId === 'faturas') populateInvoiceCards();
+            
+            // Controle de visibilidade do Botão FAB (aparece apenas em transações)
+            const fab = document.getElementById('fab-form');
+            if (fab) {
+                if (tabId === 'transacoes') {
+                    fab.style.display = '';
+                } else {
+                    fab.style.display = 'none';
+                }
+            }
         }
-
         // ================= GESTOS (SWIPE) PARA ABAS =================
         // O swipe de arrastar a tela foi desativado para priorizar a navegação fixa e evitar conflitos.
 

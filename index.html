@@ -940,9 +940,9 @@
                                     </div>
                                 </div>
                                 <div class="p-3 bg-rose-50/50 dark:bg-rose-900/20 rounded-lg border border-rose-100 dark:border-rose-800 flex justify-between items-center gap-2 transition-colors mt-2">
-                                    <div><h3 class="text-[11px] font-bold text-rose-900 dark:text-rose-400" data-i18n="cfg_del_title">Apagar Banco de Dados</h3></div>
-                                    <button onclick="clearAllData()" class="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
-                                        <i class="fa-solid fa-trash"></i> <span data-i18n="btn_delete">Apagar Tudo</span>
+                                    <div><h3 class="text-[11px] font-bold text-rose-900 dark:text-rose-400" data-i18n="cfg_del_title">Apagar Dados Salvos</h3></div>
+                                    <button onclick="openWipeDataModal()" class="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
+                                        <i class="fa-solid fa-trash"></i> <span data-i18n="btn_delete">Apagar Dados</span>
                                     </button>
                                 </div>
                             </div>
@@ -1078,7 +1078,42 @@
             </div>
         </div>
     </div>
-   
+
+    <!-- MODAL: APAGAR DADOS -->
+    <div id="modal-wipe-data" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+            <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center"><i class="fa-solid fa-trash-can text-rose-500 mr-2"></i> <span data-i18n="modal_wipe_title">Apagar Dados</span></h3>
+                <button onclick="closeModal('modal-wipe-data')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 space-y-4">
+                <label class="flex items-center gap-2 text-sm font-bold text-rose-600 dark:text-rose-400 cursor-pointer p-2 bg-rose-50 dark:bg-rose-900/20 rounded-xl border border-rose-200 dark:border-rose-800 transition">
+                    <input type="checkbox" id="wipe-all" onchange="toggleWipeAll(this.checked)" class="rounded-sm border-rose-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                    <span data-i18n="lbl_wipe_all">Marcar todos</span>
+                </label>
+                
+                <div class="pl-2 space-y-3">
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-trx" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_trx">Movimentações</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-custom" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_custom">Dados Personalizados</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-limits" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_limits">Orçamentos e Limites</span>
+                    </label>
+                </div>
+
+                <button onclick="executeWipeData()" class="w-full py-2.5 mt-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="btn_confirm_wipe">Apagar Selecionados</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <!-- MODAL: CRIAR LIMITE -->
     <div id="modal-limit-form" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
@@ -1132,7 +1167,7 @@
                 empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)",
                 dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
                 cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar",
-                cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Banco de Dados", btn_delete: "Apagar Tudo",
+                cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Dados Salvos", btn_delete: "Apagar Dados", modal_wipe_title: "Apagar Dados", lbl_wipe_all: "Marcar todos", lbl_wipe_trx: "Movimentações", lbl_wipe_custom: "Dados Personalizados", lbl_wipe_limits: "Orçamentos e Limites", btn_confirm_wipe: "Apagar Selecionados", msg_wipe_empty: "Selecione algo para apagar!",
                 cfg_acc_title: "Conta e Nuvem", cfg_acc_user: "Usuário Desconectado", cfg_acc_sync: "Última sincronização:", cfg_acc_btn: "Integração Google em breve",
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Preto",
@@ -1173,7 +1208,7 @@
                 placeholder_search: "Search...", flt_all_types: "All Types", flt_income: "Income", flt_expense: "Expenses", flt_all_status: "All Status", flt_paid: "Paid/Received", flt_pending: "Pending",
                 flt_all_splits: "All", flt_only_splits: "Only Splits", th_date: "Date", th_date_purchase: "Purchase Date", th_desc: "Description & Cat.", th_method: "Account/Card", th_orig: "Orig. Value", th_cost: "Your Cost", th_status: "Status", th_actions: "Actions",
                 empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)", dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
-                cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Database", btn_delete: "Wipe All",
+                cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Saved Data", btn_delete: "Wipe Data", modal_wipe_title: "Wipe Data", lbl_wipe_all: "Select All", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Custom Data", lbl_wipe_limits: "Budgets & Limits", btn_confirm_wipe: "Wipe Selected", msg_wipe_empty: "Select something to wipe!",
                 cfg_acc_title: "Account & Cloud", cfg_acc_user: "Logged Out", cfg_acc_sync: "Last sync:", cfg_acc_btn: "Google Integration soon",
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System", cfg_theme_oled: "Black",
                 cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version",
@@ -1206,7 +1241,7 @@
                 placeholder_search: "Buscar...", flt_all_types: "Todos los Tipos", flt_income: "Ingresos", flt_expense: "Gastos", flt_all_status: "Todos los Estados", flt_paid: "Pagados/Recibidos", flt_pending: "Pendientes",
                 flt_all_splits: "Todas", flt_only_splits: "Solo Divisiones", th_date: "Fecha", th_date_purchase: "Fecha de Compra", th_desc: "Descripción y Cat.", th_method: "Cuenta/Tarjeta", th_orig: "Valor Orig.", th_cost: "Tu Costo", th_status: "Estado", th_actions: "Acciones",
                 empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)", dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
-                cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Base de Datos", btn_delete: "Borrar Todo",
+                cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Datos Guardados", btn_delete: "Borrar Datos", modal_wipe_title: "Borrar Datos", lbl_wipe_all: "Seleccionar todo", lbl_wipe_trx: "Transacciones", lbl_wipe_custom: "Datos Personalizados", lbl_wipe_limits: "Presupuestos y Límites", btn_confirm_wipe: "Borrar Selección", msg_wipe_empty: "¡Selecciona algo para borrar!",
                 cfg_acc_title: "Cuenta y Nube", cfg_acc_user: "Usuario Desconectado", cfg_acc_sync: "Última sincro:", cfg_acc_btn: "Integración Google pronto",
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Negro",
                 cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión",
@@ -1239,7 +1274,7 @@
                 placeholder_search: "Rechercher...", flt_all_types: "Tous les types", flt_income: "Revenus", flt_expense: "Dépenses", flt_all_status: "Tous les statuts", flt_paid: "Payés/Reçus", flt_pending: "En attente",
                 flt_all_splits: "Toutes", flt_only_splits: "Partages uniquement", th_date: "Date", th_date_purchase: "Date d'achat", th_desc: "Description & Cat.", th_method: "Compte/Carte", th_orig: "Valeur Orig.", th_cost: "Votre coût", th_status: "Statut", th_actions: "Actions",
                 empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)", dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
-                cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer la base de données", btn_delete: "Tout effacer",
+                cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer les données enregistrées", btn_delete: "Effacer Données", modal_wipe_title: "Effacer les données", lbl_wipe_all: "Tout sélectionner", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Données Personnalisées", lbl_wipe_limits: "Budgets et Limites", btn_confirm_wipe: "Effacer la sélection", msg_wipe_empty: "Sélectionnez un élément à effacer !",
                 cfg_acc_title: "Compte et Cloud", cfg_acc_user: "Utilisateur déconnecté", cfg_acc_sync: "Dernière synchro :", cfg_acc_btn: "Intégration Google bientôt",
                 cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système", cfg_theme_oled: "Noir",
                 cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version",
@@ -1407,7 +1442,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.1';
+        const FLOWME_VERSION = 'beta-3.1.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2255,7 +2290,74 @@
             renderLimitsSettings();
         }
         
-        function clearAllData() { if(confirm(t('confirm_clear'))) { localStorage.removeItem('flowme_state'); state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; render(); updateAutocompleteLists(); } }
+        function openWipeDataModal() {
+            // Limpa as caixas toda vez que abre
+            document.getElementById('wipe-all').checked = false;
+            document.getElementById('wipe-trx').checked = false;
+            document.getElementById('wipe-custom').checked = false;
+            document.getElementById('wipe-limits').checked = false;
+            openModal('modal-wipe-data');
+        }
+
+        function toggleWipeAll(checked) {
+            document.getElementById('wipe-trx').checked = checked;
+            document.getElementById('wipe-custom').checked = checked;
+            document.getElementById('wipe-limits').checked = checked;
+        }
+
+        function checkWipeAllStatus() {
+            const trx = document.getElementById('wipe-trx').checked;
+            const custom = document.getElementById('wipe-custom').checked;
+            const limits = document.getElementById('wipe-limits').checked;
+            document.getElementById('wipe-all').checked = (trx && custom && limits);
+        }
+
+        function executeWipeData() {
+            const trx = document.getElementById('wipe-trx').checked;
+            const custom = document.getElementById('wipe-custom').checked;
+            const limits = document.getElementById('wipe-limits').checked;
+
+            if (!trx && !custom && !limits) {
+                alert(t('msg_wipe_empty'));
+                return;
+            }
+
+            if (confirm(t('confirm_del'))) {
+                // 1. Limpar Movimentações (Transações e Faturas)
+                if (trx) {
+                    state.transactions = [];
+                    state.invoiceSettings = {defaults:{}, exceptions:{}};
+                }
+                
+                // 2. Limpar Dados Personalizados (Pessoas, Categorias, Métodos)
+                if (custom) {
+                    state.customData = { category: [], paymentMethod: [], description: [], person: [] };
+                }
+                
+                // 3. Limpar Limites e Orçamentos
+                if (limits) {
+                    state.limits = [];
+                }
+
+                // Salva tudo localmente e recarrega os visuais corretos
+                saveState();
+                render();
+                renderLimitsSettings();
+                updateAutocompleteLists();
+                
+                if (trx) {
+                    populateInvoiceCards();
+                    const faturasContent = document.getElementById('content-faturas');
+                    if (faturasContent && !faturasContent.classList.contains('hidden')) {
+                        renderFaturas();
+                    }
+                }
+
+                if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+
+                closeModal('modal-wipe-data');
+            }
+        }
 
         function updateAutocompleteLists() {
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };

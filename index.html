@@ -1403,7 +1403,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.9.9';
+        const FLOWME_VERSION = 'beta-3.0.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1453,17 +1453,18 @@
             updateAutocompleteLists();
             addSplitRow();
 
-            // INICIALIZAÇÃO BLINDADA
-            currentFilterMode = 'month';
-            updateFilterUI(); 
-            changeGlobalMonth(state.currentMonth);
-            
-            // Força a renderização imediata das transações e gráficos na primeira carga
-            render();
-            
-            switchTab('transacoes');
-            setLanguage(userConfig.lang);
-                        
+            // INICIALIZAÇÃO BLINDADA COM DELAY
+            setTimeout(() => {
+                currentFilterMode = 'month';
+                const globalMonthInput = document.getElementById('global-month');
+                if (globalMonthInput) globalMonthInput.value = state.currentMonth;
+                
+                updateFilterUI(); 
+                changeGlobalMonth(state.currentMonth);
+                switchTab('transacoes');
+                setLanguage(userConfig.lang);
+            }, 150);
+
             setTimeout(() => {
                 if (typeof google === 'undefined') {
                     console.warn("Modo Offline/Adblock: Google não carregou.");

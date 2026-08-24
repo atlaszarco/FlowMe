@@ -1403,7 +1403,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.0';
+        const FLOWME_VERSION = 'beta-3.0.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2599,7 +2599,6 @@
 
         // ================= RENDER TRANSAÇÕES =================
         function render() {
-            // ATUALIZAÇÃO VISUAL DAS DATAS DO FILTRO (Suporte a Telas Ultra Pequenas 243px)
             const ds = document.getElementById('date-start')?.value;
             const de = document.getElementById('date-end')?.value;
             const isMicroScreen = window.innerWidth < 300;
@@ -2607,20 +2606,38 @@
             if(ds) { const [y,m,d] = ds.split('-'); document.getElementById('date-start-display').textContent = isMicroScreen ? `${d}/${m}` : `${d}/${m}/${y.substring(2)}`; }
             if(de) { const [y,m,d] = de.split('-'); document.getElementById('date-end-display').textContent = isMicroScreen ? `${d}/${m}` : `${d}/${m}/${y.substring(2)}`; }
 
-            const search = document.getElementById('search-input').value.toLowerCase().trim();
-            const fType = document.getElementById('filter-type').value; const fStatus = document.getElementById('filter-status').value; const fSplit = document.getElementById('filter-split').value;
-            const filterMode = currentFilterMode;
+            const search = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+            const fType = document.getElementById('filter-type')?.value || 'todos'; 
+            const fStatus = document.getElementById('filter-status')?.value || 'todos'; 
+            const fSplit = document.getElementById('filter-split')?.value || 'todos';
+            const filterMode = currentFilterMode || 'month';
             
             let filtered = state.transactions;
-            if (filterMode === 'month') { const targetMonth = state.currentMonth; filtered = filtered.filter(trx => { if(trx.type === 'despesa' && trx.expenseType === 'credito') return trx.invoiceMonth === targetMonth; return trx.date && trx.date.substring(0, 7) === targetMonth; }); } 
-            else {
-                const dStart = document.getElementById('date-start').value; const dEnd = document.getElementById('date-end').value;
-                filtered = filtered.filter(trx => { const compDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? (trx.invoiceMonth + '-01') : trx.date; if (!compDate) return false; let pass = true; if (dStart) pass = pass && compDate >= dStart; if (dEnd) pass = pass && compDate <= dEnd; return pass; });
+            if (filterMode === 'month') { 
+                const targetMonth = state.currentMonth; 
+                filtered = filtered.filter(trx => { 
+                    if(trx.type === 'despesa' && trx.expenseType === 'credito') return trx.invoiceMonth === targetMonth; 
+                    return trx.date && trx.date.substring(0, 7) === targetMonth; 
+                }); 
+            } else {
+                const dStart = document.getElementById('date-start')?.value; 
+                const dEnd = document.getElementById('date-end')?.value;
+                filtered = filtered.filter(trx => { 
+                    const compDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? (trx.invoiceMonth + '-01') : trx.date; 
+                    if (!compDate) return false; 
+                    let pass = true; 
+                    if (dStart) pass = pass && compDate >= dStart; 
+                    if (dEnd) pass = pass && compDate <= dEnd; 
+                    return pass; 
+                });
             }
 
             filtered = filtered.filter(trx => {
                 const matchSearch = (trx.description||'').toLowerCase().includes(search) || (trx.category||'').toLowerCase().includes(search) || (trx.paymentMethod||'').toLowerCase().includes(search) || (trx.splits && trx.splits.some(s => (s.person||'').toLowerCase().includes(search)));
-                const matchType = (fType === 'todos' || trx.type === fType); const matchStatus = (fStatus === 'todos' || trx.status === fStatus); const matchSplit = (fSplit === 'todos' || (fSplit === 'rateio' && trx.splits && trx.splits.length > 0));
+                const matchType = (fType === 'todos' || trx.type === fType); 
+                const matchStatus = (fStatus === 'todos' || trx.status === fStatus); 
+                const matchSplit = (fSplit === 'todos' || (fSplit === 'rateio' && trx.splits && trx.splits.length > 0));
+                
                 return matchSearch && matchType && matchStatus && matchSplit;
             });
 

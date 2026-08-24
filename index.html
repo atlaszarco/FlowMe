@@ -1407,7 +1407,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.0';
+        const FLOWME_VERSION = 'beta-3.1.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2263,9 +2263,31 @@
             const methods = [...new Set([...state.transactions.map(t => t.paymentMethod), ...(state.customData.paymentMethod || [])])].filter(Boolean);
             const people = [...new Set([...state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []), ...(state.customData.person || [])])].filter(Boolean);
             
-            document.getElementById('categories-list').innerHTML = cats.map(c => `<option value="${c}">`).join('');
-            document.getElementById('methods-list').innerHTML = methods.map(m => `<option value="${m}">`).join('');
-            let dlPeople = document.getElementById('people-list'); if(!dlPeople) { dlPeople = document.createElement('datalist'); dlPeople.id = 'people-list'; document.body.appendChild(dlPeople); }
+            // Criar datalist de categorias se não existir
+            let dlCategories = document.getElementById('categories-list');
+            if (!dlCategories) {
+                dlCategories = document.createElement('datalist');
+                dlCategories.id = 'categories-list';
+                document.body.appendChild(dlCategories);
+            }
+            dlCategories.innerHTML = cats.map(c => `<option value="${c}">`).join('');
+        
+            // Criar datalist de métodos de pagamento se não existir
+            let dlMethods = document.getElementById('methods-list');
+            if (!dlMethods) {
+                dlMethods = document.createElement('datalist');
+                dlMethods.id = 'methods-list';
+                document.body.appendChild(dlMethods);
+            }
+            dlMethods.innerHTML = methods.map(m => `<option value="${m}">`).join('');
+        
+            // Criar datalist de pessoas (já existe lógica, mas garantimos)
+            let dlPeople = document.getElementById('people-list');
+            if (!dlPeople) {
+                dlPeople = document.createElement('datalist');
+                dlPeople.id = 'people-list';
+                document.body.appendChild(dlPeople);
+            }
             dlPeople.innerHTML = people.map(p => `<option value="${p}">`).join('');
         }
 

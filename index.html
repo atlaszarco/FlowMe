@@ -1147,8 +1147,8 @@
                 tt_manage_desc: "Gerenciar Nomes", tt_manage_cat: "Gerenciar Categorias", tt_manage_acc: "Gerenciar Contas/Cartões", tt_manage_person: "Gerenciar Pessoas",
                 err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar", btn_use: "Usar",
                 cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico",
-                lbl_alert: "Alerta", lbl_alerts: "Alertas",
-                opt_select: "Selecione..."
+                opt_select: "Selecione...",
+                lbl_alert: "Alerta", lbl_alerts: "Alertas"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1180,8 +1180,8 @@
                 tt_manage_desc: "Manage Names", tt_manage_cat: "Manage Categories", tt_manage_acc: "Manage Accounts", tt_manage_person: "Manage People",
                 err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save", btn_use: "Use",
                 cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)", acc_summary: "Financial Summary", acc_filters: "Filters & History",
-                lbl_alert: "Alert", lbl_alerts: "Alerts",
-                opt_select: "Select..."
+                opt_select: "Select...",
+                lbl_alert: "Alert", lbl_alerts: "Alerts"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1213,8 +1213,8 @@
                 tt_manage_desc: "Administrar Nombres", tt_manage_cat: "Administrar Categorías", tt_manage_acc: "Administrar Cuentas", tt_manage_person: "Administrar Personas",
                 err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar", btn_use: "Usar",
                 cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)", acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial",
-                lbl_alert: "Alerta", lbl_alerts: "Alertas",
                 opt_select: "Seleccione...",
+                lbl_alert: "Alerta", lbl_alerts: "Alertas"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1246,8 +1246,8 @@
                 tt_manage_desc: "Gérer Noms", tt_manage_cat: "Gérer Catégories", tt_manage_acc: "Gérer Comptes", tt_manage_person: "Gérer Personnes",
                 err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer", btn_use: "Utiliser",
                 cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)", acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique",
-                lbl_alert: "Alerte", lbl_alerts: "Alertes",
-                opt_select: "Sélectionner..."
+                opt_select: "Sélectionner...",
+                lbl_alert: "Alerte", lbl_alerts: "Alertes"
             }
         };
 
@@ -3400,19 +3400,6 @@
         function renderFaturas() {
             const card = document.getElementById('invoice-card-select').value; 
             const month = state.currentMonth;
-            const search = (document.getElementById('invoice-search-input')?.value || '').toLowerCase().trim();
-            const fStatus = document.getElementById('invoice-filter-status')?.value || 'todos';
-
-            const tbody = document.getElementById('invoice-transactions-body'); 
-            if(tbody) tbody.innerHTML = '';
-            
-            if(!card) { 
-                document.getElementById('invoice-empty-state').classList.remove('hidden'); 
-                document.getElementById('invoice-total-value').textContent = formatCurrency(0); 
-                document.getElementById('invoice-due-date-display').textContent = `${t('lbl_due_date')}: --/--/----`; 
-                return; 
-            }
-            
             const search = (document.getElementById('invoice-search-input')?.value || '').toLowerCase().trim();
             const fType = document.getElementById('invoice-filter-type')?.value || 'todos';
             const fStatus = document.getElementById('invoice-filter-status')?.value || 'todos';

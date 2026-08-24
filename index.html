@@ -1403,7 +1403,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '2.9.7';
+        const FLOWME_VERSION = '2.9.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1457,12 +1457,13 @@
             currentFilterMode = 'month';
             updateFilterUI(); 
             changeGlobalMonth(state.currentMonth);
+            
+            // Força a renderização imediata das transações e gráficos na primeira carga
+            render();
+            
             switchTab('transacoes');
             setLanguage(userConfig.lang);
                         
-            // Failsafe
-            setTimeout(() => { render(); }, 150);
-
             setTimeout(() => {
                 if (typeof google === 'undefined') {
                     console.warn("Modo Offline/Adblock: Google não carregou.");

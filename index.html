@@ -1407,7 +1407,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.7';
+        const FLOWME_VERSION = 'beta-3.0.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1834,7 +1834,7 @@
                 
                 if (currentFilterMode === 'month') {
                     const monthTextLen = (document.getElementById('month-display').textContent || '').length;
-                    const wMonth = isMicro ? '170px' : `${130 + (monthTextLen * 8.5)}px`;
+                    const wMonth = isMicro ? '180px' : `${140 + (monthTextLen * 11)}px`;
                     wrapper.style.width = wMonth;
                     
                     modeMonth.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
@@ -1842,7 +1842,7 @@
                     modeRange.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
                     modeRange.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-0');
                 } else {
-                    const wRange = isMicro ? '210px' : '260px';
+                    const wRange = isMicro ? '210px' : (isMobile ? '260px' : '290px');
                     wrapper.style.width = wRange;
                     
                     modeMonth.classList.remove('opacity-100', 'scale-100', 'z-10', 'pointer-events-auto');
@@ -1866,7 +1866,7 @@
                     wCollapsed = '48px'; 
                 } else {
                     const textLen = (collapsedText.textContent || '').length;
-                    wCollapsed = isMobile ? `${64 + (textLen * 8.5)}px` : `${76 + (textLen * 9)}px`;
+                    wCollapsed = isMobile ? `${76 + (textLen * 9.5)}px` : `${90 + (textLen * 10.5)}px`;
                 }
                 wrapper.style.width = wCollapsed;
                 

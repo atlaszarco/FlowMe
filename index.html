@@ -220,37 +220,45 @@
     
     <!-- 1. FILTRO EXPANSÍVEL (CENTRALIZADO QUANDO ABERTO) -->
     <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-center">
-        <div id="filter-wrapper" class="group flex items-center justify-center btn-filter-light dark:btn-filter-dark h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0 cursor-pointer" style="width: 130px;" onclick="handleFilterIconClick(event)">
+        <div id="filter-wrapper" class="group flex items-center justify-start btn-filter-light dark:btn-filter-dark h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0" style="width: 130px;">
             
-            <!-- VISTA FECHADA (Ícone + Texto) -->
-            <div id="filter-collapsed-view" class="absolute inset-0 flex items-center justify-center px-4 pointer-events-none transition-all duration-500 opacity-100 scale-100">
+            <!-- Botão do Ícone (Esquerda) -->
+            <button id="btn-filter-icon" onclick="handleIconClick(event)" class="h-full px-4 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer">
                 <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
-                <span id="filter-collapsed-text" class="ml-2 text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
-            </div>
+            </button>
 
-            <!-- VISTA ABERTA (Mês ou Período) -->
-            <div id="filter-content" class="absolute inset-0 flex items-center justify-center transition-all duration-500 opacity-0 pointer-events-none">
+            <!-- Área de Conteúdo Dinâmico (Direita) -->
+            <div id="filter-dynamic-area" class="relative h-full flex-1 flex items-center overflow-hidden cursor-pointer" onclick="handleAreaClick(event)">
                 
-                <!-- Módulo MÊS -->
-                <div id="mode-month" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10 w-full px-1">
-                    <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="relative z-20 px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-l-xl"><i class="fa-solid fa-chevron-left"></i></button>
-                    <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition flex-1 min-w-0">
-                        <span id="month-display" class="text-[11px] sm:text-sm font-bold uppercase tracking-wide pointer-events-none text-center truncate"></span>
-                        <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="event.stopPropagation(); this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                    </div>
-                    <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="relative z-20 px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-r-xl"><i class="fa-solid fa-chevron-right"></i></button>
+                <!-- VISTA FECHADA (Apenas Texto) -->
+                <div id="filter-collapsed-view" class="absolute inset-0 flex items-center pr-4 pointer-events-none transition-all duration-500 opacity-100 scale-100 origin-left">
+                    <span id="filter-collapsed-text" class="text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
                 </div>
-                
-                <!-- Módulo PERÍODO -->
-                <div id="mode-range" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0 w-full px-2">
-                    <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1 min-w-0" onclick="event.stopPropagation()">
-                        <span id="date-start-display" class="text-[10px] sm:text-xs font-bold pointer-events-none text-center truncate">--/--/--</span>
-                        <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+
+                <!-- VISTA ABERTA (Mês ou Período) -->
+                <div id="filter-content" class="absolute inset-0 flex items-center transition-all duration-500 opacity-0 pointer-events-none">
+                    
+                    <!-- Módulo MÊS -->
+                    <div id="mode-month" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10 w-full pr-1">
+                        <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
+                        <div class="relative flex items-center justify-center h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition flex-1 min-w-0" onclick="event.stopPropagation()">
+                            <span id="month-display" class="text-[11px] sm:text-sm font-bold uppercase tracking-wide pointer-events-none text-center truncate px-1"></span>
+                            <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        </div>
+                        <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
-                    <span class="text-[10px] sm:text-xs font-bold shrink-0 mx-1">~</span>
-                    <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1 min-w-0" onclick="event.stopPropagation()">
-                        <span id="date-end-display" class="text-[10px] sm:text-xs font-bold pointer-events-none text-center truncate">--/--/--</span>
-                        <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                    
+                    <!-- Módulo PERÍODO -->
+                    <div id="mode-range" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-0 scale-95 pointer-events-none z-0 w-full pr-2">
+                        <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1 min-w-0" onclick="event.stopPropagation()">
+                            <span id="date-start-display" class="text-[10px] sm:text-xs font-bold pointer-events-none text-center truncate">--/--/--</span>
+                            <input type="date" id="date-start" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        </div>
+                        <span class="text-[10px] sm:text-xs font-bold shrink-0 mx-1">~</span>
+                        <div class="relative flex items-center justify-center px-1 h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition rounded-xl flex-1 min-w-0" onclick="event.stopPropagation()">
+                            <span id="date-end-display" class="text-[10px] sm:text-xs font-bold pointer-events-none text-center truncate">--/--/--</span>
+                            <input type="date" id="date-end" onchange="render()" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1403,7 +1411,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.2';
+        const FLOWME_VERSION = 'beta-3.0.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1731,15 +1739,25 @@
         let currentFilterMode = 'month';
         let isFilterExpanded = false;
 
-        function handleFilterIconClick(event) {
+        function handleIconClick(event) {
             if(event) event.stopPropagation();
             if (!isFilterExpanded) {
                 isFilterExpanded = true;
                 setToolbarFocus('global-toolbar-filter'); 
             } else {
+                // Se já estiver aberto, o clique no ícone troca entre Mês e Período
                 currentFilterMode = currentFilterMode === 'month' ? 'range' : 'month';
             }
             updateFilterUI();
+        }
+
+        function handleAreaClick(event) {
+            if(event) event.stopPropagation();
+            if (!isFilterExpanded) {
+                isFilterExpanded = true;
+                setToolbarFocus('global-toolbar-filter'); 
+                updateFilterUI();
+            }
         }
 
         document.addEventListener('click', (e) => {
@@ -1759,26 +1777,27 @@
             const collapsedText = document.getElementById('filter-collapsed-text');
             const modeMonth = document.getElementById('mode-month');
             const modeRange = document.getElementById('mode-range');
+            const iconBtn = document.getElementById('btn-filter-icon');
             
             const isMicro = window.innerWidth < 350;
             const isMobile = window.innerWidth < 1024;
             
-            // Larguras exatas calculadas para animação super suave
-            const wMonth = isMicro ? '150px' : '190px';
-            const wRange = isMicro ? '200px' : '260px';
+            // Larguras exatas calculadas para evitar esmagamento das setas (Ícone ocupa ~50px)
+            const wMonth = isMicro ? '180px' : '230px'; 
+            const wRange = isMicro ? '240px' : '280px';
 
-            // Atualiza o texto da vista fechada antecipadamente
-            if (collapsedText) {
-                if (currentFilterMode === 'month') {
-                    icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
-                    collapsedText.textContent = document.getElementById('month-display').textContent || '';
-                } else {
-                    icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
-                    collapsedText.textContent = (t('period_label') || 'Período').replace(':', '');
-                }
+            // Define os rótulos e ícones com base no modo atual
+            if (currentFilterMode === 'month') {
+                icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
+                if (collapsedText) collapsedText.textContent = document.getElementById('month-display').textContent || '';
+            } else {
+                icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                if (collapsedText) collapsedText.textContent = (t('period_label') || 'Período').replace(':', '');
             }
 
             if (isFilterExpanded) {
+                iconBtn.classList.add('bg-black/10', 'dark:bg-white/10'); // Indica que o ícone se tornou um botão de alternância
+                
                 collapsedView.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                 collapsedView.classList.remove('opacity-100', 'scale-100');
                 
@@ -1806,9 +1825,11 @@
                     }
                 }
             } else {
-                // Cálculo inteligente da largura recolhida baseado no tamanho do texto
+                iconBtn.classList.remove('bg-black/10', 'dark:bg-white/10');
+                
+                // Cálculo inteligente da largura recolhida (Ícone + margens + texto dinâmico)
                 const textLen = collapsedText.textContent.length;
-                const wCollapsed = isMobile ? `${60 + (textLen * 7)}px` : `${70 + (textLen * 8)}px`;
+                const wCollapsed = isMobile ? `${68 + (textLen * 7.5)}px` : `${72 + (textLen * 8.5)}px`;
                 wrapper.style.width = wCollapsed;
                 
                 content.classList.add('opacity-0', 'pointer-events-none');

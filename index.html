@@ -1403,7 +1403,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.0.1';
+        const FLOWME_VERSION = 'beta-3.0.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1456,13 +1456,19 @@
             // INICIALIZAÇÃO BLINDADA COM DELAY
             setTimeout(() => {
                 currentFilterMode = 'month';
+            
                 const globalMonthInput = document.getElementById('global-month');
-                if (globalMonthInput) globalMonthInput.value = state.currentMonth;
-                
-                updateFilterUI(); 
+                if (globalMonthInput) {
+                    globalMonthInput.value = state.currentMonth;
+                }
+            
+                updateFilterUI();
                 changeGlobalMonth(state.currentMonth);
                 switchTab('transacoes');
                 setLanguage(userConfig.lang);
+            
+                // Primeiro desenho da tela
+                render();
             }, 150);
 
             setTimeout(() => {
@@ -3685,30 +3691,60 @@
         async function checkExistingToken() {
             const spinner = document.getElementById('splash-spinner');
             const loginBtn = document.getElementById('splash-login-btn');
-
+        
             try {
                 const tokenData = localStorage.getItem('flowme_google_token');
-                if(tokenData) {
+        
+                if (tokenData) {
                     const parsed = JSON.parse(tokenData);
-                    if(parsed.expires > new Date().getTime()) { 
+        
+                    if (parsed.expires > new Date().getTime()) {
                         accessToken = parsed.token;
+        
                         const isValid = await fetchUserInfo();
-                        
-                        if(isValid) {
-                            setTimeout(hideSplashScreen, 1000); 
+        
+                        if (isValid) {
+                            try {
+                                // Sincronização automática ao abrir/recarregar
+                                const file = await findCloudFile();
+        
+                                if (file) {
+                                    await loadFromCloud(true);
+                                } else {
+                                    // Sem backup na nuvem: usa o localStorage
+                                    render();
+                                }
+                            } catch (syncError) {
+                                console.error(
+                                    'Erro na sincronização inicial com o Google Drive:',
+                                    syncError
+                                );
+        
+                                // Mesmo com falha da nuvem, mostra o que estiver no localStorage
+                                render();
+                            }
+        
+                            setTimeout(hideSplashScreen, 1000);
                             return;
                         }
-                    } 
+                    }
                 }
             } catch (error) {
                 console.error("Erro na leitura do token:", error);
-                localStorage.removeItem('flowme_google_token'); // Limpa a sujeira
+                localStorage.removeItem('flowme_google_token');
             }
-            
+        
             handleSignoutClick();
-            if(spinner) spinner.classList.add('hidden');
-            if(loginBtn) loginBtn.classList.remove('hidden');
-            if(loginBtn) loginBtn.classList.add('flex');
+        
+            if (spinner) spinner.classList.add('hidden');
+        
+            if (loginBtn) {
+                loginBtn.classList.remove('hidden');
+                loginBtn.classList.add('flex');
+            }
+        
+            // Garante a renderização dos dados locais mesmo sem login
+            render();
         }
 
         function hideSplashScreen() {

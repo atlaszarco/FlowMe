@@ -102,6 +102,16 @@
         /* Ajuste de Rolagem Global para conteúdo passar por baixo do Header Squircles */
         html { scroll-padding-top: 130px; }
 
+        /* Transição premium para os itens da pílula */
+        #global-toolbar > div {
+            transition:
+                transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+                width 700ms cubic-bezier(0.22, 1, 0.36, 1),
+                padding 700ms cubic-bezier(0.22, 1, 0.36, 1),
+                margin 700ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
         /* Animações de Swipe para as Abas */
         @keyframes slideInRight { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideInLeft { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -219,7 +229,7 @@
 <section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 z-50 rounded-3xl flex justify-center items-center h-16 sm:h-20 p-2 gap-2">
     
     <!-- 1. FILTRO EXPANSÍVEL (CENTRALIZADO QUANDO ABERTO) -->
-    <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-center">
+    <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-center">
         <div id="filter-wrapper" class="group flex items-center justify-start btn-filter-light dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0" style="width: 130px;">
             
             <!-- CAMADA INVISÍVEL (Captura o clique quando fechado e protege os inputs) -->
@@ -269,12 +279,12 @@
     </div>
 
     <!-- 2. ALERTA DINÂMICO -->
-    <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-center">
+    <div id="global-toolbar-alerts" class="hidden flex items-center justify-center shrink-0 h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-center">
         <div id="global-toolbar-alerts-inner" class="flex items-center justify-center w-full h-full"></div>
     </div>
 
     <!-- 3. BOTÃO SALVAR (NUVEM) -->
-    <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-right">
+    <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-right">
         <button id="btn-manual-save" onclick="manualSave()" onmouseenter="startSaveHover()" onmouseleave="stopSaveHover()" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
             <i id="save-icon" class="fa-solid fa-cloud-arrow-up text-lg sm:text-xl transition-transform duration-300"></i>
             <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Sincronizar Nuvem</span>
@@ -1453,7 +1463,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.4';
+        const FLOWME_VERSION = 'beta-3.2.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1730,7 +1740,7 @@
             });
         }
         
-       // ================= MAESTRO DA PÍLULA FLUTUANTE =================
+       // ================= MAESTRO DA PÍLULA FLUTUANTE (VERSÃO PREMIUM) =================
         function setToolbarFocus(targetId, callback) {
             const items = [
                 'global-toolbar-filter',  // Calendário
@@ -1739,15 +1749,24 @@
             ];
         
             const isRestoring = !targetId;
-        
+
+            // Destaca o botão clicado
+            const clickedEl = document.getElementById(targetId);
+            if (clickedEl) {
+                clickedEl.classList.add('scale-105', 'shadow-lg');
+                setTimeout(() => {
+                    clickedEl.classList.remove('scale-105', 'shadow-lg');
+                }, 900);
+            }
+            
             if (!isRestoring) {
-        
                 const targetIndex = items.indexOf(targetId);
                 const otherItems = items.filter(id => id !== targetId);
-        
                 otherItems.forEach((id, sequenceIndex) => {
+        
                     const el = document.getElementById(id);
                     if (!el) return;
+        
                     const index = items.indexOf(id);
                     const direction =
                         index < targetIndex
@@ -1765,11 +1784,11 @@
                     );
         
                     el.style.pointerEvents = 'none';
-        
                     setTimeout(() => {
+        
                         el.classList.add(direction);
-                        
                         setTimeout(() => {
+        
                             el.classList.add(
                                 '!opacity-0',
                                 '!w-0',
@@ -1777,40 +1796,51 @@
                                 '!mx-0'
                             );
         
-                        }, 180);
-
+                        }, 300);
+        
                         setTimeout(() => {
                             el.classList.add('hidden');
-                        }, 650);
+                        }, 900);
         
                     }, sequenceIndex * 220);
                 });
         
                 setTimeout(() => {
-                    if (callback) {
-                        callback();}
-                }, (otherItems.length - 1) * 220 + 700);
+                    if (callback) callback();
+                }, (otherItems.length - 1) * 220 + 1000);
+        
             }
+        
             else {
                 const hiddenItems = items.filter(id => {
-                const el = document.getElementById(id);
-                return el && el.classList.contains('hidden');
+                    const el = document.getElementById(id);
+                    return el && el.classList.contains('hidden');
                 });
         
                 hiddenItems.forEach((id, sequenceIndex) => {
+        
                     const el = document.getElementById(id);
                     if (!el) return;
-
                     setTimeout(() => {
+        
                         el.classList.remove('hidden');
                         el.classList.add(
-                            '!opacity-0'
+                            '!opacity-0',
+                            'translate-x-6'
                         );
-                        
+        
+                        const targetIndex = 1;
+                        const index = items.indexOf(id);
+                        const direction =
+                            index < targetIndex
+                                ? 'translate-x-6'
+                                : '-translate-x-6';
+        
+                        el.classList.add(direction);
+        
                         requestAnimationFrame(() => {
-
                             requestAnimationFrame(() => {
-
+        
                                 el.classList.remove(
                                     '!opacity-0',
                                     '!w-0',
@@ -1823,7 +1853,6 @@
                                 el.style.pointerEvents = 'auto';
         
                             });
-        
                         });
         
                     }, sequenceIndex * 220);
@@ -1831,12 +1860,8 @@
                 });
         
                 setTimeout(() => {
-        
-                    if (callback) {
-                        callback();
-                    }
-        
-                }, hiddenItems.length * 220 + 700);
+                    if (callback) callback();
+                }, hiddenItems.length * 220 + 1000);
             }
         }
         
@@ -2936,7 +2961,7 @@
             toast.id = toastId;
             
             // Visual do Alerta Baseado no Tema (Frosted Glass Persistente)
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between transition-all ease-[cubic-bezier(0.34,1.56,0.64,1)] ' + (useMitosis ? 'opacity-0 scale-50 translate-y-0 rounded-[40px] duration-500' : 'opacity-0 scale-90 translate-y-10 rounded-[16px] duration-400');
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between transition-all cubic-bezier(0.22, 1, 0.36, 1) ' + (useMitosis ? 'opacity-0 scale-50 translate-y-0 rounded-[40px] duration-500' : 'opacity-0 scale-90 translate-y-10 rounded-[16px] duration-400');
             
             const shortName = trx.description.length > 15 ? trx.description.substring(0, 15) + '...' : trx.description;
 
@@ -3017,7 +3042,7 @@
         function showImportSuccessToast(count, batchId) {
             const toast = document.createElement('div');
             toast.id = 'toast-' + batchId;
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 scale-75 translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 scale-75 translate-y-0 transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1)';
             
             toast.innerHTML = `
                 <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i> <span class="font-bold">${count} ${t('msg_imported')}</span></div>
@@ -3579,7 +3604,7 @@
             toast.id = toastId;
             
             // Nasce do chão (como a Pílula não está visível aqui) - Mesma aparência persistente
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 translate-y-10 scale-90 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 translate-y-10 scale-90 transition-all duration-400 cubic-bezier(0.22, 1, 0.36, 1)';
             
             const shortName = lim.target.length > 15 ? lim.target.substring(0, 15) + '...' : lim.target;
 

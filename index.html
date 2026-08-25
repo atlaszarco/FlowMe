@@ -1453,7 +1453,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.0';
+        const FLOWME_VERSION = 'beta-3.2.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1736,7 +1736,7 @@
             const isRestoring = !targetId;
 
             if (!isRestoring) {
-                // ANIMAÇÃO DE FUSÃO (Botões desaparecem um por um em cascata)
+                // ANIMAÇÃO DE FUSÃO (Agora mais lenta, suave e coreografada)
                 const toHide = items.filter(id => id !== targetId);
                 
                 toHide.forEach((id, index) => {
@@ -1747,22 +1747,21 @@
                             el.classList.add('!w-0', '!opacity-0', '!scale-50', '!px-0', '!mx-0');
                             el.style.pointerEvents = 'none';
                             
-                            // 2. Remove do fluxo HTML após o CSS terminar p/ matar o 'gap' da pílula
+                            // 2. Remove do fluxo HTML após o CSS terminar (tempo estendido)
                             setTimeout(() => {
                                 el.classList.add('hidden');
-                            }, 450); // Duração da animação CSS
-                        }, index * 150); // Efeito cascata (150ms entre cada botão)
+                            }, 500); // 500ms para garantir que a animação termine sem cortes bruscos
+                        }, index * 200); // Cascata mais lenta (200ms) - mesmo ritmo da volta!
                     }
                 });
 
                 // Avisa que terminou para a animação principal do botão clicado começar
                 setTimeout(() => {
                     if (callback) callback();
-                }, (toHide.length * 150) + 300); 
+                }, (toHide.length * 200) + 400); // Espera proporcional à lentidão da cascata
 
             } else {
-                // ANIMAÇÃO DE RETORNO (Botões voltam um por um suavemente)
-                // Usamos reverse() para que eles voltem na direção contrária de onde sumiram
+                // ANIMAÇÃO DE RETORNO (Mantida suave como você gostou)
                 const toShow = items.filter(id => {
                     const el = document.getElementById(id);
                     return el && el.classList.contains('!w-0');
@@ -1780,7 +1779,7 @@
                                 el.classList.remove('!w-0', '!opacity-0', '!scale-50', '!px-0', '!mx-0');
                                 el.style.pointerEvents = 'auto';
                             }, 30);
-                        }, index * 200); // Cascata mais lenta (200ms) para gerar leveza ao retornar
+                        }, index * 200); // Cascata lenta (200ms)
                     }
                 });
 

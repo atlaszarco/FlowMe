@@ -216,7 +216,7 @@
     </header>
 
 <!-- ================= BLOCO 3: BARRA GLOBAL (PÍLULA FLUTUANTE) ================= -->
-<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/40 dark:bg-slate-900/50 theme-oled:bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/60 dark:border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 z-50 rounded-3xl flex justify-center items-center h-16 sm:h-20 p-2 gap-2">
+<section id="global-toolbar" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-max max-w-[98%] bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 z-50 rounded-3xl flex justify-center items-center h-16 sm:h-20 p-2 gap-2">
     
     <!-- 1. FILTRO EXPANSÍVEL (CENTRALIZADO QUANDO ABERTO) -->
     <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-center">
@@ -989,7 +989,7 @@
 <!-- ================= BLOCO 8: MODAIS (Alertas, Edição, etc) ================= -->
     <!-- MODALS: ALERTAS -->
     <div id="modal-alerts" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> <span data-i18n="modal_alerts_title">Central de Alertas</span></h3>
                 <button onclick="closeModal('modal-alerts')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -1000,7 +1000,7 @@
 
     <!-- MODAL: GERENCIAR GLOBAL -->
     <div id="modal-global-edit" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 id="global-edit-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm">Gerenciar</h3>
                 <button onclick="closeModal('modal-global-edit')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -1021,7 +1021,7 @@
 
     <!-- MODAL: VENCIMENTO FATURA -->
     <div id="modal-invoice-due" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_due_title">Vencimento da Fatura</h3>
                 <button onclick="closeModal('modal-invoice-due')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -1043,7 +1043,7 @@
 
     <!-- MODAL: IMPORTADOR INTELIGENTE -->
     <div id="modal-smart-importer" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">
                     <i class="fa-solid fa-wand-magic-sparkles text-indigo-500 mr-2"></i> <span data-i18n="smart_import_title">Importador Inteligente</span>
@@ -1088,7 +1088,7 @@
 
     <!-- MODAL: APAGAR DADOS -->
     <div id="modal-wipe-data" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center"><i class="fa-solid fa-trash-can text-rose-500 mr-2"></i> <span data-i18n="modal_wipe_title">Apagar Dados</span></h3>
                 <button onclick="closeModal('modal-wipe-data')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -1123,7 +1123,7 @@
     
     <!-- MODAL: CRIAR LIMITE -->
     <div id="modal-limit-form" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        <div class="modal-inner bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 id="limit-modal-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_limit_title">Criar Limite</h3>
                 <button onclick="closeModal('modal-limit-form')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -1453,7 +1453,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.9';
+        const FLOWME_VERSION = 'beta-3.2.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1730,53 +1730,67 @@
             });
         }
         
-        // ================= MOTOR FÍSICO DE CASCATA (WAVE EFFECT) =================
-        let focusSequenceTimer1 = null;
-        let focusSequenceTimer2 = null;
-        let lastFocusId = null;
+       // ================= MAESTRO DA PÍLULA FLUTUANTE =================
+        function setToolbarFocus(targetId, callback) {
+            const items = ['global-toolbar-filter', 'global-toolbar-alerts', 'global-toolbar-save'];
+            const isRestoring = !targetId;
 
-        function setToolbarFocus(focusId, callback = null) {
-            clearTimeout(focusSequenceTimer1); clearTimeout(focusSequenceTimer2);
-            
-            const inner = document.getElementById('global-toolbar');
-            const filter = document.getElementById('global-toolbar-filter');
-            const alerts = document.getElementById('global-toolbar-alerts');
-            const save = document.getElementById('global-toolbar-save');
-            
-            const hide = (el) => {
-                if(el) {
-                    el.classList.add('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
-                    el.classList.remove('opacity-100', 'scale-100');
-                }
-            };
-            const show = (el) => {
-                if(el) {
-                    el.classList.remove('!max-w-0', '!opacity-0', 'scale-50', 'pointer-events-none', '!px-0', '!mx-0');
-                    el.classList.add('opacity-100', 'scale-100');
-                }
-            };
-
-            if (focusId) {
-                inner.classList.remove('gap-2', 'sm:gap-3');
-                lastFocusId = focusId;
+            if (!isRestoring) {
+                // ANIMAÇÃO DE FUSÃO (Botões desaparecem um por um em cascata)
+                const toHide = items.filter(id => id !== targetId);
                 
-                if (focusId === 'global-toolbar-filter') {
-                    hide(save); hide(alerts);
-                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
-                } else if (focusId === 'global-toolbar-save') {
-                    hide(filter); hide(alerts);
-                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
-                } else if (focusId === 'global-toolbar-alerts') {
-                    hide(filter); hide(save);
-                    if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
-                }
+                toHide.forEach((id, index) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        setTimeout(() => {
+                            // 1. Encolhe, some e remove as margens suavemente
+                            el.classList.add('!w-0', '!opacity-0', '!scale-50', '!px-0', '!mx-0');
+                            el.style.pointerEvents = 'none';
+                            
+                            // 2. Remove do fluxo HTML após o CSS terminar p/ matar o 'gap' da pílula
+                            setTimeout(() => {
+                                el.classList.add('hidden');
+                            }, 450); // Duração da animação CSS
+                        }, index * 150); // Efeito cascata (150ms entre cada botão)
+                    }
+                });
+
+                // Avisa que terminou para a animação principal do botão clicado começar
+                setTimeout(() => {
+                    if (callback) callback();
+                }, (toHide.length * 150) + 300); 
+
             } else {
-                inner.classList.add('gap-2', 'sm:gap-3');
-                show(filter); show(alerts); show(save);
-                lastFocusId = null;
-                if(callback) focusSequenceTimer1 = setTimeout(callback, 300);
+                // ANIMAÇÃO DE RETORNO (Botões voltam um por um suavemente)
+                // Usamos reverse() para que eles voltem na direção contrária de onde sumiram
+                const toShow = items.filter(id => {
+                    const el = document.getElementById(id);
+                    return el && el.classList.contains('!w-0');
+                }).reverse(); 
+
+                toShow.forEach((id, index) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        setTimeout(() => {
+                            // 1. Devolve ao fluxo do HTML invisível
+                            el.classList.remove('hidden');
+                            
+                            // 2. Espera um milissegundo para o navegador respirar e então expande
+                            setTimeout(() => {
+                                el.classList.remove('!w-0', '!opacity-0', '!scale-50', '!px-0', '!mx-0');
+                                el.style.pointerEvents = 'auto';
+                            }, 30);
+                        }, index * 200); // Cascata mais lenta (200ms) para gerar leveza ao retornar
+                    }
+                });
+
+                // Finaliza tudo
+                setTimeout(() => {
+                    if (callback) callback();
+                }, (toShow.length * 200) + 400);
             }
         }
+        
         // ================= FILTRO GLOBAL EXPANSÍVEL =================
         let currentFilterMode = 'month';
         let isFilterExpanded = false;

@@ -1463,7 +1463,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.5';
+        const FLOWME_VERSION = 'beta-3.2.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1740,7 +1740,7 @@
             });
         }
         
-       // ================= MAESTRO DA PÍLULA FLUTUANTE (VERSÃO PREMIUM) =================
+       // ================= MAESTRO DA PÍLULA FLUTUANTE (VERSÃO SIMULTÂNEA) =================
         function setToolbarFocus(targetId, callback) {
             const items = [
                 'global-toolbar-filter',  // Calendário
@@ -1750,28 +1750,22 @@
         
             const isRestoring = !targetId;
 
-            // Destaca o botão clicado
             const clickedEl = document.getElementById(targetId);
             if (clickedEl) {
                 clickedEl.classList.add('scale-105', 'shadow-lg');
-                setTimeout(() => {
-                    clickedEl.classList.remove('scale-105', 'shadow-lg');
-                }, 900);
+                setTimeout(() => clickedEl.classList.remove('scale-105', 'shadow-lg'), 1000);
             }
             
             if (!isRestoring) {
                 const targetIndex = items.indexOf(targetId);
                 const otherItems = items.filter(id => id !== targetId);
-                otherItems.forEach((id, sequenceIndex) => {
         
+                otherItems.forEach(id => {
                     const el = document.getElementById(id);
                     if (!el) return;
         
                     const index = items.indexOf(id);
-                    const direction =
-                        index < targetIndex
-                            ? 'translate-x-6'
-                            : '-translate-x-6';
+                    const direction = index < targetIndex ? 'translate-x-6' : '-translate-x-6';
         
                     el.classList.remove(
                         'hidden',
@@ -1782,86 +1776,69 @@
                         '!px-0',
                         '!mx-0'
                     );
-        
                     el.style.pointerEvents = 'none';
-                    setTimeout(() => {
         
-                        el.classList.add(direction);
-                        setTimeout(() => {
+                    el.classList.add(direction);
+                });
         
-                            el.classList.add(
+                setTimeout(() => {
+                    otherItems.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (!el) return;
+                        el.classList.add(
+                            '!opacity-0',
+                            '!w-0',
+                            '!px-0',
+                            '!mx-0'
+                        );
+                    });
+                }, 350);
+        
+                setTimeout(() => {
+                    otherItems.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (!el) return;
+                        el.classList.add('hidden');
+                    });
+                    if (callback) callback();
+                }, 1000);
+        
+            } else {
+                const allItems = items;
+        
+                allItems.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+        
+                    if (el.classList.contains('hidden')) {
+                        el.classList.remove('hidden');
+                        const index = items.indexOf(id);
+                        const direction = index < 1 ? 'translate-x-6' : '-translate-x-6';
+                        el.classList.add('!opacity-0', direction);
+                    } else {
+                        el.classList.remove('!opacity-0', 'translate-x-6', '-translate-x-6');
+                        el.style.pointerEvents = 'auto';
+                    }
+                });
+        
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        allItems.forEach(id => {
+                            const el = document.getElementById(id);
+                            if (!el) return;
+                            el.classList.remove(
                                 '!opacity-0',
                                 '!w-0',
                                 '!px-0',
-                                '!mx-0'
+                                '!mx-0',
+                                'translate-x-6',
+                                '-translate-x-6'
                             );
-        
-                        }, 300);
-        
-                        setTimeout(() => {
-                            el.classList.add('hidden');
-                        }, 900);
-        
-                    }, sequenceIndex * 220);
-                });
-        
-                setTimeout(() => {
-                    if (callback) callback();
-                }, (otherItems.length - 1) * 220 + 1000);
-        
-            }
-        
-            else {
-                const hiddenItems = items.filter(id => {
-                    const el = document.getElementById(id);
-                    return el && el.classList.contains('hidden');
-                });
-        
-                hiddenItems.forEach((id, sequenceIndex) => {
-        
-                    const el = document.getElementById(id);
-                    if (!el) return;
-                    setTimeout(() => {
-        
-                        el.classList.remove('hidden');
-                        el.classList.add(
-                            '!opacity-0',
-                            'translate-x-6'
-                        );
-        
-                        const targetIndex = 1;
-                        const index = items.indexOf(id);
-                        const direction =
-                            index < targetIndex
-                                ? 'translate-x-6'
-                                : '-translate-x-6';
-        
-                        el.classList.add(direction);
-        
-                        requestAnimationFrame(() => {
-                            requestAnimationFrame(() => {
-        
-                                el.classList.remove(
-                                    '!opacity-0',
-                                    '!w-0',
-                                    '!px-0',
-                                    '!mx-0',
-                                    'translate-x-6',
-                                    '-translate-x-6'
-                                );
-        
-                                el.style.pointerEvents = 'auto';
-        
-                            });
+                            el.style.pointerEvents = 'auto';
                         });
-        
-                    }, sequenceIndex * 220);
-        
+                        if (callback) callback();
+                    });
                 });
-        
-                setTimeout(() => {
-                    if (callback) callback();
-                }, hiddenItems.length * 220 + 1000);
             }
         }
         

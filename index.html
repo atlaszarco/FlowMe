@@ -1453,7 +1453,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.3';
+        const FLOWME_VERSION = 'beta-3.2.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1732,68 +1732,111 @@
         
        // ================= MAESTRO DA PÍLULA FLUTUANTE =================
         function setToolbarFocus(targetId, callback) {
-            const items = ['global-toolbar-filter', 'global-toolbar-alerts', 'global-toolbar-save'];
+            const items = [
+                'global-toolbar-filter',  // Calendário
+                'global-toolbar-alerts',  // Alertas
+                'global-toolbar-save'     // Salvar
+            ];
+        
             const isRestoring = !targetId;
-
+        
             if (!isRestoring) {
-                // ANIMAÇÃO DE DESLIZE (Os botões deslizam como ímã para o alvo)
+        
                 const targetIndex = items.indexOf(targetId);
-
-                items.forEach((id, index) => {
-                    if (index !== targetIndex) {
-                        const el = document.getElementById(id);
-                        if (el) {
-                            // Define a direção do deslize: 
-                            // Se o botão está antes do clicado (esquerda), desliza pra direita (positivo).
-                            // Se está depois (direita), desliza pra esquerda (negativo).
-                            const slideDirection = index < targetIndex ? 'translate-x-10' : '-translate-x-10';
-
-                            setTimeout(() => {
-                                // Adiciona o deslize, fade out e zera a largura (sem reduzir a escala)
-                                el.classList.add('!w-0', '!opacity-0', slideDirection, '!px-0', '!mx-0');
-                                el.style.pointerEvents = 'none';
-                                
-                                // Remove do fluxo do HTML após o deslize terminar
-                                setTimeout(() => {
-                                    el.classList.add('hidden');
-                                }, 400); 
-                            }, Math.abs(index - targetIndex) * 80); // Pequeno atraso calculado pela distância
-                        }
-                    }
-                });
-
-                // Avisa que o deslize terminou para a animação do botão clicado seguir
-                setTimeout(() => {
-                    if (callback) callback();
-                }, 500); 
-
-            } else {
-                // ANIMAÇÃO DE RETORNO (Deslize reverso suave)
-                const hiddenItems = items.filter(id => {
+                const otherItems = items.filter(id => id !== targetId);
+        
+                otherItems.forEach((id, sequenceIndex) => {
                     const el = document.getElementById(id);
-                    return el && el.classList.contains('hidden');
-                });
-
-                hiddenItems.forEach((id, index) => {
-                    const el = document.getElementById(id);
-                    if (el) {
+                    if (!el) return;
+                    const index = items.indexOf(id);
+                    const direction =
+                        index < targetIndex
+                            ? 'translate-x-6'
+                            : '-translate-x-6';
+        
+                    el.classList.remove(
+                        'hidden',
+                        '!w-0',
+                        '!opacity-0',
+                        'translate-x-6',
+                        '-translate-x-6',
+                        '!px-0',
+                        '!mx-0'
+                    );
+        
+                    el.style.pointerEvents = 'none';
+        
+                    setTimeout(() => {
+                        el.classList.add(direction);
+                        
                         setTimeout(() => {
-                            // 1. Devolve ao fluxo do HTML (ainda invisível e deslocado)
-                            el.classList.remove('hidden');
-                            
-                            // 2. Remove as classes para ele deslizar fisicamente de volta à posição original
-                            setTimeout(() => {
-                                el.classList.remove('!w-0', '!opacity-0', 'translate-x-10', '-translate-x-10', '!px-0', '!mx-0');
-                                el.style.pointerEvents = 'auto';
-                            }, 30);
-                        }, index * 120); // Cascata suave revelando um por um
-                    }
-                });
+                            el.classList.add(
+                                '!opacity-0',
+                                '!w-0',
+                                '!px-0',
+                                '!mx-0'
+                            );
+        
+                        }, 180);
 
-                // Finaliza tudo
+                        setTimeout(() => {
+                            el.classList.add('hidden');
+                        }, 650);
+        
+                    }, sequenceIndex * 220);
+                });
+        
                 setTimeout(() => {
-                    if (callback) callback();
-                }, (hiddenItems.length * 120) + 400);
+                    if (callback) {
+                        callback();}
+                }, (otherItems.length - 1) * 220 + 700);
+            }
+            else {
+                const hiddenItems = items.filter(id => {
+                const el = document.getElementById(id);
+                return el && el.classList.contains('hidden');
+                });
+        
+                hiddenItems.forEach((id, sequenceIndex) => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+
+                    setTimeout(() => {
+                        el.classList.remove('hidden');
+                        el.classList.add(
+                            '!opacity-0'
+                        );
+                        
+                        requestAnimationFrame(() => {
+
+                            requestAnimationFrame(() => {
+
+                                el.classList.remove(
+                                    '!opacity-0',
+                                    '!w-0',
+                                    '!px-0',
+                                    '!mx-0',
+                                    'translate-x-6',
+                                    '-translate-x-6'
+                                );
+        
+                                el.style.pointerEvents = 'auto';
+        
+                            });
+        
+                        });
+        
+                    }, sequenceIndex * 220);
+        
+                });
+        
+                setTimeout(() => {
+        
+                    if (callback) {
+                        callback();
+                    }
+        
+                }, hiddenItems.length * 220 + 700);
             }
         }
         

@@ -1200,7 +1200,8 @@
                 err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar", btn_use: "Usar",
                 cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico",
                 opt_select: "Selecione...",
-                lbl_alert: "Alerta", lbl_alerts: "Alertas"
+                lbl_alert: "Alerta", lbl_alerts: "Alertas",
+                btn_saving: "Salvando...", btn_saved: "Salvo às"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1233,7 +1234,8 @@
                 err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save", btn_use: "Use",
                 cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)", acc_summary: "Financial Summary", acc_filters: "Filters & History",
                 opt_select: "Select...",
-                lbl_alert: "Alert", lbl_alerts: "Alerts"
+                lbl_alert: "Alert", lbl_alerts: "Alerts",
+                btn_saving: "Saving...", btn_saved: "Saved at"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1266,7 +1268,8 @@
                 err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar", btn_use: "Usar",
                 cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)", acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial",
                 opt_select: "Seleccione...",
-                lbl_alert: "Alerta", lbl_alerts: "Alertas"
+                lbl_alert: "Alerta", lbl_alerts: "Alertas",
+                btn_saving: "Guardando...", btn_saved: "Guardado a las"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1299,7 +1302,8 @@
                 err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer", btn_use: "Utiliser",
                 cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)", acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique",
                 opt_select: "Sélectionner...",
-                lbl_alert: "Alerte", lbl_alerts: "Alertes"
+                lbl_alert: "Alerte", lbl_alerts: "Alertes",
+                btn_saving: "Enregistrement...", btn_saved: "Enregistré à"
             }
         };
 
@@ -1449,7 +1453,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.8';
+        const FLOWME_VERSION = 'beta-3.1.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1800,29 +1804,29 @@
             icon.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
 
             calendarHoverInterval = setInterval(() => {
-                // 1. O ícone sobe e desaparece
-                icon.style.transform = 'translateY(-15px) scale(0.8)';
+                // 1. O ícone gira 90 graus (fica de perfil) e some
+                icon.style.transform = 'rotateY(90deg) scale(0.8)';
                 icon.style.opacity = '0';
 
                 setTimeout(() => {
-                    // 2. Troca o ícone secretamente enquanto invisível
+                    // 2. Troca o ícone secretamente
                     isMonth = !isMonth;
                     icon.className = isMonth 
                         ? 'fa-regular fa-calendar text-lg sm:text-xl' 
                         : 'fa-solid fa-calendar-days text-lg sm:text-xl';
                     
-                    // 3. Teleporta para baixo instantaneamente
+                    // 3. Prepara o ícone virado para o outro lado (-90 graus)
                     icon.style.transition = 'none';
-                    icon.style.transform = 'translateY(15px) scale(0.8)';
+                    icon.style.transform = 'rotateY(-90deg) scale(0.8)';
 
-                    // 4. Sobe de volta à posição original já trocado
+                    // 4. Termina de girar revelando o novo ícone
                     setTimeout(() => {
                         icon.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-                        icon.style.transform = 'translateY(0) scale(1)';
+                        icon.style.transform = 'rotateY(0deg) scale(1)';
                         icon.style.opacity = '1';
                     }, 50);
-                }, 300); // Tempo da animação de subida
-            }, 2200); // Espera 2.2s antes de fazer de novo
+                }, 300); // Tempo do primeiro giro
+            }, 4000); // Aumentado para 4 segundos
         }
 
         function stopCalendarHover() {
@@ -1830,7 +1834,7 @@
             if (!isFilterExpanded && !isCalendarOpening) {
                 const icon = document.getElementById('filter-icon-display');
                 if (icon) {
-                    icon.style.transform = 'translateY(0) scale(1)';
+                    icon.style.transform = 'rotateY(0deg) scale(1)';
                     icon.style.opacity = '1';
                     icon.className = currentFilterMode === 'month' 
                         ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300' 
@@ -1844,18 +1848,14 @@
                 isCalendarOpening = true;
                 stopCalendarHover();
                 
-                // 1. Centraliza Imediatamente
                 setToolbarFocus('global-toolbar-filter'); 
 
-                // Força o Azul de destaque do clique enquanto abre
                 const wrapper = document.getElementById('filter-wrapper');
                 wrapper.classList.add('!bg-indigo-600', '!text-white', 'dark:!bg-indigo-500', 'theme-oled:!bg-indigo-500');
 
-                // Animação de Pulo
                 const icon = document.getElementById('filter-icon-display');
                 if (icon) icon.classList.add('fa-bounce'); 
 
-                // 2. Suspense e Abertura
                 setTimeout(() => {
                     if (icon) icon.classList.remove('fa-bounce');
                     wrapper.classList.remove('!bg-indigo-600', '!text-white', 'dark:!bg-indigo-500', 'theme-oled:!bg-indigo-500');
@@ -2347,25 +2347,35 @@
             if (newBtn) {
                 const icon = newBtn.querySelector('i');
                 if (icon) {
-                    icon.classList.add('fa-shake'); 
                     icon.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                    icon.style.transform = 'scale(1.45)'; // O Sino infla dramaticamente
                 }
 
                 setToolbarFocus('global-toolbar-alerts', () => {
-                    // Espera no centro batendo inflado
+                    // 1. Centraliza e espera um pouco
                     setTimeout(() => {
                         if(icon) {
-                            icon.style.transform = 'scale(1)'; // Desincha
+                            // 2. Aumenta consideravelmente
+                            icon.style.transform = 'scale(1.8)';
                             
-                            // Espera desinchar para abrir o modal
+                            // 3. Espera inflar e começa a balançar
                             setTimeout(() => {
-                                icon.classList.remove('fa-shake');
-                                isBellOpening = false;
-                                openAlertsModal(); 
-                            }, 300);
+                                icon.classList.add('fa-shake');
+                                
+                                // 4. Balança por um tempo
+                                setTimeout(() => {
+                                    icon.classList.remove('fa-shake');
+                                    icon.style.transform = 'scale(1)'; // 5. Volta ao tamanho normal
+                                    
+                                    // 6. Espera encolher e abre o pop-up
+                                    setTimeout(() => {
+                                        isBellOpening = false;
+                                        openAlertsModal(); 
+                                    }, 400);
+
+                                }, 700); // Duração do balanço
+                            }, 400); // Tempo para inflar
                         }
-                    }, 800); 
+                    }, 300); // Tempo após centralizar na tela
                 });
             } else { 
                 isBellOpening = false;
@@ -2419,10 +2429,10 @@
             const icon = document.getElementById('save-icon');
             const btn = document.getElementById('btn-manual-save');
 
-            // 1. Centraliza, força a cor verde em todos os modos e exibe texto no celular
+            // 1. Centraliza, muda a cor e exibe o texto
             setToolbarFocus('global-toolbar-save');
             btn.classList.add('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
-            btn.style.setProperty('background-color', '#059669', 'important'); // Força no OLED
+            btn.style.setProperty('background-color', '#059669', 'important'); 
             btn.style.setProperty('color', '#ffffff', 'important');
 
             if (btnText) {
@@ -2430,66 +2440,73 @@
                 btnText.classList.add('inline');
             }
 
-            // 2. Animação da Seta voando pra cima
-            if (icon) {
-                icon.style.transform = 'translateY(-15px) scale(1.1)';
-                icon.style.opacity = '0';
+            // 2. Espera um pouco após centralizar
+            setTimeout(() => {
                 
-                setTimeout(() => {
-                    icon.style.transition = 'none';
-                    icon.style.transform = 'translateY(15px) scale(0.8)';
+                // 3. Animação da Seta voando pra cima
+                if (icon) {
+                    icon.style.transform = 'translateY(-15px) scale(1.1)';
+                    icon.style.opacity = '0';
                     
                     setTimeout(() => {
-                        icon.style.transition = 'all 0.3s ease';
-                        icon.style.transform = 'translateY(0) scale(1)';
-                        icon.style.opacity = '1';
+                        icon.style.transition = 'none';
+                        icon.style.transform = 'translateY(15px) scale(0.8)';
                         
-                        // Troca para engrenagem e "Salvando..."
+                        setTimeout(() => {
+                            icon.style.transition = 'all 0.3s ease';
+                            icon.style.transform = 'translateY(0) scale(1)';
+                            icon.style.opacity = '1';
+                        }, 50);
+                    }, 300);
+                }
+
+                // 4. Espera a seta terminar para exibir "Salvando..."
+                setTimeout(async () => {
+                    if (icon) {
                         icon.classList.remove('fa-cloud-arrow-up');
                         icon.classList.add('fa-spinner', 'fa-spin');
-                        if (btnText) btnText.textContent = t('btn_saving') || 'Salvando...';
-                    }, 50);
-                }, 300);
-            }
+                    }
+                    if (btnText) btnText.textContent = t('btn_saving') || 'Salvando...';
 
-            // 3. Aguarda o botão se acomodar e executa o salvamento
-            setTimeout(async () => {
-                saveState(); 
-                if (typeof accessToken !== 'undefined' && accessToken) {
-                    await saveToCloud(false, true); 
-                } else {
-                    await new Promise(r => setTimeout(r, 1200)); // Delay para leitura
-                }
+                    // Processo invisível de gravação
+                    saveState(); 
+                    if (typeof accessToken !== 'undefined' && accessToken) {
+                        await saveToCloud(false, true); 
+                    } else {
+                        await new Promise(r => setTimeout(r, 1200)); 
+                    }
 
-                // 4. Sucesso: Check e "Salvo às"
-                if (icon) {
-                    icon.classList.remove('fa-spinner', 'fa-spin');
-                    icon.classList.add('fa-check');
-                }
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                if (btnText) btnText.textContent = `${t('btn_saved') || 'Salvo às'} ${timeStr}`;
-
-                // 5. Retorno à calma (Demora mais tempo para o usuário ler)
-                setTimeout(() => {
+                    // 5. Sucesso: Check e "Salvo às"
                     if (icon) {
-                        icon.classList.remove('fa-check');
-                        icon.classList.add('fa-cloud-arrow-up');
+                        icon.classList.remove('fa-spinner', 'fa-spin');
+                        icon.classList.add('fa-check');
                     }
-                    if (btnText) {
-                        btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
-                        btnText.classList.remove('inline');
-                        btnText.classList.add('hidden', 'sm:inline'); // Esconde no celular
-                    }
-                    btn.classList.remove('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
-                    btn.style.removeProperty('background-color');
-                    btn.style.removeProperty('color');
-                    
-                    setToolbarFocus(null);
-                    isSaveAnimating = false;
-                }, 2500);
+                    const now = new Date();
+                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    if (btnText) btnText.textContent = `${t('btn_saved') || 'Salvo às'} ${timeStr}`;
 
-            }, 900);
+                    // 6. Retorno à calma
+                    setTimeout(() => {
+                        if (icon) {
+                            icon.classList.remove('fa-check');
+                            icon.classList.add('fa-cloud-arrow-up');
+                        }
+                        if (btnText) {
+                            btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
+                            btnText.classList.remove('inline');
+                            btnText.classList.add('hidden', 'sm:inline'); 
+                        }
+                        btn.classList.remove('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
+                        btn.style.removeProperty('background-color');
+                        btn.style.removeProperty('color');
+                        
+                        setToolbarFocus(null);
+                        isSaveAnimating = false;
+                    }, 2500);
+
+                }, 700); // Delay entre a seta voar e o salvamento começar
+
+            }, 400); // Delay após a centralização da pílula
         }
         
         function loadState() {

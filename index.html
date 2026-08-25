@@ -1449,7 +1449,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.4';
+        const FLOWME_VERSION = 'beta-3.1.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2146,67 +2146,106 @@
         window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
         
-        // ================= SINO DINÂMICO (CORES E TRADUÇÃO) =================
+        // ================= SINO DINÂMICO E ANIMAÇÕES =================
         let isAlertsModalOpen = false;
+        let isBellOpening = false;
+        let bellHoverInterval;
+
+        // 1. Animação de Hover (1s de balanço, 1s de pausa)
+        function startBellHover() {
+            const icon = document.querySelector('#btn-alerts-bell i');
+            if (!icon || isAlertsModalOpen) return;
+            icon.classList.add('fa-shake');
+            bellHoverInterval = setInterval(() => {
+                if (icon) {
+                    if(icon.classList.contains('fa-shake')) {
+                        icon.classList.remove('fa-shake'); // Pausa
+                    } else {
+                        icon.classList.add('fa-shake'); // Balança
+                    }
+                }
+            }, 1000);
+        }
+
+        function stopBellHover() {
+            clearInterval(bellHoverInterval);
+            const icon = document.querySelector('#btn-alerts-bell i');
+            if (icon) icon.classList.remove('fa-shake');
+        }
+
+        // 2. Animação Automática (A cada 25s se houver alerta)
+        if (!window.bellIdleInterval) {
+            window.bellIdleInterval = setInterval(() => {
+                const icon = document.querySelector('#btn-alerts-bell i');
+                if (icon && !isAlertsModalOpen) {
+                    const groups = currentAlertGroups || {};
+                    const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
+                    if (totalAlerts > 0) {
+                        icon.classList.add('fa-shake');
+                        setTimeout(() => icon.classList.remove('fa-shake'), 1000);
+                    }
+                }
+            }, 25000);
+        }
 
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
             const alertsWrapper = document.getElementById('global-toolbar-alerts');
             if (!alertsContainer || !alertsWrapper) return;
 
-            const groups = currentAlertGroups;
+            const groups = currentAlertGroups || {};
             const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
             
             alertsWrapper.classList.remove('hidden');
 
             const profile = responsiveProfile || getResponsiveProfile();
             const isMobile = profile === 'mobile-portrait' || window.innerWidth < 420;
-            const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
 
-            const alertWord = totalAlerts === 1 ? (t('lbl_alert') || 'Alerta') : (t('lbl_alerts') || 'Alertas');
+            // Garantia Gramatical Absoluta (Singular vs Plural)
+            const lang = userConfig.lang || 'pt';
+            const dictSingular = { pt: 'Alerta', en: 'Alert', es: 'Alerta', fr: 'Alerte' };
+            const dictPlural = { pt: 'Alertas', en: 'Alerts', es: 'Alertas', fr: 'Alertes' };
+            const alertWord = totalAlerts === 1 ? (t('lbl_alert') || dictSingular[lang]) : (t('lbl_alerts') || dictPlural[lang]);
+            
             const modalTitle = t('modal_alerts_title') || 'Central de Alertas';
 
             let contentHtml = '';
             const isClicked = isAlertsModalOpen;
             
-            // 1. Lógica de Cores
-            // Padrão: Fundo escuro e texto branco (igual ao botão Salvar).
-            // Hover: Fundo amarelo e texto/ícone preto.
+            // Lógica de Cores Blindada (!important para sobrepor o dark mode)
             let baseClass = 'bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] shadow-sm hover:!bg-amber-400 hover:!text-slate-900 dark:hover:!bg-amber-400 dark:hover:!text-slate-900 transition-all duration-300';
             
-            // Clicado (Ativo): Fundo amarelo e texto/ícone preto.
             if (isClicked) {
-                baseClass = 'bg-amber-400 text-slate-900 shadow-md transition-all duration-300';
+                // Quando a central está aberta, o botão fica congelado em Amarelo com texto e ícone Pretos
+                baseClass = '!bg-amber-400 !text-slate-900 dark:!text-slate-900 shadow-md transition-all duration-300';
             }
 
-            // 2. Lógica de Texto
+            // Lógica de Texto
             let textStr = '';
             if (isClicked) {
-                textStr = modalTitle; // Sempre exibe "Central de Alertas" quando a pílula focar nele
+                textStr = modalTitle;
             } else {
                 if (totalAlerts > 0) {
                     textStr = isMobile ? `${totalAlerts}` : `${totalAlerts} ${alertWord}`;
                 } else {
-                    textStr = modalTitle; // Mostra "Central de Alertas" se estiver zerado
+                    textStr = modalTitle; 
                 }
             }
 
-            // 3. Lógica do Ícone (Sino preenchido se tiver alertas ou estiver aberto)
+            // O ícone base (Sem a classe fa-shake nativa do CSS, pois o JS agora controla)
             const iconType = (totalAlerts > 0 || isClicked) ? 'fa-solid fa-bell' : 'fa-regular fa-bell';
-            const shakeClass = (hasCritical && !isClicked) ? 'fa-shake' : ''; // Mantém tremendo se for crítico, mas remove a cor vermelha fixa
 
             if (!isClicked && isMobile && totalAlerts === 0) {
-                // Versão encolhida no celular quando não há alertas (para economizar espaço)
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
-                        <i class="${iconType} ${shakeClass} text-base sm:text-lg transition-colors"></i>
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" onmouseenter="startBellHover()" onmouseleave="stopBellHover()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
+                        <i class="${iconType} text-base sm:text-lg transition-colors duration-200"></i>
                         <span id="bell-text-span" class="hidden overflow-hidden transition-all duration-300"></span>
                     </button>
                 `;
             } else {
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-max rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
-                        <i class="${iconType} ${shakeClass} text-base sm:text-lg transition-colors"></i>
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" onmouseenter="startBellHover()" onmouseleave="stopBellHover()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-max rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
+                        <i class="${iconType} text-base sm:text-lg transition-colors duration-200"></i>
                         <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
                     </button>
                 `;
@@ -2214,23 +2253,32 @@
             alertsContainer.innerHTML = contentHtml;
         }
 
-        let isBellOpening = false;
-
         function handleBellClick() {
             if(isBellOpening || isAlertsModalOpen) return;
             isAlertsModalOpen = true; 
+            isBellOpening = true;
+            stopBellHover(); // Corta a animação do mouse na hora
+
+            // Transforma o botão em Amarelo/Preto instantaneamente
             renderToolbarAlerts(); 
-            
+
             const newBtn = document.getElementById('btn-alerts-bell');
             if (newBtn) {
+                const icon = newBtn.querySelector('i');
+                if (icon) icon.classList.add('fa-shake'); // Começa a balançar loucamente
+
                 setToolbarFocus('global-toolbar-alerts', () => {
-                    newBtn.classList.add('animate-bell-pop', 'pointer-events-none');
-                    setTimeout(() => { 
-                        newBtn.classList.remove('animate-bell-pop', 'pointer-events-none'); 
+                    // Após a pílula centralizar (leva uns 300ms), deixa o sino bater por mais 600ms de "suspense"
+                    setTimeout(() => {
+                        if(icon) icon.classList.remove('fa-shake');
+                        isBellOpening = false;
                         openAlertsModal(); 
-                    }, 500);
+                    }, 600); 
                 });
-            } else { openAlertsModal(); }
+            } else { 
+                isBellOpening = false;
+                openAlertsModal(); 
+            }
         }
 
         function revertBellState() {

@@ -1453,7 +1453,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.2';
+        const FLOWME_VERSION = 'beta-3.2.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1736,57 +1736,64 @@
             const isRestoring = !targetId;
 
             if (!isRestoring) {
-                // ANIMAÇÃO DE FUSÃO (Agora mais lenta, suave e coreografada)
-                const toHide = items.filter(id => id !== targetId);
-                
-                toHide.forEach((id, index) => {
-                    const el = document.getElementById(id);
-                    if (el) {
-                        setTimeout(() => {
-                            // 1. Encolhe, some e remove as margens suavemente
-                            el.classList.add('!w-0', '!opacity-0', '!scale-50', '!px-0', '!mx-0');
-                            el.style.pointerEvents = 'none';
-                            
-                            // 2. Remove do fluxo HTML após o CSS terminar (tempo estendido)
+                // ANIMAÇÃO DE DESLIZE (Os botões deslizam como ímã para o alvo)
+                const targetIndex = items.indexOf(targetId);
+
+                items.forEach((id, index) => {
+                    if (index !== targetIndex) {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            // Define a direção do deslize: 
+                            // Se o botão está antes do clicado (esquerda), desliza pra direita (positivo).
+                            // Se está depois (direita), desliza pra esquerda (negativo).
+                            const slideDirection = index < targetIndex ? 'translate-x-10' : '-translate-x-10';
+
                             setTimeout(() => {
-                                el.classList.add('hidden');
-                            }, 500); // 500ms para garantir que a animação termine sem cortes bruscos
-                        }, index * 200); // Cascata mais lenta (200ms) - mesmo ritmo da volta!
+                                // Adiciona o deslize, fade out e zera a largura (sem reduzir a escala)
+                                el.classList.add('!w-0', '!opacity-0', slideDirection, '!px-0', '!mx-0');
+                                el.style.pointerEvents = 'none';
+                                
+                                // Remove do fluxo do HTML após o deslize terminar
+                                setTimeout(() => {
+                                    el.classList.add('hidden');
+                                }, 400); 
+                            }, Math.abs(index - targetIndex) * 80); // Pequeno atraso calculado pela distância
+                        }
                     }
                 });
 
-                // Avisa que terminou para a animação principal do botão clicado começar
+                // Avisa que o deslize terminou para a animação do botão clicado seguir
                 setTimeout(() => {
                     if (callback) callback();
-                }, (toHide.length * 200) + 400); // Espera proporcional à lentidão da cascata
+                }, 500); 
 
             } else {
-                // ANIMAÇÃO DE RETORNO (Mantida suave como você gostou)
-                const toShow = items.filter(id => {
+                // ANIMAÇÃO DE RETORNO (Deslize reverso suave)
+                const hiddenItems = items.filter(id => {
                     const el = document.getElementById(id);
-                    return el && el.classList.contains('!w-0');
-                }).reverse(); 
+                    return el && el.classList.contains('hidden');
+                });
 
-                toShow.forEach((id, index) => {
+                hiddenItems.forEach((id, index) => {
                     const el = document.getElementById(id);
                     if (el) {
                         setTimeout(() => {
-                            // 1. Devolve ao fluxo do HTML invisível
+                            // 1. Devolve ao fluxo do HTML (ainda invisível e deslocado)
                             el.classList.remove('hidden');
                             
-                            // 2. Espera um milissegundo para o navegador respirar e então expande
+                            // 2. Remove as classes para ele deslizar fisicamente de volta à posição original
                             setTimeout(() => {
-                                el.classList.remove('!w-0', '!opacity-0', '!scale-50', '!px-0', '!mx-0');
+                                el.classList.remove('!w-0', '!opacity-0', 'translate-x-10', '-translate-x-10', '!px-0', '!mx-0');
                                 el.style.pointerEvents = 'auto';
                             }, 30);
-                        }, index * 200); // Cascata lenta (200ms)
+                        }, index * 120); // Cascata suave revelando um por um
                     }
                 });
 
                 // Finaliza tudo
                 setTimeout(() => {
                     if (callback) callback();
-                }, (toShow.length * 200) + 400);
+                }, (hiddenItems.length * 120) + 400);
             }
         }
         

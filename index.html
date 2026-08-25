@@ -189,7 +189,7 @@
         <div class="relative max-w-7xl mx-auto flex justify-between items-center gap-4 h-14 sm:h-16">
             
             <!-- ILHA 1: LOGO E NOME (ESTÁTICO) -->
-            <div class="h-full px-4 sm:px-5 pointer-events-auto bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm flex items-center justify-center gap-3 shrink-0">
+            <div class="h-full px-4 sm:px-5 pointer-events-auto bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md rounded-2xl sm:rounded-[20px] border border-white/40 dark:border-slate-700/50 shadow-sm flex items-center justify-center gap-3 shrink-0">
                 <div class="bg-emerald-500 w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
                     <i class="fa-solid fa-dollar-sign text-xl sm:text-2xl font-bold"></i>
                 </div>
@@ -197,7 +197,7 @@
             </div>
             
             <!-- ILHA 2: PÍLULA DE ABAS (Direita) -->
-            <nav id="island-tabs" class="h-full w-max max-w-[55vw] sm:max-w-none pointer-events-auto bg-white/70 dark:bg-slate-800/70 theme-oled:bg-[#0a0a0a]/70 backdrop-blur-xl p-1.5 rounded-2xl sm:rounded-[20px] border border-white/50 dark:border-slate-700/50 shadow-sm overflow-x-auto [&::-webkit-scrollbar]:hidden flex justify-start items-center shrink-0 ml-auto">
+            <nav id="island-tabs" class="h-full w-max max-w-[55vw] sm:max-w-none pointer-events-auto bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md p-1.5 rounded-2xl sm:rounded-[20px] border border-white/40 dark:border-slate-700/50 shadow-sm overflow-x-auto [&::-webkit-scrollbar]:hidden flex justify-start items-center shrink-0 ml-auto">
                 <button onclick="switchTab('transacoes')" id="tab-transacoes" class="h-full px-4 sm:px-5 rounded-xl text-sm font-medium transition-all duration-200 bg-emerald-500 text-white dark:text-slate-950 shadow-sm whitespace-nowrap flex items-center gap-1.5">
                     <i class="fa-solid fa-list-ul"></i> <span data-i18n="tab_transactions">Transações</span>
                 </button>
@@ -990,7 +990,7 @@
     <!-- MODALS: ALERTAS -->
     <div id="modal-alerts" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
-            <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> <span data-i18n="modal_alerts_title">Central de Alertas</span></h3>
                 <button onclick="closeModal('modal-alerts')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -1001,7 +1001,7 @@
     <!-- MODAL: GERENCIAR GLOBAL -->
     <div id="modal-global-edit" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
-            <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 id="global-edit-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm">Gerenciar</h3>
                 <button onclick="closeModal('modal-global-edit')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -1022,7 +1022,7 @@
     <!-- MODAL: VENCIMENTO FATURA -->
     <div id="modal-invoice-due" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
-            <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_due_title">Vencimento da Fatura</h3>
                 <button onclick="closeModal('modal-invoice-due')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -1044,7 +1044,7 @@
     <!-- MODAL: IMPORTADOR INTELIGENTE -->
     <div id="modal-smart-importer" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
-            <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">
                     <i class="fa-solid fa-wand-magic-sparkles text-indigo-500 mr-2"></i> <span data-i18n="smart_import_title">Importador Inteligente</span>
                 </h3>
@@ -1057,7 +1057,7 @@
                     <input type="text" id="csv-card-name" autocomplete="off" placeholder="Ex: Nubank, Santander..." class="w-full p-2 border border-indigo-300 dark:border-indigo-500/50 rounded-xl text-sm font-bold text-slate-800 dark:text-slate-100 bg-indigo-50/50 dark:bg-indigo-900/30 outline-none focus:border-indigo-500">
                 </div>
 
-                <div class="space-y-3 bg-white/50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+                <div class="space-y-3 bg-white/50 dark:bg-slate-900/50 p-4 rounded-2xl border border-white/40 dark:border-slate-700/50 shadow-sm">
                     <div>
                         <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide mb-1" data-i18n="lbl_csv_date">Coluna de DATA</label>
                         <select id="csv-col-date" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-xs bg-white/50 dark:bg-slate-800/50 outline-none focus:border-indigo-500"></select>
@@ -1089,7 +1089,7 @@
     <!-- MODAL: APAGAR DADOS -->
     <div id="modal-wipe-data" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
-            <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center"><i class="fa-solid fa-trash-can text-rose-500 mr-2"></i> <span data-i18n="modal_wipe_title">Apagar Dados</span></h3>
                 <button onclick="closeModal('modal-wipe-data')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -1124,7 +1124,7 @@
     <!-- MODAL: CRIAR LIMITE -->
     <div id="modal-limit-form" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
-            <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 id="limit-modal-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_limit_title">Criar Limite</h3>
                 <button onclick="closeModal('modal-limit-form')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -2710,7 +2710,7 @@
                 wrapper.className = "bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all block";
                 if(fab) fab.classList.add('hidden');
                 if(backdrop) backdrop.classList.add('hidden', 'opacity-0');
-                // Se redimensionar pro PC com ele aberto, devolve pra gaveta
+                
                 if (originalParent && wrapper.parentNode === document.body) {
                     originalParent.appendChild(backdrop);
                     originalParent.appendChild(wrapper);
@@ -2719,7 +2719,7 @@
             } else {
                 if(fab) fab.classList.remove('hidden');
                 if (!isMobileFormOpen) {
-                    wrapper.className = "hidden bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-white/10 p-5 rounded-3xl shadow-2xl transition-all overflow-hidden";
+                    wrapper.className = "hidden bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 p-5 rounded-3xl shadow-2xl transition-all overflow-hidden";
                     if(backdrop) backdrop.className = "fixed inset-0 bg-slate-900/60 backdrop-blur-md z-40 hidden opacity-0 transition-opacity duration-500 lg:hidden";
                 }
             }
@@ -2887,7 +2887,7 @@
             toast.id = toastId;
             
             // Visual do Alerta Baseado no Tema (Frosted Glass Persistente)
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between transition-all ease-[cubic-bezier(0.34,1.56,0.64,1)] ' + (useMitosis ? 'opacity-0 scale-50 translate-y-0 rounded-[40px] duration-500' : 'opacity-0 scale-90 translate-y-10 rounded-[16px] duration-400');
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between transition-all ease-[cubic-bezier(0.34,1.56,0.64,1)] ' + (useMitosis ? 'opacity-0 scale-50 translate-y-0 rounded-[40px] duration-500' : 'opacity-0 scale-90 translate-y-10 rounded-[16px] duration-400');
             
             const shortName = trx.description.length > 15 ? trx.description.substring(0, 15) + '...' : trx.description;
 
@@ -2896,7 +2896,7 @@
                     <i class="fa-solid fa-trash-can text-rose-500 shrink-0"></i> 
                     <span class="font-bold truncate">${shortName} excl.</span>
                 </div>
-                <button onclick="undoDelete('${trx.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-slate-200/50 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
+                <button onclick="undoDelete('${trx.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
             `;
             document.body.appendChild(toast);
             
@@ -2968,11 +2968,11 @@
         function showImportSuccessToast(count, batchId) {
             const toast = document.createElement('div');
             toast.id = 'toast-' + batchId;
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 scale-75 translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 scale-75 translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
             
             toast.innerHTML = `
                 <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i> <span class="font-bold">${count} ${t('msg_imported')}</span></div>
-                <button onclick="undoImport('${batchId}');" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-slate-200/50 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
+                <button onclick="undoImport('${batchId}');" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
             `;
             document.body.appendChild(toast);
             
@@ -3530,7 +3530,7 @@
             toast.id = toastId;
             
             // Nasce do chão (como a Pílula não está visível aqui) - Mesma aparência persistente
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/80 dark:bg-slate-800/80 theme-oled:bg-[#0a0a0a]/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 translate-y-10 scale-90 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between opacity-0 translate-y-10 scale-90 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)]';
             
             const shortName = lim.target.length > 15 ? lim.target.substring(0, 15) + '...' : lim.target;
 
@@ -3539,7 +3539,7 @@
                     <i class="fa-solid fa-bullseye text-pink-500 shrink-0"></i> 
                     <span class="font-bold truncate">${shortName} excl.</span>
                 </div>
-                <button onclick="undoLimitDelete('${lim.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-slate-200/50 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
+                <button onclick="undoLimitDelete('${lim.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
             `;
             document.body.appendChild(toast);
             

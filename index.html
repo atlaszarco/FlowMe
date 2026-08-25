@@ -223,7 +223,7 @@
         <div id="filter-wrapper" class="group flex items-center justify-start btn-filter-light dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0" style="width: 130px;">
             
             <!-- CAMADA INVISÍVEL (Captura o clique quando fechado e protege os inputs) -->
-            <div id="filter-closed-catcher" class="absolute inset-0 z-30 cursor-pointer" onclick="openFilter()"></div>
+            <div id="filter-closed-catcher" class="absolute inset-0 z-30 cursor-pointer" onclick="openFilter()" onmouseenter="startCalendarHover()" onmouseleave="stopCalendarHover()"></div>
 
             <!-- Botão do Ícone Fixo (Esquerda) -->
             <button id="btn-filter-icon" onclick="toggleFilterMode(event)" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-none">
@@ -275,8 +275,8 @@
 
     <!-- 3. BOTÃO SALVAR (NUVEM) -->
     <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden origin-right">
-        <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-500 hover:!text-white px-5 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
-            <i class="fa-solid fa-cloud-arrow-up text-lg sm:text-xl"></i>
+        <button id="btn-manual-save" onclick="manualSave()" onmouseenter="startSaveHover()" onmouseleave="stopSaveHover()" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+            <i id="save-icon" class="fa-solid fa-cloud-arrow-up text-lg sm:text-xl transition-transform duration-300"></i>
             <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Sincronizar Nuvem</span>
         </button>
     </div>
@@ -1449,7 +1449,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.6';
+        const FLOWME_VERSION = 'beta-3.1.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1787,12 +1787,60 @@
             }
         });
 
-        // Abre a pílula quando clica na camada de vidro
+        // ================= ANIMAÇÕES DO CALENDÁRIO =================
+        let calendarHoverInterval;
+        let isCalendarOpening = false;
+
+        function startCalendarHover() {
+            if (isFilterExpanded || isCalendarOpening) return;
+            const icon = document.getElementById('filter-icon-display');
+            if (!icon) return;
+            let isMonth = (currentFilterMode === 'month');
+            
+            calendarHoverInterval = setInterval(() => {
+                isMonth = !isMonth;
+                icon.className = isMonth 
+                    ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300' 
+                    : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+            }, 1000);
+        }
+
+        function stopCalendarHover() {
+            clearInterval(calendarHoverInterval);
+            if (!isFilterExpanded && !isCalendarOpening) {
+                const icon = document.getElementById('filter-icon-display');
+                if (icon) {
+                    icon.className = currentFilterMode === 'month' 
+                        ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300' 
+                        : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                }
+            }
+        }
+
         function openFilter() {
-            if (!isFilterExpanded) {
-                isFilterExpanded = true;
+            if (!isFilterExpanded && !isCalendarOpening) {
+                isCalendarOpening = true;
+                stopCalendarHover();
+                
+                // 1. Centraliza Imediatamente
                 setToolbarFocus('global-toolbar-filter'); 
-                updateFilterUI();
+
+                // Força o Azul de destaque do clique enquanto abre
+                const wrapper = document.getElementById('filter-wrapper');
+                wrapper.classList.add('!bg-indigo-600', '!text-white', 'dark:!bg-indigo-500', 'theme-oled:!bg-indigo-500');
+
+                // Animação de Pulo
+                const icon = document.getElementById('filter-icon-display');
+                if (icon) icon.classList.add('fa-bounce'); 
+
+                // 2. Suspense e Abertura
+                setTimeout(() => {
+                    if (icon) icon.classList.remove('fa-bounce');
+                    wrapper.classList.remove('!bg-indigo-600', '!text-white', 'dark:!bg-indigo-500', 'theme-oled:!bg-indigo-500');
+                    isFilterExpanded = true;
+                    isCalendarOpening = false;
+                    updateFilterUI();
+                }, 600);
             }
         }
 
@@ -1876,7 +1924,10 @@
                 content.classList.remove('opacity-0', 'pointer-events-none');
                 content.classList.add('opacity-100', 'pointer-events-auto');
 
-                wrapper.classList.remove('dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white');
+                wrapper.classList.remove(
+                    'dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white',
+                    'hover:!bg-indigo-600', 'hover:!text-white', 'dark:hover:!bg-indigo-500', 'theme-oled:hover:!bg-indigo-500'
+                );
                 wrapper.classList.add('dark:btn-filter-dark');
                 
                 if (currentFilterMode === 'month') {
@@ -1909,7 +1960,10 @@
                 iconBtn.classList.add('pointer-events-none');
 
                 wrapper.classList.remove('dark:btn-filter-dark');
-                wrapper.classList.add('dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white');
+                wrapper.classList.add(
+                    'dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white',
+                    'hover:!bg-indigo-600', 'hover:!text-white', 'dark:hover:!bg-indigo-500', 'theme-oled:hover:!bg-indigo-500'
+                );
                 
                 let wCollapsed;
                 if (isMicro) {
@@ -2302,41 +2356,95 @@
         function saveState() { localStorage.setItem('flowme_state', JSON.stringify(state)); updateSaveTimestamp(); }
         
         let isSaving = false;
-        function manualSave() {
-            if(isSaving) return;
-            isSaving = true;
-            saveState(); 
-            
-            const btn = document.getElementById('btn-manual-save'); 
-            const origHTML = btn.innerHTML;
-            const origClassName = btn.className; 
-            
-            btn.className = "shrink-0 bg-emerald-500 text-white px-6 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md pointer-events-none";
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base sm:text-lg"></i> <span class="hidden sm:inline text-sm sm:text-base font-bold">${t('btn_save') || 'Salvar'}</span>`;
-            
-            setTimeout(() => {
-                const executeSaveVisuals = () => {
-                    const now = new Date(); 
-                    const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-                    
-                    btn.innerHTML = `<i class="fa-solid fa-check text-base sm:text-lg"></i> <span class="font-bold text-sm sm:text-base ml-1 whitespace-nowrap">${t('saved_at')} ${timeStr}</span>`;
-                    btn.classList.add('animate-save-pop');
-                    
-                    setTimeout(() => { 
-                        btn.className = origClassName;
-                        btn.innerHTML = origHTML; 
+        
+        // ================= ANIMAÇÕES DO BOTÃO SALVAR =================
+        let saveHoverInterval;
+        let isSaveAnimating = false;
 
-                        setToolbarFocus(null, () => {
-                            btn.classList.remove('pointer-events-none');
-                            isSaving = false;
-                        });
-                    }, 2500); 
-                };
+        function startSaveHover() {
+            if (isSaveAnimating) return;
+            const icon = document.getElementById('save-icon');
+            if (!icon) return;
+            let isUp = false;
+            saveHoverInterval = setInterval(() => {
+                isUp = !isUp;
+                icon.style.transform = isUp ? 'translateY(-4px)' : 'translateY(0)'; // Seta subindo e descendo
+            }, 1000);
+        }
 
-                setToolbarFocus('global-toolbar-save', executeSaveVisuals);
-            }, 300); 
-            
-            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true, true); 
+        function stopSaveHover() {
+            clearInterval(saveHoverInterval);
+            const icon = document.getElementById('save-icon');
+            if (icon && !isSaveAnimating) icon.style.transform = 'translateY(0)';
+        }
+
+        async function manualSave() {
+            if (isSaveAnimating) return;
+            isSaveAnimating = true;
+            stopSaveHover();
+
+            const btnText = document.getElementById('save-btn-text');
+            const icon = document.getElementById('save-icon');
+            const btn = document.getElementById('btn-manual-save');
+
+            // 1. Centraliza o botão e trava a cor verde imediatamente
+            setToolbarFocus('global-toolbar-save');
+            btn.classList.add('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600', 'theme-oled:!bg-emerald-600');
+
+            // Animação do ícone voando pra cima
+            if (icon) {
+                icon.style.transform = 'translateY(-15px) scale(1.1)';
+                icon.style.opacity = '0';
+                setTimeout(() => {
+                    icon.style.transition = 'none';
+                    icon.style.transform = 'translateY(15px) scale(0.8)';
+                    setTimeout(() => {
+                        icon.style.transition = 'all 0.3s ease';
+                        icon.style.transform = 'translateY(0) scale(1)';
+                        icon.style.opacity = '1';
+                    }, 50);
+                }, 300);
+            }
+
+            // 2. Suspense e Carregamento (Exibe Salvando...)
+            setTimeout(async () => {
+                if (icon) {
+                    icon.classList.remove('fa-cloud-arrow-up');
+                    icon.classList.add('fa-spinner', 'fa-spin');
+                }
+                if (btnText) btnText.textContent = t('btn_saving') || 'Salvando...';
+
+                // Processo invisível de gravação
+                saveState(); 
+                if (typeof accessToken !== 'undefined' && accessToken) {
+                    await saveToCloud(false, true); 
+                } else {
+                    await new Promise(r => setTimeout(r, 800)); // Falso delay p/ offline
+                }
+
+                // 3. Sucesso (Check e Hora)
+                if (icon) {
+                    icon.classList.remove('fa-spinner', 'fa-spin');
+                    icon.classList.add('fa-check');
+                }
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                if (btnText) btnText.textContent = `${t('btn_saved') || 'Salvo às'} ${timeStr}`;
+
+                // 4. Retorno à calma
+                setTimeout(() => {
+                    if (icon) {
+                        icon.classList.remove('fa-check');
+                        icon.classList.add('fa-cloud-arrow-up');
+                    }
+                    if (btnText) btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
+                    btn.classList.remove('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600', 'theme-oled:!bg-emerald-600');
+                    
+                    setToolbarFocus(null);
+                    isSaveAnimating = false;
+                }, 2000);
+
+            }, 600);
         }
         
         function loadState() {

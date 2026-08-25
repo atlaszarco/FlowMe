@@ -1449,7 +1449,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.3';
+        const FLOWME_VERSION = 'beta-3.1.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2160,38 +2160,53 @@
             alertsWrapper.classList.remove('hidden');
 
             const profile = responsiveProfile || getResponsiveProfile();
-            const isMobile = profile === 'mobile-portrait';
+            const isMobile = profile === 'mobile-portrait' || window.innerWidth < 420;
             const hasCritical = (groups.expenseLate?.length > 0) || (groups.limits?.some(l => l.pct >= 100));
 
             const alertWord = totalAlerts === 1 ? (t('lbl_alert') || 'Alerta') : (t('lbl_alerts') || 'Alertas');
             const modalTitle = t('modal_alerts_title') || 'Central de Alertas';
 
             let contentHtml = '';
-            const isActive = totalAlerts > 0 || isAlertsModalOpen;
+            const isClicked = isAlertsModalOpen;
             
-            // Regra de Cores Solicitada: 
-            // - Sem alerta = Cor Padrão (Fundo da Pílula) / Sino Amarelo
-            // - Com alerta ou Clicado = Fundo Amarelo / Sino Preto
-            const baseColor = isActive 
-                ? 'bg-amber-400 text-slate-900 shadow-md' 
-                : 'btn-filter-light dark:btn-filter-dark shadow-sm transition-colors hover:opacity-80';
+            // 1. Lógica de Cores
+            // Padrão: Fundo escuro e texto branco (igual ao botão Salvar).
+            // Hover: Fundo amarelo e texto/ícone preto.
+            let baseClass = 'bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] shadow-sm hover:!bg-amber-400 hover:!text-slate-900 dark:hover:!bg-amber-400 dark:hover:!text-slate-900 transition-all duration-300';
             
-            const iconType = isActive ? 'fa-solid fa-bell' : 'fa-regular fa-bell';
-            const iconColor = isActive ? 'text-slate-900' : 'text-amber-400';
-            const shakeClass = hasCritical ? 'fa-shake' : '';
+            // Clicado (Ativo): Fundo amarelo e texto/ícone preto.
+            if (isClicked) {
+                baseClass = 'bg-amber-400 text-slate-900 shadow-md transition-all duration-300';
+            }
 
-            if (!isActive && isMobile && !isAlertsModalOpen) {
+            // 2. Lógica de Texto
+            let textStr = '';
+            if (isClicked) {
+                textStr = modalTitle; // Sempre exibe "Central de Alertas" quando a pílula focar nele
+            } else {
+                if (totalAlerts > 0) {
+                    textStr = isMobile ? `${totalAlerts}` : `${totalAlerts} ${alertWord}`;
+                } else {
+                    textStr = modalTitle; // Mostra "Central de Alertas" se estiver zerado
+                }
+            }
+
+            // 3. Lógica do Ícone (Sino preenchido se tiver alertas ou estiver aberto)
+            const iconType = (totalAlerts > 0 || isClicked) ? 'fa-solid fa-bell' : 'fa-regular fa-bell';
+            const shakeClass = (hasCritical && !isClicked) ? 'fa-shake' : ''; // Mantém tremendo se for crítico, mas remove a cor vermelha fixa
+
+            if (!isClicked && isMobile && totalAlerts === 0) {
+                // Versão encolhida no celular quando não há alertas (para economizar espaço)
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 ${baseColor}">
-                        <i class="${iconType} ${iconColor} ${shakeClass} text-base sm:text-lg transition-colors"></i>
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
+                        <i class="${iconType} ${shakeClass} text-base sm:text-lg transition-colors"></i>
                         <span id="bell-text-span" class="hidden overflow-hidden transition-all duration-300"></span>
                     </button>
                 `;
             } else {
-                const textStr = isMobile ? (totalAlerts > 0 ? `${totalAlerts}` : modalTitle) : (totalAlerts > 0 ? `${totalAlerts} ${alertWord}` : modalTitle);
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-max rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 ${baseColor}">
-                        <i class="${iconType} ${iconColor} ${shakeClass} text-base sm:text-lg transition-colors"></i>
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-max rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
+                        <i class="${iconType} ${shakeClass} text-base sm:text-lg transition-colors"></i>
                         <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
                     </button>
                 `;

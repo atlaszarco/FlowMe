@@ -235,7 +235,7 @@
                 
                 <!-- VISTA FECHADA (Texto 100% Centralizado no espaço restante) -->
                 <div id="filter-collapsed-view" class="absolute inset-0 flex items-center justify-center pr-2 sm:pr-3 pointer-events-none transition-all duration-500 opacity-100 scale-100 origin-left">
-                    <span id="filter-collapsed-text" class="text-[13px] sm:text-sm font-bold whitespace-nowrap transition-all duration-500"></span>
+                    <span id="filter-collapsed-text" class="text-sm sm:text-base font-bold whitespace-nowrap transition-all duration-500"></span>
                 </div>
 
                 <!-- VISTA ABERTA (Mês ou Período) -->
@@ -1449,7 +1449,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.1.7';
+        const FLOWME_VERSION = 'beta-3.1.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1797,12 +1797,32 @@
             if (!icon) return;
             let isMonth = (currentFilterMode === 'month');
             
+            icon.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+
             calendarHoverInterval = setInterval(() => {
-                isMonth = !isMonth;
-                icon.className = isMonth 
-                    ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300' 
-                    : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
-            }, 1000);
+                // 1. O ícone sobe e desaparece
+                icon.style.transform = 'translateY(-15px) scale(0.8)';
+                icon.style.opacity = '0';
+
+                setTimeout(() => {
+                    // 2. Troca o ícone secretamente enquanto invisível
+                    isMonth = !isMonth;
+                    icon.className = isMonth 
+                        ? 'fa-regular fa-calendar text-lg sm:text-xl' 
+                        : 'fa-solid fa-calendar-days text-lg sm:text-xl';
+                    
+                    // 3. Teleporta para baixo instantaneamente
+                    icon.style.transition = 'none';
+                    icon.style.transform = 'translateY(15px) scale(0.8)';
+
+                    // 4. Sobe de volta à posição original já trocado
+                    setTimeout(() => {
+                        icon.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                        icon.style.transform = 'translateY(0) scale(1)';
+                        icon.style.opacity = '1';
+                    }, 50);
+                }, 300); // Tempo da animação de subida
+            }, 2200); // Espera 2.2s antes de fazer de novo
         }
 
         function stopCalendarHover() {
@@ -1810,6 +1830,8 @@
             if (!isFilterExpanded && !isCalendarOpening) {
                 const icon = document.getElementById('filter-icon-display');
                 if (icon) {
+                    icon.style.transform = 'translateY(0) scale(1)';
+                    icon.style.opacity = '1';
                     icon.className = currentFilterMode === 'month' 
                         ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300' 
                         : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
@@ -2317,23 +2339,33 @@
             if(isBellOpening || isAlertsModalOpen) return;
             isAlertsModalOpen = true; 
             isBellOpening = true;
-            stopBellHover(); // Corta a animação do mouse na hora
+            stopBellHover(); 
 
-            // Transforma o botão em Amarelo/Preto instantaneamente
             renderToolbarAlerts(); 
 
             const newBtn = document.getElementById('btn-alerts-bell');
             if (newBtn) {
                 const icon = newBtn.querySelector('i');
-                if (icon) icon.classList.add('fa-shake'); // Começa a balançar loucamente
+                if (icon) {
+                    icon.classList.add('fa-shake'); 
+                    icon.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    icon.style.transform = 'scale(1.45)'; // O Sino infla dramaticamente
+                }
 
                 setToolbarFocus('global-toolbar-alerts', () => {
-                    // Após a pílula centralizar (leva uns 300ms), deixa o sino bater por mais 600ms de "suspense"
+                    // Espera no centro batendo inflado
                     setTimeout(() => {
-                        if(icon) icon.classList.remove('fa-shake');
-                        isBellOpening = false;
-                        openAlertsModal(); 
-                    }, 600); 
+                        if(icon) {
+                            icon.style.transform = 'scale(1)'; // Desincha
+                            
+                            // Espera desinchar para abrir o modal
+                            setTimeout(() => {
+                                icon.classList.remove('fa-shake');
+                                isBellOpening = false;
+                                openAlertsModal(); 
+                            }, 300);
+                        }
+                    }, 800); 
                 });
             } else { 
                 isBellOpening = false;
@@ -2368,7 +2400,7 @@
             let isUp = false;
             saveHoverInterval = setInterval(() => {
                 isUp = !isUp;
-                icon.style.transform = isUp ? 'translateY(-4px)' : 'translateY(0)'; // Seta subindo e descendo
+                icon.style.transform = isUp ? 'translateY(-4px)' : 'translateY(0)';
             }, 1000);
         }
 
@@ -2387,42 +2419,49 @@
             const icon = document.getElementById('save-icon');
             const btn = document.getElementById('btn-manual-save');
 
-            // 1. Centraliza o botão e trava a cor verde imediatamente
+            // 1. Centraliza, força a cor verde em todos os modos e exibe texto no celular
             setToolbarFocus('global-toolbar-save');
-            btn.classList.add('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600', 'theme-oled:!bg-emerald-600');
+            btn.classList.add('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
+            btn.style.setProperty('background-color', '#059669', 'important'); // Força no OLED
+            btn.style.setProperty('color', '#ffffff', 'important');
 
-            // Animação do ícone voando pra cima
+            if (btnText) {
+                btnText.classList.remove('hidden', 'sm:inline');
+                btnText.classList.add('inline');
+            }
+
+            // 2. Animação da Seta voando pra cima
             if (icon) {
                 icon.style.transform = 'translateY(-15px) scale(1.1)';
                 icon.style.opacity = '0';
+                
                 setTimeout(() => {
                     icon.style.transition = 'none';
                     icon.style.transform = 'translateY(15px) scale(0.8)';
+                    
                     setTimeout(() => {
                         icon.style.transition = 'all 0.3s ease';
                         icon.style.transform = 'translateY(0) scale(1)';
                         icon.style.opacity = '1';
+                        
+                        // Troca para engrenagem e "Salvando..."
+                        icon.classList.remove('fa-cloud-arrow-up');
+                        icon.classList.add('fa-spinner', 'fa-spin');
+                        if (btnText) btnText.textContent = t('btn_saving') || 'Salvando...';
                     }, 50);
                 }, 300);
             }
 
-            // 2. Suspense e Carregamento (Exibe Salvando...)
+            // 3. Aguarda o botão se acomodar e executa o salvamento
             setTimeout(async () => {
-                if (icon) {
-                    icon.classList.remove('fa-cloud-arrow-up');
-                    icon.classList.add('fa-spinner', 'fa-spin');
-                }
-                if (btnText) btnText.textContent = t('btn_saving') || 'Salvando...';
-
-                // Processo invisível de gravação
                 saveState(); 
                 if (typeof accessToken !== 'undefined' && accessToken) {
                     await saveToCloud(false, true); 
                 } else {
-                    await new Promise(r => setTimeout(r, 800)); // Falso delay p/ offline
+                    await new Promise(r => setTimeout(r, 1200)); // Delay para leitura
                 }
 
-                // 3. Sucesso (Check e Hora)
+                // 4. Sucesso: Check e "Salvo às"
                 if (icon) {
                     icon.classList.remove('fa-spinner', 'fa-spin');
                     icon.classList.add('fa-check');
@@ -2431,20 +2470,26 @@
                 const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 if (btnText) btnText.textContent = `${t('btn_saved') || 'Salvo às'} ${timeStr}`;
 
-                // 4. Retorno à calma
+                // 5. Retorno à calma (Demora mais tempo para o usuário ler)
                 setTimeout(() => {
                     if (icon) {
                         icon.classList.remove('fa-check');
                         icon.classList.add('fa-cloud-arrow-up');
                     }
-                    if (btnText) btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
-                    btn.classList.remove('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600', 'theme-oled:!bg-emerald-600');
+                    if (btnText) {
+                        btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
+                        btnText.classList.remove('inline');
+                        btnText.classList.add('hidden', 'sm:inline'); // Esconde no celular
+                    }
+                    btn.classList.remove('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
+                    btn.style.removeProperty('background-color');
+                    btn.style.removeProperty('color');
                     
                     setToolbarFocus(null);
                     isSaveAnimating = false;
-                }, 2000);
+                }, 2500);
 
-            }, 600);
+            }, 900);
         }
         
         function loadState() {

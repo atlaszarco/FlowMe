@@ -147,23 +147,32 @@
             margin-right: 0px !important;
         }
 
-        /* ANIMAÇÕES DA PÍLULA: começam imediatamente ao entrar na pílula
-           e repetem a cada 3s enquanto o mouse permanecer sobre ela. */
-        #global-toolbar:hover #filter-wrapper:not(.is-expanded) #filter-icon-display {
+        /* ANIMAÇÕES DA PÍLULA */
+        /* Calendário */
+        #filter-wrapper:not(.is-expanded):hover #filter-icon-display {
             animation: flip-and-wait 3s infinite;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
-        #global-toolbar:hover #btn-alerts-bell i {
+        
+        /* Alertas */
+        #btn-alerts-bell:hover i {
             animation: ring-and-wait 3s infinite;
             transform-origin: top center;
         }
-        #global-toolbar:hover #btn-manual-save i {
-            animation: cloud-and-wait 3s infinite;
-        }
-
-        /* Durante o salvamento, a animação de hover da nuvem fica desligada. */
-        #global-toolbar #btn-manual-save.is-saving i {
+        
+        #btn-alerts-bell.is-opening i {
             animation: none !important;
         }
+        
+        /* Salvar */
+        #btn-manual-save:hover i {
+            animation: cloud-and-wait 3s infinite;
+        }
+        
+        #btn-manual-save.is-saving .fa-cloud-arrow-up {
+            animation: none !important;
+        }      
 
         @keyframes flip-and-wait {
             0%   { transform: perspective(400px) rotateY(0deg); }
@@ -187,6 +196,16 @@
             12%  { transform: scale(1.15) translateY(-4px); }
             24%  { transform: scale(1) translateY(0px); }
             100% { transform: scale(1) translateY(0px); }
+        }
+
+        @keyframes save-check-pop {
+            0% {transform: scale(0.4); opacity: 0; }
+            60% {transform: scale(1.2); opacity: 1; }
+            100% {transform: scale(1); opacity: 1; }
+        }
+        
+        #save-icon.save-check-animate {
+            animation: save-check-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         /* Animações de Swipe para as Abas */
@@ -313,7 +332,7 @@
             <div id="filter-closed-catcher" class="absolute inset-0 z-30 cursor-pointer" onclick="openFilter()"></div>
 
             <!-- Botão do Ícone Fixo (Esquerda) -->
-            <button id="btn-filter-icon" onclick="toggleFilterMode(event)" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-none">
+            <button id="btn-filter-icon" onmouseenter="startCalendarHover()" onclick="toggleFilterMode(event)" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-none">
                 <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
             </button>
 
@@ -1542,7 +1561,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.3.7';
+        const FLOWME_VERSION = 'beta-3.3.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1873,6 +1892,25 @@
         let calendarHoverInterval;
         let isCalendarOpening = false;
 
+        function startCalendarHover() {
+            const icon = document.getElementById('filter-icon-display');
+            if (!icon || isFilterExpanded) return;
+        
+            const originalClasses = icon.className;
+        
+            setTimeout(() => {
+                if (!isFilterExpanded) {
+                    icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                }
+            }, 360);
+        
+            setTimeout(() => {
+                if (!isFilterExpanded) {
+                    updateFilterUI();
+                }
+            }, 720);
+        }
+        
         function openFilter() {
             if (!isFilterExpanded && !isCalendarOpening) {
                 isCalendarOpening = true;
@@ -2374,6 +2412,7 @@
 
             const newBtn = document.getElementById('btn-alerts-bell');
             if (newBtn) {
+                newBtn.classList.add('is-opening');
                 const icon = newBtn.querySelector('i');
                 if (icon) {
                     icon.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -2397,10 +2436,13 @@
                                     
                                     // 6. Espera encolher e abre o pop-up
                                     setTimeout(() => {
+                                        if (newBtn) {
+                                            newBtn.classList.remove('is-opening');
+                                        }
+                                    
                                         isBellOpening = false;
                                         openAlertsModal(); 
                                     }, 400);
-
                                 }, 700); // Duração do balanço
                             }, 400); // Tempo para inflar
                         }
@@ -2473,6 +2515,9 @@
                 if (icon) {
                     icon.classList.remove('fa-spinner', 'fa-spin');
                     icon.classList.add('fa-check');
+                    icon.classList.remove('save-check-animate');
+                    void icon.offsetWidth;
+                    icon.classList.add('save-check-animate');
                 }
                 const now = new Date();
                 const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -2481,7 +2526,7 @@
                 // 4. Retorno à calma.
                 setTimeout(() => {
                     if (icon) {
-                        icon.classList.remove('fa-check');
+                        icon.classList.remove('fa-check', 'save-check-animate');
                         icon.classList.add('fa-cloud-arrow-up');
                     }
                     if (btnText) {

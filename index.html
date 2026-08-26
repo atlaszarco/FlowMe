@@ -1461,7 +1461,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.8';
+        const FLOWME_VERSION = 'beta-3.2.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -4177,35 +4177,33 @@
                     if (parsed.expires > new Date().getTime()) {
                         accessToken = parsed.token;
         
-                        const isValid = await fetchUserInfo();
+                        try {
+                            await fetchUserInfo();
+                        } catch (userError) {
+                            console.warn("Aviso: Falha ao carregar info do usuário (pode estar offline).", userError);
+                        }
         
-                        if (isValid) {
-                            // 1. ESCONDE A TELA IMEDIATAMENTE (O usuário já pode usar o app)
-                            hideSplashScreen();
-                            
-                            try {
-                                const file = await findCloudFile();
+                        hideSplashScreen();
+                        
+                        try {
+                            const file = await findCloudFile();
         
-                                if (file) {
-                                    // 2. INDICADOR SUTIL DE INÍCIO (Informa sem travar)
-                                    showToast('Atualizando dados da nuvem...', 'info', 2000);
-                                    
-                                    // Sincroniza os dados no background
-                                    await loadFromCloud(true);
-                                    
-                                    // 3. INDICADOR SUTIL DE SUCESSO (Feedback positivo)
-                                    showToast('Nuvem sincronizada!', 'success', 2000);
-                                } else {
-                                    render();
-                                }
-                            } catch (syncError) {
-                                console.error('Erro na sincronização inicial:', syncError);
-                                // Opcional: Toast de aviso caso a internet caia no meio do processo
-                                showToast('Modo offline: usando dados locais.', 'warning', 3000);
+                            if (file) {
+                                showToast('Atualizando dados da nuvem...', 'info', 2000);
+                                await loadFromCloud(true);
+                                showToast('Nuvem sincronizada!', 'success', 2000);
+                            } else {
                                 render();
                             }
-                            return;
+                        } catch (syncError) {
+                            console.error('Erro na sincronização inicial:', syncError);
+                            showToast('Modo offline: usando dados locais.', 'warning', 3000);
+                            render();
                         }
+                        
+                        return;
+                    } else {
+                        localStorage.removeItem('flowme_google_token');
                     }
                 }
             } catch (error) {

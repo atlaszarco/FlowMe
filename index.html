@@ -147,22 +147,31 @@
             margin-right: 0px !important;
         }
 
-        /* 1. Calendário: Flip horizontal 3D (ativa APENAS quando o filtro NÃO está expandido) */
-        #filter-wrapper:not(.is-expanded) #btn-filter-icon:hover i {
+        /* ANIMAÇÕES DA PÍLULA: começam imediatamente ao entrar na pílula
+           e repetem a cada 3s enquanto o mouse permanecer sobre ela. */
+        #global-toolbar:hover #filter-wrapper:not(.is-expanded) #filter-icon-display {
             animation: flip-and-wait 3s infinite;
         }
+        #global-toolbar:hover #btn-alerts-bell i {
+            animation: ring-and-wait 3s infinite;
+            transform-origin: top center;
+        }
+        #global-toolbar:hover #btn-manual-save i {
+            animation: cloud-and-wait 3s infinite;
+        }
+
+        /* Durante o salvamento, a animação de hover da nuvem fica desligada. */
+        #global-toolbar #btn-manual-save.is-saving i {
+            animation: none !important;
+        }
+
         @keyframes flip-and-wait {
             0%   { transform: perspective(400px) rotateY(0deg); }
             12%  { transform: perspective(400px) rotateY(180deg); }
             24%  { transform: perspective(400px) rotateY(360deg); }
             100% { transform: perspective(400px) rotateY(360deg); }
         }
-        
-        /* 2. Alertas: Sino balançando (eixo no topo) */
-        #btn-alerts-bell:hover i {
-            animation: ring-and-wait 3s infinite;
-            transform-origin: top center;
-        }
+
         @keyframes ring-and-wait {
             0%   { transform: rotate(0deg); }
             4%   { transform: rotate(20deg); }
@@ -172,18 +181,14 @@
             20%  { transform: rotate(0deg); }
             100% { transform: rotate(0deg); }
         }
-        
-        /* 3. Salvar: Nuvem expande e sobe levemente */
-        #btn-manual-save:hover i {
-            animation: cloud-and-wait 3s infinite;
-        }
+
         @keyframes cloud-and-wait {
             0%   { transform: scale(1) translateY(0px); }
             12%  { transform: scale(1.15) translateY(-4px); }
             24%  { transform: scale(1) translateY(0px); }
             100% { transform: scale(1) translateY(0px); }
         }
-        
+
         /* Animações de Swipe para as Abas */
         @keyframes slideInRight { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideInLeft { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -357,7 +362,7 @@
 
     <!-- 3. BOTÃO SALVAR (NUVEM) -->
     <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-right">
-        <button id="btn-manual-save" onclick="manualSave()" onmouseenter="startSaveHover()" onmouseleave="stopSaveHover()" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+        <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
             <i id="save-icon" class="fa-solid fa-cloud-arrow-up text-lg sm:text-xl transition-transform duration-300"></i>
             <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Sincronizar Nuvem</span>
         </button>
@@ -1537,7 +1542,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.3.6';
+        const FLOWME_VERSION = 'beta-3.3.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2343,14 +2348,14 @@
 
             if (!isClicked && isMobile && totalAlerts === 0) {
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" onmouseenter="startBellHover()" onmouseleave="stopBellHover()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
                         <i class="${iconType} text-base sm:text-lg transition-colors duration-200"></i>
                         <span id="bell-text-span" class="hidden overflow-hidden transition-all duration-300"></span>
                     </button>
                 `;
             } else {
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" onmouseenter="startBellHover()" onmouseleave="stopBellHover()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-max rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 h-full w-max rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
                         <i class="${iconType} text-base sm:text-lg transition-colors duration-200"></i>
                         <span id="bell-text-span" class="whitespace-nowrap transition-all duration-300">${textStr}</span>
                     </button>
@@ -2424,39 +2429,20 @@
         let isSaving = false;
         
         // ================= ANIMAÇÕES DO BOTÃO SALVAR =================
-        let saveHoverInterval;
         let isSaveAnimating = false;
-
-        function startSaveHover() {
-            if (isSaveAnimating) return;
-            const icon = document.getElementById('save-icon');
-            if (!icon) return;
-            let isUp = false;
-            saveHoverInterval = setInterval(() => {
-                isUp = !isUp;
-                icon.style.transform = isUp ? 'translateY(-4px)' : 'translateY(0)';
-            }, 1000);
-        }
-
-        function stopSaveHover() {
-            clearInterval(saveHoverInterval);
-            const icon = document.getElementById('save-icon');
-            if (icon && !isSaveAnimating) icon.style.transform = 'translateY(0)';
-        }
 
         async function manualSave() {
             if (isSaveAnimating) return;
             isSaveAnimating = true;
-            stopSaveHover();
 
             const btnText = document.getElementById('save-btn-text');
             const icon = document.getElementById('save-icon');
             const btn = document.getElementById('btn-manual-save');
 
-            // 1. Centraliza, muda a cor e exibe o texto
+            // 1. Centraliza, muda a cor e exibe o texto.
             setToolbarFocus('global-toolbar-save');
-            btn.classList.add('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
-            btn.style.setProperty('background-color', '#059669', 'important'); 
+            btn.classList.add('is-saving', '!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
+            btn.style.setProperty('background-color', '#059669', 'important');
             btn.style.setProperty('color', '#ffffff', 'important');
 
             if (btnText) {
@@ -2464,75 +2450,55 @@
                 btnText.classList.add('inline');
             }
 
-            // 2. Espera um pouco após centralizar
-            setTimeout(() => {
-                
-                // 3. Animação da Seta voando pra cima
+            // 2. Após a pílula centralizar, entra diretamente em "Salvando...".
+            setTimeout(async () => {
                 if (icon) {
-                    icon.style.transform = 'translateY(-15px) scale(1.1)';
-                    icon.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        icon.style.transition = 'none';
-                        icon.style.transform = 'translateY(15px) scale(0.8)';
-                        
-                        setTimeout(() => {
-                            icon.style.transition = 'all 0.3s ease';
-                            icon.style.transform = 'translateY(0) scale(1)';
-                            icon.style.opacity = '1';
-                        }, 50);
-                    }, 300);
+                    icon.style.removeProperty('transform');
+                    icon.style.removeProperty('opacity');
+                    icon.style.removeProperty('transition');
+                    icon.classList.remove('fa-cloud-arrow-up', 'fa-check');
+                    icon.classList.add('fa-spinner', 'fa-spin');
+                }
+                if (btnText) btnText.textContent = t('btn_saving') || 'Salvando...';
+
+                // Processo invisível de gravação.
+                saveState();
+                if (typeof accessToken !== 'undefined' && accessToken) {
+                    await saveToCloud(false, true);
+                } else {
+                    await new Promise(r => setTimeout(r, 1200));
                 }
 
-                // 4. Espera a seta terminar para exibir "Salvando..."
-                setTimeout(async () => {
+                // 3. Sucesso: Check e "Salvo às".
+                if (icon) {
+                    icon.classList.remove('fa-spinner', 'fa-spin');
+                    icon.classList.add('fa-check');
+                }
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                if (btnText) btnText.textContent = `${t('btn_saved') || 'Salvo às'} ${timeStr}`;
+
+                // 4. Retorno à calma.
+                setTimeout(() => {
                     if (icon) {
-                        icon.classList.remove('fa-cloud-arrow-up');
-                        icon.classList.add('fa-spinner', 'fa-spin');
+                        icon.classList.remove('fa-check');
+                        icon.classList.add('fa-cloud-arrow-up');
                     }
-                    if (btnText) btnText.textContent = t('btn_saving') || 'Salvando...';
-
-                    // Processo invisível de gravação
-                    saveState(); 
-                    if (typeof accessToken !== 'undefined' && accessToken) {
-                        await saveToCloud(false, true); 
-                    } else {
-                        await new Promise(r => setTimeout(r, 1200)); 
+                    if (btnText) {
+                        btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
+                        btnText.classList.remove('inline');
+                        btnText.classList.add('hidden', 'sm:inline');
                     }
+                    btn.classList.remove('is-saving', '!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
+                    btn.style.removeProperty('background-color');
+                    btn.style.removeProperty('color');
 
-                    // 5. Sucesso: Check e "Salvo às"
-                    if (icon) {
-                        icon.classList.remove('fa-spinner', 'fa-spin');
-                        icon.classList.add('fa-check');
-                    }
-                    const now = new Date();
-                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    if (btnText) btnText.textContent = `${t('btn_saved') || 'Salvo às'} ${timeStr}`;
-
-                    // 6. Retorno à calma
-                    setTimeout(() => {
-                        if (icon) {
-                            icon.classList.remove('fa-check');
-                            icon.classList.add('fa-cloud-arrow-up');
-                        }
-                        if (btnText) {
-                            btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
-                            btnText.classList.remove('inline');
-                            btnText.classList.add('hidden', 'sm:inline'); 
-                        }
-                        btn.classList.remove('!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
-                        btn.style.removeProperty('background-color');
-                        btn.style.removeProperty('color');
-                        
-                        setToolbarFocus(null);
-                        isSaveAnimating = false;
-                    }, 2500);
-
-                }, 700); // Delay entre a seta voar e o salvamento começar
-
-            }, 400); // Delay após a centralização da pílula
+                    setToolbarFocus(null);
+                    isSaveAnimating = false;
+                }, 2500);
+            }, 400);
         }
-        
+
         function loadState() {
             const data = localStorage.getItem('flowme_state');
             if (data) { 

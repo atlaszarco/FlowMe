@@ -149,7 +149,8 @@
 
         /* ================= ANIMAÇÕES INDIVIDUAIS DOS ÍCONES ================= */
         /* 1. Calendário: Flip horizontal 3D */
-        #btn-calendario:hover svg {
+        /* Aplica a animação apenas quando NÃO houver a classe 'js-animating' no botão */
+        #btn-filter-icon:not(.js-animating):hover i {
             animation: flip-and-wait 3s infinite;
         }
         @keyframes flip-and-wait {
@@ -160,9 +161,9 @@
         }
         
         /* 2. Alertas: Sino balançando (com eixo no topo) */
-        #btn-alertas:hover svg {
+        #btn-alerts-bell:hover i {
             animation: ring-and-wait 3s infinite;
-            transform-origin: top center; /* Garante que o sino balance pelo pino, e não pelo meio */
+            transform-origin: top center;
         }
         @keyframes ring-and-wait {
             0%   { transform: rotate(0deg); }
@@ -175,7 +176,7 @@
         }
         
         /* 3. Salvar: Nuvem expande e sobe levemente */
-        #btn-salvar:hover svg {
+        #btn-manual-save:hover i {
             animation: cloud-and-wait 3s infinite;
         }
         @keyframes cloud-and-wait {
@@ -1538,7 +1539,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.3.4';
+        const FLOWME_VERSION = 'beta-3.3.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1870,17 +1871,21 @@
 
         function startCalendarHover() {
             if (isFilterExpanded || isCalendarOpening) return;
+            const btn = document.getElementById('btn-filter-icon');
             const icon = document.getElementById('filter-icon-display');
-            if (!icon) return;
-            let isMonth = (currentFilterMode === 'month');
+            if (!btn || !icon) return;
             
+            // Adiciona a classe que desativa a animação CSS
+            btn.classList.add('js-animating');
+            
+            let isMonth = (currentFilterMode === 'month');
             icon.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-
+        
             calendarHoverInterval = setInterval(() => {
                 // 1. O ícone gira 90 graus (fica de perfil) e some
                 icon.style.transform = 'rotateY(90deg) scale(0.8)';
                 icon.style.opacity = '0';
-
+        
                 setTimeout(() => {
                     // 2. Troca o ícone secretamente
                     isMonth = !isMonth;
@@ -1891,19 +1896,22 @@
                     // 3. Prepara o ícone virado para o outro lado (-90 graus)
                     icon.style.transition = 'none';
                     icon.style.transform = 'rotateY(-90deg) scale(0.8)';
-
+        
                     // 4. Termina de girar revelando o novo ícone
                     setTimeout(() => {
                         icon.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
                         icon.style.transform = 'rotateY(0deg) scale(1)';
                         icon.style.opacity = '1';
                     }, 50);
-                }, 300); // Tempo do primeiro giro
-            }, 4000); // Aumentado para 4 segundos
+                }, 300);
+            }, 4000);
         }
 
         function stopCalendarHover() {
             clearInterval(calendarHoverInterval);
+            const btn = document.getElementById('btn-filter-icon');
+            if (btn) btn.classList.remove('js-animating'); // Remove a classe
+            
             if (!isFilterExpanded && !isCalendarOpening) {
                 const icon = document.getElementById('filter-icon-display');
                 if (icon) {
@@ -1919,7 +1927,7 @@
         function openFilter() {
             if (!isFilterExpanded && !isCalendarOpening) {
                 isCalendarOpening = true;
-                stopCalendarHover();
+                stopCalendarHover(); // Interrompe a animação JS e remove a classe
                 
                 setToolbarFocus('global-toolbar-filter'); 
 

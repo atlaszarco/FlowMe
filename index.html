@@ -101,7 +101,8 @@
         
         /* Ajuste de Rolagem Global para conteúdo passar por baixo do Header Squircles */
         html { scroll-padding-top: 130px; }
-
+        
+        /* ================= PÍLULA FLUTUANTE ================= */
         /* Estado base dos botões: Transição suave em curva */
         #global-toolbar > div {
             transition: max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
@@ -134,6 +135,30 @@
             margin-left: 0 !important;
             margin-right: 0 !important;
             border-width: 0 !important;
+        }
+
+        /* Quando a pílula tiver um item focado, remove os buracos (gaps e margens) */
+        #global-toolbar.is-focused {
+            gap: 0px !important;
+        }
+        
+        #global-toolbar.is-focused > div {
+            margin-left: 0px !important;
+            margin-right: 0px !important;
+        }
+
+        /* Animação dos Ícones da Pílula (Instantânea + Intervalo) */
+        #global-toolbar > div:hover svg,
+        #global-toolbar > div:hover i {
+            animation: start-and-wait 3s infinite;
+        }
+
+        @keyframes start-and-wait {
+            0%   { transform: scale(1) rotate(0deg); }
+            8%   { transform: scale(1.15) rotate(15deg); } /* Movimento ápice */
+            16%  { transform: scale(1) rotate(-10deg); }   /* Balanço de retorno */
+            24%  { transform: scale(1) rotate(0deg); }     /* Fim do movimento */
+            100% { transform: scale(1) rotate(0deg); }     /* Pausa silenciosa (24% até 100%) */
         }
         
         /* Animações de Swipe para as Abas */
@@ -1489,7 +1514,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.3.2';
+        const FLOWME_VERSION = 'beta-3.3.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1766,25 +1791,24 @@
             });
         }
         
-       // ================= MAESTRO DA PÍLULA FLUTUANTE (VERSÃO SIMULTÂNEA) =================
-        // 1. Declaramos o estado inicial fora da função para rastrear a animação
+       // ================= MAESTRO DA PÍLULA FLUTUANTE =================
         let toolbarAnimState = 'idle';
-        const TOOLBAR_ANIM_TIME = 500; // Deve espelhar os 0.5s do CSS
+        const TOOLBAR_ANIM_TIME = 500; 
         
         function setToolbarFocus(targetId, callback = null) {
-            // 2. Trava de segurança: Se já estiver animando, ignora novos cliques
             if (toolbarAnimState !== 'idle') return;
             
             const items = document.querySelectorAll('#global-toolbar > div');
+            const toolbar = document.getElementById('global-toolbar');
             toolbarAnimState = 'animating';
         
             if (targetId === null) {
-                // 3. RESTAURAR: Remove as classes, o CSS faz a mágica de reverter
+                toolbar.classList.remove('is-focused');
                 items.forEach(el => {
                     el.classList.remove('active-item', 'hidden-item');
                 });
             } else {
-                // 4. EXPANDIR: Aplica os estados no alvo e nos vizinhos
+                toolbar.classList.add('is-focused');
                 items.forEach(el => {
                     if (el.id === targetId) {
                         el.classList.add('active-item');
@@ -1795,8 +1819,7 @@
                     }
                 });
             }
-
-            // 5. Sincronização segura: Libera a interface no momento exato em que o CSS termina
+        
             setTimeout(() => {
                 toolbarAnimState = 'idle';
                 if (typeof callback === 'function') callback();

@@ -102,14 +102,38 @@
         /* Ajuste de Rolagem Global para conteúdo passar por baixo do Header Squircles */
         html { scroll-padding-top: 130px; }
 
-        /* Transição premium para os itens da pílula */
+        /* Estado base dos botões: Transição suave em curva */
         #global-toolbar > div {
-            transition:
-                transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
-                width 700ms cubic-bezier(0.22, 1, 0.36, 1),
-                padding 700ms cubic-bezier(0.22, 1, 0.36, 1),
-                margin 700ms cubic-bezier(0.22, 1, 0.36, 1);
+            transition: max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.4s ease,
+                        padding 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        margin 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: center;
+            will-change: transform, opacity, max-width;
+            
+            /* Um limite flexível para permitir o recolhimento */
+            max-width: 300px; 
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        /* O item clicado cresce e ganha destaque */
+        #global-toolbar > div.active-item {
+            transform: scale(1.05);
+        }
+        
+        /* Os itens não clicados encolhem e somem sem quebrar o flexbox */
+        #global-toolbar > div.hidden-item {
+            max-width: 0px !important;
+            transform: scale(0.8);
+            opacity: 0 !important;
+            pointer-events: none;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            border-width: 0 !important;
         }
         
         /* Animações de Swipe para as Abas */
@@ -1465,7 +1489,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.3.1';
+        const FLOWME_VERSION = 'beta-3.3.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1743,109 +1767,40 @@
         }
         
        // ================= MAESTRO DA PÍLULA FLUTUANTE (VERSÃO SIMULTÂNEA) =================
-        let lastClickedIndex = 1; 
-
-        function setToolbarFocus(targetId, callback) {
-            const items = [
-                'global-toolbar-filter',  // Calendário (0)
-                'global-toolbar-alerts',  // Alertas (1)
-                'global-toolbar-save'     // Salvar (2)
-            ];
+        // 1. Declaramos o estado inicial fora da função para rastrear a animação
+        let toolbarAnimState = 'idle';
+        const TOOLBAR_ANIM_TIME = 500; // Deve espelhar os 0.5s do CSS
         
-            const isRestoring = !targetId;
-
-            const clickedEl = document.getElementById(targetId);
-            if (clickedEl) {
-                clickedEl.classList.add('scale-105', 'shadow-lg');
-                setTimeout(() => clickedEl.classList.remove('scale-105', 'shadow-lg'), 1000);
-            }
+        function setToolbarFocus(targetId, callback = null) {
+            // 2. Trava de segurança: Se já estiver animando, ignora novos cliques
+            if (toolbarAnimState !== 'idle') return;
             
-            if (!isRestoring) {
-                const targetIndex = items.indexOf(targetId);
-                lastClickedIndex = targetIndex; 
-                const otherItems = items.filter(id => id !== targetId);
+            const items = document.querySelectorAll('#global-toolbar > div');
+            toolbarAnimState = 'animating';
         
-                otherItems.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (!el) return;
-        
-                    const index = items.indexOf(id);
-                    const direction = index < targetIndex ? 'translate-x-6' : '-translate-x-6';
-        
-                    el.classList.remove(
-                        'hidden',
-                        '!w-0',
-                        '!opacity-0',
-                        'translate-x-6',
-                        '-translate-x-6',
-                        '!px-0',
-                        '!mx-0'
-                    );
-                    el.style.pointerEvents = 'none';
-        
-                    el.classList.add(direction);
+            if (targetId === null) {
+                // 3. RESTAURAR: Remove as classes, o CSS faz a mágica de reverter
+                items.forEach(el => {
+                    el.classList.remove('active-item', 'hidden-item');
                 });
-        
-                setTimeout(() => {
-                    otherItems.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (!el) return;
-                        el.classList.add(
-                            '!opacity-0',
-                            '!w-0',
-                            '!px-0',
-                            '!mx-0'
-                        );
-                    });
-                }, 350);
-        
-                setTimeout(() => {
-                    otherItems.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (!el) return;
-                        el.classList.add('hidden');
-                    });
-                    if (callback) callback();
-                }, 1000);
-        
             } else {
-                const allItems = items;
-        
-                allItems.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (!el) return;
-        
-                    if (el.classList.contains('hidden')) {
-                        el.classList.remove('hidden');
-                        const index = items.indexOf(id);
-                        const direction = index < lastClickedIndex ? 'translate-x-6' : '-translate-x-6';
-                        
-                        el.classList.add('!opacity-0', direction);
+                // 4. EXPANDIR: Aplica os estados no alvo e nos vizinhos
+                items.forEach(el => {
+                    if (el.id === targetId) {
+                        el.classList.add('active-item');
+                        el.classList.remove('hidden-item');
                     } else {
-                        el.classList.remove('!opacity-0', 'translate-x-6', '-translate-x-6');
-                        el.style.pointerEvents = 'auto';
+                        el.classList.add('hidden-item');
+                        el.classList.remove('active-item');
                     }
                 });
-        
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        allItems.forEach(id => {
-                            const el = document.getElementById(id);
-                            if (!el) return;
-                            el.classList.remove(
-                                '!opacity-0',
-                                '!w-0',
-                                '!px-0',
-                                '!mx-0',
-                                'translate-x-6',
-                                '-translate-x-6'
-                            );
-                            el.style.pointerEvents = 'auto';
-                        });
-                        if (callback) callback();
-                    });
-                });
             }
+
+            // 5. Sincronização segura: Libera a interface no momento exato em que o CSS termina
+            setTimeout(() => {
+                toolbarAnimState = 'idle';
+                if (typeof callback === 'function') callback();
+            }, TOOLBAR_ANIM_TIME);
         }
         
         // ================= FILTRO GLOBAL EXPANSÍVEL =================

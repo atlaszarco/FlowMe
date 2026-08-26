@@ -1211,7 +1211,8 @@
                 cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico",
                 opt_select: "Selecione...",
                 lbl_alert: "Alerta", lbl_alerts: "Alertas",
-                btn_saving: "Salvando...", btn_saved: "Salvo às"
+                btn_saving: "Salvando...", btn_saved: "Salvo às",
+                toast_sync_start: "Atualizando dados da nuvem...", toast_sync_success: "Nuvem sincronizada!", toast_sync_offline: "Modo offline: usando dados locais."
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1245,7 +1246,8 @@
                 cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)", acc_summary: "Financial Summary", acc_filters: "Filters & History",
                 opt_select: "Select...",
                 lbl_alert: "Alert", lbl_alerts: "Alerts",
-                btn_saving: "Saving...", btn_saved: "Saved at"
+                btn_saving: "Saving...", btn_saved: "Saved at",
+                toast_sync_start: "Updating cloud data...", toast_sync_success: "Cloud synced!", toast_sync_offline: "Offline mode: using local data."
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1279,7 +1281,8 @@
                 cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)", acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial",
                 opt_select: "Seleccione...",
                 lbl_alert: "Alerta", lbl_alerts: "Alertas",
-                btn_saving: "Guardando...", btn_saved: "Guardado a las"
+                btn_saving: "Guardando...", btn_saved: "Guardado a las",
+                toast_sync_start: "Actualizando datos de la nube...", toast_sync_success: "¡Nube sincronizada!", toast_sync_offline: "Modo sin conexión: usando datos locales."
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1313,7 +1316,8 @@
                 cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)", acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique",
                 opt_select: "Sélectionner...",
                 lbl_alert: "Alerte", lbl_alerts: "Alertes",
-                btn_saving: "Enregistrement...", btn_saved: "Enregistré à"
+                btn_saving: "Enregistrement...", btn_saved: "Enregistré à",
+                toast_sync_start: "Mise à jour des données du cloud...", toast_sync_success: "Cloud synchronisé !", toast_sync_offline: "Mode hors ligne : utilisation des données locales."
             }
         };
 
@@ -1461,7 +1465,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.3.0';
+        const FLOWME_VERSION = 'beta-3.3.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -4213,19 +4217,19 @@
                 updateCloudUI(true);
         
                 (async () => {
-                    try {
-                        const file = await findCloudFile();
-                        if (file) {
-                            showToast?.('Atualizando dados da nuvem...', 'info', 2000);
-                            await loadFromCloud(true);
-                            showToast?.('Nuvem sincronizada!', 'success', 2000);
-                        } else {
-                            render();
-                        }
-                    } catch (syncError) {
-                        console.error('Erro na sincronização inicial:', syncError);
-                        showToast?.('Modo offline: usando dados locais.', 'warning', 3000);
-                        render();
+            try {
+                const file = await findCloudFile();
+                if (file) {
+                    showToast?.(t('toast_sync_start'), 'info', 2000); 
+                    await loadFromCloud(true);
+                    showToast?.(t('toast_sync_success'), 'success', 2000);
+                } else {
+                    render();
+                }
+            } catch (syncError) {
+                console.error('Erro na sincronização inicial:', syncError);
+                showToast?.(t('toast_sync_offline'), 'warning', 3000);
+                render();
                     }
                 })();
         
@@ -4252,12 +4256,15 @@
         }
 
         async function fetchUserInfo() {
-            if(!accessToken) return false;
+            if (!accessToken) return false;
             try {
                 const resp = await fetch('https://www.googleapis.com/drive/v3/about?fields=user', {
                     headers: { 'Authorization': 'Bearer ' + accessToken }
                 });
-                if(!resp.ok) throw new Error('Token expirado');
+                if (!resp.ok) {
+                    if (resp.status === 401) throw new Error('UNAUTHORIZED');
+                    throw new Error('Erro na requisição');
+                }
                 const data = await resp.json();
                 const user = data.user;
                 document.getElementById('cloud-user-name').textContent = user.displayName;
@@ -4267,8 +4274,7 @@
                 updateCloudUI(true);
                 return true;
             } catch (err) {
-                console.error("Token inválido", err);
-                handleSignoutClick();
+                console.error("fetchUserInfo erro:", err);
                 return false;
             }
         }

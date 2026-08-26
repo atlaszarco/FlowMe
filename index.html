@@ -1368,8 +1368,6 @@
                 }
             }
 
-            const versionSpan = document.querySelector('[data-i18n="cfg_version"]');
-            if(versionSpan) versionSpan.innerHTML = t('cfg_version') + ' ' + FLOWME_VERSION;
             if (typeof updateLangUI === 'function') updateLangUI(lang); 
 
             if (typeof changeGlobalMonth === 'function') {
@@ -1463,7 +1461,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.7';
+        const FLOWME_VERSION = 'beta-3.2.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -4182,27 +4180,30 @@
                         const isValid = await fetchUserInfo();
         
                         if (isValid) {
+                            // 1. ESCONDE A TELA IMEDIATAMENTE (O usuário já pode usar o app)
+                            hideSplashScreen();
+                            
                             try {
-                                // Sincronização automática ao abrir/recarregar
                                 const file = await findCloudFile();
         
                                 if (file) {
+                                    // 2. INDICADOR SUTIL DE INÍCIO (Informa sem travar)
+                                    showToast('Atualizando dados da nuvem...', 'info', 2000);
+                                    
+                                    // Sincroniza os dados no background
                                     await loadFromCloud(true);
+                                    
+                                    // 3. INDICADOR SUTIL DE SUCESSO (Feedback positivo)
+                                    showToast('Nuvem sincronizada!', 'success', 2000);
                                 } else {
-                                    // Sem backup na nuvem: usa o localStorage
                                     render();
                                 }
                             } catch (syncError) {
-                                console.error(
-                                    'Erro na sincronização inicial com o Google Drive:',
-                                    syncError
-                                );
-        
-                                // Mesmo com falha da nuvem, mostra o que estiver no localStorage
+                                console.error('Erro na sincronização inicial:', syncError);
+                                // Opcional: Toast de aviso caso a internet caia no meio do processo
+                                showToast('Modo offline: usando dados locais.', 'warning', 3000);
                                 render();
                             }
-        
-                            setTimeout(hideSplashScreen, 1000);
                             return;
                         }
                     }
@@ -4221,7 +4222,6 @@
                 loginBtn.classList.add('flex');
             }
         
-            // Garante a renderização dos dados locais mesmo sem login
             render();
         }
 

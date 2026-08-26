@@ -1461,7 +1461,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.2.9';
+        const FLOWME_VERSION = 'beta-3.3.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -4171,56 +4171,77 @@
             try {
                 const tokenData = localStorage.getItem('flowme_google_token');
         
-                if (tokenData) {
-                    const parsed = JSON.parse(tokenData);
+                if (!tokenData) {
+                    handleSignoutClick();
+                    if (spinner) spinner.classList.add('hidden');
+                    if (loginBtn) {
+                        loginBtn.classList.remove('hidden');
+                        loginBtn.classList.add('flex');
+                    }
+                    render();
+                    return;
+                }
         
-                    if (parsed.expires > new Date().getTime()) {
-                        accessToken = parsed.token;
+                const parsed = JSON.parse(tokenData);
         
-                        try {
-                            await fetchUserInfo();
-                        } catch (userError) {
-                            console.warn("Aviso: Falha ao carregar info do usuário (pode estar offline).", userError);
-                        }
+                if (parsed.expires <= new Date().getTime()) {
+                    localStorage.removeItem('flowme_google_token');
+                    handleSignoutClick();
+                    if (spinner) spinner.classList.add('hidden');
+                    if (loginBtn) {
+                        loginBtn.classList.remove('hidden');
+                        loginBtn.classList.add('flex');
+                    }
+                    render();
+                    return;
+                }
         
-                        hideSplashScreen();
-                        
-                        try {
-                            const file = await findCloudFile();
+                accessToken = parsed.token;
         
-                            if (file) {
-                                showToast('Atualizando dados da nuvem...', 'info', 2000);
-                                await loadFromCloud(true);
-                                showToast('Nuvem sincronizada!', 'success', 2000);
-                            } else {
-                                render();
-                            }
-                        } catch (syncError) {
-                            console.error('Erro na sincronização inicial:', syncError);
-                            showToast('Modo offline: usando dados locais.', 'warning', 3000);
+                const userValid = await fetchUserInfo();
+                if (!userValid) {
+                    if (spinner) spinner.classList.add('hidden');
+                    if (loginBtn) {
+                        loginBtn.classList.remove('hidden');
+                        loginBtn.classList.add('flex');
+                    }
+                    render();
+                    return;
+                }
+        
+                hideSplashScreen();
+                updateCloudUI(true);
+        
+                (async () => {
+                    try {
+                        const file = await findCloudFile();
+                        if (file) {
+                            showToast?.('Atualizando dados da nuvem...', 'info', 2000);
+                            await loadFromCloud(true);
+                            showToast?.('Nuvem sincronizada!', 'success', 2000);
+                        } else {
                             render();
                         }
-                        
-                        return;
-                    } else {
-                        localStorage.removeItem('flowme_google_token');
+                    } catch (syncError) {
+                        console.error('Erro na sincronização inicial:', syncError);
+                        showToast?.('Modo offline: usando dados locais.', 'warning', 3000);
+                        render();
                     }
-                }
+                })();
+        
+                return;
+        
             } catch (error) {
-                console.error("Erro na leitura do token:", error);
+                console.error('Erro inesperado:', error);
                 localStorage.removeItem('flowme_google_token');
+                handleSignoutClick();
+                if (spinner) spinner.classList.add('hidden');
+                if (loginBtn) {
+                    loginBtn.classList.remove('hidden');
+                    loginBtn.classList.add('flex');
+                }
+                render();
             }
-        
-            handleSignoutClick();
-        
-            if (spinner) spinner.classList.add('hidden');
-        
-            if (loginBtn) {
-                loginBtn.classList.remove('hidden');
-                loginBtn.classList.add('flex');
-            }
-        
-            render();
         }
 
         function hideSplashScreen() {

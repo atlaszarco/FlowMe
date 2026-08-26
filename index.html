@@ -149,11 +149,7 @@
 
         /* ANIMAÇÕES DA PÍLULA */
         /* Calendário */
-        #filter-wrapper:not(.is-expanded):hover #filter-icon-display {
-            animation: flip-and-wait 3s infinite;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
+        /* O JavaScript controla o ciclo de 3s */
         
         /* Alertas */
         #btn-alerts-bell:hover i {
@@ -179,6 +175,16 @@
             12%  { transform: perspective(400px) rotateY(180deg); }
             24%  { transform: perspective(400px) rotateY(360deg); }
             100% { transform: perspective(400px) rotateY(360deg); }
+        }
+
+        .calendar-flipping {
+            animation: calendar-flip 0.5s ease-in-out;
+        }
+        
+        @keyframes calendar-flip {
+            0% {transform: perspective(400px) rotateY(0deg); }
+            50% {transform: perspective(400px) rotateY(180deg); }
+            100% {transform: perspective(400px) rotateY(360deg); }
         }
 
         @keyframes ring-and-wait {
@@ -332,7 +338,7 @@
             <div id="filter-closed-catcher" class="absolute inset-0 z-30 cursor-pointer" onclick="openFilter()"></div>
 
             <!-- Botão do Ícone Fixo (Esquerda) -->
-            <button id="btn-filter-icon" onmouseenter="startCalendarHover()" onclick="toggleFilterMode(event)" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-none">
+            <button id="btn-filter-icon" onmouseenter="startCalendarHover()" onmouseleave="stopCalendarHover()" onclick="toggleFilterMode(event)" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-none">
                 <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
             </button>
 
@@ -1561,7 +1567,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.3.8';
+        const FLOWME_VERSION = 'beta-3.3.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1893,22 +1899,70 @@
         let isCalendarOpening = false;
 
         function startCalendarHover() {
+            const btn = document.getElementById('btn-filter-icon');
             const icon = document.getElementById('filter-icon-display');
-            if (!icon || isFilterExpanded) return;
         
-            const originalClasses = icon.className;
+            if (!btn || !icon || isFilterExpanded || isCalendarOpening) return;
+        
+            clearInterval(calendarHoverInterval);
+        
+            btn.classList.add('js-animating');
+        
+            icon.classList.remove('calendar-flipping');
+            void icon.offsetWidth;
+            icon.classList.add('calendar-flipping');
         
             setTimeout(() => {
-                if (!isFilterExpanded) {
-                    icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                if (!isFilterExpanded && !isCalendarOpening) {
+                    icon.className = currentFilterMode === 'month'
+                        ? 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300'
+                        : 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
                 }
-            }, 360);
+            }, 180);
         
-            setTimeout(() => {
-                if (!isFilterExpanded) {
-                    updateFilterUI();
+            calendarHoverInterval = setInterval(() => {
+                if (isFilterExpanded || isCalendarOpening) return;
+        
+                const icon = document.getElementById('filter-icon-display');
+                if (!icon) return;
+        
+                icon.classList.remove('calendar-flipping');
+                void icon.offsetWidth;
+                icon.classList.add('calendar-flipping');
+        
+                setTimeout(() => {
+                    if (isFilterExpanded || isCalendarOpening) return;
+        
+                    icon.className = icon.classList.contains('fa-calendar-days')
+                        ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300'
+                        : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                }, 180);
+        
+            }, 3000);
+        }
+
+        function stopCalendarHover() {
+            clearInterval(calendarHoverInterval);
+        
+            const btn = document.getElementById('btn-filter-icon');
+            const icon = document.getElementById('filter-icon-display');
+        
+            if (btn) {
+                btn.classList.remove('js-animating');
+            }
+        
+            if (icon) {
+                icon.classList.remove('calendar-flipping');
+        
+                icon.style.transform = 'rotateY(0deg) scale(1)';
+                icon.style.opacity = '1';
+        
+                if (!isFilterExpanded && !isCalendarOpening) {
+                    icon.className = currentFilterMode === 'month'
+                        ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300'
+                        : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
                 }
-            }, 720);
+            }
         }
         
         function openFilter() {

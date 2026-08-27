@@ -205,7 +205,7 @@
 
         
         /* Salvar */
-        #btn-manual-save:hover i {
+        #btn-manual-save:hover:not(.is-saving) i {
             animation: cloud-and-wait 3s infinite;
         }
         
@@ -1583,7 +1583,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.4.2';
+        const FLOWME_VERSION = 'beta-3.4.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

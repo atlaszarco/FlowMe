@@ -348,13 +348,13 @@
     
     <!-- 1. FILTRO EXPANSÍVEL (CENTRALIZADO QUANDO ABERTO) -->
     <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-center">
-        <div id="filter-wrapper" class="group flex items-center justify-start btn-filter-light dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0" style="width: 130px;">
+        <div id="filter-wrapper" onmouseenter="startCalendarHover()" onmouseleave="stopCalendarHover()" class="group flex items-center justify-start btn-filter-light dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white h-full rounded-2xl transition-all duration-500 shadow-md relative overflow-hidden shrink-0" style="width: 130px;">
             
             <!-- CAMADA INVISÍVEL (Captura o clique quando fechado e protege os inputs) -->
             <div id="filter-closed-catcher" class="absolute inset-0 z-10 cursor-pointer" onclick="openFilter()"></div>
 
             <!-- Botão do Ícone Fixo (Esquerda) -->
-            <button id="btn-filter-icon" onmouseenter="startCalendarHover()" onmouseleave="stopCalendarHover()" onclick="isFilterExpanded ? toggleFilterMode(event) : openFilter()" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-auto">
+            <button id="btn-filter-icon" onclick="isFilterExpanded ? toggleFilterMode(event) : openFilter()" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-auto">
                 <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
             </button>
 
@@ -1583,7 +1583,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.4.1';
+        const FLOWME_VERSION = 'beta-3.4.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

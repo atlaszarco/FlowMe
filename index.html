@@ -163,9 +163,9 @@
         }
         
         @keyframes calendar-flip {
-            0% {transform: perspective(400px) rotateY(0deg); }
-            50% {transform: perspective(400px) rotateY(180deg); }
-            100% {transform: perspective(400px) rotateY(360deg); }
+            0%   { transform: perspective(400px) rotateY(0deg); }
+            50%  { transform: perspective(400px) rotateY(90deg); }
+            100% { transform: perspective(400px) rotateY(0deg); }
         }
         
         /* Alertas */
@@ -1583,7 +1583,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.4.0';
+        const FLOWME_VERSION = 'beta-3.4.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1914,6 +1914,32 @@
         let calendarHoverInterval;
         let isCalendarOpening = false;
 
+        function setCalendarGlyph(icon, mode) {
+            icon.classList.remove('fa-regular', 'fa-solid', 'fa-calendar', 'fa-calendar-days');
+            if (mode === 'month') {
+                icon.classList.add('fa-regular', 'fa-calendar');
+            } else {
+                icon.classList.add('fa-solid', 'fa-calendar-days');
+            }
+        }
+
+        function runCalendarFlip(icon, nextMode) {
+            icon.classList.remove('calendar-flipping');
+            void icon.offsetWidth;
+            icon.classList.add('calendar-flipping');
+
+            setTimeout(() => {
+                if (isFilterExpanded || isCalendarOpening) return;
+                setCalendarGlyph(icon, nextMode);
+            }, 250);
+
+            icon.addEventListener('animationend', function onEnd(e) {
+                if (e.animationName !== 'calendar-flip') return;
+                icon.classList.remove('calendar-flipping');
+                icon.removeEventListener('animationend', onEnd);
+            });
+        }
+
         function startCalendarHover() {
             const btn = document.getElementById('btn-filter-icon');
             const icon = document.getElementById('filter-icon-display');
@@ -1923,37 +1949,20 @@
             clearInterval(calendarHoverInterval);
         
             btn.classList.add('js-animating');
-        
-            icon.classList.remove('calendar-flipping');
-            void icon.offsetWidth;
-            icon.classList.add('calendar-flipping');
-        
-            setTimeout(() => {
-                if (!isFilterExpanded && !isCalendarOpening) {
-                    icon.className = currentFilterMode === 'month'
-                        ? 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300'
-                        : 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
-                }
-            }, 180);
-        
+
+            // Primeiro flip: sai do modo atual (currentFilterMode) para o outro.
+            const firstNextMode = currentFilterMode === 'month' ? 'range' : 'month';
+            runCalendarFlip(icon, firstNextMode);
+
             calendarHoverInterval = setInterval(() => {
                 if (isFilterExpanded || isCalendarOpening) return;
         
                 const icon = document.getElementById('filter-icon-display');
                 if (!icon) return;
-        
-                icon.classList.remove('calendar-flipping');
-                void icon.offsetWidth;
-                icon.classList.add('calendar-flipping');
-        
-                setTimeout(() => {
-                    if (isFilterExpanded || isCalendarOpening) return;
-        
-                    icon.className = icon.classList.contains('fa-calendar-days')
-                        ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300'
-                        : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
-                }, 180);
-        
+
+                // Alterna a partir do glifo exibido no momento.
+                const nextMode = icon.classList.contains('fa-calendar-days') ? 'month' : 'range';
+                runCalendarFlip(icon, nextMode);
             }, 3000);
         }
 
@@ -1970,13 +1979,11 @@
             if (icon) {
                 icon.classList.remove('calendar-flipping');
         
-                icon.style.transform = 'rotateY(0deg) scale(1)';
-                icon.style.opacity = '1';
+                icon.style.transform = '';
+                icon.style.opacity = '';
         
                 if (!isFilterExpanded && !isCalendarOpening) {
-                    icon.className = currentFilterMode === 'month'
-                        ? 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300'
-                        : 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                    setCalendarGlyph(icon, currentFilterMode === 'month' ? 'month' : 'range');
                 }
             }
         }

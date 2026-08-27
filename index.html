@@ -2047,6 +2047,7 @@
             
             const isMicro = window.innerWidth < 350;
             const isMobile = window.innerWidth < 1024;
+            const isCompactIcon = window.innerWidth < 640;
 
             // 1. GERAÇÃO BLINDADA DO TEXTO
             if (!state.currentMonth) {
@@ -2136,7 +2137,7 @@
                     wCollapsed = '48px'; 
                 } else {
                     const len = (collapsedText.textContent || '').length;
-                    wCollapsed = isMobile ? `${68 + (len * 8.5)}px` : `${80 + (len * 9.5)}px`;
+                    wCollapsed = isCompactIcon ? `${68 + (len * 8.5)}px` : `${80 + (len * 9.5)}px`;
                 }
                 wrapper.style.width = wCollapsed;
                 

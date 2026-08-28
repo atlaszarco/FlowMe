@@ -1112,10 +1112,21 @@
     <div id="modal-alerts" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
-                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> <span data-i18n="modal_alerts_title">Central de Alertas</span></h3>
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bell text-amber-500 mr-2"></i> <span data-i18n="modal_alerts_title">Notificações</span></h3>
                 <button onclick="closeModal('modal-alerts')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+    
+            <div class="px-4 pt-3 flex gap-2 shrink-0">
+                <button id="notif-tab-alerts" onclick="switchNotifTab('alerts')" class="flex-1 text-xs font-bold py-2 rounded-lg transition bg-amber-400 text-slate-900">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> <span data-i18n="tab_notif_alerts">Alertas</span>
+                </button>
+                <button id="notif-tab-deleted" onclick="switchNotifTab('deleted')" class="flex-1 text-xs font-bold py-2 rounded-lg transition text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <i class="fa-solid fa-trash-can mr-1"></i> <span data-i18n="tab_notif_deleted">Deletados</span>
+                </button>
+            </div>
+    
             <div class="p-4 overflow-y-auto space-y-2" id="alerts-modal-content"></div>
+            <div class="p-4 overflow-y-auto space-y-2 hidden" id="deleted-history-content"></div>
         </div>
     </div>
 
@@ -1576,7 +1587,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.4.5';
+        const FLOWME_VERSION = 'beta-3.4.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2369,6 +2380,7 @@
         
         // ================= SINO DINÂMICO E ANIMAÇÕES =================
         let isAlertsModalOpen = false;
+        let activeNotifTab = 'alerts';
         let isBellOpening = false;
         let bellHoverInterval;
 
@@ -2427,8 +2439,7 @@
             const dictSingular = { pt: 'Alerta', en: 'Alert', es: 'Alerta', fr: 'Alerte' };
             const dictPlural = { pt: 'Alertas', en: 'Alerts', es: 'Alertas', fr: 'Alertes' };
             const alertWord = totalAlerts === 1 ? (t('lbl_alert') || dictSingular[lang]) : (t('lbl_alerts') || dictPlural[lang]);
-            
-            const modalTitle = t('modal_alerts_title') || 'Central de Alertas';
+            const modalTitle = t('modal_alerts_title') || 'Notificações';
 
             let contentHtml = '';
             const isClicked = isAlertsModalOpen;
@@ -4171,7 +4182,7 @@
         }
 
         // ================= ALERTS MODAL =================
-        function openAlertsModal() {
+        function renderAlertsTabContent() {
             const c = document.getElementById('alerts-modal-content'); c.innerHTML = '';
             const todayStr = new Date().toISOString().split('T')[0];
             
@@ -4259,7 +4270,77 @@
                         </div>`;
                 });
             }
+        }
+
+        // Abre o modal de Notificações (chamada pelo sino) e decide qual aba mostrar
+        function openAlertsModal() {
+            renderAlertsTabContent();
+            renderDeletedHistoryList();
+            switchNotifTab(activeNotifTab);
             openModal('modal-alerts');
+        }
+        
+        // Alterna entre a aba "Alertas" e a aba "Deletados"
+        function switchNotifTab(tab) {
+            activeNotifTab = tab;
+        
+            const alertsBtn = document.getElementById('notif-tab-alerts');
+            const deletedBtn = document.getElementById('notif-tab-deleted');
+            const alertsContent = document.getElementById('alerts-modal-content');
+            const deletedContent = document.getElementById('deleted-history-content');
+        
+            const activeCls = 'flex-1 text-xs font-bold py-2 rounded-lg transition bg-amber-400 text-slate-900';
+            const inactiveCls = 'flex-1 text-xs font-bold py-2 rounded-lg transition text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50';
+        
+            if (tab === 'deleted') {
+                alertsContent.classList.add('hidden');
+                deletedContent.classList.remove('hidden');
+                alertsBtn.className = inactiveCls;
+                deletedBtn.className = activeCls;
+                renderDeletedHistoryList(); // sempre atualiza a lista ao entrar nessa aba
+            } else {
+                alertsContent.classList.remove('hidden');
+                deletedContent.classList.add('hidden');
+                alertsBtn.className = activeCls;
+                deletedBtn.className = inactiveCls;
+            }
+        }
+        
+        // Monta a lista de itens excluídos (transações e limites) dentro da aba "Deletados"
+        function renderDeletedHistoryList() {
+            const c = document.getElementById('deleted-history-content');
+            if (!c) return;
+            c.innerHTML = '';
+        
+            const items = state.deletedHistory || [];
+        
+            if (items.length === 0) {
+                c.innerHTML = `<p class="text-sm text-slate-500 text-center py-4" data-i18n="msg_history_empty">Nenhum item excluído recentemente.</p>`;
+                return;
+            }
+        
+            items.forEach(entry => {
+                const isTrx = entry.kind === 'transaction';
+                const label = isTrx ? entry.data.description : entry.data.target;
+                const icon = isTrx
+                    ? (entry.data.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>')
+                    : '<i class="fa-solid fa-bullseye text-pink-500"></i>';
+                const dt = new Date(entry.deletedAt);
+                const dtStr = dt.toLocaleDateString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                const valueStr = isTrx ? formatCurrency(entry.data.value) : '';
+        
+                c.innerHTML += `
+                    <div class="flex items-center justify-between p-2 rounded-lg border bg-slate-50 border-slate-200 dark:bg-slate-800/60 dark:border-slate-700 shadow-sm">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="text-lg shrink-0">${icon}</div>
+                            <div class="min-w-0">
+                                <p class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">${label}</p>
+                                <p class="text-[10px] font-medium text-slate-500 dark:text-slate-400">${t('lbl_deleted_on')} ${dtStr}${valueStr ? ' • ' + valueStr : ''}</p>
+                            </div>
+                        </div>
+                        <button onclick="restoreFromHistory('${entry.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${t('btn_restore')}</button>
+                    </div>`;
+            });
         }
 
         // ================= CSV EXPORT / IMPORT =================

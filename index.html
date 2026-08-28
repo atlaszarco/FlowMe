@@ -984,14 +984,14 @@
                                         <button onclick="setTheme('system')" id="btn-theme-system" class="flex items-center gap-1.5 px-3 py-2 border rounded-lg transition text-xs font-medium"><i class="fa-solid fa-display text-slate-400"></i> <span data-i18n="cfg_theme_sys">Sistema</span></button>
                                     </div>
                                 </div>
-                                <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
+                                <div class="mt-4 pt-2">
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_tab_style">Estilo do Menu Principal:</label>
                                     <select id="cfg-tab-style" onchange="setTabStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
                                         <option value="both" data-i18n="opt_tab_both">Ícone e Texto</option>
                                         <option value="icons" data-i18n="opt_tab_icons">Apenas Ícones</option>
                                     </select>
                                 </div>
-                                <div class="mt-4 border-t border-slate-100 dark:border-slate-700 pt-4">
+                                <div class="mt-4 pt-2">
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_panel_style">Estilo dos Painéis:</label>
                                     <select id="cfg-panel-style" onchange="setPanelStyle(this.value)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
                                         <option value="blocks" data-i18n="opt_panel_blocks">Blocos Expandidos</option>
@@ -1006,34 +1006,47 @@
                 <!-- 4. Alertas e Lembretes -->
                 <div id="cfg-wrap-notif" class="flex flex-col break-inside-avoid transition-all duration-500">
                     <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-notif" onclick="toggleAccordion('cfg-notif')">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bell text-rose-500"></i> <span data-i18n="cfg_alerts_title">Alertas e Lembretes</span></h2>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bell text-rose-500"></i> <span data-i18n="cfg_alerts_title">Alertas e Histórico</span></h2>
                         <i id="acc-icon-cfg-notif" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
                     </button>
                     <div id="acc-content-cfg-notif" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors space-y-3">
-                                <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
-                                    <input type="checkbox" id="cfg-notif" onchange="toggleNotifications(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                                    <span data-i18n="cfg_notif">Ativar Notificações/Alertas</span>
-                                </label>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pre">Avisar quando faltar</span>
-                                    <input type="number" id="cfg-reminder" onchange="setReminderDays(this.value)" min="0" max="30" class="w-16 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs text-center bg-white dark:bg-slate-900 outline-none focus:border-amber-500 dark:text-slate-100 transition-colors">
-                                    <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pos">dia(s)</span>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors space-y-4">
+                                
+                                <!-- Bloco 1: Alertas e Lembretes -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_alerts_section_title">Alertas e Lembretes:</label>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pre">Avisar quando faltar</span>
+                                            <input type="number" id="cfg-reminder" onchange="setReminderDays(this.value)" min="0" max="30" class="w-16 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs text-center bg-white dark:bg-slate-900 outline-none focus:border-amber-500 dark:text-slate-100 transition-colors">
+                                            <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pos">dia(s)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_overdue">Avisar quando passar</span>
+                                            <input type="number" id="cfg-overdue" onchange="setOverdueDays(this.value)" min="0" max="90" class="w-16 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs text-center bg-white dark:bg-slate-900 outline-none focus:border-rose-500 dark:text-slate-100 transition-colors">
+                                            <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pos">dia(s)</span>
+                                        </div>
+                                        <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer w-max">
+                                            <input type="checkbox" id="cfg-notif" onchange="toggleNotifications(this.checked)" class="rounded-sm border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                            <span data-i18n="cfg_notif_label">Ativar alertas no botão de Notificações</span>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_overdue">Avisar quando passar</span>
-                                    <input type="number" id="cfg-overdue" onchange="setOverdueDays(this.value)" min="0" max="90" class="w-16 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs text-center bg-white dark:bg-slate-900 outline-none focus:border-rose-500 dark:text-slate-100 transition-colors">
-                                    <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pos">dia(s)</span>
+                        
+                                <!-- Bloco 2: Histórico de Deletados -->
+                                <div class="mt-4">
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2" data-i18n="cfg_history_section_title">Histórico de Deletados:</label>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_history_retention">Manter histórico por</span>
+                                        <select id="cfg-history-retention" onchange="setHistoryRetention(this.value)" class="w-24 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs bg-white dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                            <option value="30" data-i18n="opt_30_days">30 dias</option>
+                                            <option value="60" data-i18n="opt_60_days">60 dias</option>
+                                            <option value="90" selected data-i18n="opt_90_days">90 dias</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="flex items-center gap-2 mt-3">
-                                    <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_history_retention">Manter histórico por</span>
-                                    <select id="cfg-history-retention" onchange="setHistoryRetention(this.value)" class="w-24 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs bg-white dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                        <option value="30">30 dias</option>
-                                        <option value="60">60 dias</option>
-                                        <option value="90" selected>90 dias</option>
-                                    </select>
-                                </div>
+                        
                             </div>
                         </div>
                     </div>
@@ -1320,9 +1333,9 @@
                 cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar",
                 cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Dados Salvos", btn_delete: "Apagar Dados", modal_wipe_title: "Apagar Dados", lbl_wipe_all: "Marcar todos", lbl_wipe_trx: "Movimentações", lbl_wipe_custom: "Dados Personalizados", lbl_wipe_limits: "Orçamentos e Limites", btn_confirm_wipe: "Apagar Selecionados", msg_wipe_empty: "Selecione algo para apagar!",
                 cfg_acc_title: "Conta e Nuvem", cfg_acc_user: "Usuário Desconectado", cfg_acc_sync: "Última sincronização:", cfg_acc_btn: "Integração Google em breve",
-                cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Lembretes", cfg_theme: "Tema do Aplicativo:", 
+                cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Histórico", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Preto",
-                cfg_notif: "Ativar Notificações/Alertas", cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
+                cfg_rem_pre: "Avisar quando faltar", cfg_rem_overdue: "Avisar quando passar", cfg_rem_pos: "dia(s)", 
                 cfg_credits: "Feito por Mateus Bitarães", cfg_version: "Versão",
                 curr_brl: "Real Brasileiro (R$)", curr_usd: "Dólar Americano ($)", curr_eur: "Euro (€)",
                 opt_month: "Mês:", opt_range: "Período:", str_to: "até",
@@ -1344,7 +1357,7 @@
                 err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar", btn_use: "Usar",
                 cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico",
                 opt_select: "Selecione...",
-                lbl_alert: "Alerta", lbl_alerts: "Alertas",
+                lbl_alert: "Alerta", lbl_alerts: "Alertas", tab_notif_alerts: "Alertas", tab_notif_deleted: "Deletados", cfg_alerts_section_title: "Alertas e Lembretes:", cfg_notif_label: "Ativar alertas no botão de Notificações", cfg_history_section_title: "Histórico de Deletados:", opt_30_days: "30 dias", opt_60_days: "60 dias", opt_90_days: "90 dias",
                 btn_saving: "Salvando...", btn_saved: "Salvo às",
                 toast_sync_start: "Atualizando dados da nuvem...", toast_sync_success: "Nuvem sincronizada!", toast_sync_offline: "Modo offline: usando dados locais.",
                 lbl_deleted_on: "Excluído em", btn_restore: "Restaurar", msg_history_empty: "Nenhum item excluído recentemente.", cfg_history_retention: "Manter histórico por", lbl_wipe_history: "Histórico de Deletados"
@@ -1364,8 +1377,8 @@
                 empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)", dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
                 cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Saved Data", btn_delete: "Wipe Data", modal_wipe_title: "Wipe Data", lbl_wipe_all: "Select All", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Custom Data", lbl_wipe_limits: "Budgets & Limits", btn_confirm_wipe: "Wipe Selected", msg_wipe_empty: "Select something to wipe!",
                 cfg_acc_title: "Account & Cloud", cfg_acc_user: "Logged Out", cfg_acc_sync: "Last sync:", cfg_acc_btn: "Google Integration soon",
-                cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & Reminders", cfg_theme: "App Theme:", cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System", cfg_theme_oled: "Black",
-                cfg_notif: "Enable Notifications/Alerts", cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version",
+                cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & History", cfg_theme: "App Theme:", cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System", cfg_theme_oled: "Black",
+                cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version",
                 curr_brl: "Brazilian Real (R$)", curr_usd: "US Dollar ($)", curr_eur: "Euro (€)", opt_month: "Month:", opt_range: "Range:", str_to: "to",
                 str_received: "Received:", str_paid: "Paid:", str_real: "Real:", str_pending: "Pending:", str_split_pen: "Pending", str_split_paid: "Paid",
                 rem_inc_soon: "income(s) arriving soon", rem_inc_late: "late income(s)", rem_exp_soon: "expense(s) due soon", rem_exp_late: "late expense(s)",
@@ -1380,7 +1393,7 @@
                 err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save", btn_use: "Use",
                 cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)", acc_summary: "Financial Summary", acc_filters: "Filters & History",
                 opt_select: "Select...",
-                lbl_alert: "Alert", lbl_alerts: "Alerts",
+                lbl_alert: "Alert", lbl_alerts: "Alerts", tab_notif_alerts: "Alerts", tab_notif_deleted: "Deleted", cfg_alerts_section_title: "Alerts & Reminders:", cfg_notif_label: "Enable alerts on Notification button", cfg_history_section_title: "Deleted History:", opt_30_days: "30 days", opt_60_days: "60 days", opt_90_days: "90 days",
                 btn_saving: "Saving...", btn_saved: "Saved at",
                 toast_sync_start: "Updating cloud data...", toast_sync_success: "Cloud synced!", toast_sync_offline: "Offline mode: using local data.",
                 lbl_deleted_on: "Deleted on", btn_restore: "Restore", msg_history_empty: "No recently deleted items.", cfg_history_retention: "Keep history for", lbl_wipe_history: "Deleted History"
@@ -1400,8 +1413,8 @@
                 empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)", dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
                 cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Datos Guardados", btn_delete: "Borrar Datos", modal_wipe_title: "Borrar Datos", lbl_wipe_all: "Seleccionar todo", lbl_wipe_trx: "Transacciones", lbl_wipe_custom: "Datos Personalizados", lbl_wipe_limits: "Presupuestos y Límites", btn_confirm_wipe: "Borrar Selección", msg_wipe_empty: "¡Selecciona algo para borrar!",
                 cfg_acc_title: "Cuenta y Nube", cfg_acc_user: "Usuario Desconectado", cfg_acc_sync: "Última sincro:", cfg_acc_btn: "Integración Google pronto",
-                cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Recordatorios", cfg_theme: "Tema de la App:", cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Negro",
-                cfg_notif: "Activar Notificaciones/Alertas", cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión",
+                cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Historial", cfg_theme: "Tema de la App:", cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Negro",
+                cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión",
                 curr_brl: "Real Brasileño (R$)", curr_usd: "Dólar Estadounidense ($)", curr_eur: "Euro (€)", opt_month: "Mes:", opt_range: "Período:", str_to: "hasta",
                 str_received: "Recibido:", str_paid: "Pagado:", str_real: "Real:", str_pending: "Pendiente:", str_split_pen: "Pendiente", str_split_paid: "Pagado",
                 rem_inc_soon: "ingreso(s) cercano(s)", rem_inc_late: "ingreso(s) atrasado(s)", rem_exp_soon: "gasto(s) vence(n) pronto", rem_exp_late: "gasto(s) atrasado(s)",
@@ -1416,8 +1429,7 @@
                 err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar", btn_use: "Usar",
                 cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)", acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial",
                 opt_select: "Seleccione...",
-                lbl_alert: "Alerta", lbl_alerts: "Alertas",
-                btn_saving: "Guardando...", btn_saved: "Guardado a las",
+                lbl_alert: "Alerta", lbl_alerts: "Alertas", tab_notif_alerts: "Alertas", tab_notif_deleted: "Eliminados", cfg_alerts_section_title: "Alertas y Recordatorios:", cfg_notif_label: "Activar alertas en el botón de Notificaciones", cfg_history_section_title: "Historial de Eliminados:", opt_30_days: "30 días", opt_60_days: "60 días", opt_90_days: "90 días",                 btn_saving: "Guardando...", btn_saved: "Guardado a las",
                 toast_sync_start: "Actualizando datos de la nube...", toast_sync_success: "¡Nube sincronizada!", toast_sync_offline: "Modo sin conexión: usando datos locales.",
                 lbl_deleted_on: "Eliminado el", btn_restore: "Restaurar", msg_history_empty: "No hay elementos eliminados recientemente.", cfg_history_retention: "Conservar historial por", lbl_wipe_history: "Historial de eliminados"
             },
@@ -1436,8 +1448,8 @@
                 empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)", dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
                 cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer les données enregistrées", btn_delete: "Effacer Données", modal_wipe_title: "Effacer les données", lbl_wipe_all: "Tout sélectionner", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Données Personnalisées", lbl_wipe_limits: "Budgets et Limites", btn_confirm_wipe: "Effacer la sélection", msg_wipe_empty: "Sélectionnez un élément à effacer !",
                 cfg_acc_title: "Compte et Cloud", cfg_acc_user: "Utilisateur déconnecté", cfg_acc_sync: "Dernière synchro :", cfg_acc_btn: "Intégration Google bientôt",
-                cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Rappels", cfg_theme: "Thème de l'application :", cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système", cfg_theme_oled: "Noir",
-                cfg_notif: "Activer les notifications/alertes", cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version",
+                cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Historique", cfg_theme: "Thème de l'application :", cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système", cfg_theme_oled: "Noir",
+                cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version",
                 curr_brl: "Réal brésilien (R$)", curr_usd: "Dollar américain ($)", curr_eur: "Euro (€)", opt_month: "Mois :", opt_range: "Période :", str_to: "à",
                 str_received: "Reçu :", str_paid: "Payé :", str_real: "Réel :", str_pending: "En attente :", str_split_pen: "En attente", str_split_paid: "Payé",
                 rem_inc_soon: "revenu(s) à venir", rem_inc_late: "revenu(s) en retard", rem_exp_soon: "dépense(s) arrivant à échéance", rem_exp_late: "dépense(s) en retard",
@@ -1452,7 +1464,7 @@
                 err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer", btn_use: "Utiliser",
                 cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)", acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique",
                 opt_select: "Sélectionner...",
-                lbl_alert: "Alerte", lbl_alerts: "Alertes",
+                lbl_alert: "Alerte", lbl_alerts: "Alertes", tab_notif_alerts: "Alertes", tab_notif_deleted: "Supprimés", cfg_alerts_section_title: "Alertes et Rappels :", cfg_notif_label: "Activer les alertes sur le bouton Notifications", cfg_history_section_title: "Historique des suppressions :", opt_30_days: "30 jours", opt_60_days: "60 jours", opt_90_days: "90 jours",
                 btn_saving: "Enregistrement...", btn_saved: "Enregistré à",
                 toast_sync_start: "Mise à jour des données du cloud...", toast_sync_success: "Cloud synchronisé !", toast_sync_offline: "Mode hors ligne : utilisation des données locales.",
                 lbl_deleted_on: "Supprimé le", btn_restore: "Restaurer", msg_history_empty: "Aucun élément supprimé récemment.", cfg_history_retention: "Conserver l'historique pendant", lbl_wipe_history: "Historique des suppressions"
@@ -1603,7 +1615,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.4.7';
+        const FLOWME_VERSION = 'beta-3.4.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

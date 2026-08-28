@@ -282,6 +282,31 @@
             .micro-shrink { padding-left: 0.5rem !important; padding-right: 0.5rem !important; font-size: 0.7rem !important; }
             .micro-icon { font-size: 0.9rem !important; }
         }
+
+        /* Força o cabeçalho do accordion a nunca quebrar em duas linhas */
+        .accordion-header {
+            flex-wrap: nowrap !important;
+        }
+        
+        /* Título do accordion: nunca quebra e truncata com reticências se necessário */
+        .accordion-header h2 {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            min-width: 0; /* permite encolher */
+            flex-shrink: 1; /* permite encolher, mas não quebrar */
+        }
+        
+        /* Bloco de ações (botão + ícone) nunca encolhe */
+        .accordion-header > div {
+            flex-shrink: 0 !important;
+            flex-wrap: nowrap !important;
+        }
+        
+        /* Garante que o botão "Novo" não quebre */
+        .acc-action {
+            white-space: nowrap !important;
+        }
     </style>
 </head>
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
@@ -1614,7 +1639,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.5.1';
+        const FLOWME_VERSION = 'beta-3.5.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

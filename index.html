@@ -1026,6 +1026,14 @@
                                     <input type="number" id="cfg-overdue" onchange="setOverdueDays(this.value)" min="0" max="90" class="w-16 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs text-center bg-white dark:bg-slate-900 outline-none focus:border-rose-500 dark:text-slate-100 transition-colors">
                                     <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_rem_pos">dia(s)</span>
                                 </div>
+                                <div class="flex items-center gap-2 mt-3">
+                                    <span class="text-xs text-slate-600 dark:text-slate-400" data-i18n="cfg_history_retention">Manter histórico por</span>
+                                    <select id="cfg-history-retention" onchange="setHistoryRetention(this.value)" class="w-24 p-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-xs bg-white dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        <option value="30">30 dias</option>
+                                        <option value="60">60 dias</option>
+                                        <option value="90" selected>90 dias</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1244,6 +1252,10 @@
                         <input type="checkbox" id="wipe-limits" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
                         <span data-i18n="lbl_wipe_limits">Orçamentos e Limites</span>
                     </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-history" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_history">Histórico de Deletados</span>
+                    </label>
                 </div>
 
                 <button onclick="executeWipeData()" class="w-full py-2.5 mt-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
@@ -1334,7 +1346,8 @@
                 opt_select: "Selecione...",
                 lbl_alert: "Alerta", lbl_alerts: "Alertas",
                 btn_saving: "Salvando...", btn_saved: "Salvo às",
-                toast_sync_start: "Atualizando dados da nuvem...", toast_sync_success: "Nuvem sincronizada!", toast_sync_offline: "Modo offline: usando dados locais."
+                toast_sync_start: "Atualizando dados da nuvem...", toast_sync_success: "Nuvem sincronizada!", toast_sync_offline: "Modo offline: usando dados locais.",
+                lbl_deleted_on: "Excluído em", btn_restore: "Restaurar", msg_history_empty: "Nenhum item excluído recentemente.", cfg_history_retention: "Manter histórico por", lbl_wipe_history: "Histórico de Deletados"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1369,7 +1382,8 @@
                 opt_select: "Select...",
                 lbl_alert: "Alert", lbl_alerts: "Alerts",
                 btn_saving: "Saving...", btn_saved: "Saved at",
-                toast_sync_start: "Updating cloud data...", toast_sync_success: "Cloud synced!", toast_sync_offline: "Offline mode: using local data."
+                toast_sync_start: "Updating cloud data...", toast_sync_success: "Cloud synced!", toast_sync_offline: "Offline mode: using local data.",
+                lbl_deleted_on: "Deleted on", btn_restore: "Restore", msg_history_empty: "No recently deleted items.", cfg_history_retention: "Keep history for", lbl_wipe_history: "Deleted History"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1404,7 +1418,8 @@
                 opt_select: "Seleccione...",
                 lbl_alert: "Alerta", lbl_alerts: "Alertas",
                 btn_saving: "Guardando...", btn_saved: "Guardado a las",
-                toast_sync_start: "Actualizando datos de la nube...", toast_sync_success: "¡Nube sincronizada!", toast_sync_offline: "Modo sin conexión: usando datos locales."
+                toast_sync_start: "Actualizando datos de la nube...", toast_sync_success: "¡Nube sincronizada!", toast_sync_offline: "Modo sin conexión: usando datos locales.",
+                lbl_deleted_on: "Eliminado el", btn_restore: "Restaurar", msg_history_empty: "No hay elementos eliminados recientemente.", cfg_history_retention: "Conservar historial por", lbl_wipe_history: "Historial de eliminados"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1439,7 +1454,8 @@
                 opt_select: "Sélectionner...",
                 lbl_alert: "Alerte", lbl_alerts: "Alertes",
                 btn_saving: "Enregistrement...", btn_saved: "Enregistré à",
-                toast_sync_start: "Mise à jour des données du cloud...", toast_sync_success: "Cloud synchronisé !", toast_sync_offline: "Mode hors ligne : utilisation des données locales."
+                toast_sync_start: "Mise à jour des données du cloud...", toast_sync_success: "Cloud synchronisé !", toast_sync_offline: "Mode hors ligne : utilisation des données locales.",
+                lbl_deleted_on: "Supprimé le", btn_restore: "Restaurer", msg_history_empty: "Aucun élément supprimé récemment.", cfg_history_retention: "Conserver l'historique pendant", lbl_wipe_history: "Historique des suppressions"
             }
         };
 
@@ -1587,7 +1603,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.4.6';
+        const FLOWME_VERSION = 'beta-3.4.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1628,6 +1644,7 @@
             document.getElementById('cfg-overdue').value = userConfig.overdueDays;
             document.getElementById('cfg-notif').checked = userConfig.notificationsEnabled;
             document.getElementById('cfg-tab-style').value = userConfig.tabStyle;
+            document.getElementById('cfg-history-retention').value = userConfig.historyRetentionDays;
             
             loadState();
             applyFormMode();
@@ -1747,6 +1764,16 @@
         function setReminderDays(days) { userConfig.reminderDays = parseInt(days) || 0; localStorage.setItem('flowme_reminder_days', userConfig.reminderDays); render(); }
         function setOverdueDays(days) { userConfig.overdueDays = parseInt(days) || 0; localStorage.setItem('flowme_overdue_days', userConfig.overdueDays); render(); }
 
+        function setHistoryRetention(days) {
+            userConfig.historyRetentionDays = parseInt(days, 10) || 90;
+            localStorage.setItem('flowme_history_retention', userConfig.historyRetentionDays);
+            purgeOldDeletedHistory(); // limpa registros antigos imediatamente
+            saveState();
+            if (typeof renderDeletedHistoryList === 'function' && activeNotifTab === 'deleted') {
+                renderDeletedHistoryList(); // atualiza a lista se estiver visível
+            }
+        }
+                
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (userConfig.theme === 'system') applyTheme(); });
         const formatCurrency = (val) => val.toLocaleString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', { style: 'currency', currency: userConfig.currency });
 
@@ -1952,8 +1979,6 @@
             if (!btn || !icon || isFilterExpanded || isCalendarOpening) return;
         
             clearInterval(calendarHoverInterval);
-        
-            btn.classList.add('js-animating');
 
             // Primeiro flip: sai do modo atual (currentFilterMode) para o outro.
             const firstNextMode = currentFilterMode === 'month' ? 'range' : 'month';
@@ -1976,10 +2001,6 @@
         
             const btn = document.getElementById('btn-filter-icon');
             const icon = document.getElementById('filter-icon-display');
-        
-            if (btn) {
-                btn.classList.remove('js-animating');
-            }
         
             if (icon) {
                 icon.classList.remove('calendar-flipping');
@@ -2677,21 +2698,25 @@
             document.getElementById('wipe-trx').checked = checked;
             document.getElementById('wipe-custom').checked = checked;
             document.getElementById('wipe-limits').checked = checked;
+            document.getElementById('wipe-history').checked = checked;
         }
 
         function checkWipeAllStatus() {
             const trx = document.getElementById('wipe-trx').checked;
             const custom = document.getElementById('wipe-custom').checked;
             const limits = document.getElementById('wipe-limits').checked;
-            document.getElementById('wipe-all').checked = (trx && custom && limits);
+            const history = document.getElementById('wipe-history').checked;
+            document.getElementById('wipe-all').checked = (trx && custom && limits && history);
         }
 
         function executeWipeData() {
             const trx = document.getElementById('wipe-trx').checked;
             const custom = document.getElementById('wipe-custom').checked;
             const limits = document.getElementById('wipe-limits').checked;
+            const history = document.getElementById('wipe-history').checked;
+            document.getElementById('wipe-all').checked = (trx && custom && limits && history);
 
-            if (!trx && !custom && !limits) {
+            if (!trx && !custom && !limits && !history) {
                 alert(t('msg_wipe_empty'));
                 return;
             }
@@ -2728,6 +2753,10 @@
                 }
 
                 if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+
+                if (history) {
+                    state.deletedHistory = [];
+                }
 
                 closeModal('modal-wipe-data');
             }
@@ -3814,7 +3843,9 @@
             updateAutocompleteLists();
             if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         
-            if (typeof renderDeletedHistoryList === 'function') renderDeletedHistoryList(); // vamos criar essa função na Fase 2
+            if (document.getElementById('modal-alerts') && !document.getElementById('modal-alerts').classList.contains('hidden') && activeNotifTab === 'deleted') {
+            renderDeletedHistoryList();
+            }
         }
         
         function renderLimitsSettings() {

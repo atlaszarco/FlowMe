@@ -1576,7 +1576,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.4.4';
+        const FLOWME_VERSION = 'beta-3.4.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1588,6 +1588,7 @@
             reminderDays: parseInt(localStorage.getItem('flowme_reminder_days') || '3'),
             overdueDays: parseInt(localStorage.getItem('flowme_overdue_days') || '3'),
             notificationsEnabled: localStorage.getItem('flowme_notif') !== 'false',
+            historyRetentionDays: parseInt(localStorage.getItem('flowme_history_retention') || '90'),
             panelStyle: localStorage.getItem('flowme_panel_style') || 'blocks'
         };
 
@@ -2641,6 +2642,10 @@
                 } catch(e) { state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; state.limits = []; } 
             }
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
+            
+            if(!state.deletedHistory) state.deletedHistory = [];
+            purgeOldDeletedHistory();
+            
             state.transactions.forEach(t => {
                 if(t.type === 'despesa' && !t.expenseType) t.expenseType = 'debito';
             });
@@ -3083,6 +3088,7 @@
                 setTimeout(() => {
                     if (toast.parentNode) toast.remove();
                     delete pendingDeletions[trx.id];
+                    addToDeletedHistory('transaction', trx);
                 }, 520);
             }, 6000);
         }
@@ -3716,7 +3722,11 @@
                 if (!document.body.contains(toast)) return;
                 toast.style.transform = 'translate(-50%, 10px) scale(0.9)';
                 toast.style.opacity = '0';
-                setTimeout(() => { toast.remove(); delete pendingLimitDeletions[lim.id]; }, 420);
+                setTimeout(() => {
+                    toast.remove();
+                    delete pendingLimitDeletions[lim.id];
+                    addToDeletedHistory('limit', lim);
+                }, 420);
             }, 6000);
         }
         
@@ -3749,6 +3759,51 @@
         
             saveState(); renderLimitsSettings(); render();
             if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+        
+        // ================= HISTÓRICO DE ITENS DELETADOS =================
+        function addToDeletedHistory(kind, data) {
+            if (!state.deletedHistory) state.deletedHistory = [];
+        
+            state.deletedHistory.unshift({
+                id: data.id,
+                kind, // 'transaction' ou 'limit'
+                data, // cópia completa do objeto original, pra dar pra restaurar depois
+                deletedAt: new Date().toISOString()
+            });
+        
+            purgeOldDeletedHistory();
+            saveState();
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+        
+        function purgeOldDeletedHistory() {
+            if (!state.deletedHistory || state.deletedHistory.length === 0) return;
+            const days = userConfig.historyRetentionDays || 90;
+            const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
+            state.deletedHistory = state.deletedHistory.filter(item => new Date(item.deletedAt).getTime() >= cutoff);
+        }
+        
+        function restoreFromHistory(entryId) {
+            if (!state.deletedHistory) return;
+            const idx = state.deletedHistory.findIndex(e => e.id === entryId);
+            if (idx === -1) return;
+        
+            const entry = state.deletedHistory[idx];
+            if (entry.kind === 'transaction') {
+                state.transactions.push(entry.data);
+            } else if (entry.kind === 'limit') {
+                state.limits.push(entry.data);
+            }
+        
+            state.deletedHistory.splice(idx, 1);
+        
+            saveState(); render(); renderLimitsSettings();
+            if (!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas();
+            updateAutocompleteLists();
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        
+            if (typeof renderDeletedHistoryList === 'function') renderDeletedHistoryList(); // vamos criar essa função na Fase 2
         }
         
         function renderLimitsSettings() {

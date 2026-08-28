@@ -286,15 +286,21 @@
         /* Força o cabeçalho do accordion a nunca quebrar em duas linhas */
         .accordion-header {
             flex-wrap: nowrap !important;
+            gap: 0.5rem; /* espaçamento entre título e botão */
         }
         
-        /* Título do accordion: nunca quebra e truncata com reticências se necessário */
+        /* Título do accordion: ocupa o espaço disponível, mas não encolhe além de um mínimo */
         .accordion-header h2 {
+            flex: 1 1 auto;
+            min-width: 120px; /* evita que encolha demais */
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
-            min-width: 0; /* permite encolher */
-            flex-shrink: 1; /* permite encolher, mas não quebrar */
+        }
+        
+        /* O span interno também não quebra */
+        .accordion-header h2 span {
+            white-space: nowrap !important;
         }
         
         /* Bloco de ações (botão + ícone) nunca encolhe */
@@ -303,7 +309,7 @@
             flex-wrap: nowrap !important;
         }
         
-        /* Garante que o botão "Novo" não quebre */
+        /* Botão "Novo" não quebra */
         .acc-action {
             white-space: nowrap !important;
         }
@@ -1639,7 +1645,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.5.2';
+        const FLOWME_VERSION = 'beta-3.5.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2699,12 +2705,13 @@
                         state.transactions = parsed; 
                         state.invoiceSettings = {defaults:{}, exceptions:{}}; 
                     } else { 
-                        state = { 
-                            transactions: parsed.transactions||[], 
-                            currentMonth: state.currentMonth, 
-                            invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}}, 
-                            limits: parsed.limits||[],
-                            customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] }
+                        state = {
+                            transactions: parsed.transactions || [],
+                            currentMonth: state.currentMonth,
+                            invoiceSettings: parsed.invoiceSettings || { defaults: {}, exceptions: {} },
+                            limits: parsed.limits || [],
+                            customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] },
+                            deletedHistory: parsed.deletedHistory || []
                         }; 
                     }
                 } catch(e) { state.transactions = []; state.invoiceSettings = {defaults:{}, exceptions:{}}; state.limits = []; } 

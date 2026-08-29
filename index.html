@@ -277,8 +277,19 @@
             #tabs-nav button { font-size: 0.75rem !important; padding: 0.4rem 0.75rem !important; }
         }
 
+        .break-inside-avoid {
+            container-type: inline-size;
+        }
+        
+        @container (max-width: 430px) {
+            .accordion-header { padding: 1rem 0.875rem !important; }
+            .accordion-header h2 { font-size: 0.95rem !important; gap: 0.5rem !important; min-width: 0; }
+            .accordion-header h2 span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .accordion-header > div { gap: 0.5rem !important; flex-shrink: 0; }
+            .accordion-header .acc-action { padding: 0.35rem 0.5rem !important; font-size: 0.65rem !important; }
+        }
+        
         @media (max-width: 300px) {
-            /* Força botões menores no filtro e pílula na tela minúscula */
             .micro-shrink { padding-left: 0.5rem !important; padding-right: 0.5rem !important; font-size: 0.7rem !important; }
             .micro-icon { font-size: 0.9rem !important; }
         }
@@ -1645,7 +1656,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.5.4';
+        const FLOWME_VERSION = 'beta-3.5.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

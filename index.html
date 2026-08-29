@@ -75,25 +75,25 @@
         }
 
         /* 2. Elementos Flutuantes (Modais, Ilhas do Header, Pílula e Pop-up Mobile) */
-        .modal-inner, #main-header > div > div, #island-tabs, #global-toolbar, #form-wrapper.fixed {
+        .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed {
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
             border-width: 1px !important;
         }
         /* TEMA CLARO */
-        .modal-inner, #main-header > div > div, #island-tabs, #global-toolbar, #form-wrapper.fixed { 
+        .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed { 
             background-color: rgba(255, 255, 255, 0.6) !important; 
             border-color: rgba(0, 0, 0, 0.15) !important;
         }
         /* TEMA ESCURO */
-        .dark .modal-inner, .dark #main-header > div > div, .dark #island-tabs, .dark #global-toolbar, .dark #form-wrapper.fixed {
+        .dark .modal-inner, .dark #island-logo, .dark #island-name, .dark #island-tabs, .dark #global-toolbar, .dark #form-wrapper.fixed {
             background-color: rgba(15, 23, 42, 0.55) !important; 
             border-color: rgba(255, 255, 255, 0.15) !important; 
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
         }
         /* TEMA PRETO */
-        html.theme-oled .modal-inner, html.theme-oled #main-header > div > div, html.theme-oled #island-tabs, html.theme-oled #global-toolbar, html.theme-oled #form-wrapper.fixed {
+        html.theme-oled .modal-inner, html.theme-oled #island-logo, html.theme-oled #island-name, html.theme-oled #island-tabs, html.theme-oled #global-toolbar, html.theme-oled #form-wrapper.fixed {
             background-color: rgba(0, 0, 0, 0.5) !important; 
             border-color: rgba(255, 255, 255, 0.25) !important; 
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
@@ -101,6 +101,41 @@
         
         /* Ajuste de Rolagem Global para conteúdo passar por baixo do Header Squircles */
         html { scroll-padding-top: 130px; }
+        
+        /* ================= MITOSE DO CABEÇALHO (LOGO + NOME) ================= */
+        #island-name {
+            transition: max-width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.5s ease,
+                        padding 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                        margin 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                        border-width 0.4s ease;
+            max-width: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+            opacity: 0;
+            margin-left: -12px;
+            border-width: 0px !important;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #island-name.is-open {
+            max-width: 220px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            opacity: 1;
+            margin-left: 0px;
+            border-width: 1px !important;
+        }
+
+        @media (min-width: 640px) {
+            #island-name.is-open { padding-left: 1.25rem; padding-right: 1.25rem; }
+        }
+
+        /* A pílula de abas encolhe temporariamente pra abrir espaço pro nome, no celular */
+        #island-tabs.temp-compact button span[data-i18n] { display: none !important; }
+        #island-tabs.temp-compact button i { margin-right: 0 !important; }
+        #island-tabs.temp-compact button { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
         
         /* ================= PÍLULA FLUTUANTE ================= */
         /* Estado base dos botões: Transição suave em curva */
@@ -352,11 +387,20 @@
         <div class="relative max-w-7xl mx-auto flex justify-between items-center gap-4 h-14 sm:h-16">
             
             <!-- ILHA 1: LOGO E NOME (ESTÁTICO) -->
-            <div class="h-full px-4 sm:px-5 pointer-events-auto bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md rounded-2xl sm:rounded-[20px] border border-white/40 dark:border-slate-700/50 shadow-sm flex items-center justify-center gap-3 shrink-0">
-                <div class="bg-emerald-500 w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
-                    <i class="fa-solid fa-dollar-sign text-xl sm:text-2xl font-bold"></i>
+            <!-- GRUPO ESQUERDO: Logo + Nome -->
+            <div id="header-left-group" class="h-full flex items-center gap-3 shrink-0">
+
+                <!-- SQUIRCLE A: LOGO -->
+                <div id="island-logo" class="h-full px-4 sm:px-5 pointer-events-auto bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md rounded-2xl sm:rounded-[20px] border border-white/40 dark:border-slate-700/50 shadow-sm flex items-center justify-center shrink-0">
+                    <div class="bg-emerald-500 w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
+                        <i class="fa-solid fa-dollar-sign text-xl sm:text-2xl font-bold"></i>
+                    </div>
                 </div>
-                <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-800 dark:text-white whitespace-nowrap">FlowMe</h1>
+
+                <!-- SQUIRCLE B: NOME -->
+                <div id="island-name" class="h-full pointer-events-auto bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md rounded-2xl sm:rounded-[20px] border border-white/40 dark:border-slate-700/50 shadow-sm flex items-center justify-center shrink-0">
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-800 dark:text-white whitespace-nowrap">FlowMe</h1>
+                </div>
             </div>
             
             <!-- ILHA 2: PÍLULA DE ABAS (Direita) -->
@@ -1656,7 +1700,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.5.5';
+        const FLOWME_VERSION = 'beta-3.5.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1943,6 +1987,41 @@
                 if (style === 'icons') icon.classList.remove('mr-1');
                 else icon.classList.add('mr-1');
             });
+        }
+
+        // ================= MITOSE DO CABEÇALHO (LOGO + NOME) =================
+        let headerMergeTimer = null;
+
+        function openHeaderName() {
+            const nameIsland = document.getElementById('island-name');
+            if (nameIsland) nameIsland.classList.add('is-open');
+        }
+
+        function closeHeaderName() {
+            const nameIsland = document.getElementById('island-name');
+            const tabsIsland = document.getElementById('island-tabs');
+            if (nameIsland) nameIsland.classList.remove('is-open');
+            setTimeout(() => { if (tabsIsland) tabsIsland.classList.remove('temp-compact'); }, 300);
+        }
+
+        function runHeaderIntroAnimation() {
+            setTimeout(() => {
+                const tabsIsland = document.getElementById('island-tabs');
+                const isDesktop = getResponsiveProfile() === 'desktop';
+
+                if (!isDesktop && tabsIsland) tabsIsland.classList.add('temp-compact');
+
+                openHeaderName();
+
+                if (isDesktop) return;
+
+                headerMergeTimer = setTimeout(closeHeaderName, 3000);
+                window.addEventListener('scroll', () => {
+                    clearTimeout(headerMergeTimer);
+                    closeHeaderName();
+                }, { once: true });
+
+            }, 500);
         }
         
        // ================= MAESTRO DA PÍLULA FLUTUANTE =================
@@ -4587,6 +4666,7 @@
             if(!splash) return;
             splash.classList.add('opacity-0');
             setTimeout(() => splash.classList.add('hidden'), 500);
+            runHeaderIntroAnimation();
         }
 
         async function fetchUserInfo() {

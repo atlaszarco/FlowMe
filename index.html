@@ -1645,7 +1645,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.5.3';
+        const FLOWME_VERSION = 'beta-3.5.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2781,6 +2781,10 @@
                     state.limits = [];
                 }
 
+                if (history) {
+                    state.deletedHistory = [];
+                }
+                
                 // Salva tudo localmente e recarrega os visuais corretos
                 saveState();
                 render();
@@ -2796,10 +2800,6 @@
                 }
 
                 if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
-
-                if (history) {
-                    state.deletedHistory = [];
-                }
 
                 closeModal('modal-wipe-data');
             }
@@ -4744,7 +4744,16 @@
                 let parsed = await response.json();
 
                 if(Array.isArray(parsed)) { state.transactions = parsed; state.invoiceSettings = {defaults:{}, exceptions:{}}; }
-                else if (parsed.transactions) { state = { transactions: parsed.transactions||[], currentMonth: state.currentMonth, invoiceSettings: parsed.invoiceSettings||{defaults:{}, exceptions:{}}, limits: parsed.limits||[] }; }
+                else if (parsed.transactions) {
+                    state = {
+                        transactions: parsed.transactions || [],
+                        currentMonth: state.currentMonth,
+                        invoiceSettings: parsed.invoiceSettings || {defaults:{}, exceptions:{}},
+                        limits: parsed.limits || [],
+                        customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] },
+                        deletedHistory: parsed.deletedHistory || []
+                    };
+                }
 
                 // Repare que adicionei o renderLimitsSettings() aqui também, para que a tela de limites se atualize automaticamente se você puxar as regras da nuvem!
                 saveState(); render(); renderLimitsSettings(); updateAutocompleteLists(); switchTab('transacoes');

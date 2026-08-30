@@ -1447,14 +1447,19 @@
             </div>
     
             <!-- Rodapé Fixo -->
-            <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex justify-between items-center">
-                <div>
+            <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex justify-between items-center gap-3">
+                <div class="shrink-0">
                     <p class="text-[10px] text-slate-500 uppercase font-semibold">Total</p>
                     <h2 id="market-total-value" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0,00</h2>
                 </div>
-                <button type="button" onclick="clearMarketList()" class="text-xs text-rose-600 dark:text-rose-400 font-bold px-3 py-2 rounded-lg border border-rose-200 dark:border-rose-800 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition">
-                    <i class="fa-solid fa-trash-can mr-1"></i> Limpar tudo
-                </button>
+                <div class="flex flex-col gap-2 items-end shrink-0">
+                    <button type="button" onclick="goToSaveMarketPurchase()" class="w-full justify-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar como Gasto
+                    </button>
+                    <button type="button" onclick="clearMarketList()" class="text-[11px] text-rose-600 dark:text-rose-400 font-bold hover:underline">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Limpar tudo
+                    </button>
+                </div>
             </div>
     
         </div>
@@ -1766,7 +1771,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.5.9';
+        const FLOWME_VERSION = 'beta-3.6.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1998,12 +2003,12 @@
             
             // Controle de visibilidade do Botão FAB (aparece apenas em transações)
             const fab = document.getElementById('fab-form');
+            const fabMarket = document.getElementById('fab-market');
             if (fab) {
-                if (tabId === 'transacoes') {
-                    fab.style.display = '';
-                } else {
-                    fab.style.display = 'none';
-                }
+                fab.style.display = (tabId === 'transacoes') ? '' : 'none';
+            }
+            if (fabMarket) {
+                fabMarket.style.display = (tabId === 'transacoes') ? '' : 'none';
             }
         }
         
@@ -2442,6 +2447,7 @@
         // ================= MODO MERCADO (CALCULADORA) =================
         let marketList = [];
         let marketQtyTemp = 1;
+        let marketPendingSave = false;
         
         function openMarketMode() {
             document.getElementById('market-price').value = '';
@@ -2523,6 +2529,38 @@
         
             const total = marketList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             document.getElementById('market-total-value').textContent = formatCurrency(total);
+        }
+
+        function goToSaveMarketPurchase() {
+            if (marketList.length === 0) {
+                alert('Adicione pelo menos um item antes de salvar.');
+                return;
+            }
+        
+            const total = marketList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+            closeModal('modal-market');
+        
+            // Garante que o formulário está limpo (sem edição pendente) antes de preencher
+            cancelEdit();
+        
+            // Muda o tipo para Despesa e preenche os campos padrão
+            document.querySelector('input[name="type"][value="despesa"]').checked = true;
+            toggleTypeFields('despesa');
+        
+            document.getElementById('description').value = 'Compras no Mercado';
+            document.getElementById('value').value = formatMaskedValue(total);
+            document.getElementById('category').value = 'Mercado';
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        
+            // Avisa o formulário que, quando for salvo, a lista do mercado deve ser limpa
+            marketPendingSave = true;
+        
+            checkLimitsInRealTime();
+        
+            // Abre o formulário (no celular vira modal; no desktop já está na tela)
+            toggleMobileForm(true);
+            setTimeout(() => document.getElementById('form-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' }), 350);
         }
 
 // ================= BLOCO 10: JAVASCRIPT - LÓGICA PRINCIPAL (Transações, Renders) =================
@@ -3230,12 +3268,17 @@
                 }
             }
             saveState(); render(); updateAutocompleteLists();
-            document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = ''; toggleInstallmentOptions(false);
+            document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = '';
+            toggleInstallmentOptions(false);
             document.querySelector('input[name="type"][value="receita"]').checked = true; toggleTypeFields('receita'); addSplitRow(); document.getElementById('date').value = dateStr;
             
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
             
-            // NOVO: Fecha o formulário no celular após salvar
+            if (marketPendingSave) {
+                marketList = [];
+                marketPendingSave = false;
+            }
+
             toggleMobileForm(false);
         }
 

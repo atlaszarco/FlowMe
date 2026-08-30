@@ -1771,7 +1771,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.6.0';
+        const FLOWME_VERSION = 'beta-3.6.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2540,11 +2540,19 @@
         
             const total = marketList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         
-            closeModal('modal-market');
-        
-            // Garante que o formulário está limpo (sem edição pendente) antes de preencher
-            cancelEdit();
-        
+           closeModal('modal-market');
+
+            // Garante que não ficou nenhuma edição pendente, sem fechar/reabrir o formulário à toa
+            document.getElementById('edit-id').value = '';
+            document.getElementById('edit-group-id').value = '';
+            document.getElementById('btn-cancel-edit-container').classList.add('hidden');
+            document.getElementById('btn-cancel-edit-container').classList.remove('flex');
+            document.getElementById('desktop-form-title').innerHTML = t('form_title_new');
+            document.getElementById('mobile-form-title').innerHTML = t('form_title_new');
+            document.getElementById('desktop-form-icon').className = 'fa-solid fa-plus-circle text-emerald-500';
+            document.getElementById('mobile-form-icon').className = 'fa-solid fa-plus-circle text-emerald-500';
+            document.getElementById('btn-submit').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_submit">${t('btn_submit')}</span>`;
+            
             // Muda o tipo para Despesa e preenche os campos padrão
             document.querySelector('input[name="type"][value="despesa"]').checked = true;
             toggleTypeFields('despesa');

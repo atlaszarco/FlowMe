@@ -809,6 +809,10 @@
         <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
             <i class="fa-solid fa-plus"></i>
         </button>
+        <!-- Botão Flutuante (FAB) - MODO MERCADO -->
+        <button id="fab-market" onclick="openMarketMode()" class="hidden lg:hidden fixed bottom-48 right-6 w-14 h-14 bg-indigo-500 text-white rounded-full shadow-[0_8px_30px_rgba(99,102,241,0.4)] items-center justify-center text-2xl z-[60] hover:bg-indigo-600 transition-transform active:scale-90 flex">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </button>
 
 <!-- ================= BLOCO 5: ABA FATURAS ================= -->
         <div id="content-faturas" class="tab-content hidden max-w-5xl mx-auto space-y-4">
@@ -1394,6 +1398,68 @@
         </div>
     </div>
 
+    <!-- MODAL: MODO MERCADO -->
+    <div id="modal-market" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+            
+            <!-- Cabeçalho -->
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">
+                    <i class="fa-solid fa-cart-shopping text-indigo-500 mr-2"></i> Modo Mercado
+                </h3>
+                <button onclick="closeModal('modal-market')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+    
+            <!-- Área de Input -->
+            <div class="p-4 space-y-3 border-b border-white/40 dark:border-slate-700/50">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Preço do item</label>
+                    <input type="text" inputmode="numeric" id="market-price" placeholder="0,00" oninput="maskCurrencyField(this)" class="w-full p-3 text-2xl font-bold border border-slate-300 dark:border-slate-600 rounded-xl bg-white/60 dark:bg-slate-900/60 outline-none focus:border-indigo-500 dark:text-white text-center">
+                </div>
+    
+                <div class="flex gap-3">
+                    <div class="flex-1">
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nome (opcional)</label>
+                        <input type="text" id="market-name" autocomplete="off" placeholder="Ex: Café" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/60 dark:bg-slate-900/60 outline-none focus:border-indigo-500 dark:text-white">
+                    </div>
+                    <div class="w-28 shrink-0">
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Qtd.</label>
+                        <div class="flex items-center border border-slate-300 dark:border-slate-600 rounded-xl overflow-hidden bg-white/60 dark:bg-slate-900/60">
+                            <button type="button" onclick="changeMarketQty(-1)" class="w-8 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">-</button>
+                            <input type="text" id="market-qty" value="1" readonly class="w-full text-center text-sm font-bold bg-transparent outline-none dark:text-white">
+                            <button type="button" onclick="changeMarketQty(1)" class="w-8 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">+</button>
+                        </div>
+                    </div>
+                </div>
+    
+                <button type="button" onclick="addMarketItem()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Adicionar Item
+                </button>
+            </div>
+    
+            <!-- Lista de Itens -->
+            <div id="market-items-list" class="p-4 overflow-y-auto flex-1 space-y-2"></div>
+            <div id="market-empty-state" class="hidden flex flex-col items-center justify-center p-8 text-slate-400">
+                <i class="fa-solid fa-basket-shopping text-2xl mb-2"></i>
+                <p class="text-xs">Nenhum item adicionado ainda.</p>
+            </div>
+    
+            <!-- Rodapé Fixo -->
+            <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase font-semibold">Total</p>
+                    <h2 id="market-total-value" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0,00</h2>
+                </div>
+                <button type="button" onclick="clearMarketList()" class="text-xs text-rose-600 dark:text-rose-400 font-bold px-3 py-2 rounded-lg border border-rose-200 dark:border-rose-800 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Limpar tudo
+                </button>
+            </div>
+    
+        </div>
+    </div>
+
 <!-- ================= BLOCO 9: JAVASCRIPT - TRADUÇÕES E CONFIGURAÇÃO INICIAL ================= -->
     <script>
         // ================= i18n =================
@@ -1700,7 +1766,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.5.6';
+        const FLOWME_VERSION = 'beta-3.5.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2371,6 +2437,92 @@
                 </select>
                 <button type="button" onclick="document.getElementById('${rowId}').remove(); checkLimitsInRealTime()" class="text-rose-400 hover:text-rose-600 w-6 shrink-0 flex justify-center"><i class="fa-solid fa-xmark"></i></button>`;
             container.appendChild(div);
+        }
+
+        // ================= MODO MERCADO (CALCULADORA) =================
+        let marketList = [];
+        let marketQtyTemp = 1;
+        
+        function openMarketMode() {
+            document.getElementById('market-price').value = '';
+            document.getElementById('market-name').value = '';
+            marketQtyTemp = 1;
+            document.getElementById('market-qty').value = marketQtyTemp;
+            renderMarketList();
+            openModal('modal-market');
+        }
+        
+        function changeMarketQty(delta) {
+            marketQtyTemp = Math.max(1, marketQtyTemp + delta);
+            document.getElementById('market-qty').value = marketQtyTemp;
+        }
+        
+        function addMarketItem() {
+            const price = parseMaskedValue(document.getElementById('market-price').value);
+            if (!price || price <= 0) return;
+        
+            const name = document.getElementById('market-name').value.trim() || `Item ${marketList.length + 1}`;
+        
+            marketList.push({
+                id: 'mkt-' + Date.now(),
+                name: name,
+                price: price,
+                quantity: marketQtyTemp
+            });
+        
+            document.getElementById('market-price').value = '';
+            document.getElementById('market-name').value = '';
+            marketQtyTemp = 1;
+            document.getElementById('market-qty').value = marketQtyTemp;
+            document.getElementById('market-price').focus();
+        
+            renderMarketList();
+        }
+        
+        function removeMarketItem(id) {
+            marketList = marketList.filter(item => item.id !== id);
+            renderMarketList();
+        }
+        
+        function clearMarketList() {
+            if (marketList.length === 0) return;
+            if (confirm('Limpar todos os itens da lista?')) {
+                marketList = [];
+                renderMarketList();
+            }
+        }
+        
+        function renderMarketList() {
+            const listEl = document.getElementById('market-items-list');
+            const emptyEl = document.getElementById('market-empty-state');
+            listEl.innerHTML = '';
+        
+            if (marketList.length === 0) {
+                emptyEl.classList.remove('hidden');
+            } else {
+                emptyEl.classList.add('hidden');
+                marketList.forEach(item => {
+                    const subtotal = item.price * item.quantity;
+                    const row = document.createElement('div');
+                    row.className = 'flex justify-between items-center bg-white/50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-white/40 dark:border-slate-700/50';
+                    row.innerHTML = `
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">${item.name}</p>
+                            <p class="text-[11px] text-slate-500">${item.quantity}x ${formatCurrency(item.price)}</p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="text-sm font-bold text-slate-800 dark:text-white">${formatCurrency(subtotal)}</span>
+                            <button onclick="removeMarketItem('${item.id}')" class="text-rose-400 hover:text-rose-600">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    `;
+                    listEl.appendChild(row);
+                });
+            }
+        
+            const total = marketList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('market-total-value').textContent = formatCurrency(total);
         }
 
 // ================= BLOCO 10: JAVASCRIPT - LÓGICA PRINCIPAL (Transações, Renders) =================

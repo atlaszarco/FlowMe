@@ -354,6 +354,10 @@
             flex-shrink: 0 !important;
             flex-wrap: nowrap !important;
         }
+
+        /* Empilhamento: formulário por cima do Modo Mercado, sem fechar o modal do mercado */
+        #form-wrapper.market-stack { z-index: 65 !important; }
+        #form-backdrop.market-stack { z-index: 63 !important; }
         
         /* Botão "Novo" não quebra */
         .acc-action {
@@ -1434,9 +1438,14 @@
                     </div>
                 </div>
     
-                <button type="button" onclick="addMarketItem()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-plus"></i> Adicionar Item
-                </button>
+                <div class="flex gap-2">
+                    <button type="button" id="market-add-btn" onclick="addMarketItem()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> <span>Adicionar Item</span>
+                    </button>
+                    <button type="button" id="market-cancel-edit-btn" onclick="cancelMarketEdit()" class="hidden px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl text-sm transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
     
             <!-- Lista de Itens -->
@@ -1447,21 +1456,37 @@
             </div>
     
             <!-- Rodapé Fixo -->
-            <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex justify-between items-center gap-3">
-                <div class="shrink-0">
-                    <p class="text-[10px] text-slate-500 uppercase font-semibold">Total</p>
+            <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <p class="text-xs text-slate-500 uppercase font-semibold">Total da Compra</p>
                     <h2 id="market-total-value" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0,00</h2>
                 </div>
-                <div class="flex flex-col gap-2 items-end shrink-0">
-                    <button type="button" onclick="goToSaveMarketPurchase()" class="w-full justify-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center gap-2">
+                <div class="flex gap-2">
+                    <button type="button" onclick="goToSaveMarketPurchase()" class="flex-[2] justify-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center gap-2">
                         <i class="fa-solid fa-floppy-disk"></i> Salvar como Gasto
                     </button>
-                    <button type="button" onclick="clearMarketList()" class="text-[11px] text-rose-600 dark:text-rose-400 font-bold hover:underline">
-                        <i class="fa-solid fa-trash-can mr-1"></i> Limpar tudo
+                    <button type="button" onclick="clearMarketList()" class="flex-1 justify-center px-3 py-2.5 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-bold text-xs rounded-xl border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-trash-can"></i> Limpar
                     </button>
                 </div>
             </div>
     
+        </div>
+    </div>
+    <!-- MODAL: VER ITENS DA COMPRA -->
+    <div id="modal-market-view" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">
+                    <i class="fa-solid fa-basket-shopping text-indigo-500 mr-2"></i> Itens da Compra
+                </h3>
+                <button onclick="closeModal('modal-market-view')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="market-view-list" class="p-4 overflow-y-auto space-y-2"></div>
+            <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex justify-between items-center">
+                <p class="text-[10px] text-slate-500 uppercase font-semibold">Total</p>
+                <h2 id="market-view-total" class="text-xl font-bold text-slate-800 dark:text-slate-100">0,00</h2>
+            </div>
         </div>
     </div>
 
@@ -1771,7 +1796,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.6.1';
+        const FLOWME_VERSION = 'beta-3.6.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2449,13 +2474,10 @@
         let marketList = [];
         let marketQtyTemp = 1;
         let marketPendingSave = false;
+        let marketEditingId = null; // se preenchido, o próximo clique em "salvar" edita esse item, em vez de criar um novo
         
         function openMarketMode() {
-            document.getElementById('market-price').value = '';
-            document.getElementById('market-name').value = '';
-            marketQtyTemp = 1;
-            document.getElementById('market-qty').value = marketQtyTemp;
-            renderMarketList();
+            cancelMarketEdit(); // garante que abre sempre "limpo", sem edição pendente de uma vez anterior
             openModal('modal-market');
         }
         
@@ -2470,32 +2492,77 @@
         
             const name = document.getElementById('market-name').value.trim() || `Item ${marketList.length + 1}`;
         
-            marketList.push({
-                id: 'mkt-' + Date.now(),
-                name: name,
-                price: price,
-                quantity: marketQtyTemp
-            });
+            if (marketEditingId) {
+                // MODO EDIÇÃO: atualiza o item existente
+                const item = marketList.find(i => i.id === marketEditingId);
+                if (item) {
+                    item.name = name;
+                    item.price = price;
+                    item.quantity = marketQtyTemp;
+                }
+                cancelMarketEdit(); // sai do modo edição e limpa/redesenha tudo
+            } else {
+                // MODO NORMAL: cria um item novo
+                marketList.push({ id: 'mkt-' + Date.now(), name, price, quantity: marketQtyTemp });
+                document.getElementById('market-price').value = '';
+                document.getElementById('market-name').value = '';
+                marketQtyTemp = 1;
+                document.getElementById('market-qty').value = marketQtyTemp;
+                document.getElementById('market-price').focus();
+                renderMarketList();
+            }
+        }
         
+        function editMarketItem(id) {
+            const item = marketList.find(i => i.id === id);
+            if (!item) return;
+        
+            marketEditingId = id;
+            document.getElementById('market-price').value = formatMaskedValue(item.price);
+            document.getElementById('market-name').value = item.name;
+            marketQtyTemp = item.quantity;
+            document.getElementById('market-qty').value = marketQtyTemp;
+        
+            const addBtn = document.getElementById('market-add-btn');
+            addBtn.querySelector('span').textContent = 'Salvar Alteração';
+            addBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+            addBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
+            document.getElementById('market-cancel-edit-btn').classList.remove('hidden');
+        
+            document.getElementById('market-price').focus();
+            renderMarketList(); // redesenha pra destacar a linha em edição
+        }
+        
+        function cancelMarketEdit() {
+            marketEditingId = null;
             document.getElementById('market-price').value = '';
             document.getElementById('market-name').value = '';
             marketQtyTemp = 1;
             document.getElementById('market-qty').value = marketQtyTemp;
-            document.getElementById('market-price').focus();
+        
+            const addBtn = document.getElementById('market-add-btn');
+            addBtn.querySelector('span').textContent = 'Adicionar Item';
+            addBtn.classList.remove('bg-amber-500', 'hover:bg-amber-600');
+            addBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            document.getElementById('market-cancel-edit-btn').classList.add('hidden');
         
             renderMarketList();
         }
         
         function removeMarketItem(id) {
             marketList = marketList.filter(item => item.id !== id);
-            renderMarketList();
+            if (marketEditingId === id) {
+                cancelMarketEdit(); // se apagou o item que estava sendo editado, sai do modo edição também
+            } else {
+                renderMarketList();
+            }
         }
         
         function clearMarketList() {
             if (marketList.length === 0) return;
             if (confirm('Limpar todos os itens da lista?')) {
                 marketList = [];
-                renderMarketList();
+                cancelMarketEdit(); // reseta campos e o botão, e já redesenha a lista vazia
             }
         }
         
@@ -2510,18 +2577,19 @@
                 emptyEl.classList.add('hidden');
                 marketList.forEach(item => {
                     const subtotal = item.price * item.quantity;
+                    const isEditing = item.id === marketEditingId;
                     const row = document.createElement('div');
-                    row.className = 'flex justify-between items-center bg-white/50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-white/40 dark:border-slate-700/50';
+                    row.className = 'flex justify-between items-center bg-white/50 dark:bg-slate-800/50 p-2.5 rounded-xl border transition-colors ' +
+                        (isEditing ? 'border-amber-400 dark:border-amber-500' : 'border-white/40 dark:border-slate-700/50');
                     row.innerHTML = `
                         <div class="min-w-0">
                             <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">${item.name}</p>
                             <p class="text-[11px] text-slate-500">${item.quantity}x ${formatCurrency(item.price)}</p>
                         </div>
-                        <div class="flex items-center gap-3 shrink-0">
+                        <div class="flex items-center gap-2 shrink-0">
                             <span class="text-sm font-bold text-slate-800 dark:text-white">${formatCurrency(subtotal)}</span>
-                            <button onclick="removeMarketItem('${item.id}')" class="text-rose-400 hover:text-rose-600">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
+                            <button onclick="editMarketItem('${item.id}')" class="text-slate-400 hover:text-blue-500 p-1"><i class="fa-solid fa-pen text-xs"></i></button>
+                            <button onclick="removeMarketItem('${item.id}')" class="text-rose-400 hover:text-rose-600 p-1"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     `;
                     listEl.appendChild(row);
@@ -2540,7 +2608,16 @@
         
             const total = marketList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         
-           closeModal('modal-market');
+            const isMobile = window.innerWidth < 1024;
+
+            if (isMobile) {
+                // Não fecha o modal do mercado — só "empilha" o formulário por cima dele
+                document.getElementById('form-wrapper').classList.add('market-stack');
+                document.getElementById('form-backdrop').classList.add('market-stack');
+            } else {
+                // No desktop o formulário já é visível na lateral, então aí sim fechamos o mercado
+                closeModal('modal-market');
+            }
 
             // Garante que não ficou nenhuma edição pendente, sem fechar/reabrir o formulário à toa
             document.getElementById('edit-id').value = '';
@@ -2572,8 +2649,35 @@
             setTimeout(() => document.getElementById('form-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' }), 350);
         }
 
+        function viewMarketItems(trxId) {
+            const trx = state.transactions.find(t => t.id === trxId);
+            if (!trx || !trx.items) return;
+        
+            const listEl = document.getElementById('market-view-list');
+            listEl.innerHTML = '';
+            let total = 0;
+        
+            trx.items.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                const row = document.createElement('div');
+                row.className = 'flex justify-between items-center bg-white/50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-white/40 dark:border-slate-700/50';
+                row.innerHTML = `
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">${item.name}</p>
+                        <p class="text-[11px] text-slate-500">${item.quantity}x ${formatCurrency(item.price)}</p>
+                    </div>
+                    <span class="text-sm font-bold text-slate-800 dark:text-white shrink-0">${formatCurrency(subtotal)}</span>
+                `;
+                listEl.appendChild(row);
+            });
+        
+            document.getElementById('market-view-total').textContent = formatCurrency(total);
+            openModal('modal-market-view');
+        }
+
 // ================= BLOCO 10: JAVASCRIPT - LÓGICA PRINCIPAL (Transações, Renders) =================
-        // ================= GLOBAL EDIT MODALS & ANIMAÇÕES (CLIQUE FORA E BORDAS) =================
+        // ================= GLOBAL EDIT MODALS & ANIMAÇÕES =================
         function openModal(id) {
             const m = document.getElementById(id);
             const inner = m.querySelector('.modal-inner');
@@ -3164,9 +3268,11 @@
                 setTimeout(() => {
                     wrapper.classList.add('hidden');
                     backdrop.classList.add('hidden');
-                    wrapper.classList.remove('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95', 'opacity-100', 'scale-100');
+                    wrapper.classList.remove('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                    wrapper.classList.remove('market-stack');
+                    backdrop.classList.remove('market-stack');
+                    marketPendingSave = false;
                     
-                    // Devolve o formulário para a gaveta do Desktop
                     if (originalParent) {
                         originalParent.appendChild(backdrop);
                         originalParent.appendChild(wrapper);
@@ -3273,7 +3379,13 @@
                         if(currentInvMonth) currentInvMonth.setMonth(currentInvMonth.getMonth() + 1);
                     }
                 } else {
-                    state.transactions.push({ id: 't-' + Date.now(), type, expenseType: expType, invoiceMonth, description, value: rawValue, date: dateStr, category, paymentMethod, status, splits });
+                    const newTrx = { id: 't-' + Date.now(), type, expenseType: expType, invoiceMonth, description, value: rawValue, date: dateStr, category, paymentMethod, status, splits };
+                    
+                    if (marketPendingSave && marketList.length > 0) {
+                        newTrx.items = marketList.map(i => ({ name: i.name, price: i.price, quantity: i.quantity }));
+                    }
+                    
+                    state.transactions.push(newTrx);
                 }
             }
             saveState(); render(); updateAutocompleteLists();
@@ -3286,8 +3398,9 @@
             if (marketPendingSave) {
                 marketList = [];
                 marketPendingSave = false;
+                renderMarketList();
+                closeModal('modal-market');
             }
-
             toggleMobileForm(false);
         }
 
@@ -3669,6 +3782,7 @@
                         <td class="p-3">
                             <div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${trx.description || '--'}</div>
                             <div class="mt-1"><span class="inline-flex items-center px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 rounded text-[9px] font-bold uppercase tracking-wider dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300"><i class="fa-solid fa-tag mr-1 text-slate-400"></i> ${trx.category || '--'}</span></div>
+                            ${(trx.items && trx.items.length > 0) ? `<div class="mt-1"><button onclick="viewMarketItems('${trx.id}')" class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-indigo-50 border border-indigo-200 text-indigo-600 rounded text-[9px] font-bold uppercase tracking-wider dark:bg-indigo-900/30 dark:border-indigo-800 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition"><i class="fa-solid fa-list"></i> ${trx.items.length} itens</button></div>` : ''}
                             ${badges}
                         </td>
                         <td class="p-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">

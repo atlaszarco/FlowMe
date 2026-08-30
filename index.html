@@ -2003,10 +2003,11 @@
             
             // Controle de visibilidade do Botão FAB (aparece apenas em transações)
             const fab = document.getElementById('fab-form');
-            const fabMarket = document.getElementById('fab-market');
             if (fab) {
                 fab.style.display = (tabId === 'transacoes') ? '' : 'none';
             }
+
+            const fabMarket = document.getElementById('fab-market');
             if (fabMarket) {
                 fabMarket.style.display = (tabId === 'transacoes') ? '' : 'none';
             }

@@ -82,6 +82,7 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
             border-width: 1px !important;
             isolation: isolate;
+            transform: translateZ(0);
         }
         /* TEMA CLARO */
         .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed { 
@@ -907,7 +908,7 @@
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bullseye text-pink-500"></i> <span data-i18n="dash_limits">Orçamentos do Mês</span></h2>
                     <div class="flex gap-2 items-center">
                         <span id="acc-action-dash-limits" onclick="event.stopPropagation(); openLimitModal()" class="acc-action text-xs bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 dark:hover:bg-pink-800 transition-all duration-500 border border-pink-200 dark:border-pink-800 flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></span>
-                        <span onclick="event.stopPropagation(); toggleAccordion('dash-limits')" class="p-2 -m-2 flex items-center justify-center cursor-pointer">
+                        <span class="p-2 -m-2 flex items-center justify-center cursor-pointer">
                             <i id="acc-icon-dash-limits" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
                         </span>
                     </div>
@@ -1794,7 +1795,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.6.9';
+        const FLOWME_VERSION = 'beta-3.7.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

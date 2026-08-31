@@ -57,6 +57,7 @@
             backdrop-filter: blur(12px) !important;
             -webkit-backdrop-filter: blur(12px) !important;
             border-width: 1px !important;
+            isolation: isolate;
         }
         /* TEMA CLARO */
         .bg-white { 
@@ -80,6 +81,7 @@
             -webkit-backdrop-filter: blur(20px) !important;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
             border-width: 1px !important;
+            isolation: isolate;
         }
         /* TEMA CLARO */
         .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed { 
@@ -591,6 +593,10 @@
                                 <input type="hidden" id="edit-id">
                                 <input type="hidden" id="edit-group-id">
                                 
+                                <button type="button" onclick="openMarketMode()" class="hidden lg:flex w-full items-center justify-center gap-2 py-2.5 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-bold text-sm rounded-xl border border-indigo-200 dark:border-indigo-800 transition">
+                                    <i class="fa-solid fa-cart-shopping"></i> <span data-i18n="market_title">Modo Mercado</span>
+                                </button>
+                                
                                 <div>
                                     <div class="grid grid-cols-2 gap-2">
                                         <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg border-2 cursor-pointer text-sm font-medium transition-all bg-emerald-50 border-emerald-500 text-emerald-700" id="label-type-income">
@@ -899,9 +905,11 @@
             <div id="dashboard-limits-section" class="flex flex-col mb-6">
                 <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-limits" onclick="toggleAccordion('dash-limits')">
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bullseye text-pink-500"></i> <span data-i18n="dash_limits">Orçamentos do Mês</span></h2>
-                    <div class="flex gap-4 items-center">
-                        <span id="acc-action-dash-limits" onclick="event.stopPropagation(); openLimitModal()" class="acc-action text-xs bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 dark:hover:bg-pink-800 transition-all duration-500 border border-pink-200 dark:border-pink-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></span>
-                        <i id="acc-icon-dash-limits" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                    <div class="flex gap-2 items-center">
+                        <span id="acc-action-dash-limits" onclick="event.stopPropagation(); openLimitModal()" class="acc-action text-xs bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 dark:hover:bg-pink-800 transition-all duration-500 border border-pink-200 dark:border-pink-800 flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></span>
+                        <span onclick="event.stopPropagation(); toggleAccordion('dash-limits')" class="p-2 -m-2 flex items-center justify-center cursor-pointer">
+                            <i id="acc-icon-dash-limits" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                        </span>
                     </div>
                 </button>
                 <div id="acc-content-dash-limits" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
@@ -1520,7 +1528,7 @@
                 tt_manage_desc: "Gerenciar Nomes", tt_manage_cat: "Gerenciar Categorias", tt_manage_acc: "Gerenciar Contas/Cartões", tt_manage_person: "Gerenciar Pessoas",
                 err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar", btn_use: "Usar",
                 cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico",
-                opt_select: "Selecione...",
+                opt_select: "Selecione...", people_empty: "Nenhum rateio registrado.",
                 lbl_alert: "Alerta", lbl_alerts: "Alertas", tab_notif_alerts: "Alertas", tab_notif_deleted: "Deletados", cfg_alerts_section_title: "Alertas e Lembretes:", cfg_notif_label: "Ativar alertas no botão de Notificações", cfg_history_section_title: "Histórico de Deletados:", opt_30_days: "30 dias", opt_60_days: "60 dias", opt_90_days: "90 dias",
                 btn_saving: "Salvando...", btn_saved: "Salvo às",
                 toast_sync_start: "Atualizando dados da nuvem...", toast_sync_success: "Nuvem sincronizada!", toast_sync_offline: "Modo offline: usando dados locais.",
@@ -1557,12 +1565,12 @@
                 tt_manage_desc: "Manage Names", tt_manage_cat: "Manage Categories", tt_manage_acc: "Manage Accounts", tt_manage_person: "Manage People",
                 err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save", btn_use: "Use",
                 cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)", acc_summary: "Financial Summary", acc_filters: "Filters & History",
-                opt_select: "Select...",
+                opt_select: "Select...", people_empty: "No splits registered.",
                 lbl_alert: "Alert", lbl_alerts: "Alerts", tab_notif_alerts: "Alerts", tab_notif_deleted: "Deleted", cfg_alerts_section_title: "Alerts & Reminders:", cfg_notif_label: "Enable alerts on Notification button", cfg_history_section_title: "Deleted History:", opt_30_days: "30 days", opt_60_days: "60 days", opt_90_days: "90 days",
                 btn_saving: "Saving...", btn_saved: "Saved at",
                 toast_sync_start: "Updating cloud data...", toast_sync_success: "Cloud synced!", toast_sync_offline: "Offline mode: using local data.",
                 lbl_deleted_on: "Deleted on", btn_restore: "Restore", msg_history_empty: "No recently deleted items.", cfg_history_retention: "Keep history for", lbl_wipe_history: "Deleted History",
-                market_installment_note: "Purchase split into {N} installments", market_title: "Market Mode", market_price_label: "Item price", market_name_label: "Name (optional)", market_name_placeholder: "Ex: Coffee", market_qty_label: "Qty.", market_add_item: "Add Item", market_save_edit: "Save Change", market_empty: "No items added yet.", market_total_label: "Purchase Total", market_save_btn: "Save as Expense", market_clear_btn: "Clear", market_confirm_clear: "Clear all items from the list?", market_alert_empty: "Add at least one item before saving.", market_view_title: "Purchased Items", market_items_suffix: "items", market_default_desc: "Grocery Shopping", market_category: "Groceries"
+                market_installment_note: "Purchased split into {N} installments", market_title: "Market Mode", market_price_label: "Item price", market_name_label: "Name (optional)", market_name_placeholder: "Ex: Coffee", market_qty_label: "Qty.", market_add_item: "Add Item", market_save_edit: "Save Change", market_empty: "No items added yet.", market_total_label: "Purchase Total", market_save_btn: "Save as Expense", market_clear_btn: "Clear", market_confirm_clear: "Clear all items from the list?", market_alert_empty: "Add at least one item before saving.", market_view_title: "Purchased Items", market_items_suffix: "items", market_default_desc: "Grocery Shopping", market_category: "Groceries"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1594,7 +1602,7 @@
                 tt_manage_desc: "Administrar Nombres", tt_manage_cat: "Administrar Categorías", tt_manage_acc: "Administrar Cuentas", tt_manage_person: "Administrar Personas",
                 err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar", btn_use: "Usar",
                 cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)", acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial",
-                opt_select: "Seleccione...",
+                opt_select: "Seleccione...", people_empty: "Ningún reparto registrado.",
                 lbl_alert: "Alerta", lbl_alerts: "Alertas", tab_notif_alerts: "Alertas", tab_notif_deleted: "Eliminados", cfg_alerts_section_title: "Alertas y Recordatorios:", cfg_notif_label: "Activar alertas en el botón de Notificaciones", cfg_history_section_title: "Historial de Eliminados:", opt_30_days: "30 días", opt_60_days: "60 días", opt_90_days: "90 días",                 btn_saving: "Guardando...", btn_saved: "Guardado a las",
                 toast_sync_start: "Actualizando datos de la nube...", toast_sync_success: "¡Nube sincronizada!", toast_sync_offline: "Modo sin conexión: usando datos locales.",
                 lbl_deleted_on: "Eliminado el", btn_restore: "Restaurar", msg_history_empty: "No hay elementos eliminados recientemente.", cfg_history_retention: "Conservar historial por", lbl_wipe_history: "Historial de eliminados",
@@ -1630,7 +1638,7 @@
                 tt_manage_desc: "Gérer Noms", tt_manage_cat: "Gérer Catégories", tt_manage_acc: "Gérer Comptes", tt_manage_person: "Gérer Personnes",
                 err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer", btn_use: "Utiliser",
                 cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)", acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique",
-                opt_select: "Sélectionner...",
+                opt_select: "Sélectionner...", people_empty: "Aucun partage enregistré.",
                 lbl_alert: "Alerte", lbl_alerts: "Alertes", tab_notif_alerts: "Alertes", tab_notif_deleted: "Supprimés", cfg_alerts_section_title: "Alertes et Rappels :", cfg_notif_label: "Activer les alertes sur le bouton Notifications", cfg_history_section_title: "Historique des suppressions :", opt_30_days: "30 jours", opt_60_days: "60 jours", opt_90_days: "90 jours",
                 btn_saving: "Enregistrement...", btn_saved: "Enregistré à",
                 toast_sync_start: "Mise à jour des données du cloud...", toast_sync_success: "Cloud synchronisé !", toast_sync_offline: "Mode hors ligne : utilisation des données locales.",
@@ -1786,7 +1794,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.6.8';
+        const FLOWME_VERSION = 'beta-3.6.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -3444,6 +3452,11 @@
             
             document.getElementById('btn-cancel-edit-container').classList.add('hidden'); document.getElementById('btn-cancel-edit-container').classList.remove('flex'); 
             toggleTypeFields('receita'); addSplitRow();
+            
+            marketPendingSave = false;
+            document.getElementById('form-wrapper').classList.remove('market-stack');
+            document.getElementById('form-backdrop').classList.remove('market-stack');
+            
             toggleMobileForm(false);
         }
 
@@ -3813,7 +3826,14 @@
             }
 
             const pplC = document.getElementById('people-summary-list'); pplC.innerHTML = '';
-            for(let p in peopleMap) pplC.innerHTML += `<div class="py-2 flex justify-between items-center"><div class="font-semibold dark:text-slate-200">${p}<div class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</div></div><div class="text-right font-bold text-amber-600 dark:text-amber-400">${formatCurrency(peopleMap[p].pen)}</div></div>`;
+            const peopleNames = Object.keys(peopleMap);
+            if (peopleNames.length === 0) {
+                pplC.innerHTML = `<p class="text-xs text-slate-400 text-center py-3" data-i18n="people_empty">${t('people_empty')}</p>`;
+            } else {
+                peopleNames.forEach(p => {
+                    pplC.innerHTML += `<div class="py-2 flex justify-between items-center"><div class="font-semibold dark:text-slate-200">${p}<div class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</div></div><div class="text-right font-bold text-amber-600 dark:text-amber-400">${formatCurrency(peopleMap[p].pen)}</div></div>`;
+                });
+            }
 
             // ALERTS E ORÇAMENTOS (SINO SUPERIOR)
             let limitAlerts = [];

@@ -355,9 +355,10 @@
             flex-wrap: nowrap !important;
         }
 
-        /* Empilhamento: formulário por cima do Modo Mercado, sem fechar o modal do mercado */
+        /* Empilhamento de modais no Modo Mercado*/
         #form-wrapper.market-stack { z-index: 65 !important; }
         #form-backdrop.market-stack { z-index: 63 !important; }
+        #modal-global-edit { z-index: 68 !important; }    
         
         /* Botão "Novo" não quebra */
         .acc-action {
@@ -1463,6 +1464,7 @@
                 </h3>
                 <button onclick="closeModal('modal-market-view')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+            <p id="market-view-installment-note" class="hidden mx-4 mt-3 px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 text-[11px] font-bold rounded-lg border border-indigo-200 dark:border-indigo-800"></p>
             <div id="market-view-list" class="p-4 overflow-y-auto space-y-2"></div>
             <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <p class="text-[10px] text-slate-500 uppercase font-semibold">Total</p>
@@ -1523,7 +1525,7 @@
                 btn_saving: "Salvando...", btn_saved: "Salvo às",
                 toast_sync_start: "Atualizando dados da nuvem...", toast_sync_success: "Nuvem sincronizada!", toast_sync_offline: "Modo offline: usando dados locais.",
                 lbl_deleted_on: "Excluído em", btn_restore: "Restaurar", msg_history_empty: "Nenhum item excluído recentemente.", cfg_history_retention: "Manter histórico por", lbl_wipe_history: "Histórico de Deletados",
-                market_title: "Modo Mercado", market_price_label: "Preço do item", market_name_label: "Nome (opcional)", market_name_placeholder: "Ex: Café", market_qty_label: "Qtd.", market_add_item: "Adicionar Item", market_save_edit: "Salvar Alteração", market_empty: "Nenhum item adicionado ainda.", market_total_label: "Total da Compra", market_save_btn: "Salvar como Gasto", market_clear_btn: "Limpar", market_confirm_clear: "Limpar todos os itens da lista?", market_alert_empty: "Adicione pelo menos um item antes de salvar.", market_view_title: "Itens da Compra", market_items_suffix: "itens", market_default_desc: "Compras no Mercado", market_category: "Mercado"
+                market_installment_note: "Compra parcelada em {N}x", market_title: "Modo Mercado", market_price_label: "Preço do item", market_name_label: "Nome (opcional)", market_name_placeholder: "Ex: Café", market_qty_label: "Qtd.", market_add_item: "Adicionar Item", market_save_edit: "Salvar Alteração", market_empty: "Nenhum item adicionado ainda.", market_total_label: "Total da Compra", market_save_btn: "Salvar como Gasto", market_clear_btn: "Limpar", market_confirm_clear: "Limpar todos os itens da lista?", market_alert_empty: "Adicione pelo menos um item antes de salvar.", market_view_title: "Itens da Compra", market_items_suffix: "itens", market_default_desc: "Compras no Mercado", market_category: "Mercado"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1560,7 +1562,7 @@
                 btn_saving: "Saving...", btn_saved: "Saved at",
                 toast_sync_start: "Updating cloud data...", toast_sync_success: "Cloud synced!", toast_sync_offline: "Offline mode: using local data.",
                 lbl_deleted_on: "Deleted on", btn_restore: "Restore", msg_history_empty: "No recently deleted items.", cfg_history_retention: "Keep history for", lbl_wipe_history: "Deleted History",
-                market_title: "Market Mode", market_price_label: "Item price", market_name_label: "Name (optional)", market_name_placeholder: "Ex: Coffee", market_qty_label: "Qty.", market_add_item: "Add Item", market_save_edit: "Save Change", market_empty: "No items added yet.", market_total_label: "Purchase Total", market_save_btn: "Save as Expense", market_clear_btn: "Clear", market_confirm_clear: "Clear all items from the list?", market_alert_empty: "Add at least one item before saving.", market_view_title: "Purchased Items", market_items_suffix: "items", market_default_desc: "Grocery Shopping", market_category: "Groceries"
+                market_installment_note: "Purchase split into {N} installments", market_title: "Market Mode", market_price_label: "Item price", market_name_label: "Name (optional)", market_name_placeholder: "Ex: Coffee", market_qty_label: "Qty.", market_add_item: "Add Item", market_save_edit: "Save Change", market_empty: "No items added yet.", market_total_label: "Purchase Total", market_save_btn: "Save as Expense", market_clear_btn: "Clear", market_confirm_clear: "Clear all items from the list?", market_alert_empty: "Add at least one item before saving.", market_view_title: "Purchased Items", market_items_suffix: "items", market_default_desc: "Grocery Shopping", market_category: "Groceries"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1596,7 +1598,7 @@
                 lbl_alert: "Alerta", lbl_alerts: "Alertas", tab_notif_alerts: "Alertas", tab_notif_deleted: "Eliminados", cfg_alerts_section_title: "Alertas y Recordatorios:", cfg_notif_label: "Activar alertas en el botón de Notificaciones", cfg_history_section_title: "Historial de Eliminados:", opt_30_days: "30 días", opt_60_days: "60 días", opt_90_days: "90 días",                 btn_saving: "Guardando...", btn_saved: "Guardado a las",
                 toast_sync_start: "Actualizando datos de la nube...", toast_sync_success: "¡Nube sincronizada!", toast_sync_offline: "Modo sin conexión: usando datos locales.",
                 lbl_deleted_on: "Eliminado el", btn_restore: "Restaurar", msg_history_empty: "No hay elementos eliminados recientemente.", cfg_history_retention: "Conservar historial por", lbl_wipe_history: "Historial de eliminados",
-                market_title: "Modo Mercado", market_price_label: "Precio del artículo", market_name_label: "Nombre (opcional)", market_name_placeholder: "Ej: Café", market_qty_label: "Cant.", market_add_item: "Añadir Artículo", market_save_edit: "Guardar Cambio", market_empty: "Ningún artículo añadido todavía.", market_total_label: "Total de la Compra", market_save_btn: "Guardar como Gasto", market_clear_btn: "Limpiar", market_confirm_clear: "¿Borrar todos los artículos de la lista?", market_alert_empty: "Añade al menos un artículo antes de guardar.", market_view_title: "Artículos de la Compra", market_items_suffix: "artículos", market_default_desc: "Compras en el Mercado", market_category: "Mercado"
+                market_installment_note: "Compra en {N} cuotas", market_title: "Modo Mercado", market_price_label: "Precio del artículo", market_name_label: "Nombre (opcional)", market_name_placeholder: "Ej: Café", market_qty_label: "Cant.", market_add_item: "Añadir Artículo", market_save_edit: "Guardar Cambio", market_empty: "Ningún artículo añadido todavía.", market_total_label: "Total de la Compra", market_save_btn: "Guardar como Gasto", market_clear_btn: "Limpiar", market_confirm_clear: "¿Borrar todos los artículos de la lista?", market_alert_empty: "Añade al menos un artículo antes de guardar.", market_view_title: "Artículos de la Compra", market_items_suffix: "artículos", market_default_desc: "Compras en el Mercado", market_category: "Mercado"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1633,7 +1635,7 @@
                 btn_saving: "Enregistrement...", btn_saved: "Enregistré à",
                 toast_sync_start: "Mise à jour des données du cloud...", toast_sync_success: "Cloud synchronisé !", toast_sync_offline: "Mode hors ligne : utilisation des données locales.",
                 lbl_deleted_on: "Supprimé le", btn_restore: "Restaurer", msg_history_empty: "Aucun élément supprimé récemment.", cfg_history_retention: "Conserver l'historique pendant", lbl_wipe_history: "Historique des suppressions",
-                market_title: "Mode Marché", market_price_label: "Prix de l'article", market_name_label: "Nom (facultatif)", market_name_placeholder: "Ex : Café", market_qty_label: "Qté", market_add_item: "Ajouter un article", market_save_edit: "Enregistrer la modification", market_empty: "Aucun article ajouté pour l'instant.", market_total_label: "Total de l'achat", market_save_btn: "Enregistrer comme Dépense", market_clear_btn: "Effacer", market_confirm_clear: "Effacer tous les articles de la liste ?", market_alert_empty: "Ajoutez au moins un article avant d'enregistrer.", market_view_title: "Articles de l'achat", market_items_suffix: "articles", market_default_desc: "Courses au marché", market_category: "Marché"
+                market_installment_note: "Achat en {N} fois", market_title: "Mode Marché", market_price_label: "Prix de l'article", market_name_label: "Nom (facultatif)", market_name_placeholder: "Ex : Café", market_qty_label: "Qté", market_add_item: "Ajouter un article", market_save_edit: "Enregistrer la modification", market_empty: "Aucun article ajouté pour l'instant.", market_total_label: "Total de l'achat", market_save_btn: "Enregistrer comme Dépense", market_clear_btn: "Effacer", market_confirm_clear: "Effacer tous les articles de la liste ?", market_alert_empty: "Ajoutez au moins un article avant d'enregistrer.", market_view_title: "Articles de l'achat", market_items_suffix: "articles", market_default_desc: "Courses au marché", market_category: "Marché"
             }
         };
 
@@ -1699,7 +1701,6 @@
             }
 
             if (typeof renderToolbarAlerts === 'function') renderToolbarAlerts();
-            if (typeof renderLimitsSettings === 'function') renderLimitsSettings();
             if (typeof updateSaveTimestamp === 'function') updateSaveTimestamp();
             if (typeof updateFilterUI === 'function') updateFilterUI();
 
@@ -1785,7 +1786,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.6.7';
+        const FLOWME_VERSION = 'beta-3.6.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2643,8 +2644,18 @@
             if (!trx || !trx.items) return;
         
             const listEl = document.getElementById('market-view-list');
+            const noteEl = document.getElementById('market-view-installment-note');
             listEl.innerHTML = '';
             let total = 0;
+        
+            const installmentMatch = trx.description.match(/\((\d+)\/(\d+)\)$/);
+            if (installmentMatch) {
+                const totalInstallments = installmentMatch[2];
+                noteEl.textContent = t('market_installment_note').replace('{N}', totalInstallments);
+                noteEl.classList.remove('hidden');
+            } else {
+                noteEl.classList.add('hidden');
+            }
         
             trx.items.forEach(item => {
                 const subtotal = item.price * item.quantity;
@@ -3107,7 +3118,6 @@
                 if(t.type === 'despesa' && !t.expenseType) t.expenseType = 'debito';
             });
             updateSaveTimestamp();
-            renderLimitsSettings();
         }
         
         function openWipeDataModal() {
@@ -3170,7 +3180,6 @@
                 // Salva tudo localmente e recarrega os visuais corretos
                 saveState();
                 render();
-                renderLimitsSettings();
                 updateAutocompleteLists();
                 
                 if (trx) {
@@ -3364,7 +3373,7 @@
                         
                         const installmentTrx = { id: 't-' + Date.now() + i, groupId: newGroupId, type, expenseType: expType, invoiceMonth: fInvMonth, description: `${description} (${i}/${numInstallments})`, value: baseValue, date: (expType === 'credito' ? dateStr : fDate), category, paymentMethod, status: i === 1 ? status : 'pendente', splits: parsedSplits };
                     
-                        if (i === 1 && marketPendingSave && marketList.length > 0) {
+                        if (marketPendingSave && marketList.length > 0) {
                             installmentTrx.items = marketList.map(it => ({ name: it.name, price: it.price, quantity: it.quantity }));
                         }
                     
@@ -4066,7 +4075,6 @@
             }
             
             saveState();
-            renderLimitsSettings();
             render(); 
             closeModal('modal-limit-form');
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
@@ -4163,7 +4171,7 @@
             const deletedLim = state.limits[limIndex];
             
             state.limits.splice(limIndex, 1);
-            saveState(); renderLimitsSettings(); render();
+            saveState(); render();
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
             
             showLimitDeleteToast(deletedLim);
@@ -4174,13 +4182,13 @@
             const existing = document.getElementById(toastId);
             if (existing) { clearTimeout(existing.dataset.timeout); existing.remove(); }
         
+            const toolbar = document.getElementById('global-toolbar');
+            const useMitosis = toolbar && !toolbar.classList.contains('hidden');
+        
             const toast = document.createElement('div');
             toast.id = toastId;
         
-            toast.className = 'fixed bottom-6 sm:bottom-10 left-1/2 bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm w-[90%] max-w-sm justify-between';
-            toast.style.transform = 'translate(-50%, 10px) scale(0.9)';
-            toast.style.opacity = '0';
-            toast.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+            const glassClasses = 'bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm justify-between overflow-hidden';
         
             const shortName = lim.target.length > 15 ? lim.target.substring(0, 15) + '...' : lim.target;
             toast.innerHTML = `
@@ -4190,13 +4198,59 @@
                 </div>
                 <button class="undo-btn shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
             `;
-            document.body.appendChild(toast);
         
-            requestAnimationFrame(() => {
-                toast.style.transform = 'translate(-50%, 0) scale(1)';
+            if (useMitosis) {
+                toolbar.classList.remove('animate-pilula-react');
+                void toolbar.offsetWidth;
+                toolbar.classList.add('animate-pilula-react');
+        
+                const pillRect = toolbar.getBoundingClientRect();
+        
+                toast.className = glassClasses;
+                toast.style.position = 'fixed';
+                toast.style.left = pillRect.left + 'px';
+                toast.style.top = pillRect.top + 'px';
+                toast.style.width = pillRect.width + 'px';
+                toast.style.height = pillRect.height + 'px';
+                toast.style.borderRadius = '9999px';
                 toast.style.opacity = '1';
-                setTimeout(() => pulseAlert(toast), 300);
-            });
+        
+                document.body.appendChild(toast);
+        
+                requestAnimationFrame(() => {
+                    const finalWidth = Math.min(window.innerWidth * 0.9, 384);
+                    const finalHeight = 56;
+                    const finalLeft = (window.innerWidth - finalWidth) / 2;
+                    const gap = 16;
+                    const finalTop = pillRect.top - finalHeight - gap;
+        
+                    toast.style.transition = 'left 0.55s cubic-bezier(0.34,1.56,0.64,1), top 0.55s cubic-bezier(0.34,1.56,0.64,1), width 0.55s cubic-bezier(0.34,1.56,0.64,1), height 0.55s cubic-bezier(0.34,1.56,0.64,1), border-radius 0.55s ease';
+                    toast.style.left = finalLeft + 'px';
+                    toast.style.top = finalTop + 'px';
+                    toast.style.width = finalWidth + 'px';
+                    toast.style.height = finalHeight + 'px';
+                    toast.style.borderRadius = '16px';
+        
+                    setTimeout(() => pulseAlert(toast), 560);
+                });
+        
+            } else {
+                toast.className = glassClasses + ' rounded-2xl w-[90%] max-w-sm';
+                toast.style.position = 'fixed';
+                toast.style.left = '50%';
+                toast.style.bottom = '24px';
+                toast.style.transform = 'translate(-50%, 10px) scale(0.9)';
+                toast.style.opacity = '0';
+                toast.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+        
+                document.body.appendChild(toast);
+        
+                requestAnimationFrame(() => {
+                    toast.style.transform = 'translate(-50%, 0) scale(1)';
+                    toast.style.opacity = '1';
+                    setTimeout(() => pulseAlert(toast), 300);
+                });
+            }
         
             pendingLimitDeletions[lim.id] = lim;
         
@@ -4206,13 +4260,30 @@
         
             toast.dataset.timeout = setTimeout(() => {
                 if (!document.body.contains(toast)) return;
-                toast.style.transform = 'translate(-50%, 10px) scale(0.9)';
-                toast.style.opacity = '0';
+        
+                if (useMitosis) {
+                    toolbar.classList.remove('animate-pilula-react');
+                    void toolbar.offsetWidth;
+                    toolbar.classList.add('animate-pilula-react');
+        
+                    const pillRect = toolbar.getBoundingClientRect();
+                    toast.style.transition = 'left 0.5s ease-in, top 0.5s ease-in, width 0.5s ease-in, height 0.5s ease-in, border-radius 0.5s ease-in, opacity 0.5s ease-in';
+                    toast.style.left = pillRect.left + 'px';
+                    toast.style.top = pillRect.top + 'px';
+                    toast.style.width = pillRect.width + 'px';
+                    toast.style.height = pillRect.height + 'px';
+                    toast.style.borderRadius = '9999px';
+                    toast.style.opacity = '0';
+                } else {
+                    toast.style.transform = 'translate(-50%, 10px) scale(0.9)';
+                    toast.style.opacity = '0';
+                }
+        
                 setTimeout(() => {
-                    toast.remove();
+                    if (toast.parentNode) toast.remove();
                     delete pendingLimitDeletions[lim.id];
                     addToDeletedHistory('limit', lim);
-                }, 420);
+                }, 520);
             }, 6000);
         }
         
@@ -4234,7 +4305,7 @@
         
                 toast.style.transition = 'transform 0.35s ease-in, opacity 0.35s ease-in';
                 toast.style.transformOrigin = `${originX} ${originY}`;
-                toast.style.transform = 'translate(-50%, 0) scale(0)';
+                toast.style.transform = (toast.style.transform || '') + ' scale(0)';
                 toast.style.opacity = '0';
         
                 setTimeout(() => toast.remove(), 380);
@@ -4243,7 +4314,7 @@
             state.limits.push(lim);
             delete pendingLimitDeletions[id];
         
-            saveState(); renderLimitsSettings(); render();
+            saveState(); render();
             if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
         
@@ -4284,7 +4355,7 @@
         
             state.deletedHistory.splice(idx, 1);
         
-            saveState(); render(); renderLimitsSettings();
+            saveState(); render();
             if (!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas();
             updateAutocompleteLists();
             if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
@@ -4292,35 +4363,6 @@
             if (document.getElementById('modal-alerts') && !document.getElementById('modal-alerts').classList.contains('hidden') && activeNotifTab === 'deleted') {
             renderDeletedHistoryList();
             }
-        }
-        
-        function renderLimitsSettings() {
-            const container = document.getElementById('settings-limits-list');
-            if(!container) return;
-            container.innerHTML = '';
-            
-            if(!state.limits || state.limits.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 col-span-full" data-i18n="lim_empty">${t('lim_empty')}</p>`;
-                return;
-            }
-            
-            const iconMap = { category: 'fa-tag', method: 'fa-credit-card', person: 'fa-user' };
-            
-            state.limits.forEach(lim => {
-                container.innerHTML += `
-                    <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-xl shadow-sm">
-                        <div class="min-w-0 pr-2"> <!-- Trava o texto para não esmagar os botões -->
-                            <p class="text-[10px] text-slate-400 font-bold uppercase truncate"><i class="fa-solid ${iconMap[lim.type]} mr-1"></i> ${t('opt_lim_' + (lim.type === 'category' ? 'cat' : lim.type))}</p>
-                            <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">${lim.target}</p>
-                            <p class="text-xs font-semibold text-pink-600">${formatCurrency(lim.max)}</p>
-                        </div>
-                        <div class="flex gap-1 shrink-0"> <!-- Trava os botões -->
-                            <button onclick="openLimitModal('${lim.id}')" class="text-slate-400 hover:text-blue-500 p-2 transition"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteLimit('${lim.id}')" class="text-slate-400 hover:text-rose-500 p-2 transition"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
         }
         
         function renderDashboard(filtered) {
@@ -5160,8 +5202,7 @@
                     };
                 }
 
-                // Repare que adicionei o renderLimitsSettings() aqui também, para que a tela de limites se atualize automaticamente se você puxar as regras da nuvem!
-                saveState(); render(); renderLimitsSettings(); updateAutocompleteLists(); switchTab('transacoes');
+                saveState(); render(); updateAutocompleteLists(); switchTab('transacoes');
                 
                 const now = new Date(); const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
                 document.getElementById('cloud-last-sync').textContent = timeStr + ' ' + t('lbl_sync_loaded');

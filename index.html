@@ -895,11 +895,11 @@
         <div id="content-dashboard" class="tab-content hidden max-w-7xl mx-auto space-y-6">
         
             <!-- ORÇAMENTOS E LIMITES -->
-            <div id="dashboard-limits-section" class="hidden flex-col mb-6">
+            <div id="dashboard-limits-section" class="flex flex-col mb-6">
                 <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-limits" onclick="toggleAccordion('dash-limits')">
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-bullseye text-pink-500"></i> <span data-i18n="dash_limits">Orçamentos do Mês</span></h2>
                     <div class="flex gap-4 items-center">
-                        <span id="acc-action-dash-limits" onclick="event.stopPropagation(); switchTab('backup'); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}), 100)" class="acc-action text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold px-3 py-1.5 rounded-lg shadow-sm transition-all duration-500 border border-slate-200 dark:border-slate-600" data-i18n="btn_config">Configurar</span>
+                        <span id="acc-action-dash-limits" onclick="event.stopPropagation(); openLimitModal()" class="acc-action text-xs bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-pink-200 dark:hover:bg-pink-800 transition-all duration-500 border border-pink-200 dark:border-pink-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span></span>
                         <i id="acc-icon-dash-limits" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
                     </div>
                 </button>
@@ -1409,7 +1409,7 @@
             <!-- Cabeçalho -->
             <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">
-                    <i class="fa-solid fa-cart-shopping text-indigo-500 mr-2"></i> Modo Mercado
+                    <i class="fa-solid fa-cart-shopping text-indigo-500 mr-2"></i> <span data-i18n="market_title">Modo Mercado</span>
                 </h3>
                 <button onclick="closeModal('modal-market')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
@@ -1419,17 +1419,17 @@
             <!-- Área de Input -->
             <div class="p-4 space-y-3 border-b border-white/40 dark:border-slate-700/50">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Preço do item</label>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" data-i18n="market_price_label">Preço do item</label>
                     <input type="text" inputmode="numeric" id="market-price" placeholder="0,00" oninput="maskCurrencyField(this)" class="w-full p-3 text-2xl font-bold border border-slate-300 dark:border-slate-600 rounded-xl bg-white/60 dark:bg-slate-900/60 outline-none focus:border-indigo-500 dark:text-white text-center">
                 </div>
     
                 <div class="flex gap-3">
                     <div class="flex-1">
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nome (opcional)</label>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" data-i18n="market_name_label">Nome (opcional)</label>
                         <input type="text" id="market-name" autocomplete="off" placeholder="Ex: Café" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/60 dark:bg-slate-900/60 outline-none focus:border-indigo-500 dark:text-white">
                     </div>
                     <div class="w-28 shrink-0">
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Qtd.</label>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" <label ... data-i18n="market_qty_label">Qtd.</label>
                         <div class="flex items-center border border-slate-300 dark:border-slate-600 rounded-xl overflow-hidden bg-white/60 dark:bg-slate-900/60">
                             <button type="button" onclick="changeMarketQty(-1)" class="w-8 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">-</button>
                             <input type="text" id="market-qty" value="1" readonly class="w-full text-center text-sm font-bold bg-transparent outline-none dark:text-white">
@@ -1440,7 +1440,7 @@
     
                 <div class="flex gap-2">
                     <button type="button" id="market-add-btn" onclick="addMarketItem()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> <span>Adicionar Item</span>
+                        <i class="fa-solid fa-plus"></i> <span data-i18n="market_add_item">Adicionar Item</span>
                     </button>
                     <button type="button" id="market-cancel-edit-btn" onclick="cancelMarketEdit()" class="hidden px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl text-sm transition">
                         <i class="fa-solid fa-xmark"></i>
@@ -1452,21 +1452,21 @@
             <div id="market-items-list" class="p-4 overflow-y-auto flex-1 space-y-2"></div>
             <div id="market-empty-state" class="hidden flex flex-col items-center justify-center p-8 text-slate-400">
                 <i class="fa-solid fa-basket-shopping text-2xl mb-2"></i>
-                <p class="text-xs">Nenhum item adicionado ainda.</p>
+                <p class="text-xs" data-i18n="market_empty">Nenhum item adicionado ainda.</p>
             </div>
     
             <!-- Rodapé Fixo -->
             <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex flex-col gap-3">
                 <div class="flex justify-between items-center">
-                    <p class="text-xs text-slate-500 uppercase font-semibold">Total da Compra</p>
+                    <p class="text-xs text-slate-500 uppercase font-semibold" data-i18n="market_total_label">Total da Compra</p>
                     <h2 id="market-total-value" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0,00</h2>
                 </div>
                 <div class="flex gap-2">
                     <button type="button" onclick="goToSaveMarketPurchase()" class="flex-[2] justify-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center gap-2">
-                        <i class="fa-solid fa-floppy-disk"></i> Salvar como Gasto
+                        <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="market_save_btn">Salvar como Gasto</span>
                     </button>
                     <button type="button" onclick="clearMarketList()" class="flex-1 justify-center px-3 py-2.5 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-bold text-xs rounded-xl border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-trash-can"></i> Limpar
+                        <i class="fa-solid fa-trash-can"></i> <span data-i18n="market_clear_btn">Limpar</span>
                     </button>
                 </div>
             </div>
@@ -1478,7 +1478,7 @@
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
             <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">
-                    <i class="fa-solid fa-basket-shopping text-indigo-500 mr-2"></i> Itens da Compra
+                    <i class="fa-solid fa-basket-shopping text-indigo-500 mr-2"></i> <span data-i18n="market_view_title">Itens da Compra</span>
                 </h3>
                 <button onclick="closeModal('modal-market-view')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -1541,7 +1541,8 @@
                 lbl_alert: "Alerta", lbl_alerts: "Alertas", tab_notif_alerts: "Alertas", tab_notif_deleted: "Deletados", cfg_alerts_section_title: "Alertas e Lembretes:", cfg_notif_label: "Ativar alertas no botão de Notificações", cfg_history_section_title: "Histórico de Deletados:", opt_30_days: "30 dias", opt_60_days: "60 dias", opt_90_days: "90 dias",
                 btn_saving: "Salvando...", btn_saved: "Salvo às",
                 toast_sync_start: "Atualizando dados da nuvem...", toast_sync_success: "Nuvem sincronizada!", toast_sync_offline: "Modo offline: usando dados locais.",
-                lbl_deleted_on: "Excluído em", btn_restore: "Restaurar", msg_history_empty: "Nenhum item excluído recentemente.", cfg_history_retention: "Manter histórico por", lbl_wipe_history: "Histórico de Deletados"
+                lbl_deleted_on: "Excluído em", btn_restore: "Restaurar", msg_history_empty: "Nenhum item excluído recentemente.", cfg_history_retention: "Manter histórico por", lbl_wipe_history: "Histórico de Deletados",
+                market_title: "Modo Mercado", market_price_label: "Preço do item", market_name_label: "Nome (opcional)", market_name_placeholder: "Ex: Café", market_qty_label: "Qtd.", market_add_item: "Adicionar Item", market_save_edit: "Salvar Alteração", market_empty: "Nenhum item adicionado ainda.", market_total_label: "Total da Compra", market_save_btn: "Salvar como Gasto", market_clear_btn: "Limpar", market_confirm_clear: "Limpar todos os itens da lista?", market_alert_empty: "Adicione pelo menos um item antes de salvar.", market_view_title: "Itens da Compra", market_items_suffix: "itens", market_default_desc: "Compras no Mercado", market_category: "Mercado"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1577,7 +1578,8 @@
                 lbl_alert: "Alert", lbl_alerts: "Alerts", tab_notif_alerts: "Alerts", tab_notif_deleted: "Deleted", cfg_alerts_section_title: "Alerts & Reminders:", cfg_notif_label: "Enable alerts on Notification button", cfg_history_section_title: "Deleted History:", opt_30_days: "30 days", opt_60_days: "60 days", opt_90_days: "90 days",
                 btn_saving: "Saving...", btn_saved: "Saved at",
                 toast_sync_start: "Updating cloud data...", toast_sync_success: "Cloud synced!", toast_sync_offline: "Offline mode: using local data.",
-                lbl_deleted_on: "Deleted on", btn_restore: "Restore", msg_history_empty: "No recently deleted items.", cfg_history_retention: "Keep history for", lbl_wipe_history: "Deleted History"
+                lbl_deleted_on: "Deleted on", btn_restore: "Restore", msg_history_empty: "No recently deleted items.", cfg_history_retention: "Keep history for", lbl_wipe_history: "Deleted History",
+                market_title: "Market Mode", market_price_label: "Item price", market_name_label: "Name (optional)", market_name_placeholder: "Ex: Coffee", market_qty_label: "Qty.", market_add_item: "Add Item", market_save_edit: "Save Change", market_empty: "No items added yet.", market_total_label: "Purchase Total", market_save_btn: "Save as Expense", market_clear_btn: "Clear", market_confirm_clear: "Clear all items from the list?", market_alert_empty: "Add at least one item before saving.", market_view_title: "Purchase Items", market_items_suffix: "items", market_default_desc: "Grocery Shopping", market_category: "Groceries"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1612,7 +1614,8 @@
                 opt_select: "Seleccione...",
                 lbl_alert: "Alerta", lbl_alerts: "Alertas", tab_notif_alerts: "Alertas", tab_notif_deleted: "Eliminados", cfg_alerts_section_title: "Alertas y Recordatorios:", cfg_notif_label: "Activar alertas en el botón de Notificaciones", cfg_history_section_title: "Historial de Eliminados:", opt_30_days: "30 días", opt_60_days: "60 días", opt_90_days: "90 días",                 btn_saving: "Guardando...", btn_saved: "Guardado a las",
                 toast_sync_start: "Actualizando datos de la nube...", toast_sync_success: "¡Nube sincronizada!", toast_sync_offline: "Modo sin conexión: usando datos locales.",
-                lbl_deleted_on: "Eliminado el", btn_restore: "Restaurar", msg_history_empty: "No hay elementos eliminados recientemente.", cfg_history_retention: "Conservar historial por", lbl_wipe_history: "Historial de eliminados"
+                lbl_deleted_on: "Eliminado el", btn_restore: "Restaurar", msg_history_empty: "No hay elementos eliminados recientemente.", cfg_history_retention: "Conservar historial por", lbl_wipe_history: "Historial de eliminados",
+                market_title: "Modo Mercado", market_price_label: "Precio del artículo", market_name_label: "Nombre (opcional)", market_name_placeholder: "Ej: Café", market_qty_label: "Cant.", market_add_item: "Añadir Artículo", market_save_edit: "Guardar Cambio", market_empty: "Ningún artículo añadido todavía.", market_total_label: "Total de la Compra", market_save_btn: "Guardar como Gasto", market_clear_btn: "Limpiar", market_confirm_clear: "¿Borrar todos los artículos de la lista?", market_alert_empty: "Añade al menos un artículo antes de guardar.", market_view_title: "Artículos de la Compra", market_items_suffix: "artículos", market_default_desc: "Compras en el Mercado", market_category: "Mercado"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1648,7 +1651,8 @@
                 lbl_alert: "Alerte", lbl_alerts: "Alertes", tab_notif_alerts: "Alertes", tab_notif_deleted: "Supprimés", cfg_alerts_section_title: "Alertes et Rappels :", cfg_notif_label: "Activer les alertes sur le bouton Notifications", cfg_history_section_title: "Historique des suppressions :", opt_30_days: "30 jours", opt_60_days: "60 jours", opt_90_days: "90 jours",
                 btn_saving: "Enregistrement...", btn_saved: "Enregistré à",
                 toast_sync_start: "Mise à jour des données du cloud...", toast_sync_success: "Cloud synchronisé !", toast_sync_offline: "Mode hors ligne : utilisation des données locales.",
-                lbl_deleted_on: "Supprimé le", btn_restore: "Restaurer", msg_history_empty: "Aucun élément supprimé récemment.", cfg_history_retention: "Conserver l'historique pendant", lbl_wipe_history: "Historique des suppressions"
+                lbl_deleted_on: "Supprimé le", btn_restore: "Restaurer", msg_history_empty: "Aucun élément supprimé récemment.", cfg_history_retention: "Conserver l'historique pendant", lbl_wipe_history: "Historique des suppressions",
+                market_title: "Mode Marché", market_price_label: "Prix de l'article", market_name_label: "Nom (facultatif)", market_name_placeholder: "Ex : Café", market_qty_label: "Qté", market_add_item: "Ajouter un article", market_save_edit: "Enregistrer la modification", market_empty: "Aucun article ajouté pour l'instant.", market_total_label: "Total de l'achat", market_save_btn: "Enregistrer comme Dépense", market_clear_btn: "Effacer", market_confirm_clear: "Effacer tous les articles de la liste ?", market_alert_empty: "Ajoutez au moins un article avant d'enregistrer.", market_view_title: "Articles de l'achat", market_items_suffix: "articles", market_default_desc: "Courses au marché", market_category: "Marché"
             }
         };
 
@@ -1674,6 +1678,10 @@
             const dGlobalNew = document.getElementById('global-edit-new'); if(dGlobalNew) dGlobalNew.placeholder = t('ph_add_new');
             const dGlobalSearch = document.getElementById('global-edit-search'); if(dGlobalSearch) dGlobalSearch.placeholder = t('placeholder_search');
             const dInvSearch = document.getElementById('invoice-search-input'); if(dInvSearch) dInvSearch.placeholder = t('placeholder_search');
+
+            const dMarketName = document.getElementById('market-name'); if(dMarketName) dMarketName.placeholder = t('market_name_placeholder');
+            const marketAddBtn = document.getElementById('market-add-btn');
+            if (marketAddBtn) marketAddBtn.querySelector('span').textContent = marketEditingId ? t('market_save_edit') : t('market_add_item');
             
             document.querySelectorAll('.split-person').forEach(el => el.placeholder = t('placeholder_name'));
             document.querySelectorAll('.split-status option[value="pendente"]').forEach(el => el.textContent = t('str_split_pen'));
@@ -1796,7 +1804,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.6.2';
+        const FLOWME_VERSION = 'beta-3.6.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2524,7 +2532,7 @@
             document.getElementById('market-qty').value = marketQtyTemp;
         
             const addBtn = document.getElementById('market-add-btn');
-            addBtn.querySelector('span').textContent = 'Salvar Alteração';
+            addBtn.querySelector('span').textContent = t('market_save_edit');
             addBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
             addBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
             document.getElementById('market-cancel-edit-btn').classList.remove('hidden');
@@ -2541,7 +2549,7 @@
             document.getElementById('market-qty').value = marketQtyTemp;
         
             const addBtn = document.getElementById('market-add-btn');
-            addBtn.querySelector('span').textContent = 'Adicionar Item';
+            addBtn.querySelector('span').textContent = t('market_add_item');
             addBtn.classList.remove('bg-amber-500', 'hover:bg-amber-600');
             addBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
             document.getElementById('market-cancel-edit-btn').classList.add('hidden');
@@ -2560,7 +2568,7 @@
         
         function clearMarketList() {
             if (marketList.length === 0) return;
-            if (confirm('Limpar todos os itens da lista?')) {
+            if (confirm(t('market_confirm_clear'))) {
                 marketList = [];
                 cancelMarketEdit(); // reseta campos e o botão, e já redesenha a lista vazia
             }
@@ -2602,7 +2610,7 @@
 
         function goToSaveMarketPurchase() {
             if (marketList.length === 0) {
-                alert('Adicione pelo menos um item antes de salvar.');
+                alert(t('market_alert_empty'));
                 return;
             }
         
@@ -2634,9 +2642,9 @@
             document.querySelector('input[name="type"][value="despesa"]').checked = true;
             toggleTypeFields('despesa');
         
-            document.getElementById('description').value = 'Compras no Mercado';
+            document.getElementById('description').value = t('market_default_desc');
             document.getElementById('value').value = formatMaskedValue(total);
-            document.getElementById('category').value = 'Mercado';
+            document.getElementById('category').value = t('market_category');
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
         
             // Avisa o formulário que, quando for salvo, a lista do mercado deve ser limpa
@@ -3373,7 +3381,13 @@
                         let fInvMonth = currentInvMonth ? `${currentInvMonth.getFullYear()}-${String(currentInvMonth.getMonth()+1).padStart(2,'0')}` : null;
                         let parsedSplits = splits.map(s => ({ ...s, value: logic === 'total' ? (s.value / numInstallments) : s.value }));
                         
-                        state.transactions.push({ id: 't-' + Date.now() + i, groupId: newGroupId, type, expenseType: expType, invoiceMonth: fInvMonth, description: `${description} (${i}/${numInstallments})`, value: baseValue, date: (expType === 'credito' ? dateStr : fDate), category, paymentMethod, status: i === 1 ? status : 'pendente', splits: parsedSplits });
+                        const installmentTrx = { id: 't-' + Date.now() + i, groupId: newGroupId, type, expenseType: expType, invoiceMonth: fInvMonth, description: `${description} (${i}/${numInstallments})`, value: baseValue, date: (expType === 'credito' ? dateStr : fDate), category, paymentMethod, status: i === 1 ? status : 'pendente', splits: parsedSplits };
+                    
+                        if (i === 1 && marketPendingSave && marketList.length > 0) {
+                            installmentTrx.items = marketList.map(it => ({ name: it.name, price: it.price, quantity: it.quantity }));
+                        }
+                    
+                        state.transactions.push(installmentTrx);
                         
                         currentDate.setMonth(currentDate.getMonth() + 1);
                         if(currentInvMonth) currentInvMonth.setMonth(currentInvMonth.getMonth() + 1);
@@ -3782,7 +3796,7 @@
                         <td class="p-3">
                             <div class="font-bold text-slate-800 dark:text-slate-100 text-sm">${trx.description || '--'}</div>
                             <div class="mt-1"><span class="inline-flex items-center px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 rounded text-[9px] font-bold uppercase tracking-wider dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300"><i class="fa-solid fa-tag mr-1 text-slate-400"></i> ${trx.category || '--'}</span></div>
-                            ${(trx.items && trx.items.length > 0) ? `<div class="mt-1"><button onclick="viewMarketItems('${trx.id}')" class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-indigo-50 border border-indigo-200 text-indigo-600 rounded text-[9px] font-bold uppercase tracking-wider dark:bg-indigo-900/30 dark:border-indigo-800 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition"><i class="fa-solid fa-list"></i> ${trx.items.length} itens</button></div>` : ''}
+                            ${(trx.items && trx.items.length > 0) ? `<div class="mt-1"><button onclick="viewMarketItems('${trx.id}')" ...><i class="fa-solid fa-list"></i> ${trx.items.length} ${t('market_items_suffix')}</button></div>` : ''}
                             ${badges}
                         </td>
                         <td class="p-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">
@@ -4331,15 +4345,12 @@
         function renderDashboard(filtered) {
         // PROCESSA AS BARRAS DE LIMITES
             if(!state.limits) state.limits = [];
-            const limitsSection = document.getElementById('dashboard-limits-section');
             const limitsContainer = document.getElementById('dashboard-limits-container');
-            
+            limitsContainer.innerHTML = '';
+        
             if(state.limits.length === 0) {
-                limitsSection.classList.add('hidden');
+                limitsContainer.innerHTML = `<p class="text-xs text-slate-400 col-span-full" data-i18n="lim_empty">${t('lim_empty')}</p>`;
             } else {
-                limitsSection.classList.remove('hidden');
-                limitsContainer.innerHTML = '';
-                
                 // Separa só as compras do mês atual
                 const currentMonthTx = state.transactions.filter(t => {
                     const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
@@ -4362,17 +4373,21 @@
                     });
         
                     const pct = Math.min(100, (spent / lim.max) * 100);
-                    let color = 'bg-emerald-500'; // Seguro (Verde)
-                    if(pct >= 90) color = 'bg-rose-500'; // Estourando (Vermelho)
-                    else if(pct >= 70) color = 'bg-amber-400'; // Atenção (Amarelo)
+                    let color = 'bg-emerald-500';
+                    if(pct >= 90) color = 'bg-rose-500';
+                    else if(pct >= 70) color = 'bg-amber-400';
         
                     const remaining = lim.max - spent;
         
                     limitsContainer.innerHTML += `
                         <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-xl shadow-sm">
-                            <div class="flex justify-between items-center mb-1.5">
-                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate w-3/5">${lim.target}</span>
-                                <span class="text-[10px] font-bold ${remaining < 0 ? 'text-rose-500' : 'text-slate-500'}">${formatCurrency(spent)} / ${formatCurrency(lim.max)}</span>
+                            <div class="flex justify-between items-center mb-1.5 gap-2">
+                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${lim.target}</span>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <span class="text-[10px] font-bold ${remaining < 0 ? 'text-rose-500' : 'text-slate-500'}">${formatCurrency(spent)} / ${formatCurrency(lim.max)}</span>
+                                    <button onclick="openLimitModal('${lim.id}')" class="text-slate-400 hover:text-blue-500 transition"><i class="fa-solid fa-pen text-[11px]"></i></button>
+                                    <button onclick="deleteLimit('${lim.id}')" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-[11px]"></i></button>
+                                </div>
                             </div>
                             <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-1.5 overflow-hidden">
                                 <div class="${color} h-2 rounded-full transition-all duration-700" style="width: ${pct}%"></div>

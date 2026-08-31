@@ -82,7 +82,6 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
             border-width: 1px !important;
             isolation: isolate;
-            transform: translateZ(0);
         }
         /* TEMA CLARO */
         .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed { 
@@ -1795,7 +1794,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.7.0';
+        const FLOWME_VERSION = 'beta-3.7.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

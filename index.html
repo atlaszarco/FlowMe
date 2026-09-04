@@ -77,7 +77,7 @@
 
         /* 2. Elementos Flutuantes (Modais, Ilhas do Header, Pílula e Pop-up Mobile) */
         .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed {
-            backdrop-filter: blur(20px) !important;
+            /*backdrop-filter: blur(20px) !important;*/
             -webkit-backdrop-filter: blur(20px) !important;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
             border-width: 1px !important;
@@ -177,7 +177,7 @@
         /* Quando a pílula tiver um item focado, remove os buracos (gaps e margens) */
         #global-toolbar.is-focused {
             gap: 0px !important;
-            padding: calc(0.5rem + 6px) !important;
+            padding: calc(0.5rem + 3px) !important;
         }
         
         #global-toolbar.is-focused > div {
@@ -1806,7 +1806,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.7.5';
+        const FLOWME_VERSION = 'beta-3.7.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

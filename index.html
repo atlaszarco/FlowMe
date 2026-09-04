@@ -295,6 +295,10 @@
             transform: translateZ(0);
         }
 
+        #island-tabs button:hover {
+            filter: none !important;
+        }
+
         #invoice-header-card {
             transform: translateZ(0);
             will-change: transform;
@@ -1812,7 +1816,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.7.8';
+        const FLOWME_VERSION = 'beta-3.7.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

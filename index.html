@@ -295,6 +295,11 @@
             transform: translateZ(0);
         }
 
+        #invoice-header-card {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
         body.mode-blocks .acc-content { grid-template-rows: 1fr !important; }
         body.mode-blocks .acc-icon { display: none !important; }
         body.mode-blocks .acc-action { opacity: 1 !important; transform: scale(1) !important; pointer-events: auto !important; }
@@ -833,7 +838,7 @@
 
 <!-- ================= BLOCO 5: ABA FATURAS ================= -->
         <div id="content-faturas" class="tab-content hidden max-w-5xl mx-auto space-y-4">
-            <div id="invoice-header-card" style="transform: translateZ(0);" class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-md p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div id="invoice-header-card" class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-md p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div class="flex-1 w-full min-w-0">
                     <label class="block text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1" data-i18n="lbl_select_card">Selecione o Cartão:</label>
                     <div class="flex gap-2 w-full md:w-max">
@@ -1807,7 +1812,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.7.7';
+        const FLOWME_VERSION = 'beta-3.7.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

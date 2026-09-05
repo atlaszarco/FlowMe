@@ -291,15 +291,7 @@
         @media (hover: hover) { button:hover { filter: brightness(1.08); } }
         .dark button:hover { filter: brightness(1.15); }
         
-        #island-tabs button {
-            transform: translateZ(0);
-        }
-
-        #island-tabs button:hover {
-            filter: none !important;
-        }
-
-        #invoice-header-card {
+       #main-header {
             transform: translateZ(0);
             will-change: transform;
         }
@@ -1816,7 +1808,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.7.9';
+        const FLOWME_VERSION = 'beta-3.8.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -3303,7 +3295,7 @@
                 backdrop.classList.remove('hidden');
                 wrapper.classList.remove('hidden');
                 
-                wrapper.classList.add('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                wrapper.classList.add('fixed', 'z-[60]', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
                 
                 requestAnimationFrame(() => {
                     backdrop.classList.remove('opacity-0');

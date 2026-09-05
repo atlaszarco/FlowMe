@@ -3295,7 +3295,9 @@
                 backdrop.classList.remove('hidden');
                 wrapper.classList.remove('hidden');
                 
-                wrapper.classList.add('fixed', 'z-[60]', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                wrapper.classList.add('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'overflow-y-auto', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                backdrop.classList.add('market-stack');
+                wrapper.classList.add('market-stack');
                 
                 requestAnimationFrame(() => {
                     backdrop.classList.remove('opacity-0');

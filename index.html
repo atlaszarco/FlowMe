@@ -448,7 +448,7 @@
 
             <!-- Botão do Ícone Fixo (Esquerda) -->
             <button id="btn-filter-icon" onclick="isFilterExpanded ? toggleFilterMode(event) : openFilter()" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-auto">
-                <i id="filter-icon-display" class="fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300"></i>
+                <i id="filter-icon-display" class="fa-regular fa-calendar fa-fw text-lg sm:text-xl transition-transform duration-300"></i>
             </button>
 
             <!-- Área de Conteúdo Dinâmico (Direita) - Isolada do Ícone -->
@@ -496,9 +496,9 @@
 
     <!-- 3. BOTÃO SALVAR (NUVEM) -->
     <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-right">
-        <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 sm:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
-            <i id="save-icon" class="fa-solid fa-cloud-arrow-up text-lg sm:text-xl transition-transform duration-300"></i>
-            <span id="save-btn-text" data-i18n="btn_save_data" class="hidden sm:inline text-sm sm:text-base">Sincronizar Nuvem</span>
+        <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 bg-slate-900 text-white dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 min-[700px]:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+            <i id="save-icon" class="fa-solid fa-cloud-arrow-up text-lg min-[700px]:text-xl transition-transform duration-300"></i>
+            <span id="save-btn-text" data-i18n="btn_save_data" class="hidden min-[700px]:inline text-sm min-[700px]:text-base">Sincronizar Nuvem</span>
         </button>
     </div>
 
@@ -824,11 +824,11 @@
         </div>
             
         <!-- Botão Flutuante (FAB) - NOVA TRANSAÇÃO -->
-        <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
+        <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 sm:bottom-[136px] right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
             <i class="fa-solid fa-plus"></i>
         </button>
         <!-- Botão Flutuante (FAB) - MODO MERCADO -->
-        <button id="fab-market" onclick="openMarketMode(true)" class="lg:hidden fixed bottom-48 right-6 w-14 h-14 bg-indigo-500 text-white rounded-full shadow-[0_8px_30px_rgba(99,102,241,0.4)] items-center justify-center text-2xl z-[60] hover:bg-indigo-600 transition-transform active:scale-90 flex">
+        <button id="fab-market" onclick="openMarketMode(true)" class="lg:hidden fixed bottom-48 sm:bottom-[216px] right-6 w-14 h-14 bg-indigo-500 text-white rounded-full shadow-[0_8px_30px_rgba(99,102,241,0.4)] items-center justify-center text-2xl z-[60] hover:bg-indigo-600 transition-transform active:scale-90 flex">
             <i class="fa-solid fa-cart-shopping"></i>
         </button>
 
@@ -1807,7 +1807,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.8.0';
+        const FLOWME_VERSION = 'beta-3.8.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2307,6 +2307,21 @@
             measureTextWidth._ctx.font = `${fontWeight} ${fontSizePx}px Inter, sans-serif`;
             return measureTextWidth._ctx.measureText(text).width;
         }
+
+        function measureRealTextWidth(text, referenceEl) {
+            const clone = document.createElement('span');
+            clone.className = referenceEl.className;
+            clone.style.position = 'absolute';
+            clone.style.visibility = 'hidden';
+            clone.style.whiteSpace = 'nowrap';
+            clone.style.left = '-9999px';
+            clone.style.top = '-9999px';
+            clone.textContent = text;
+            document.body.appendChild(clone);
+            const width = clone.getBoundingClientRect().width;
+            document.body.removeChild(clone);
+            return width;
+        }
         
         function updateFilterUI() {
             const wrapper = document.getElementById('filter-wrapper');
@@ -2343,12 +2358,12 @@
 
             // 2. APLICAÇÃO DOS TEXTOS E ÍCONES
             if (currentFilterMode === 'month') {
-                icon.className = 'fa-regular fa-calendar text-lg sm:text-xl transition-transform duration-300';
+                icon.className = 'fa-regular fa-calendar fa-fw text-lg sm:text-xl transition-transform duration-300';
                 if (collapsedText) collapsedText.textContent = isMicro ? '' : monthTextLong;
                 const md = document.getElementById('month-display');
                 if (md) md.textContent = isMicro ? monthTextShort : monthTextLong;
             } else {
-                icon.className = 'fa-solid fa-calendar-days text-lg sm:text-xl transition-transform duration-300';
+                icon.className = 'fa-solid fa-calendar-days fa-fw text-lg sm:text-xl transition-transform duration-300';
                 if (collapsedText) collapsedText.textContent = isMicro ? '' : rangeText;
             }
 
@@ -2377,14 +2392,12 @@
                         wMonth = '180px';
                     } else {
                         const displayText = monthTextLong.toUpperCase();
-                        const fontSizePx = window.innerWidth < 640 ? 11 : 14;
-                        let textWidthPx = measureTextWidth(displayText, fontSizePx);
-                        textWidthPx += displayText.length * fontSizePx * 0.025;
+                        const textWidthPx = measureRealTextWidth(displayText, document.getElementById('month-display'));
 
                         const chevronBtns = modeMonth.querySelectorAll(':scope > button');
                         const chevronsWidth = chevronBtns.length ? (chevronBtns[0].offsetWidth * chevronBtns.length) : 80;
                         const iconAreaWidth = iconBtn ? iconBtn.offsetWidth : 56;
-                        const safetyBuffer = 16;
+                        const safetyBuffer = 20;
 
                         wMonth = `${Math.ceil(iconAreaWidth + chevronsWidth + textWidthPx + safetyBuffer)}px`;
                     }
@@ -3076,7 +3089,7 @@
             btn.style.setProperty('color', '#ffffff', 'important');
 
             if (btnText) {
-                btnText.classList.remove('hidden', 'sm:inline');
+                btnText.classList.remove('hidden', 'min-[700px]:inline');
                 btnText.classList.add('inline');
             }
 
@@ -3120,7 +3133,7 @@
                     if (btnText) {
                         btnText.textContent = t('btn_save_data') || 'Sincronizar Nuvem';
                         btnText.classList.remove('inline');
-                        btnText.classList.add('hidden', 'sm:inline');
+                        btnText.classList.add('hidden', 'min-[700px]:inline');
                     }
                     btn.classList.remove('is-saving', '!bg-emerald-600', '!text-white', 'dark:!bg-emerald-600');
                     btn.style.removeProperty('background-color');

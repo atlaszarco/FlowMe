@@ -1403,8 +1403,7 @@
 
     <!-- MODAL: MODO MERCADO -->
     <div id="modal-market" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
-        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
-            
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-md overflow-y-auto overflow-x-hidden flex flex-col max-h-[90vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">            
             <!-- Cabeçalho -->
             <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">
@@ -1807,7 +1806,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.8.2';
+        const FLOWME_VERSION = 'beta-3.8.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

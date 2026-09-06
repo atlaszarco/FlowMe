@@ -54,19 +54,19 @@
         /* ================= PADRÃO GLASSMORPHISM GLOBAL ================= */
         /* 1. Painéis Comuns (Cartões, Gavetas, Faturas, Gráficos) */
         .bg-white, .dark\:bg-slate-800 {
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
             border-width: 1px !important;
             isolation: isolate;
         }
         /* TEMA CLARO */
         .bg-white { 
-            background-color: rgba(255, 255, 255, 0.45) !important; 
-            border-color: rgba(0, 0, 0, 0.12) !important; 
+            background-color: rgba(236, 253, 245, 0.4) !important; 
+            border-color: rgba(16, 185, 129, 0.18) !important; 
         }
         /* TEMA ESCURO */
         .dark .bg-white, .dark .dark\:bg-slate-800 { 
-            background-color: rgba(30, 41, 59, 0.45) !important; 
+            background-color: rgba(30, 41, 59, 0.4) !important; 
             border-color: rgba(255, 255, 255, 0.1) !important; 
         }
         /* TEMA PRETO */
@@ -77,26 +77,26 @@
 
         /* 2. Elementos Flutuantes (Modais, Ilhas do Header, Pílula e Pop-up Mobile) */
         .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed {
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
             border-width: 1px !important;
             isolation: isolate;
         }
         /* TEMA CLARO */
         .modal-inner, #island-logo, #island-name, #island-tabs, #global-toolbar, #form-wrapper.fixed { 
-            background-color: rgba(255, 255, 255, 0.6) !important; 
-            border-color: rgba(0, 0, 0, 0.15) !important;
+            background-color: rgba(236, 253, 245, 0.4) !important; 
+            border-color: rgba(16, 185, 129, 0.18) !important;
         }
         /* TEMA ESCURO */
         .dark .modal-inner, .dark #island-logo, .dark #island-name, .dark #island-tabs, .dark #global-toolbar, .dark #form-wrapper.fixed {
-            background-color: rgba(15, 23, 42, 0.55) !important; 
+            background-color: rgba(15, 23, 42, 0.4) !important; 
             border-color: rgba(255, 255, 255, 0.15) !important; 
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
         }
         /* TEMA PRETO */
         html.theme-oled .modal-inner, html.theme-oled #island-logo, html.theme-oled #island-name, html.theme-oled #island-tabs, html.theme-oled #global-toolbar, html.theme-oled #form-wrapper.fixed {
-            background-color: rgba(0, 0, 0, 0.5) !important; 
+            background-color: rgba(0, 0, 0, 0.4) !important; 
             border-color: rgba(255, 255, 255, 0.25) !important; 
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
         }
@@ -372,6 +372,12 @@
         /* Botão "Novo" não quebra */
         .acc-action {
             white-space: nowrap !important;
+        }
+
+        #cfg-container .bg-white,
+        #cfg-container .dark\:bg-slate-800 {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
     </style>
 </head>
@@ -757,17 +763,16 @@
                                         <input type="text" id="search-input" autocomplete="off" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
                                     </div>
                                     <div class="flex items-center gap-2 overflow-x-auto">
-                                        <select id="filter-type" onchange="render()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
-                                            <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
+                                        <select id="filter-type" onchange="autoSizeSelect(this); render()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-all duration-300">                                            <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
                                             <option value="receita" data-i18n="flt_income">Receitas</option>
                                             <option value="despesa" data-i18n="flt_expense">Despesas</option>
                                         </select>
-                                        <select id="filter-status" onchange="render()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        <select id="filter-status" onchange="autoSizeSelect(this); render()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-all duration-300">
                                             <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
                                             <option value="pago" data-i18n="flt_paid">Pagos/Recebidos</option>
                                             <option value="pendente" data-i18n="flt_pending">Pendentes</option>
                                         </select>
-                                        <select id="filter-split" onchange="render()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        <select id="filter-split" onchange="autoSizeSelect(this); render()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-all duration-300">
                                             <option value="todos" data-i18n="flt_all_splits">Todas</option>
                                             <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
                                         </select>
@@ -862,17 +867,17 @@
                     <input type="text" id="invoice-search-input" autocomplete="off" oninput="renderFaturas()" data-i18n="placeholder_search" placeholder="Buscar..." class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
                 </div>
                 <div class="flex items-center gap-2 overflow-x-auto">
-                    <select id="invoice-filter-type" onchange="renderFaturas()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
+                    <select id="invoice-filter-type" onchange="autoSizeSelect(this); renderFaturas()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-all duration-300">
                         <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
                         <option value="receita" data-i18n="flt_income">Receitas</option>
                         <option value="despesa" data-i18n="flt_expense">Despesas</option>
                     </select>
-                    <select id="invoice-filter-status" onchange="renderFaturas()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
+                    <select id="invoice-filter-status" onchange="autoSizeSelect(this); renderFaturas()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-all duration-300">
                         <option value="todos" data-i18n="flt_all_status">Todos os Status</option>
                         <option value="pago" data-i18n="flt_paid">Pagos</option>
                         <option value="pendente" data-i18n="flt_pending">Pendentes</option>
                     </select>
-                    <select id="invoice-filter-split" onchange="renderFaturas()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
+                    <select id="invoice-filter-split" onchange="autoSizeSelect(this); renderFaturas()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-all duration-300">
                         <option value="todos" data-i18n="flt_all_splits">Todas</option>
                         <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
                     </select>
@@ -1727,6 +1732,7 @@
 
             setTimeout(() => {
                 if (typeof render === 'function') render(); 
+                autoSizeAllFilterSelects();
             }, 50);
         }
         
@@ -1807,7 +1813,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.8.4';
+        const FLOWME_VERSION = 'beta-3.8.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1872,9 +1878,8 @@
                 changeGlobalMonth(state.currentMonth);
                 switchTab('transacoes');
                 setLanguage(userConfig.lang);
-            
-                // Primeiro desenho da tela
                 render();
+                autoSizeAllFilterSelects();
             }, 150);
 
             setTimeout(() => {
@@ -2306,6 +2311,22 @@
             }
             measureTextWidth._ctx.font = `${fontWeight} ${fontSizePx}px Inter, sans-serif`;
             return measureTextWidth._ctx.measureText(text).width;
+        }
+
+        function autoSizeSelect(selectEl) {
+            if (!selectEl || selectEl.selectedIndex < 0) return;
+            const selectedText = selectEl.options[selectEl.selectedIndex].text;
+            const textWidth = measureTextWidth(selectedText, 12, '500'); // 12px = text-xs
+            const horizontalPadding = 24; // as duas bordas p-1.5 do Tailwind, com folga
+            const arrowSpace = 28;        // espaço reservado pra setinha nativa do select
+            const borderWidth = 2;        // 1px de cada lado
+            const totalWidth = Math.ceil(textWidth + horizontalPadding + arrowSpace + borderWidth);
+            selectEl.style.width = totalWidth + 'px';
+        }
+        
+        function autoSizeAllFilterSelects() {
+            ['filter-type', 'filter-status', 'filter-split', 'invoice-filter-type', 'invoice-filter-status', 'invoice-filter-split']
+                .forEach(id => { const el = document.getElementById(id); if (el) autoSizeSelect(el); });
         }
 
         function measureRealTextWidth(text, referenceEl) {

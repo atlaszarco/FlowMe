@@ -196,14 +196,6 @@
         /* ANIMAÇÕES DA PÍLULA */
         /* Calendário */
         /* O JavaScript controla o ciclo de 3s */
-
-        @keyframes flip-and-wait {
-            0%   { transform: perspective(400px) rotateY(0deg); }
-            12%  { transform: perspective(400px) rotateY(180deg); }
-            24%  { transform: perspective(400px) rotateY(360deg); }
-            100% { transform: perspective(400px) rotateY(360deg); }
-        }
-
         .calendar-flipping {
             animation: calendar-flip 0.5s ease-in-out;
         }
@@ -332,10 +324,10 @@
             .accordion-header .acc-action { padding: 0.35rem 0.5rem !important; font-size: 0.65rem !important; }
         }
         
-        @media (max-width: 300px) {
+        /*@media (max-width: 300px) {
             .micro-shrink { padding-left: 0.5rem !important; padding-right: 0.5rem !important; font-size: 0.7rem !important; }
             .micro-icon { font-size: 0.9rem !important; }
-        }
+        }*/
 
         /* Força o cabeçalho do accordion a nunca quebrar em duas linhas */
         .accordion-header {
@@ -1816,7 +1808,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.9.1';
+        const FLOWME_VERSION = 'beta-3.9.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

@@ -306,11 +306,7 @@
         body.mode-blocks .acc-icon { display: none !important; }
         body.mode-blocks .acc-action { opacity: 1 !important; transform: scale(1) !important; pointer-events: auto !important; }
         body.mode-blocks .accordion-header { cursor: default !important; pointer-events: none !important; }
-        body.mode-blocks .accordion-header .acc-action { pointer-events: auto !important; } 
-
-        /* CORES PERSONALIZADAS: Botão Filtro */      
-        .dark .btn-filter-dark { background-color: #10b981; color: #020617; }
-        .dark .btn-filter-dark:hover { background-color: #ffffff; color: #020617; }
+        body.mode-blocks .accordion-header .acc-action { pointer-events: auto !important; }
 
         /* MICRO-RESPONSIVIDADE (< 420px e < 300px) */
         @media (max-width: 420px) {
@@ -1820,7 +1816,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.8.6';
+        const FLOWME_VERSION = 'beta-3.8.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2324,8 +2320,8 @@
             if (!selectEl || selectEl.selectedIndex < 0) return;
             const selectedText = selectEl.options[selectEl.selectedIndex].text;
             const textWidth = measureTextWidth(selectedText, 12, '500'); // 12px = text-xs
-            const horizontalPadding = 24; // as duas bordas p-1.5 do Tailwind, com folga
-            const arrowSpace = 28;        // espaço reservado pra setinha nativa do select
+            const horizontalPadding = 14; // as duas bordas p-1.5 do Tailwind (12px reais + 2px de folga)
+            const arrowSpace = 20;        // espaço reservado pra setinha nativa do select
             const borderWidth = 2;        // 1px de cada lado
             const totalWidth = Math.ceil(textWidth + horizontalPadding + arrowSpace + borderWidth);
             selectEl.style.width = totalWidth + 'px';
@@ -2409,10 +2405,10 @@
                 content.classList.add('opacity-100', 'pointer-events-auto');
 
                 wrapper.classList.remove(
-                    'dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white',
+                    'pill-action-btn', 'dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white',
                     'hover:!bg-indigo-600', 'hover:!text-white', 'dark:hover:!bg-indigo-500', 'theme-oled:hover:!bg-indigo-500'
                 );
-                wrapper.classList.add('dark:btn-filter-dark');
+                wrapper.classList.add('bg-indigo-600', 'text-white', 'hover:bg-indigo-500');
                 
                 if (currentFilterMode === 'month') {
                     let wMonth;
@@ -2455,9 +2451,9 @@
                 iconBtn.classList.remove('bg-black/10', 'dark:bg-white/10');
                 iconBtn.classList.add('pointer-events-none');
                 wrapper.classList.remove('is-expanded');
-                wrapper.classList.remove('dark:btn-filter-dark');
+                wrapper.classList.remove('bg-indigo-600', 'text-white', 'hover:bg-indigo-500');
                 wrapper.classList.add(
-                    'dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white',
+                    'pill-action-btn', 'dark:bg-slate-800', 'theme-oled:bg-[#111]', 'dark:text-white', 'theme-oled:text-white',
                     'hover:!bg-indigo-600', 'hover:!text-white', 'dark:hover:!bg-indigo-500', 'theme-oled:hover:!bg-indigo-500'
                 );
                 
@@ -3335,9 +3331,11 @@
                 backdrop.classList.remove('hidden');
                 wrapper.classList.remove('hidden');
                 
-                wrapper.classList.add('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'flex', 'flex-col', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
-                    const scrollInner = document.getElementById('form-scroll-inner');
-                    if (scrollInner) scrollInner.classList.add('flex-1', 'min-h-0', 'overflow-y-auto', 'overflow-x-hidden');
+                wrapper.classList.add('fixed', 'z-[62]', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'flex', 'flex-col', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                backdrop.classList.remove('z-40');
+                backdrop.classList.add('z-[61]');
+                const scrollInner = document.getElementById('form-scroll-inner');
+                if (scrollInner) scrollInner.classList.add('flex-1', 'min-h-0', 'overflow-y-auto', 'overflow-x-hidden');
                 
                 requestAnimationFrame(() => {
                     backdrop.classList.remove('opacity-0');
@@ -3352,9 +3350,12 @@
                 setTimeout(() => {
                     wrapper.classList.add('hidden');
                     backdrop.classList.add('hidden');
-                    wrapper.classList.remove('fixed', 'z-50', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'flex', 'flex-col', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
-                        const scrollInner = document.getElementById('form-scroll-inner');
-                        if (scrollInner) scrollInner.classList.remove('flex-1', 'min-h-0', 'overflow-y-auto', 'overflow-x-hidden');                    wrapper.classList.remove('market-stack');
+                    wrapper.classList.remove('fixed', 'z-[62]', 'top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2', 'w-[90%]', 'max-w-md', 'max-h-[90vh]', 'flex', 'flex-col', 'transition-all', 'duration-500', 'opacity-0', 'scale-95');
+                    backdrop.classList.remove('z-[61]');
+                    backdrop.classList.add('z-40');
+                    const scrollInner = document.getElementById('form-scroll-inner');
+                    if (scrollInner) scrollInner.classList.remove('flex-1', 'min-h-0', 'overflow-y-auto', 'overflow-x-hidden');
+                    wrapper.classList.remove('market-stack');
                     backdrop.classList.remove('market-stack');
                     marketPendingSave = false;
                     

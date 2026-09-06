@@ -2791,7 +2791,7 @@
         });
         
         // Efeito de rolagem na aba transações para o Modal Nova Movimentação
-        document.getElementById('form-backdrop'));
+        document.getElementById('form-backdrop').addEventListener('mousedown', () => toggleMobileForm(false));
         
         function filterGlobalEdit() {
             const term = document.getElementById('global-edit-search').value.toLowerCase();

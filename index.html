@@ -19,7 +19,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #dedfe0;
+            background-color: #f8fafc;
             transition: background-color 0.3s, color 0.3s;
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -373,16 +373,12 @@
         #modal-global-edit { z-index: 68 !important; }    
 
         /* BOTÕES DE AÇÃO DA PÍLULA (Filtro, Alertas, Salvar) - VIDRO NO MODO CLARO */
-        html:not(.dark) .pill-action-btn {
-            background-color: rgba(236, 253, 245, 0.55) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(16, 185, 129, 0.25) !important;
-            color: #0f172a !important;
-        }
-        html:not(.dark) .pill-action-btn:hover {
-            background-color: rgba(16, 185, 129, 0.3) !important;
-            color: #0f172a !important;
+        :where(html:not(.dark)) .pill-action-btn {
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            color: #0f172a;
         }
         
         /* Botão "Novo" não quebra */

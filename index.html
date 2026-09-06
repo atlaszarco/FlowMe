@@ -1816,7 +1816,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.8.8';
+        const FLOWME_VERSION = 'beta-3.8.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2878,30 +2878,6 @@
             if (width < 768 && !portrait) return 'mobile-landscape';
             if (width < 1024) return 'tablet';
             return 'desktop';
-        }
-
-        function updateSaveDisplay(profile) {
-            const saveText = document.querySelector('#btn-manual-save span[data-i18n="btn_save_data"]');
-            const saveTime = document.getElementById('last-save-time');
-            if (!saveText || !saveTime) return;
-
-            if (profile === 'desktop' || profile === 'tablet' || profile === 'mobile-landscape') {
-                saveText.classList.remove('hidden'); saveTime.classList.remove('hidden');
-            } else {
-                saveText.classList.add('hidden'); saveTime.classList.add('hidden');
-            }
-        }
-
-        function updateSaveTimestamp() {
-            const now = new Date(); 
-            const timeStr = now.toLocaleTimeString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit'});
-            const profile = responsiveProfile || getResponsiveProfile();
-            
-            if(profile === 'desktop') {
-                document.getElementById('last-save-time').innerHTML = `<i class="fa-solid fa-check text-emerald-500 mr-1"></i> <span data-i18n="saved_time">${t('saved_time')}</span> ${timeStr}`;
-            } else {
-                document.getElementById('last-save-time').innerHTML = `<i class="fa-solid fa-check text-emerald-500 mr-1"></i> <span>${timeStr}</span>`;
-            }
         }
 
         function updateGlobalToolbarResponsive() {

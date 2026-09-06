@@ -3061,7 +3061,12 @@
             renderToolbarAlerts(); 
         }
 
-        // ================= SAVE & LOAD =================   
+        // ================= SAVE & LOAD =================
+        function updateSaveTimestamp() {
+            const saveTime = document.getElementById('last-save-time');
+            if (saveTime) saveTime.classList.add('hidden');
+        }
+        
         function saveState() { localStorage.setItem('flowme_state', JSON.stringify(state)); updateSaveTimestamp(); }
         
         let isSaving = false;

@@ -296,17 +296,14 @@
 
         body.mode-blocks .acc-content { grid-template-rows: 1fr !important; }
         body.mode-blocks .acc-icon { display: none !important; }
-        body.mode-blocks .acc-action { opacity: 1 !important; transform: scale(1) !important; pointer-events: auto !important; }
         body.mode-blocks .accordion-header { cursor: default !important; pointer-events: none !important; }
-        body.mode-blocks .accordion-header .acc-action { pointer-events: auto !important; }
-
+        
         /* MICRO-RESPONSIVIDADE (< 420px e < 300px) */
         @media (max-width: 420px) {
             .accordion-header { padding: 1rem 0.875rem !important; }
             .accordion-header h2 { font-size: 0.95rem !important; gap: 0.5rem !important; min-width: 0; }
             .accordion-header h2 span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
             .accordion-header > div { gap: 0.5rem !important; flex-shrink: 0; }
-            .accordion-header .acc-action { padding: 0.35rem 0.5rem !important; font-size: 0.65rem !important; }
             #invoice-total-value { font-size: 1.75rem !important; }
             #summary-income, #summary-expense, #summary-balance, #summary-splits { font-size: 1.15rem !important; }
             #tabs-nav button { font-size: 0.75rem !important; padding: 0.4rem 0.75rem !important; }
@@ -321,7 +318,6 @@
             .accordion-header h2 { font-size: 0.95rem !important; gap: 0.5rem !important; min-width: 0; }
             .accordion-header h2 span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
             .accordion-header > div { gap: 0.5rem !important; flex-shrink: 0; }
-            .accordion-header .acc-action { padding: 0.35rem 0.5rem !important; font-size: 0.65rem !important; }
         }
         
         /*@media (max-width: 300px) {
@@ -369,10 +365,6 @@
             color: #0f172a;
         }
         
-        /* Botão "Novo" não quebra */
-        .acc-action {
-            white-space: nowrap !important;
-        }
     </style>
 </head>
 <body ontouchstart="" class="text-slate-800 antialiased min-h-screen flex flex-col transition-colors">
@@ -1739,7 +1731,6 @@
             
             const content = document.getElementById(`acc-content-${id}`);
             const icon = document.getElementById(`acc-icon-${id}`);
-            const actionBtn = document.getElementById(`acc-action-${id}`); 
             
             if(!content) return; // Proteção extra contra quebras
             const isOpen = content.classList.contains('[grid-template-rows:1fr]');
@@ -1748,13 +1739,11 @@
                 content.classList.remove('[grid-template-rows:1fr]');
                 content.classList.add('[grid-template-rows:0fr]');
                 if(icon) icon.classList.remove('rotate-180');
-                if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = false;
             } else {
                 content.classList.remove('[grid-template-rows:0fr]');
                 content.classList.add('[grid-template-rows:1fr]');
                 if(icon) icon.classList.add('rotate-180');
-                if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                 accordionState[id] = true;
             }
             localStorage.setItem('flowme_accordions', JSON.stringify(accordionState));
@@ -1768,7 +1757,6 @@
                 const id = header.getAttribute('data-acc-id');
                 const content = document.getElementById(`acc-content-${id}`);
                 const icon = document.getElementById(`acc-icon-${id}`);
-                const actionBtn = document.getElementById(`acc-action-${id}`);
                 
                 if(!content) return; // Proteção extra
                 
@@ -1782,12 +1770,10 @@
                         content.classList.remove('[grid-template-rows:0fr]');
                         content.classList.add('[grid-template-rows:1fr]');
                         if(icon) icon.classList.add('rotate-180');
-                        if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                     } else {
                         content.classList.remove('[grid-template-rows:1fr]');
                         content.classList.add('[grid-template-rows:0fr]');
                         if(icon) icon.classList.remove('rotate-180');
-                        if(actionBtn) actionBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
                     }
                 } else {
                     header.classList.remove('cursor-pointer');
@@ -1797,7 +1783,6 @@
                     content.classList.remove('[grid-template-rows:0fr]');
                     content.classList.add('[grid-template-rows:1fr]');
                     if(icon) icon.classList.add('rotate-180');
-                    if(actionBtn) actionBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
                 }
             });
         }
@@ -1808,7 +1793,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.9.2';
+        const FLOWME_VERSION = 'beta-3.9.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 

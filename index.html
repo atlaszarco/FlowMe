@@ -1793,7 +1793,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.9.3';
+        const FLOWME_VERSION = 'beta-3.9.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -1810,8 +1810,20 @@
         };
 
         let resizeTimer;
-        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { render(); applyFormMode(); }, 200); });
-
+        function handleWindowResize() {
+            applyFormMode();
+            updateGlobalToolbarResponsive();
+            updateFilterUI(); // já recalcula o texto/largura da pílula e chama render() sozinha
+        }
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(handleWindowResize, 200);
+        });
+        window.addEventListener('orientationchange', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(handleWindowResize, 200);
+        });
+                
         window.addEventListener('DOMContentLoaded', () => {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('PWA SW erro:', err));
@@ -2863,9 +2875,6 @@
             renderToolbarAlerts();
         }
 
-        window.addEventListener('resize', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
-        window.addEventListener('orientationchange', () => { updateGlobalToolbarResponsive(); updateFilterUI(); changeGlobalMonth(state.currentMonth); });
-        
         // ================= SINO DINÂMICO E ANIMAÇÕES =================
         let isAlertsModalOpen = false;
         let activeNotifTab = 'alerts';

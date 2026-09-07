@@ -1793,7 +1793,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.9.4';
+        const FLOWME_VERSION = 'beta-3.9.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2709,7 +2709,7 @@
         }
 
         function viewMarketItems(trxId) {
-            const trx = state.transactions.find(t => t.id === trxId);
+            const trx = state.transactions.find(item => item.id === trxId);
             if (!trx || !trx.items) return;
         
             const listEl = document.getElementById('market-view-list');
@@ -2803,15 +2803,19 @@
             const m = document.getElementById('modal-global-edit'); const c = document.getElementById('global-edit-content');
             document.getElementById('global-edit-field').value = field;
             document.getElementById('global-edit-search').value = '';
+           
             if(document.getElementById('global-edit-new')) document.getElementById('global-edit-new').value = '';
             document.getElementById('global-edit-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-500 mr-2"></i> ${t('title_manage')}`;
+            
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
             let items = [];
-            if(field === 'category') items = [...new Set([...state.transactions.map(t => t.category), ...(state.customData.category||[])])].filter(Boolean);
-            else if (field === 'paymentMethod') items = [...new Set([...state.transactions.map(t => t.paymentMethod), ...(state.customData.paymentMethod||[])])].filter(Boolean);
-            else if (field === 'description') items = [...new Set([...state.transactions.map(t => t.description.replace(/\s*\(\d+\/\d+\)$/, '')), ...(state.customData.description||[])])].filter(Boolean);
-            else if (field === 'person') items = [...new Set([...state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []), ...(state.customData.person||[])])].filter(Boolean);
+            
+            if(field === 'category') items = [...new Set([...state.transactions.map(trx => trx.category), ...(state.customData.category||[])])].filter(Boolean);
+            else if (field === 'paymentMethod') items = [...new Set([...state.transactions.map(trx => trx.paymentMethod), ...(state.customData.paymentMethod||[])])].filter(Boolean);
+            else if (field === 'description') items = [...new Set([...state.transactions.map(trx => trx.description.replace(/\s*\(\d+\/\d+\)$/, '')), ...(state.customData.description||[])])].filter(Boolean);
+            else if (field === 'person') items = [...new Set([...state.transactions.flatMap(trx => trx.splits ? trx.splits.map(s => s.person) : []), ...(state.customData.person||[])])].filter(Boolean);
             c.innerHTML = '';
+            
             if(items.length === 0) { c.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Nenhum item salvo ainda.</p>'; }
             else {
                 items.sort().forEach(it => {
@@ -2846,10 +2850,10 @@
             newVal = newVal.trim(); if(!newVal || oldVal === newVal) return;
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
             if(state.customData[field]) { const idx = state.customData[field].indexOf(oldVal); if(idx !== -1) state.customData[field][idx] = newVal; }
-            state.transactions.forEach(t => {
-                if(field === 'description') { const match = t.description.match(/(.*)(\s+\(\d+\/\d+\))$/); if(match && match[1] === oldVal) t.description = newVal + match[2]; else if (t.description === oldVal) t.description = newVal; } 
-                else if (field === 'person') { if(t.splits) t.splits.forEach(s => { if(s.person === oldVal) s.person = newVal; }); } 
-                else if(t[field] === oldVal) t[field] = newVal;
+            state.transactions.forEach(trx => {
+                if(field === 'description') { const match = trx.description.match(/(.*)(\s+\(\d+\/\d+\))$/); if(match && match[1] === oldVal) trx.description = newVal + match[2]; else if (trx.description === oldVal) trx.description = newVal; } 
+                else if (field === 'person') { if(trx.splits) trx.splits.forEach(s => { if(s.person === oldVal) s.person = newVal; }); } 
+                else if(trx[field] === oldVal) trx[field] = newVal;
             });
             saveState(); updateAutocompleteLists(); render(); openGlobalEdit(field);
             if(field !== 'person' && document.getElementById(field).value === oldVal) document.getElementById(field).value = newVal;
@@ -3155,8 +3159,8 @@
             if(!state.deletedHistory) state.deletedHistory = [];
             purgeOldDeletedHistory();
             
-            state.transactions.forEach(t => {
-                if(t.type === 'despesa' && !t.expenseType) t.expenseType = 'debito';
+            state.transactions.forEach(trx => {
+                if(trx.type === 'despesa' && !trx.expenseType) trx.expenseType = 'debito';
             });
             updateSaveTimestamp();
         }
@@ -3239,9 +3243,9 @@
 
         function updateAutocompleteLists() {
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
-            const cats = [...new Set([...state.transactions.map(t => t.category), ...(state.customData.category || [])])].filter(Boolean);
-            const methods = [...new Set([...state.transactions.map(t => t.paymentMethod), ...(state.customData.paymentMethod || [])])].filter(Boolean);
-            const people = [...new Set([...state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []), ...(state.customData.person || [])])].filter(Boolean);
+            const cats = [...new Set([...state.transactions.map(trx => trx.category), ...(state.customData.category || [])])].filter(Boolean);
+            const methods = [...new Set([...state.transactions.map(trx => trx.paymentMethod), ...(state.customData.paymentMethod || [])])].filter(Boolean);
+            const people = [...new Set([...state.transactions.flatMap(trx => trx.splits ? trx.splits.map(s => s.person) : []), ...(state.customData.person || [])])].filter(Boolean);
             
             // Criar datalist de categorias se não existir
             let dlCategories = document.getElementById('categories-list');
@@ -3379,7 +3383,7 @@
             }
 
             if (editId) {
-                const index = state.transactions.findIndex(t => t.id === editId);
+                const index = state.transactions.findIndex(trx => trx.id === editId);
                 if (index !== -1) {
                     const oldTrx = state.transactions[index];
                     const descMatch = oldTrx.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
@@ -3393,13 +3397,13 @@
 
                     if (cascade) {
                         const baseOld = descMatch[1]; const curP = parseInt(descMatch[2]); const newDescM = description.match(/(.*)\s+\((\d+)\/(\d+)\)$/); const baseNew = newDescM ? newDescM[1] : description;
-                        state.transactions.forEach(t => {
-                            if(t.groupId === groupId && t.id !== editId) {
-                                const m = t.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
-                                if(m && parseInt(m[2]) > curP) t.description = `${baseNew} (${m[2]}/${m[3]})`;
+                        state.transactions.forEach(trx => {
+                            if(trx.groupId === groupId && trx.id !== editId) {
+                                const m = trx.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
+                                if(m && parseInt(m[2]) > curP) trx.description = `${baseNew} (${m[2]}/${m[3]})`;
                             } else if (!groupId) { // Fallback name match
-                                const m = t.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
-                                if(m && m[1] === baseOld && parseInt(m[2]) > curP) t.description = `${baseNew} (${m[2]}/${m[3]})`;
+                                const m = trx.description.match(/(.*)\s+\((\d+)\/(\d+)\)$/);
+                                if(m && m[1] === baseOld && parseInt(m[2]) > curP) trx.description = `${baseNew} (${m[2]}/${m[3]})`;
                             }
                         });
                     }
@@ -3458,7 +3462,7 @@
         }
 
         function editTransaction(id) {
-            const trx = state.transactions.find(t => t.id === id); if (!trx) return;
+            const trx = state.transactions.find(item => item.id === id); if (!trx) return;
             document.getElementById('edit-id').value = trx.id; document.getElementById('edit-group-id').value = trx.groupId || '';
             document.getElementById('description').value = trx.description; 
             document.getElementById('value').value = formatMaskedValue(trx.value); // Applica máscara ao puxar valor
@@ -3717,13 +3721,30 @@
                 setTimeout(() => toast.remove(), 400);
             }
 
-            state.transactions = state.transactions.filter(t => t.groupId !== batchId);
+            state.transactions = state.transactions.filter(trx => trx.groupId !== batchId);
             saveState(); populateInvoiceCards(); renderFaturas(); render(); updateAutocompleteLists();
             if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
         
-        function toggleStatus(id) { const index = state.transactions.findIndex(t => t.id === id); if(index !== -1) { state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
-        function toggleSplitStatus(transactionId, splitIndex) { const tIndex = state.transactions.findIndex(t => t.id === transactionId); if(tIndex !== -1) { const s = state.transactions[tIndex].splits[splitIndex]; s.status = s.status === 'pago' ? 'pendente' : 'pago'; saveState(); render(); if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); } }
+        function toggleStatus(id) {
+            const index = state.transactions.findIndex(trx => trx.id === id);
+            if(index !== -1) {
+                state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago';
+                saveState(); render();
+                if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            }
+        }
+        
+        function toggleSplitStatus(transactionId, splitIndex) {
+            const tIndex = state.transactions.findIndex(trx => trx.id === transactionId);
+            if(tIndex !== -1) {
+                const s = state.transactions[tIndex].splits[splitIndex];
+                s.status = s.status === 'pago' ? 'pendente' : 'pago';
+                saveState();
+                render();
+                if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            }
+        }
 
         // ================= DUE DATES & ALERTS =================
         function getDueDate(trx) {
@@ -3893,8 +3914,8 @@
                 });
 
                 if (state.limits && state.limits.length > 0) {
-                    const currentMonthTx = state.transactions.filter(t => {
-                        const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                    const currentMonthTx = state.transactions.filter(trx => {
+                        const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
                         return cDate === state.currentMonth;
                     });
                     
@@ -4074,9 +4095,9 @@
             
             if(!state.customData) state.customData = { category: [], paymentMethod: [], description: [], person: [] };
             
-            if(type === 'category') items = [...new Set([...state.transactions.map(t => t.category), ...(state.customData.category||[])])].filter(Boolean);
-            else if (type === 'method') items = [...new Set([...state.transactions.map(t => t.paymentMethod), ...(state.customData.paymentMethod||[])])].filter(Boolean);
-            else if (type === 'person') items = [...new Set([...state.transactions.flatMap(t => t.splits ? t.splits.map(s => s.person) : []), ...(state.customData.person||[])])].filter(Boolean);
+            if(type === 'category') items = [...new Set([...state.transactions.map(trx => trx.category), ...(state.customData.category||[])])].filter(Boolean);
+            else if (type === 'method') items = [...new Set([...state.transactions.map(trx => trx.paymentMethod), ...(state.customData.paymentMethod||[])])].filter(Boolean);
+            else if (type === 'person') items = [...new Set([...state.transactions.flatMap(trx => trx.splits ? trx.splits.map(s => s.person) : []), ...(state.customData.person||[])])].filter(Boolean);
             
             items.sort().forEach(it => { selectEl.innerHTML += `<option value="${it}">${it}</option>`; });
         }
@@ -4141,9 +4162,9 @@
             
             // Filtra as contas do mês atual (Ignorando a conta antiga caso você esteja editando)
             const editId = document.getElementById('edit-id').value;
-            const currentMonthTx = state.transactions.filter(t => {
-                if(t.id === editId) return false;
-                const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+            const currentMonthTx = state.transactions.filter(trx => {
+                if(trx.id === editId) return false;
+                const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
                 return cDate === state.currentMonth;
             });
             
@@ -4409,8 +4430,8 @@
                 limitsContainer.innerHTML = `<p class="text-xs text-slate-400 col-span-full" data-i18n="lim_empty">${t('lim_empty')}</p>`;
             } else {
                 // Separa só as compras do mês atual
-                const currentMonthTx = state.transactions.filter(t => {
-                    const cDate = (t.type === 'despesa' && t.expenseType === 'credito') ? t.invoiceMonth : (t.date ? t.date.substring(0,7) : null);
+                const currentMonthTx = state.transactions.filter(trx => {
+                    const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
                     return cDate === state.currentMonth;
                 });
         
@@ -4625,7 +4646,7 @@
         
         // ================= FATURAS ABA =================
         function populateInvoiceCards() {
-            const cards = [...new Set(state.transactions.filter(t => t.type === 'despesa' && t.expenseType === 'credito').map(t => t.paymentMethod))].filter(Boolean);
+            const cards = [...new Set(state.transactions.filter(trx => trx.type === 'despesa' && trx.expenseType === 'credito').map(trx => trx.paymentMethod))].filter(Boolean);
             const sel = document.getElementById('invoice-card-select'); const cur = sel.value; sel.innerHTML = '';
             if(cards.length === 0) sel.innerHTML = '<option value="">Nenhum cartão encontrado</option>';
             else { cards.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`); if(cards.includes(cur)) sel.value = cur; }
@@ -4901,9 +4922,9 @@
         function exportToCSV() {
             if(!state.transactions.length) return;
             let csv = "data:text/csv;charset=utf-8,ID,GroupId,Tipo,ExpType,InvMonth,Descricao,ValorOriginal,Data,Categoria,Status,FormaPagamento,DadosRateio\n";
-            state.transactions.forEach(t => {
-                let spl = t.splits ? t.splits.map(s => `${s.person}:${s.value}:${s.status}`).join('|') : '';
-                csv += `${t.id},${t.groupId||''},${t.type},${t.expenseType||''},${t.invoiceMonth||''},${(t.description||'').replace(/,/g,'')},${t.value},${t.date||''},${(t.category||'').replace(/,/g,'')},${t.status},${(t.paymentMethod||'').replace(/,/g,'')},${spl}\n`;
+            state.transactions.forEach(trx => {
+                let spl = trx.splits ? trx.splits.map(s => `${s.person}:${s.value}:${s.status}`).join('|') : '';
+                csv += `${trx.id},${trx.groupId||''},${trx.type},${trx.expenseType||''},${trx.invoiceMonth||''},${(trx.description||'').replace(/,/g,'')},${trx.value},${trx.date||''},${(trx.category||'').replace(/,/g,'')},${trx.status},${(trx.paymentMethod||'').replace(/,/g,'')},${spl}\n`;
             });
             const lnk = document.createElement("a"); lnk.href = encodeURI(csv); lnk.download = `FlowMe_Backup.csv`; lnk.click();
         }

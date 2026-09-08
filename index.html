@@ -869,6 +869,7 @@
                     <div class="mt-2 flex flex-wrap items-center gap-2 md:justify-end">
                         <span id="invoice-due-date-display" class="text-xs text-slate-600 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700">Vencimento: --/--/----</span>
                         <button onclick="openInvoiceDueModal()" class="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-lg" data-i18n="btn_edit_due">Editar Vencimento</button>
+                        <button onclick="payInvoice()" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline font-bold bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg" data-i18n="btn_pay_invoice">Marcar Fatura como Paga</button>
                     </div>
                 </div>
             </div>
@@ -1358,6 +1359,12 @@
                     <input type="checkbox" id="invoice-due-apply-all" class="mt-0.5 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500">
                     <span data-i18n="lbl_apply_all">Aplicar como padrão para todas as faturas futuras deste cartão.</span>
                 </label>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="lbl_invoice_account">Conta para Pagamento (opcional)</label>
+                    <select id="invoice-due-account" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500">
+                        <option value="">--</option>
+                    </select>
+                </div>
                 <button onclick="saveInvoiceDueDate()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm transition shadow-md"><span data-i18n="btn_save_due">Salvar Vencimento</span></button>
             </div>
         </div>
@@ -1443,6 +1450,10 @@
                         <span data-i18n="lbl_wipe_accounts">Contas e Saldos</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-recurring" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_recurring">Assinaturas e Recorrências</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" id="wipe-history" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
                         <span data-i18n="lbl_wipe_history">Histórico de Deletados</span>
                     </label>
@@ -1508,6 +1519,37 @@
                     <input type="date" id="goal-deadline" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-emerald-500">
                 </div>
                 <button onclick="saveGoal()" class="w-full py-2 mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition shadow-md"><span data-i18n="btn_save_goal">Salvar Meta</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EDITAR ASSINATURA/RECORRÊNCIA -->
+    <div id="modal-recurring-edit" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm" data-i18n="modal_recurring_edit_title">Editar Assinatura</h3>
+                <button onclick="closeModal('modal-recurring-edit')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 space-y-3">
+                <input type="hidden" id="edit-recurring-id">
+                <p class="text-[10px] text-slate-400" data-i18n="hint_recurring_edit">A alteração vale a partir deste mês, apenas para as parcelas ainda não pagas.</p>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="label_desc">Descrição</label>
+                    <input type="text" id="recurring-edit-description" autocomplete="off" list="descriptions-list" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500 dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide mb-1" data-i18n="label_value">Valor</label>
+                    <input type="text" inputmode="numeric" id="recurring-edit-value" placeholder="0,00" oninput="maskCurrencyField(this)" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide mb-1" data-i18n="label_category">Categoria</label>
+                    <input type="text" id="recurring-edit-category" autocomplete="off" list="categories-list" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500 dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide mb-1" data-i18n="label_account">Conta</label>
+                    <input type="text" id="recurring-edit-account" autocomplete="off" list="methods-list" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-indigo-500 dark:text-white">
+                </div>
+                <button onclick="saveRecurringEdit()" class="w-full py-2 mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition shadow-md"><span data-i18n="btn_save">Salvar</span></button>
             </div>
         </div>
     </div>
@@ -1693,7 +1735,7 @@
                 chart_cashflow: "Fluxo de Caixa (Filtro Atual)", chart_categories: "Despesas por Categoria", chart_evolution: "Evolução (Últimos 6 Meses)", chart_accounts: "Gastos por Conta / Cartão", lbl_chart_inc: "Receitas", lbl_chart_exp: "Despesas",
                 btn_import_csv: "Importar",
                 smart_import_title: "Importador Inteligente", smart_import_desc: "Verifique o mapeamento das colunas e defina o nome do cartão.", lbl_csv_card: "Nome do Cartão / Banco", ph_csv_card: "Ex: Nubank, Santander...", lbl_csv_date: "Coluna de DATA", lbl_csv_desc: "Coluna de DESCRIÇÃO", lbl_csv_val: "Coluna de VALOR", lbl_csv_invert: "Inverter valores negativos?", desc_csv_invert: "Bancos exportam gastos com sinal de menos. Deixe marcado para converter.", btn_confirm_import: "Confirmar Importação",
-                dash_limits: "Orçamentos do Mês", dash_limits_count_one: "{N} limite definido", dash_limits_count_other: "{N} limites definidos", btn_config: "Configurar", btn_new: "Novo", modal_limit_title: "Criar Limite", modal_limit_edit: "Editar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:", btn_view: "Ver", modal_alerts_title: "Notificações", btn_view_trx: "Ver Conta", msg_late: "X dias atrasado", msg_left: "faltam X dias", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento",
+                dash_limits: "Orçamentos do Mês", dash_limits_count_one: "{N} limite definido", dash_limits_count_other: "{N} limites definidos", btn_config: "Configurar", btn_new: "Novo", modal_limit_title: "Criar Limite", modal_limit_edit: "Editar Limite", lbl_lim_type: "Tipo de Limite", opt_lim_cat: "Por Categoria", opt_lim_method: "Por Cartão/Conta", opt_lim_person: "Por Pessoa (Rateio)", lbl_lim_target: "Nome exato", ph_lim_target: "Digite o nome exato...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Salvar Regra", lim_empty: "Nenhum limite cadastrado.", lim_free: "Livre:", lim_busted: "Estourado:", lim_busted_alert: "Estourado em", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "orçamentos em risco", msg_all_control: "Tudo sob controle!", btn_view_dash: "Ver Painel", err_csv_card: "Por favor, digite o nome do Cartão/Banco!", err_lim_fields: "Preencha o nome e o valor!", msg_imported: "contas importadas!", btn_undo: "Desfazer", str_col: "Coluna", str_unnamed: "Sem nome", warn_busted: "⚠️ O orçamento de <b>TARGET</b> será estourado em <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atenção: Essa compra usará PCT% do orçamento de <b>TARGET</b>.", str_budget: "Orçamento:", btn_view: "Ver", modal_alerts_title: "Notificações", btn_view_trx: "Ver Conta", msg_late: "{N} {UNIT} atrasado", msg_left: "faltam {N} {UNIT}", lbl_due_date: "Vencimento", modal_due_title: "Vencimento da Fatura", lbl_due_day: "Dia do Vencimento", lbl_apply_all: "Aplicar como padrão para todas as faturas futuras deste cartão.", btn_save_due: "Salvar Vencimento",
                 tt_manage_desc: "Gerenciar Nomes", tt_manage_cat: "Gerenciar Categorias", tt_manage_acc: "Gerenciar Contas/Cartões", tt_manage_person: "Gerenciar Pessoas",
                 err_lim_dup: "Já existe um limite para este item!", ph_add_new: "Adicionar novo...", btn_add: "Adicionar", btn_save: "Salvar", btn_use: "Usar",
                 cfg_panel_style: "Estilo dos Painéis", opt_panel_blocks: "Blocos Expandidos", opt_panel_accordion: "Sanfonas (Recolhíveis)", acc_summary: "Resumo Financeiro", acc_filters: "Filtros e Histórico",
@@ -1704,9 +1746,9 @@
                 lbl_deleted_on: "Excluído em", btn_restore: "Restaurar", msg_history_empty: "Nenhum item excluído recentemente.", cfg_history_retention: "Manter histórico por", lbl_wipe_history: "Histórico de Deletados",
                 market_installment_note: "Compra parcelada em {N}x", market_title: "Modo Mercado", market_price_label: "Preço do item", market_name_label: "Nome (opcional)", market_name_placeholder: "Ex: Café", market_qty_label: "Qtd.", market_add_item: "Adicionar Item", market_save_edit: "Salvar Alteração", market_empty: "Nenhum item adicionado ainda.", market_total_label: "Total da Compra", market_save_btn: "Salvar como Gasto", market_clear_btn: "Limpar", market_confirm_clear: "Limpar todos os itens da lista?", market_alert_empty: "Adicione pelo menos um item antes de salvar.", market_view_title: "Itens da Compra", market_items_suffix: "itens", market_default_desc: "Compras no Mercado", market_category: "Mercado",
                 lbl_is_recurring: "Repetir todo mês até eu cancelar", acc_recurring: "Assinaturas e Recorrências", recurring_empty: "Nenhuma assinatura/recorrência ativa.", recurring_per_month: "/mês", btn_cancel_recurring: "Cancelar", confirm_cancel_recurring: "Cancelar esta movimentação? As parcelas futuras ainda pendentes serão removidas (o que já foi pago fica no histórico).", compare_vs_last: "vs mês passado",
-                dash_goals: "Metas de Economia", dash_goals_count_one: "{N} meta criada", dash_goals_count_other: "{N} metas criadas", modal_goal_title: "Criar Meta", modal_goal_edit: "Editar Meta", lbl_goal_name: "Nome da Meta", ph_goal_name: "Ex: Viagem, Reserva de emergência...", lbl_goal_target: "Valor Alvo", lbl_goal_deadline: "Prazo (opcional)", btn_save_goal: "Salvar Meta", goal_empty: "Nenhuma meta criada ainda.", err_goal_fields: "Preencha o nome e um valor alvo válido!", btn_add_contribution: "Aporte", prompt_goal_contribution: "Quanto você quer guardar agora? (ex: 150.00)", goal_deadline_passed: "Prazo estourado", goal_deadline_left: "faltam {N} dia(s)",
+                dash_goals: "Metas de Economia", dash_goals_count_one: "{N} meta criada", dash_goals_count_other: "{N} metas criadas", modal_goal_title: "Criar Meta", modal_goal_edit: "Editar Meta", lbl_goal_name: "Nome da Meta", ph_goal_name: "Ex: Viagem, Reserva de emergência...", lbl_goal_target: "Valor Alvo", lbl_goal_deadline: "Prazo (opcional)", btn_save_goal: "Salvar Meta", goal_empty: "Nenhuma meta criada ainda.", err_goal_fields: "Preencha o nome e um valor alvo válido!", btn_add_contribution: "Aporte", prompt_goal_contribution: "Quanto você quer guardar agora? (ex: 150.00)", goal_deadline_passed: "Prazo estourado", goal_deadline_left: "faltam {N} {UNIT}",
                 dash_accounts: "Contas e Saldos", dash_accounts_count_one: "{N} conta cadastrada", dash_accounts_count_other: "{N} contas cadastradas", modal_account_title: "Cadastrar Conta", modal_account_edit: "Editar Conta", lbl_account_name: "Nome da Conta", ph_account_name: "Ex: Nubank, Carteira...", hint_account_name: "Use exatamente o mesmo nome usado no campo \"Conta\" das movimentações.", lbl_account_initial_balance: "Saldo Inicial", lbl_account_initial_date: "Data do Saldo Inicial", btn_save_account: "Salvar Conta", account_empty: "Nenhuma conta cadastrada ainda.", err_account_fields: "Preencha o nome e a data inicial!", err_account_dup: "Já existe uma conta com esse nome!", btn_view_extract: "Ver Extrato", modal_extract_title: "Extrato da Conta", lbl_initial_balance: "Saldo Inicial", lbl_current_balance: "Saldo Atual", extract_empty: "Nenhuma movimentação paga registrada nesta conta ainda.",
-                graphics_title: "Gráficos"            
+                graphics_title: "Gráficos", str_goal_prefix: "Meta:", modal_recurring_edit_title: "Editar Assinatura", hint_recurring_edit: "A alteração vale a partir deste mês, apenas para as parcelas ainda não pagas.", lbl_recurring_cancelled_short: "cancelada", lbl_wipe_recurring: "Assinaturas e Recorrências", err_invoice_no_account: "Vincule uma conta a este cartão antes de marcar a fatura como paga.", msg_invoice_already_paid: "Não há valores pendentes nesta fatura.", lbl_invoice_payment_prefix: "Pagamento fatura", cat_invoice_payment: "Pagamento de Fatura", btn_pay_invoice: "Marcar Fatura como Paga", lbl_invoice_account: "Conta para Pagamento (opcional)" 
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1736,7 +1778,7 @@
                 err_cloud: "Error communicating with the cloud.", msg_cloud_empty: "No cloud backup found.", cfg_tab_style: "Main Menu Style:", opt_tab_both: "Icon and Text", opt_tab_icons: "Icons Only",
                 chart_cashflow: "Cash Flow (Current Filter)", chart_categories: "Expenses by Category", chart_evolution: "Evolution (Last 6 Months)", chart_accounts: "Expenses by Account / Card", lbl_chart_inc: "Income", lbl_chart_exp: "Expenses", btn_import_csv: "Import",
                 smart_import_title: "Smart Importer", smart_import_desc: "Verify column mapping and set the card name.", lbl_csv_card: "Card / Bank Name", ph_csv_card: "Ex: Chase, Amex...", lbl_csv_date: "DATE Column", lbl_csv_desc: "DESCRIPTION Column", lbl_csv_val: "VALUE Column", lbl_csv_invert: "Invert negative values?", desc_csv_invert: "Banks export expenses with a minus sign. Keep checked to convert to expenses.", btn_confirm_import: "Confirm Import",
-                dash_limits: "Monthly Budgets", dash_limits_count_one: "{N} limit set", dash_limits_count_other: "{N} limits set", btn_config: "Configure", btn_new: "New", modal_limit_title: "Create Limit", modal_limit_edit: "Edit Limit", lbl_lim_type: "Limit Type", opt_lim_cat: "By Category", opt_lim_method: "By Account/Card", opt_lim_person: "By Person (Split)", lbl_lim_target: "Exact Name", ph_lim_target: "Type exact name...", lbl_lim_val: "Max Value", btn_save_rule: "Save Rule", lim_empty: "No limits registered.", lim_free: "Free:", lim_busted: "Busted:", lim_busted_alert: "Busted by", lim_remaining: "remaining", lim_used: "used", msg_lim_risk: "budgets at risk", msg_all_control: "Everything under control!", btn_view_dash: "View Panel", err_csv_card: "Please enter the Card/Bank name!", err_lim_fields: "Fill in name and value!", msg_imported: "bills imported!", btn_undo: "Undo", str_col: "Column", str_unnamed: "Unnamed", warn_busted: "⚠️ The budget for <b>TARGET</b> will be busted by <span class='font-bold'>VALUE</span>!", warn_near: "👀 Attention: This purchase will use PCT% of the budget for <b>TARGET</b>.", str_budget: "Budget:", btn_view: "View", modal_alerts_title: "Notifications", btn_view_trx: "View Trx", msg_late: "X days late", msg_left: "X days left", lbl_due_date: "Due Date", modal_due_title: "Invoice Due Date", lbl_due_day: "Due Day", lbl_apply_all: "Apply as default for all future invoices for this card.", btn_save_due: "Save Due Date",
+                dash_limits: "Monthly Budgets", dash_limits_count_one: "{N} limit set", dash_limits_count_other: "{N} limits set", btn_config: "Configure", btn_new: "New", modal_limit_title: "Create Limit", modal_limit_edit: "Edit Limit", lbl_lim_type: "Limit Type", opt_lim_cat: "By Category", opt_lim_method: "By Account/Card", opt_lim_person: "By Person (Split)", lbl_lim_target: "Exact Name", ph_lim_target: "Type exact name...", lbl_lim_val: "Max Value", btn_save_rule: "Save Rule", lim_empty: "No limits registered.", lim_free: "Free:", lim_busted: "Busted:", lim_busted_alert: "Busted by", lim_remaining: "remaining", lim_used: "used", msg_lim_risk: "budgets at risk", msg_all_control: "Everything under control!", btn_view_dash: "View Panel", err_csv_card: "Please enter the Card/Bank name!", err_lim_fields: "Fill in name and value!", msg_imported: "bills imported!", btn_undo: "Undo", str_col: "Column", str_unnamed: "Unnamed", warn_busted: "⚠️ The budget for <b>TARGET</b> will be busted by <span class='font-bold'>VALUE</span>!", warn_near: "👀 Attention: This purchase will use PCT% of the budget for <b>TARGET</b>.", str_budget: "Budget:", btn_view: "View", modal_alerts_title: "Notifications", btn_view_trx: "View Trx", msg_late: "{N} {UNIT} late", msg_left: "{N} {UNIT} left", lbl_due_date: "Due Date", modal_due_title: "Invoice Due Date", lbl_due_day: "Due Day", lbl_apply_all: "Apply as default for all future invoices for this card.", btn_save_due: "Save Due Date",
                 tt_manage_desc: "Manage Names", tt_manage_cat: "Manage Categories", tt_manage_acc: "Manage Accounts", tt_manage_person: "Manage People",
                 err_lim_dup: "A limit for this item already exists!", ph_add_new: "Add new...", btn_add: "Add", btn_save: "Save", btn_use: "Use",
                 cfg_panel_style: "Panel Style", opt_panel_blocks: "Expanded Blocks", opt_panel_accordion: "Accordion (Collapsible)", acc_summary: "Financial Summary", acc_filters: "Filters & History",
@@ -1747,9 +1789,9 @@
                 lbl_deleted_on: "Deleted on", btn_restore: "Restore", msg_history_empty: "No recently deleted items.", cfg_history_retention: "Keep history for", lbl_wipe_history: "Deleted History",
                 market_installment_note: "Purchased split into {N} installments", market_title: "Market Mode", market_price_label: "Item price", market_name_label: "Name (optional)", market_name_placeholder: "Ex: Coffee", market_qty_label: "Qty.", market_add_item: "Add Item", market_save_edit: "Save Change", market_empty: "No items added yet.", market_total_label: "Purchase Total", market_save_btn: "Save as Expense", market_clear_btn: "Clear", market_confirm_clear: "Clear all items from the list?", market_alert_empty: "Add at least one item before saving.", market_view_title: "Purchased Items", market_items_suffix: "items", market_default_desc: "Grocery Shopping", market_category: "Groceries",
                 lbl_is_recurring: "Repeat every month until I cancel", acc_recurring: "Subscriptions & Recurrences", recurring_empty: "No active subscriptions/recurrences.", recurring_per_month: "/month", btn_cancel_recurring: "Cancel", confirm_cancel_recurring: "Cancel this transaction? Future pending installments will be removed (already paid ones stay in history).", compare_vs_last: "vs last month",
-                dash_goals: "Savings Goals", dash_goals_count_one: "{N} goal set", dash_goals_count_other: "{N} goals set", modal_goal_title: "Create Goal", modal_goal_edit: "Edit Goal", lbl_goal_name: "Goal Name", ph_goal_name: "Ex: Trip, Emergency fund...", lbl_goal_target: "Target Amount", lbl_goal_deadline: "Deadline (optional)", btn_save_goal: "Save Goal", goal_empty: "No goals created yet.", err_goal_fields: "Fill in the name and a valid target amount!", btn_add_contribution: "Add", prompt_goal_contribution: "How much do you want to save now? (ex: 150.00)", goal_deadline_passed: "Deadline passed", goal_deadline_left: "{N} day(s) left",
+                dash_goals: "Savings Goals", dash_goals_count_one: "{N} goal set", dash_goals_count_other: "{N} goals set", modal_goal_title: "Create Goal", modal_goal_edit: "Edit Goal", lbl_goal_name: "Goal Name", ph_goal_name: "Ex: Trip, Emergency fund...", lbl_goal_target: "Target Amount", lbl_goal_deadline: "Deadline (optional)", btn_save_goal: "Save Goal", goal_empty: "No goals created yet.", err_goal_fields: "Fill in the name and a valid target amount!", btn_add_contribution: "Add", prompt_goal_contribution: "How much do you want to save now? (ex: 150.00)", goal_deadline_passed: "Deadline passed", goal_deadline_left: "{N} {UNIT} left",
                 dash_accounts: "Accounts & Balances", dash_accounts_count_one: "{N} account set up", dash_accounts_count_other: "{N} accounts set up", modal_account_title: "Create Account", modal_account_edit: "Edit Account", lbl_account_name: "Account Name", ph_account_name: "Ex: Bank, Wallet...", hint_account_name: "Use the exact same name used in the \"Account\" field of transactions.", lbl_account_initial_balance: "Initial Balance", lbl_account_initial_date: "Initial Balance Date", btn_save_account: "Save Account", account_empty: "No accounts created yet.", err_account_fields: "Fill in the name and initial date!", err_account_dup: "An account with this name already exists!", btn_view_extract: "View Statement", modal_extract_title: "Account Statement", lbl_initial_balance: "Initial Balance", lbl_current_balance: "Current Balance", extract_empty: "No paid transactions registered for this account yet.",
-                graphics_title: "Charts"
+                graphics_title: "Charts", str_goal_prefix: "Goal:", modal_recurring_edit_title: "Edit Subscription", hint_recurring_edit: "This change applies from this month onward, only to installments not yet paid.", lbl_recurring_cancelled_short: "cancelled", lbl_wipe_recurring: "Subscriptions & Recurrences", err_invoice_no_account: "Link an account to this card before marking the invoice as paid.", msg_invoice_already_paid: "There are no pending amounts on this invoice.", lbl_invoice_payment_prefix: "Invoice payment", cat_invoice_payment: "Invoice Payment", btn_pay_invoice: "Mark Invoice as Paid", lbl_invoice_account: "Payment Account (optional)"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1779,7 +1821,7 @@
                 err_cloud: "Error al comunicarse con la nube.", msg_cloud_empty: "Ninguna copia encontrada en la nube.", cfg_tab_style: "Estilo del Menú Principal:", opt_tab_both: "Icono y Texto", opt_tab_icons: "Solo Iconos",
                 chart_cashflow: "Flujo de Caja (Filtro Actual)", chart_categories: "Gastos por Categoría", chart_evolution: "Evolución (Últimos 6 Meses)", chart_accounts: "Gastos por Cuenta / Tarjeta", lbl_chart_inc: "Ingresos", lbl_chart_exp: "Gastos", btn_import_csv: "Importar",
                 smart_import_title: "Importador Inteligente", smart_import_desc: "Verifica el mapeo de columnas y define el nombre.", lbl_csv_card: "Nombre de Tarjeta / Banco", ph_csv_card: "Ej: Santander, BBVA...", lbl_csv_date: "Columna FECHA", lbl_csv_desc: "Columna DESCRIPCIÓN", lbl_csv_val: "Columna VALOR", lbl_csv_invert: "¿Invertir valores negativos?", desc_csv_invert: "Los bancos exportan gastos con signo menos. Deja marcado para convertir.", btn_confirm_import: "Confirmar Importación",
-                dash_limits: "Presupuestos", dash_limits_count_one: "{N} límite definido", dash_limits_count_other: "{N} límites definidos", btn_config: "Configurar", btn_new: "Nuevo", modal_limit_title: "Crear Límite", modal_limit_edit: "Editar Límite", lbl_lim_type: "Tipo de Límite", opt_lim_cat: "Por Categoría", opt_lim_method: "Por Cuenta/Tarjeta", opt_lim_person: "Por Persona (División)", lbl_lim_target: "Nombre exacto", ph_lim_target: "Escribe nombre exacto...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Guardar Regla", lim_empty: "Sin límites.", lim_free: "Libre:", lim_busted: "Pasado:", lim_busted_alert: "Pasado en", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "presupuestos en riesgo", msg_all_control: "¡Todo bajo control!", btn_view_dash: "Ver Panel", err_csv_card: "¡Ingresa el nombre de la Tarjeta/Banco!", err_lim_fields: "¡Rellena nombre y valor!", msg_imported: "cuentas importadas!", btn_undo: "Deshacer", str_col: "Columna", str_unnamed: "Sin nombre", warn_busted: "⚠️ ¡El presupuesto de <b>TARGET</b> se excederá en <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atención: Esta compra usará PCT% del presupuesto de <b>TARGET</b>.", str_budget: "Presupuesto:", btn_view: "Ver", modal_alerts_title: "Notificaciones", btn_view_trx: "Ver Transacción", msg_late: "X días de retraso", msg_left: "faltan X días", lbl_due_date: "Vencimiento", modal_due_title: "Vencimiento de Factura", lbl_due_day: "Día de Vencimiento", lbl_apply_all: "Aplicar como predeterminado para facturas futuras.", btn_save_due: "Guardar Vencimiento",
+                dash_limits: "Presupuestos", dash_limits_count_one: "{N} límite definido", dash_limits_count_other: "{N} límites definidos", btn_config: "Configurar", btn_new: "Nuevo", modal_limit_title: "Crear Límite", modal_limit_edit: "Editar Límite", lbl_lim_type: "Tipo de Límite", opt_lim_cat: "Por Categoría", opt_lim_method: "Por Cuenta/Tarjeta", opt_lim_person: "Por Persona (División)", lbl_lim_target: "Nombre exacto", ph_lim_target: "Escribe nombre exacto...", lbl_lim_val: "Valor Máximo", btn_save_rule: "Guardar Regla", lim_empty: "Sin límites.", lim_free: "Libre:", lim_busted: "Pasado:", lim_busted_alert: "Pasado en", lim_remaining: "restantes", lim_used: "usado", msg_lim_risk: "presupuestos en riesgo", msg_all_control: "¡Todo bajo control!", btn_view_dash: "Ver Panel", err_csv_card: "¡Ingresa el nombre de la Tarjeta/Banco!", err_lim_fields: "¡Rellena nombre y valor!", msg_imported: "cuentas importadas!", btn_undo: "Deshacer", str_col: "Columna", str_unnamed: "Sin nombre", warn_busted: "⚠️ ¡El presupuesto de <b>TARGET</b> se excederá en <span class='font-bold'>VALUE</span>!", warn_near: "👀 Atención: Esta compra usará PCT% del presupuesto de <b>TARGET</b>.", str_budget: "Presupuesto:", btn_view: "Ver", modal_alerts_title: "Notificaciones", btn_view_trx: "Ver Transacción", msg_late: "{N} {UNIT} de retraso", msg_left: "faltan {N} {UNIT}", lbl_due_date: "Vencimiento", modal_due_title: "Vencimiento de Factura", lbl_due_day: "Día de Vencimiento", lbl_apply_all: "Aplicar como predeterminado para facturas futuras.", btn_save_due: "Guardar Vencimiento",
                 tt_manage_desc: "Administrar Nombres", tt_manage_cat: "Administrar Categorías", tt_manage_acc: "Administrar Cuentas", tt_manage_person: "Administrar Personas",
                 err_lim_dup: "¡Ya existe un límite para este ítem!", ph_add_new: "Añadir nuevo...", btn_add: "Añadir", btn_save: "Guardar", btn_use: "Usar",
                 cfg_panel_style: "Estilo de Paneles", opt_panel_blocks: "Bloques Expandidos", opt_panel_accordion: "Acordeón (Colapsable)", acc_summary: "Resumen Financiero", acc_filters: "Filtros e Historial",
@@ -1789,9 +1831,9 @@
                 lbl_deleted_on: "Eliminado el", btn_restore: "Restaurar", msg_history_empty: "No hay elementos eliminados recientemente.", cfg_history_retention: "Conservar historial por", lbl_wipe_history: "Historial de eliminados",
                 market_installment_note: "Compra en {N} cuotas", market_title: "Modo Mercado", market_price_label: "Precio del artículo", market_name_label: "Nombre (opcional)", market_name_placeholder: "Ej: Café", market_qty_label: "Cant.", market_add_item: "Añadir Artículo", market_save_edit: "Guardar Cambio", market_empty: "Ningún artículo añadido todavía.", market_total_label: "Total de la Compra", market_save_btn: "Guardar como Gasto", market_clear_btn: "Limpiar", market_confirm_clear: "¿Borrar todos los artículos de la lista?", market_alert_empty: "Añade al menos un artículo antes de guardar.", market_view_title: "Artículos de la Compra", market_items_suffix: "artículos", market_default_desc: "Compras en el Mercado", market_category: "Mercado",
                 lbl_is_recurring: "Repetir cada mes hasta cancelar", acc_recurring: "Suscripciones y Recurrencias", recurring_empty: "Ninguna suscripción/recurrencia activa.", recurring_per_month: "/mes", btn_cancel_recurring: "Cancelar", confirm_cancel_recurring: "¿Cancelar esta transacción? Se eliminarán las cuotas futuras pendientes (lo ya pagado queda en el historial).", compare_vs_last: "vs mes pasado",
-                compare_vs_last: "vs mes pasado", dash_goals: "Metas de Ahorro", dash_goals_count_one: "{N} meta creada", dash_goals_count_other: "{N} metas creadas", modal_goal_title: "Crear Meta", modal_goal_edit: "Editar Meta", lbl_goal_name: "Nombre de la Meta", ph_goal_name: "Ej: Viaje, Fondo de emergencia...", lbl_goal_target: "Valor Objetivo", lbl_goal_deadline: "Plazo (opcional)", btn_save_goal: "Guardar Meta", goal_empty: "Ninguna meta creada todavía.", err_goal_fields: "¡Rellena el nombre y un valor objetivo válido!", btn_add_contribution: "Aportar", prompt_goal_contribution: "¿Cuánto quieres ahorrar ahora? (ej: 150.00)", goal_deadline_passed: "Plazo vencido", goal_deadline_left: "faltan {N} día(s)",
+                compare_vs_last: "vs mes pasado", dash_goals: "Metas de Ahorro", dash_goals_count_one: "{N} meta creada", dash_goals_count_other: "{N} metas creadas", modal_goal_title: "Crear Meta", modal_goal_edit: "Editar Meta", lbl_goal_name: "Nombre de la Meta", ph_goal_name: "Ej: Viaje, Fondo de emergencia...", lbl_goal_target: "Valor Objetivo", lbl_goal_deadline: "Plazo (opcional)", btn_save_goal: "Guardar Meta", goal_empty: "Ninguna meta creada todavía.", err_goal_fields: "¡Rellena el nombre y un valor objetivo válido!", btn_add_contribution: "Aportar", prompt_goal_contribution: "¿Cuánto quieres ahorrar ahora? (ej: 150.00)", goal_deadline_passed: "Plazo vencido", goal_deadline_left: "faltan {N} {UNIT}",
                 dash_accounts: "Cuentas y Saldos", dash_accounts_count_one: "{N} cuenta creada", dash_accounts_count_other: "{N} cuentas creadas", modal_account_title: "Crear Cuenta", modal_account_edit: "Editar Cuenta", lbl_account_name: "Nombre de la Cuenta", ph_account_name: "Ej: Banco, Billetera...", hint_account_name: "Usa exactamente el mismo nombre usado en el campo \"Cuenta\" de las transacciones.", lbl_account_initial_balance: "Saldo Inicial", lbl_account_initial_date: "Fecha del Saldo Inicial", btn_save_account: "Guardar Cuenta", account_empty: "Ninguna cuenta creada todavía.", err_account_fields: "¡Rellena el nombre y la fecha inicial!", err_account_dup: "¡Ya existe una cuenta con ese nombre!", btn_view_extract: "Ver Extracto", modal_extract_title: "Extracto de la Cuenta", lbl_initial_balance: "Saldo Inicial", lbl_current_balance: "Saldo Actual", extract_empty: "Ninguna transacción pagada registrada en esta cuenta todavía.",
-                graphics_title: "Gráficos"
+                graphics_title: "Gráficos", str_goal_prefix: "Meta:", modal_recurring_edit_title: "Editar Suscripción", hint_recurring_edit: "El cambio se aplica desde este mes, solo a las cuotas aún no pagadas.", lbl_recurring_cancelled_short: "cancelada", lbl_wipe_recurring: "Suscripciones y Recurrencias", err_invoice_no_account: "Vincula una cuenta a esta tarjeta antes de marcar la factura como pagada.", msg_invoice_already_paid: "No hay montos pendientes en esta factura.", lbl_invoice_payment_prefix: "Pago de factura", cat_invoice_payment: "Pago de Factura", btn_pay_invoice: "Marcar Factura como Pagada", lbl_invoice_account: "Cuenta de Pago (opcional)"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1821,7 +1863,7 @@
                 err_cloud: "Erreur de communication avec le Cloud.", msg_cloud_empty: "Aucune sauvegarde trouvée dans le Cloud.", cfg_tab_style: "Style du menu principal :", opt_tab_both: "Icône et Texte", opt_tab_icons: "Icônes uniquement",
                 chart_cashflow: "Flux de trésorerie (Filtre actuel)", chart_categories: "Dépenses par catégorie", chart_evolution: "Évolution (6 derniers mois)", chart_accounts: "Dépenses par compte / carte", lbl_chart_inc: "Revenus", lbl_chart_exp: "Dépenses", btn_import_csv: "Importer",
                 smart_import_title: "Importateur Intelligent", smart_import_desc: "Vérifiez le mappage des colonnes et définissez le nom.", lbl_csv_card: "Nom de Carte / Banque", ph_csv_card: "Ex : Crédit Agricole...", lbl_csv_date: "Colonne DATE", lbl_csv_desc: "Colonne DESCRIPTION", lbl_csv_val: "Colonne VALEUR", lbl_csv_invert: "Inverser les valeurs négatives ?", desc_csv_invert: "Laissez coché pour convertir en dépenses.", btn_confirm_import: "Confirmer l'importation",
-                dash_limits: "Budgets Mensuels", dash_limits_count_one: "{N} limite défini", dash_limits_count_other: "{N} limites définies", btn_config: "Configurer", btn_new: "Nouveau", modal_limit_title: "Créer une limite", modal_limit_edit: "Modifier la limite", lbl_lim_type: "Type de Limite", opt_lim_cat: "Par Catégorie", opt_lim_method: "Par Compte/Carte", opt_lim_person: "Par Personne (Partage)", lbl_lim_target: "Nom exact", ph_lim_target: "Tapez le nom exact...", lbl_lim_val: "Valeur Max", btn_save_rule: "Enregistrer", lim_empty: "Aucune limite enregistrée.", lim_free: "Libre :", lim_busted: "Dépassé :", lim_busted_alert: "Dépassé de", lim_remaining: "restants", lim_used: "utilisé", msg_lim_risk: "budgets à risque", msg_all_control: "Tout est sous contrôle !", btn_view_dash: "Voir le Panel", err_csv_card: "Veuillez entrer le nom de la Carte/Banque !", err_lim_fields: "Remplissez le nom et la valeur !", msg_imported: "comptes importés !", btn_undo: "Annuler", str_col: "Colonne", str_unnamed: "Sans nom", warn_busted: "⚠️ Le budget de <b>TARGET</b> sera dépassé de <span class='font-bold'>VALUE</span> !", warn_near: "👀 Attention : Cet achat utilisera PCT% du budget de <b>TARGET</b>.", str_budget: "Budget :", btn_view: "Voir", modal_alerts_title: "Notifications", btn_view_trx: "Voir Transac.", msg_late: "X jours de retard", msg_left: "il reste X jours", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance",
+                dash_limits: "Budgets Mensuels", dash_limits_count_one: "{N} limite défini", dash_limits_count_other: "{N} limites définies", btn_config: "Configurer", btn_new: "Nouveau", modal_limit_title: "Créer une limite", modal_limit_edit: "Modifier la limite", lbl_lim_type: "Type de Limite", opt_lim_cat: "Par Catégorie", opt_lim_method: "Par Compte/Carte", opt_lim_person: "Par Personne (Partage)", lbl_lim_target: "Nom exact", ph_lim_target: "Tapez le nom exact...", lbl_lim_val: "Valeur Max", btn_save_rule: "Enregistrer", lim_empty: "Aucune limite enregistrée.", lim_free: "Libre :", lim_busted: "Dépassé :", lim_busted_alert: "Dépassé de", lim_remaining: "restants", lim_used: "utilisé", msg_lim_risk: "budgets à risque", msg_all_control: "Tout est sous contrôle !", btn_view_dash: "Voir le Panel", err_csv_card: "Veuillez entrer le nom de la Carte/Banque !", err_lim_fields: "Remplissez le nom et la valeur !", msg_imported: "comptes importés !", btn_undo: "Annuler", str_col: "Colonne", str_unnamed: "Sans nom", warn_busted: "⚠️ Le budget de <b>TARGET</b> sera dépassé de <span class='font-bold'>VALUE</span> !", warn_near: "👀 Attention : Cet achat utilisera PCT% du budget de <b>TARGET</b>.", str_budget: "Budget :", btn_view: "Voir", modal_alerts_title: "Notifications", btn_view_trx: "Voir Transac.", msg_late: "{N} {UNIT} de retard", msg_left: "il reste {N} {UNIT}", lbl_due_date: "Échéance", modal_due_title: "Échéance de la Facture", lbl_due_day: "Jour d'Échéance", lbl_apply_all: "Appliquer par défaut aux futures factures.", btn_save_due: "Enregistrer l'Échéance",
                 tt_manage_desc: "Gérer Noms", tt_manage_cat: "Gérer Catégories", tt_manage_acc: "Gérer Comptes", tt_manage_person: "Gérer Personnes",
                 err_lim_dup: "Une limite pour cet article existe déjà !", ph_add_new: "Ajouter un nouveau...", btn_add: "Ajouter", btn_save: "Enregistrer", btn_use: "Utiliser",
                 cfg_panel_style: "Style de Panneaux", opt_panel_blocks: "Blocs Étendus", opt_panel_accordion: "Accordéon (Pliable)", acc_summary: "Résumé Financier", acc_filters: "Filtres et Historique",
@@ -1832,9 +1874,9 @@
                 lbl_deleted_on: "Supprimé le", btn_restore: "Restaurer", msg_history_empty: "Aucun élément supprimé récemment.", cfg_history_retention: "Conserver l'historique pendant", lbl_wipe_history: "Historique des suppressions",
                 market_installment_note: "Achat en {N} fois", market_title: "Mode Marché", market_price_label: "Prix de l'article", market_name_label: "Nom (facultatif)", market_name_placeholder: "Ex : Café", market_qty_label: "Qté", market_add_item: "Ajouter un article", market_save_edit: "Enregistrer la modification", market_empty: "Aucun article ajouté pour l'instant.", market_total_label: "Total de l'achat", market_save_btn: "Enregistrer comme Dépense", market_clear_btn: "Effacer", market_confirm_clear: "Effacer tous les articles de la liste ?", market_alert_empty: "Ajoutez au moins un article avant d'enregistrer.", market_view_title: "Articles de l'achat", market_items_suffix: "articles", market_default_desc: "Courses au marché", market_category: "Marché",
                 lbl_is_recurring: "Répéter chaque mois jusqu'à annulation", acc_recurring: "Abonnements et Récurrences", recurring_empty: "Aucun abonnement/récurrence actif.", recurring_per_month: "/mois", btn_cancel_recurring: "Annuler", confirm_cancel_recurring: "Annuler cet transaction ? Les échéances futures en attente seront supprimées (le déjà payé reste dans l'historique).", compare_vs_last: "vs mois dernier",
-                dash_goals: "Objectifs d'Épargne", dash_goals_count_one: "{N} objectif défini", dash_goals_count_other: "{N} objectifs définis", modal_goal_title: "Créer un Objectif", modal_goal_edit: "Modifier l'Objectif", lbl_goal_name: "Nom de l'Objectif", ph_goal_name: "Ex : Voyage, Fonds d'urgence...", lbl_goal_target: "Montant Cible", lbl_goal_deadline: "Échéance (facultatif)", btn_save_goal: "Enregistrer l'Objectif", goal_empty: "Aucun objectif créé pour l'instant.", err_goal_fields: "Remplissez le nom et un montant cible valide !", btn_add_contribution: "Ajouter", prompt_goal_contribution: "Combien voulez-vous épargner maintenant ? (ex : 150.00)", goal_deadline_passed: "Échéance dépassée", goal_deadline_left: "{N} jour(s) restant(s)",
+                dash_goals: "Objectifs d'Épargne", dash_goals_count_one: "{N} objectif défini", dash_goals_count_other: "{N} objectifs définis", modal_goal_title: "Créer un Objectif", modal_goal_edit: "Modifier l'Objectif", lbl_goal_name: "Nom de l'Objectif", ph_goal_name: "Ex : Voyage, Fonds d'urgence...", lbl_goal_target: "Montant Cible", lbl_goal_deadline: "Échéance (facultatif)", btn_save_goal: "Enregistrer l'Objectif", goal_empty: "Aucun objectif créé pour l'instant.", err_goal_fields: "Remplissez le nom et un montant cible valide !", btn_add_contribution: "Ajouter", prompt_goal_contribution: "Combien voulez-vous épargner maintenant ? (ex : 150.00)", goal_deadline_passed: "Échéance dépassée", goal_deadline_left: "il reste {N} {UNIT}",
                 goal_deadline_left: "{N} jour(s) restant(s)", dash_accounts: "Comptes et Soldes", dash_accounts_count_one: "{N} compte créé", dash_accounts_count_other: "{N} comptes créés", modal_account_title: "Créer un Compte", modal_account_edit: "Modifier le Compte", lbl_account_name: "Nom du Compte", ph_account_name: "Ex : Banque, Portefeuille...", hint_account_name: "Utilisez exactement le même nom que celui utilisé dans le champ \"Compte\" des transactions.", lbl_account_initial_balance: "Solde Initial", lbl_account_initial_date: "Date du Solde Initial", btn_save_account: "Enregistrer le Compte", account_empty: "Aucun compte créé pour l'instant.", err_account_fields: "Remplissez le nom et la date initiale !", err_account_dup: "Un compte avec ce nom existe déjà !", btn_view_extract: "Voir le Relevé", modal_extract_title: "Relevé du Compte", lbl_initial_balance: "Solde Initial", lbl_current_balance: "Solde Actuel", extract_empty: "Aucune transaction payée enregistrée sur ce compte pour l'instant.",
-                graphics_title: "Graphiques"
+                graphics_title: "Graphiques", str_goal_prefix: "Objectif :", modal_recurring_edit_title: "Modifier l'Abonnement", hint_recurring_edit: "Le changement s'applique à partir de ce mois, uniquement aux échéances non encore payées.", lbl_recurring_cancelled_short: "annulée", lbl_wipe_recurring: "Abonnements et Récurrences", err_invoice_no_account: "Associez un compte à cette carte avant de marquer la facture comme payée.", msg_invoice_already_paid: "Il n'y a aucun montant en attente sur cette facture.", lbl_invoice_payment_prefix: "Paiement facture", cat_invoice_payment: "Paiement de Facture", btn_pay_invoice: "Marquer la Facture comme Payée", lbl_invoice_account: "Compte de Paiement (optionnel)"
             }
         };
 
@@ -1983,9 +2025,9 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.9.8';
+        const FLOWME_VERSION = 'beta-3.9.9';
 
-        let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
+        let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
         let userConfig = { 
             lang: localStorage.getItem('flowme_lang') || 'pt', 
             currency: localStorage.getItem('flowme_currency') || 'BRL', 
@@ -2111,6 +2153,22 @@
         }
 
         function t(key) { return translations[userConfig.lang][key] || key; }
+
+        function pluralDay(n) {
+            const forms = {
+                pt: { one: 'dia', other: 'dias' },
+                en: { one: 'day', other: 'days' },
+                es: { one: 'día', other: 'días' },
+                fr: { one: 'jour', other: 'jours' }
+            };
+            const f = forms[userConfig.lang] || forms.pt;
+            return Math.abs(n) === 1 ? f.one : f.other;
+        }
+        
+        function formatDaysPhrase(key, n) {
+            return t(key).replace('{N}', Math.abs(n)).replace('{UNIT}', pluralDay(n));
+        }
+    
         function setCurrency(currency) { userConfig.currency = currency; localStorage.setItem('flowme_currency', currency); render(); }
 
         // ================= MÁSCARA MONETÁRIA =================
@@ -2738,21 +2796,6 @@
         }
 
         // ================= SALDO REAL DE CONTAS ================= 
-        function computeAccountBalance(accountName, uptoDateStr = new Date().toISOString().split('T')[0]) {
-            const acc = (state.accounts || []).find(a => a.name === accountName);
-            if (!acc) return 0;
-            let bal = acc.initialBalance || 0;
-            state.transactions
-                .filter(t => t.paymentMethod === accountName && t.status === 'pago' && t.expenseType !== 'credito')
-                .filter(t => t.date >= acc.initialDate && t.date <= uptoDateStr)
-                .forEach(t => {
-                    const rSplit = t.splits ? t.splits.reduce((a, s) => a + s.value, 0) : 0;
-                    const myPart = t.value - rSplit;
-                    bal += (t.type === 'receita' ? myPart : -myPart);
-                });
-            return bal;
-        }
-
         function getMonthTotals(monthStr) {
             let inc = 0, exp = 0;
             state.transactions.forEach(trx => {
@@ -3180,7 +3223,7 @@
                 const icon = document.querySelector('#btn-alerts-bell i');
                 if (icon && !isAlertsModalOpen) {
                     const groups = currentAlertGroups || {};
-                    const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
+                    const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0) + (groups.goals?.length||0);
                     if (totalAlerts > 0) {
                         icon.classList.add('fa-shake');
                         setTimeout(() => icon.classList.remove('fa-shake'), 1000);
@@ -3195,7 +3238,7 @@
             if (!alertsContainer || !alertsWrapper) return;
 
             const groups = currentAlertGroups || {};
-            const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0);
+            const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0) + (groups.goals?.length||0);
             
             alertsWrapper.classList.remove('hidden');
 
@@ -3413,7 +3456,7 @@
                         state = {
                             transactions: parsed.transactions || [],
                             currentMonth: state.currentMonth,
-                            invoiceSettings: parsed.invoiceSettings || { defaults: {}, exceptions: {} },
+                            invoiceSettings: parsed.invoiceSettings ? { defaults: parsed.invoiceSettings.defaults || {}, exceptions: parsed.invoiceSettings.exceptions || {}, paymentAccounts: parsed.invoiceSettings.paymentAccounts || {} } : { defaults: {}, exceptions: {}, paymentAccounts: {} },
                             limits: parsed.limits || [],
                             customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] },
                             deletedHistory: parsed.deletedHistory || [],
@@ -3436,25 +3479,26 @@
         }
         
         function openWipeDataModal() {
-            // Limpa as caixas toda vez que abre
             document.getElementById('wipe-all').checked = false;
             document.getElementById('wipe-trx').checked = false;
             document.getElementById('wipe-custom').checked = false;
             document.getElementById('wipe-limits').checked = false;
             document.getElementById('wipe-goals').checked = false;
             document.getElementById('wipe-accounts').checked = false;
+            document.getElementById('wipe-recurring').checked = false;
             openModal('modal-wipe-data');
         }
-
+        
         function toggleWipeAll(checked) {
             document.getElementById('wipe-trx').checked = checked;
             document.getElementById('wipe-custom').checked = checked;
             document.getElementById('wipe-limits').checked = checked;
             document.getElementById('wipe-history').checked = checked;
             document.getElementById('wipe-goals').checked = checked;
-            document.getElementById('wipe-accounts').checked = checked;            
+            document.getElementById('wipe-accounts').checked = checked;
+            document.getElementById('wipe-recurring').checked = checked;
         }
-
+        
         function checkWipeAllStatus() {
             const trx = document.getElementById('wipe-trx').checked;
             const custom = document.getElementById('wipe-custom').checked;
@@ -3462,7 +3506,8 @@
             const history = document.getElementById('wipe-history').checked;
             const goals = document.getElementById('wipe-goals').checked;
             const accounts = document.getElementById('wipe-accounts').checked;
-            document.getElementById('wipe-all').checked = (trx && custom && limits && history && goals && accounts);
+            const recurring = document.getElementById('wipe-recurring').checked;
+            document.getElementById('wipe-all').checked = (trx && custom && limits && history && goals && accounts && recurring);
         }
 
         function executeWipeData() {
@@ -3472,9 +3517,10 @@
             const history = document.getElementById('wipe-history').checked;
             const goals = document.getElementById('wipe-goals').checked;
             const accounts = document.getElementById('wipe-accounts').checked;
-            document.getElementById('wipe-all').checked = (trx && custom && limits && history && goals && accounts);
-
-            if (!trx && !custom && !limits && !history && !goals && !accounts) {
+            const recurring = document.getElementById('wipe-recurring').checked;
+            document.getElementById('wipe-all').checked = (trx && custom && limits && history && goals && accounts && recurring);
+            
+            if (!trx && !custom && !limits && !history && !goals && !accounts && !recurring) {
                 alert(t('msg_wipe_empty'));
                 return;
             }
@@ -3507,6 +3553,11 @@
 
                 if (accounts) {
                     state.accounts = [];
+                }
+
+                // 5. Limpar Assinaturas e Recorrências
+                if (recurring) {
+                    state.recurringRules = [];
                 }
                 
                 // Salva tudo localmente e recarrega os visuais corretos
@@ -3792,6 +3843,52 @@
                 });
             }
         }
+
+        function openRecurringEditModal(ruleId) {
+            const rule = (state.recurringRules || []).find(r => r.id === ruleId);
+            if (!rule) return;
+            document.getElementById('edit-recurring-id').value = rule.id;
+            document.getElementById('recurring-edit-description').value = rule.description;
+            document.getElementById('recurring-edit-value').value = formatMaskedValue(rule.value);
+            document.getElementById('recurring-edit-category').value = rule.category;
+            document.getElementById('recurring-edit-account').value = rule.paymentMethod;
+            openModal('modal-recurring-edit');
+        }
+        
+        function saveRecurringEdit() {
+            const ruleId = document.getElementById('edit-recurring-id').value;
+            const rule = (state.recurringRules || []).find(r => r.id === ruleId);
+            if (!rule) return;
+        
+            const newDesc = document.getElementById('recurring-edit-description').value.trim();
+            const newValue = parseMaskedValue(document.getElementById('recurring-edit-value').value);
+            const newCategory = document.getElementById('recurring-edit-category').value.trim();
+            const newAccount = document.getElementById('recurring-edit-account').value.trim();
+        
+            if (!newDesc || !newValue || newValue <= 0) { alert(t('err_lim_fields')); return; }
+        
+            // Atualiza a regra: os PRÓXIMOS meses ainda não gerados nascerão com esses valores
+            rule.description = newDesc;
+            rule.value = newValue;
+            rule.category = newCategory;
+            rule.paymentMethod = newAccount;
+        
+            // Atualiza as parcelas já geradas, a partir do mês exibido no filtro, que ainda não foram pagas
+            const fromMonth = state.currentMonth;
+            state.transactions.forEach(trx => {
+                if (trx.recurringId !== ruleId || trx.status !== 'pendente') return;
+                const compMonth = trx.invoiceMonth || (trx.date ? trx.date.substring(0, 7) : null);
+                if (compMonth && compMonth >= fromMonth) {
+                    trx.description = newDesc;
+                    trx.value = newValue;
+                    trx.category = newCategory;
+                    trx.paymentMethod = newAccount;
+                }
+            });
+        
+            saveState(); render(); closeModal('modal-recurring-edit');
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
         
         function ensureRecurringInstancesUpToDate() {
             if (!state.recurringRules) return;
@@ -3799,18 +3896,135 @@
             saveState();
         }
         
+        let pendingRecurringCancellations = {};
+
         function cancelRecurring(ruleId) {
             if (!confirm(t('confirm_cancel_recurring'))) return;
-            const rule = state.recurringRules.find(r => r.id === ruleId);
+            const rule = (state.recurringRules || []).find(r => r.id === ruleId);
             if (!rule) return;
-            rule.active = false;
+        
             const todayStr = new Date().toISOString().split('T')[0];
-            state.transactions = state.transactions.filter(t => {
-                if (t.recurringId !== ruleId) return true;
-                const compDate = t.invoiceMonth ? t.invoiceMonth + '-01' : t.date;
-                return !(compDate > todayStr && t.status === 'pendente');
+            const removed = [];
+            state.transactions = state.transactions.filter(trx => {
+                if (trx.recurringId !== ruleId) return true;
+                const compDate = trx.invoiceMonth ? trx.invoiceMonth + '-01' : trx.date;
+                const shouldRemove = compDate > todayStr && trx.status === 'pendente';
+                if (shouldRemove) removed.push(trx);
+                return !shouldRemove;
             });
-            saveState(); render(); if (typeof renderRecurringList === 'function') renderRecurringList();
+        
+            rule.active = false;
+        
+            saveState(); render(); renderRecurringList();
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        
+            showRecurringCancelToast(rule, removed);
+        }
+        
+        function showRecurringCancelToast(rule, removed) {
+            const toastId = 'toast-rec-' + rule.id;
+            const existing = document.getElementById(toastId);
+            if (existing) { clearTimeout(existing.dataset.timeout); existing.remove(); }
+        
+            const toolbar = document.getElementById('global-toolbar');
+            const useMitosis = toolbar && !toolbar.classList.contains('hidden');
+            const toast = document.createElement('div');
+            toast.id = toastId;
+        
+            const glassClasses = 'bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-4 text-sm justify-between overflow-hidden';
+            const shortName = rule.description.length > 15 ? rule.description.substring(0, 15) + '...' : rule.description;
+            toast.innerHTML = `
+                <div class="flex items-center gap-2 min-w-0">
+                    <i class="fa-solid fa-rotate text-indigo-500 shrink-0"></i>
+                    <span class="font-bold truncate">${shortName} ${t('lbl_recurring_cancelled_short')}</span>
+                </div>
+                <button class="undo-btn shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${t('btn_undo')}</button>
+            `;
+        
+            if (useMitosis) {
+                toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react');
+                const pillRect = toolbar.getBoundingClientRect();
+                toast.className = glassClasses;
+                toast.style.position = 'fixed';
+                toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';
+                toast.style.width = pillRect.width + 'px'; toast.style.height = pillRect.height + 'px';
+                toast.style.borderRadius = '9999px'; toast.style.opacity = '1';
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => {
+                    const finalWidth = Math.min(window.innerWidth * 0.9, 384);
+                    const finalHeight = 56;
+                    const finalLeft = (window.innerWidth - finalWidth) / 2;
+                    const finalTop = pillRect.top - finalHeight - 16;
+                    toast.style.transition = 'left 0.55s cubic-bezier(0.34,1.56,0.64,1), top 0.55s cubic-bezier(0.34,1.56,0.64,1), width 0.55s cubic-bezier(0.34,1.56,0.64,1), height 0.55s cubic-bezier(0.34,1.56,0.64,1), border-radius 0.55s ease';
+                    toast.style.left = finalLeft + 'px'; toast.style.top = finalTop + 'px';
+                    toast.style.width = finalWidth + 'px'; toast.style.height = finalHeight + 'px';
+                    toast.style.borderRadius = '16px';
+                    setTimeout(() => pulseAlert(toast), 560);
+                });
+            } else {
+                toast.className = glassClasses + ' rounded-2xl w-[90%] max-w-sm';
+                toast.style.position = 'fixed'; toast.style.left = '50%'; toast.style.bottom = '24px';
+                toast.style.transform = 'translate(-50%, 10px) scale(0.9)'; toast.style.opacity = '0';
+                toast.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => {
+                    toast.style.transform = 'translate(-50%, 0) scale(1)'; toast.style.opacity = '1';
+                    setTimeout(() => pulseAlert(toast), 300);
+                });
+            }
+        
+            pendingRecurringCancellations[rule.id] = { rule, removed };
+            toast.querySelector('.undo-btn').addEventListener('click', (e) => undoRecurringCancel(rule.id, e));
+        
+            toast.dataset.timeout = setTimeout(() => {
+                if (!document.body.contains(toast)) return;
+                if (useMitosis) {
+                    toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react');
+                    const pillRect = toolbar.getBoundingClientRect();
+                    toast.style.transition = 'left 0.5s ease-in, top 0.5s ease-in, width 0.5s ease-in, height 0.5s ease-in, border-radius 0.5s ease-in, opacity 0.5s ease-in';
+                    toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';
+                    toast.style.width = pillRect.width + 'px'; toast.style.height = pillRect.height + 'px';
+                    toast.style.borderRadius = '9999px'; toast.style.opacity = '0';
+                } else {
+                    toast.style.transform = 'translate(-50%, 10px) scale(0.9)'; toast.style.opacity = '0';
+                }
+                setTimeout(() => {
+                    if (toast.parentNode) toast.remove();
+                    const pending = pendingRecurringCancellations[rule.id];
+                    delete pendingRecurringCancellations[rule.id];
+                    if (pending) pending.removed.forEach(trx => addToDeletedHistory('transaction', trx));
+                }, 520);
+            }, 6000);
+        }
+        
+        function undoRecurringCancel(ruleId, clickEvent) {
+            const pending = pendingRecurringCancellations[ruleId];
+            if (!pending) return;
+        
+            const toast = document.getElementById('toast-rec-' + ruleId);
+            if (toast) {
+                clearTimeout(toast.dataset.timeout);
+                let originX = '100%', originY = '50%';
+                if (clickEvent && clickEvent.target) {
+                    const btnRect = clickEvent.target.getBoundingClientRect();
+                    const toastRect = toast.getBoundingClientRect();
+                    originX = (btnRect.left + btnRect.width / 2 - toastRect.left) + 'px';
+                    originY = (btnRect.top + btnRect.height / 2 - toastRect.top) + 'px';
+                }
+                toast.style.transition = 'transform 0.35s ease-in, opacity 0.35s ease-in';
+                toast.style.transformOrigin = `${originX} ${originY}`;
+                toast.style.transform = (toast.style.transform || '') + ' scale(0)';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 380);
+            }
+        
+            const rule = (state.recurringRules || []).find(r => r.id === ruleId);
+            if (rule) rule.active = true;
+            pending.removed.forEach(trx => state.transactions.push(trx));
+            delete pendingRecurringCancellations[ruleId];
+        
+            saveState(); render(); renderRecurringList();
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
 
         function renderRecurringList() {
@@ -3820,14 +4034,19 @@
             c.innerHTML = rules.length === 0
                 ? `<p class="text-xs text-slate-400 text-center py-3">${t('recurring_empty')}</p>`
                 : rules.map(r => `
-                    <div class="py-2 flex justify-between items-center">
-                        <div>
-                            <p class="font-semibold dark:text-slate-200">${r.description}</p>
+                    <div class="py-2 flex justify-between items-center gap-2">
+                        <div class="min-w-0">
+                            <p class="font-semibold dark:text-slate-200 truncate">${r.description}</p>
                             <div class="text-[10px] text-slate-400">${formatCurrency(r.value)} ${t('recurring_per_month')}</div>
                         </div>
-                        <button onclick="cancelRecurring('${r.id}')" class="text-[10px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/30 px-2 py-1 rounded-lg border border-rose-200 dark:border-rose-800 transition">
-                            <i class="fa-solid fa-xmark"></i> ${t('btn_cancel_recurring')}
-                        </button>
+                        <div class="flex gap-1.5 shrink-0">
+                            <button onclick="openRecurringEditModal('${r.id}')" class="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-lg border border-blue-200 dark:border-blue-800 transition">
+                                <i class="fa-solid fa-pen"></i> ${t('btn_edit')}
+                            </button>
+                            <button onclick="cancelRecurring('${r.id}')" class="text-[10px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/30 px-2 py-1 rounded-lg border border-rose-200 dark:border-rose-800 transition">
+                                <i class="fa-solid fa-xmark"></i> ${t('btn_cancel_recurring')}
+                            </button>
+                        </div>
                     </div>`).join('');
         }
         
@@ -4311,7 +4530,18 @@
                     });
                 }
 
-                currentAlertGroups = { incomeLate: aIncLate, expenseLate: aExpLate, incomeSoon: aIncSoon, expenseSoon: aExpSoon, limits: limitAlerts };
+                let goalAlerts = [];
+                if (state.goals && state.goals.length > 0) {
+                    state.goals.forEach(goal => {
+                        if (!goal.deadline) return;
+                        const saved = goal.contributions.reduce((acc, c) => acc + c.value, 0);
+                        if (saved >= goal.target) return;
+                        const diffDays = Math.ceil((new Date(goal.deadline + 'T12:00:00') - new Date(todayStr + 'T12:00:00')) / (1000 * 60 * 60 * 24));
+                        if ((diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) || (diffDays >= 0 && diffDays <= userConfig.reminderDays)) goalAlerts.push(goal);
+                    });
+                }
+                currentAlertGroups = { incomeLate: aIncLate, expenseLate: aExpLate, incomeSoon: aIncSoon, expenseSoon: aExpSoon, limits: limitAlerts, goals: goalAlerts };
+                
                 renderToolbarAlerts();
             } else {
                 currentAlertGroups = { incomeLate: [], expenseLate: [], incomeSoon: [], expenseSoon: [], limits: [] };
@@ -5372,7 +5602,7 @@
                         if (goal.deadline) {
                             const diffDays = Math.ceil((new Date(goal.deadline + 'T12:00:00') - new Date(todayStr + 'T12:00:00')) / (1000 * 60 * 60 * 24));
                             if (!isDone && diffDays < 0) deadlineInfo = `<p class="text-[9px] font-bold text-rose-500 mt-1"><i class="fa-solid fa-triangle-exclamation"></i> ${t('goal_deadline_passed')}</p>`;
-                            else if (!isDone) deadlineInfo = `<p class="text-[9px] font-semibold text-slate-400 mt-1">${t('goal_deadline_left').replace('{N}', diffDays)}</p>`;
+                            else if (!isDone) deadlineInfo = `<p class="text-[9px] font-semibold text-slate-400 mt-1">${formatDaysPhrase('goal_deadline_left', diffDays)}</p>`;
                         }
     
                         goalsContainer.innerHTML += `
@@ -5703,6 +5933,13 @@
             document.getElementById('invoice-due-card-name').textContent = card;
             document.getElementById('invoice-due-day').value = state.invoiceSettings.defaults[card] || '';
             document.getElementById('invoice-due-apply-all').checked = true;
+        
+            const accSelect = document.getElementById('invoice-due-account');
+            accSelect.innerHTML = `<option value="">--</option>`;
+            (state.accounts || []).forEach(acc => { accSelect.innerHTML += `<option value="${acc.name}">${acc.name}</option>`; });
+            if (!state.invoiceSettings.paymentAccounts) state.invoiceSettings.paymentAccounts = {};
+            accSelect.value = state.invoiceSettings.paymentAccounts[card] || '';
+        
             openModal('modal-invoice-due');
         }
 
@@ -5713,8 +5950,47 @@
             
             if(applyAll) { state.invoiceSettings.defaults[card] = day; delete state.invoiceSettings.exceptions[`${card}-${month}`]; }
             else { state.invoiceSettings.exceptions[`${card}-${month}`] = `${month}-${String(day).padStart(2,'0')}`; }
+        
+            if (!state.invoiceSettings.paymentAccounts) state.invoiceSettings.paymentAccounts = {};
+            const linkedAccount = document.getElementById('invoice-due-account').value;
+            if (linkedAccount) state.invoiceSettings.paymentAccounts[card] = linkedAccount;
+            else delete state.invoiceSettings.paymentAccounts[card];
             
             saveState(); renderFaturas(); render(); closeModal('modal-invoice-due');
+        }
+
+        function payInvoice() {
+            const card = document.getElementById('invoice-card-select').value;
+            if (!card) return;
+            const month = state.currentMonth;
+            const linkedAccount = (state.invoiceSettings.paymentAccounts || {})[card];
+            if (!linkedAccount) { alert(t('err_invoice_no_account')); openInvoiceDueModal(); return; }
+        
+            const pendingTx = state.transactions.filter(trx => trx.type === 'despesa' && trx.expenseType === 'credito' && trx.paymentMethod === card && trx.invoiceMonth === month && trx.status === 'pendente');
+            if (pendingTx.length === 0) { alert(t('msg_invoice_already_paid')); return; }
+        
+            let total = 0;
+            pendingTx.forEach(trx => {
+                const rSplit = trx.splits ? trx.splits.reduce((a, s) => a + s.value, 0) : 0;
+                total += (trx.value - rSplit);
+                trx.status = 'pago';
+            });
+        
+            state.transactions.push({
+                id: 'pay-' + Date.now(),
+                type: 'despesa',
+                expenseType: 'debito',
+                description: `${t('lbl_invoice_payment_prefix')} ${card}`,
+                value: total,
+                date: new Date().toISOString().split('T')[0],
+                category: t('cat_invoice_payment'),
+                paymentMethod: linkedAccount,
+                status: 'pago',
+                splits: []
+            });
+        
+            saveState(); render(); renderFaturas();
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
 
         // ================= ALERTS MODAL =================
@@ -5755,7 +6031,19 @@
                 });
             }
 
-            if(list.length === 0 && modalLimits.length === 0) { 
+            let modalGoals = [];
+            if (state.goals && state.goals.length > 0) {
+                state.goals.forEach(goal => {
+                    if (!goal.deadline) return;
+                    const saved = goal.contributions.reduce((acc, c) => acc + c.value, 0);
+                    if (saved >= goal.target) return;
+                    const diffDays = Math.ceil((new Date(goal.deadline + 'T12:00:00') - new Date(todayStr + 'T12:00:00')) / (1000 * 60 * 60 * 24));
+                    if (diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) modalGoals.push({ goal, d: diffDays, late: true });
+                    else if (diffDays >= 0 && diffDays <= userConfig.reminderDays) modalGoals.push({ goal, d: diffDays, late: false });
+                });
+            }
+
+            if(list.length === 0 && modalLimits.length === 0 && modalGoals.length === 0) { 
                 c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">' + t('msg_all_control') + '</p>'; 
             } else {
                 // Preenche primeiro os alertas de Orçamento
@@ -5780,6 +6068,27 @@
                         </div>`;
                 });
 
+                modalGoals.sort((a,b) => a.d - b.d).forEach(item => {
+                    const g = item.goal;
+                    const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-emerald-50 border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-800';
+                    const dtPts = g.deadline.split('-'); const dtF = `${dtPts[2]}/${dtPts[1]}`;
+                    const timeMsg = item.late ? formatDaysPhrase('msg_late', item.d) : formatDaysPhrase('msg_left', item.d);
+                
+                    c.innerHTML += `
+                        <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="text-lg"><i class="fa-solid fa-piggy-bank text-emerald-500"></i></div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${t('str_goal_prefix')} ${g.name}</p>
+                                    <p class="text-[10px] font-medium ${item.late ? 'text-rose-600' : 'text-emerald-600'}">${dtF} • ${timeMsg}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button onclick="closeModal('modal-alerts'); switchTab('dashboard');" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_dash')}</button>
+                            </div>
+                        </div>`;
+                });
+
                 // Preenche os alertas de Contas Pendentes logo abaixo
                 list.sort((a,b) => a.d - b.d).forEach(item => {
                     const trx = item.t;
@@ -5788,7 +6097,7 @@
                     const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length>=3 ? `${dtPts[2]}/${dtPts[1]}` : '';
                     
                     // Monta a string dinâmica de tempo
-                    const timeMsg = item.late ? t('msg_late').replace('X', Math.abs(item.d)) : t('msg_left').replace('X', item.d);
+                    const timeMsg = item.late ? formatDaysPhrase('msg_late', item.d) : formatDaysPhrase('msg_left', item.d);
                     
                     c.innerHTML += `
                         <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
@@ -5856,14 +6165,28 @@
             }
         
             items.forEach(entry => {
-                const isTrx = entry.kind === 'transaction';
-                let label = entry.data.description || entry.data.target || entry.data.name || '';
-                const icon = isTrx
-                    ? (entry.data.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>')
-                    : '<i class="fa-solid fa-bullseye text-pink-500"></i>';
+                let label = '', icon = '', valueStr = '';
+            
+                if (entry.kind === 'transaction') {
+                    label = entry.data.description;
+                    icon = entry.data.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
+                    valueStr = formatCurrency(entry.data.value);
+                } else if (entry.kind === 'limit') {
+                    label = entry.data.target;
+                    icon = '<i class="fa-solid fa-bullseye text-pink-500"></i>';
+                    valueStr = formatCurrency(entry.data.max);
+                } else if (entry.kind === 'goal') {
+                    label = entry.data.name;
+                    icon = '<i class="fa-solid fa-piggy-bank text-emerald-500"></i>';
+                    valueStr = formatCurrency(entry.data.target);
+                } else if (entry.kind === 'account') {
+                    label = entry.data.name;
+                    icon = '<i class="fa-solid fa-building-columns text-blue-500"></i>';
+                    valueStr = formatCurrency(entry.data.initialBalance);
+                }
+            
                 const dt = new Date(entry.deletedAt);
                 const dtStr = dt.toLocaleDateString(userConfig.lang === 'en' ? 'en-US' : 'pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                const valueStr = isTrx ? formatCurrency(entry.data.value) : '';
         
                 c.innerHTML += `
                     <div class="flex items-center justify-between p-2 rounded-lg border bg-slate-50 border-slate-200 dark:bg-slate-800/60 dark:border-slate-700 shadow-sm">
@@ -6211,7 +6534,7 @@
                     state = {
                         transactions: parsed.transactions || [],
                         currentMonth: state.currentMonth,
-                        invoiceSettings: parsed.invoiceSettings || {defaults:{}, exceptions:{}},
+                        invoiceSettings: parsed.invoiceSettings ? { defaults: parsed.invoiceSettings.defaults || {}, exceptions: parsed.invoiceSettings.exceptions || {}, paymentAccounts: parsed.invoiceSettings.paymentAccounts || {} } : { defaults: {}, exceptions: {}, paymentAccounts: {} },
                         limits: parsed.limits || [],
                         customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] },
                         deletedHistory: parsed.deletedHistory || [],

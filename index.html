@@ -925,6 +925,29 @@
 
 <!-- ================= BLOCO 6: ABA DASHBOARD ================= -->
         <div id="content-dashboard" class="tab-content hidden max-w-7xl mx-auto space-y-6">
+
+            <!-- CONTAS E SALDOS -->
+            <div id="dashboard-accounts-section" class="flex flex-col mb-6">
+                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-accounts" onclick="toggleAccordion('dash-accounts')">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-building-columns text-blue-500"></i> <span data-i18n="dash_accounts">Contas e Saldos</span></h2>
+                    <span class="p-2 -m-2 flex items-center justify-center cursor-pointer">
+                        <i id="acc-icon-dash-accounts" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                    </span>
+                </button>
+                <div id="acc-content-dash-accounts" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                    <div class="overflow-hidden">
+                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
+                            <span id="dash-accounts-count" class="text-sm font-semibold text-slate-600 dark:text-slate-300"></span>
+                            <button onclick="openAccountModal()" class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition-all duration-300 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer">
+                                <i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span>
+                            </button>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
+                            <div id="dashboard-accounts-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         
             <!-- ORÇAMENTOS E LIMITES -->
             <div id="dashboard-limits-section" class="flex flex-col mb-6">
@@ -967,29 +990,6 @@
                         </div>
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
                             <div id="dashboard-goals-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CONTAS E SALDOS -->
-            <div id="dashboard-accounts-section" class="flex flex-col mb-6">
-                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-accounts" onclick="toggleAccordion('dash-accounts')">
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3"><i class="fa-solid fa-building-columns text-blue-500"></i> <span data-i18n="dash_accounts">Contas e Saldos</span></h2>
-                    <span class="p-2 -m-2 flex items-center justify-center cursor-pointer">
-                        <i id="acc-icon-dash-accounts" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
-                    </span>
-                </button>
-                <div id="acc-content-dash-accounts" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
-                    <div class="overflow-hidden">
-                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
-                            <span id="dash-accounts-count" class="text-sm font-semibold text-slate-600 dark:text-slate-300"></span>
-                            <button onclick="openAccountModal()" class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition-all duration-300 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer">
-                                <i class="fa-solid fa-plus"></i> <span data-i18n="btn_new">Novo</span>
-                            </button>
-                        </div>
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
-                            <div id="dashboard-accounts-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                         </div>
                     </div>
                 </div>
@@ -1434,8 +1434,16 @@
                         <span data-i18n="lbl_wipe_trx">Movimentações</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-recurring" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_recurring">Assinaturas e Recorrências</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" id="wipe-custom" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
                         <span data-i18n="lbl_wipe_custom">Dados Personalizados</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-accounts" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_accounts">Contas e Saldos</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" id="wipe-limits" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
@@ -1444,14 +1452,6 @@
                     <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" id="wipe-goals" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
                         <span data-i18n="lbl_wipe_goals">Metas de Economia</span>
-                    </label>
-                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
-                        <input type="checkbox" id="wipe-accounts" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
-                        <span data-i18n="lbl_wipe_accounts">Contas e Saldos</span>
-                    </label>
-                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
-                        <input type="checkbox" id="wipe-recurring" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
-                        <span data-i18n="lbl_wipe_recurring">Assinaturas e Recorrências</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" id="wipe-history" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
@@ -2025,7 +2025,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.9.9';
+        const FLOWME_VERSION = 'beta-4.0.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
         let userConfig = { 

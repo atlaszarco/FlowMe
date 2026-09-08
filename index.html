@@ -625,7 +625,7 @@
                                 <div>
                                     <label for="description" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="label_desc">Descrição</label>
                                     <div class="flex gap-1 w-full">
-                                        <input type="text" id="description" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
+                                        <input type="text" id="description" autocomplete="off" required list="descriptions-list" class="flex-1 min-w-0 p-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-emerald-500 bg-white transition-colors">
                                         <button type="button" onclick="openGlobalEdit('description')" class="text-slate-400 hover:text-indigo-500 p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm transition shrink-0" data-i18n-title="tt_manage_desc"><i class="fa-solid fa-pen-to-square"></i></button>
                                     </div>
                                 </div>
@@ -679,14 +679,14 @@
                                     <div>
                                         <label for="category" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" data-i18n="label_category">Categoria</label>
                                         <div class="flex gap-1">
-                                            <input type="text" id="category" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-emerald-500 dark:text-white transition">
+                                            <input type="text" id="category" autocomplete="off" required list="categories-list" class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-emerald-500 dark:text-white transition">
                                             <button type="button" onclick="openGlobalEdit('category')" class="text-slate-400 hover:text-indigo-500 p-2 bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm transition shrink-0" data-i18n-title="tt_manage_cat"><i class="fa-solid fa-pen-to-square"></i></button>
                                         </div>
                                     </div>
                                     <div>
                                         <label for="payment-method" id="label-method" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" data-i18n="label_account">Conta</label>
                                         <div class="flex gap-1">
-                                            <input type="text" id="payment-method" autocomplete="off" required class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-emerald-500 dark:text-white transition">
+                                            <input type="text" id="payment-method" autocomplete="off" required list="methods-list" class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-emerald-500 dark:text-white transition">
                                             <button type="button" onclick="openGlobalEdit('paymentMethod')" class="text-slate-400 hover:text-indigo-500 p-2 bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm transition shrink-0" data-i18n-title="tt_manage_acc"><i class="fa-solid fa-pen-to-square"></i></button>
                                         </div>
                                     </div>
@@ -994,76 +994,87 @@
                 </div>
             </div>
             
-            <div class="columns-1 lg:columns-2 gap-6">
-                <!-- Gráfico 1: Fluxo de Caixa -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
-                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-fluxo" onclick="toggleAccordion('dash-fluxo')">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_cashflow">Fluxo de Caixa (Filtro Atual)</h2>
-                        <i id="acc-icon-dash-fluxo" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
-                    </button>
-                    <div id="acc-content-dash-fluxo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
-                        <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                                <div class="min-w-[240px] h-64 relative">
-                                    <canvas id="chart-cashflow"></canvas>
+            <div class="flex flex-col mb-6">
+                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-charts" onclick="toggleAccordion('dash-charts')">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                        <i class="fa-solid fa-chart-line text-indigo-500"></i> <span>Gráficos</span>
+                    </h2>
+                    <i id="acc-icon-dash-charts" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                </button>
+                <div id="acc-content-dash-charts" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                    <div class="overflow-hidden mt-2">
+                        <div class="columns-1 lg:columns-2 gap-6">
+                            <!-- Gráfico 1: Fluxo de Caixa -->
+                            <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-fluxo" onclick="toggleAccordion('dash-fluxo')">
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_cashflow">Fluxo de Caixa (Filtro Atual)</h2>
+                                    <i id="acc-icon-dash-fluxo" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                                </button>
+                                <div id="acc-content-dash-fluxo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                                    <div class="overflow-hidden">
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                                            <div class="min-w-[240px] h-64 relative">
+                                                <canvas id="chart-cashflow"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gráfico 2: Despesas por Categoria -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
-                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-cat" onclick="toggleAccordion('dash-cat')">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_categories">Despesas por Categoria</h2>
-                        <i id="acc-icon-dash-cat" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
-                    </button>
-                    <div id="acc-content-dash-cat" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
-                        <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                                <div class="min-w-[240px] h-64 relative">
-                                    <canvas id="chart-categories"></canvas>
+            
+                            <!-- Gráfico 2: Despesas por Categoria -->
+                            <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-cat" onclick="toggleAccordion('dash-cat')">
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_categories">Despesas por Categoria</h2>
+                                    <i id="acc-icon-dash-cat" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                                </button>
+                                <div id="acc-content-dash-cat" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                                    <div class="overflow-hidden">
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                                            <div class="min-w-[240px] h-64 relative">
+                                                <canvas id="chart-categories"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gráfico 3: Evolução 6 Meses -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
-                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-evo" onclick="toggleAccordion('dash-evo')">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_evolution">Evolução (Últimos 6 Meses)</h2>
-                        <i id="acc-icon-dash-evo" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
-                    </button>
-                    <div id="acc-content-dash-evo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
-                        <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                                <div class="min-w-[240px] h-64 relative">
-                                    <canvas id="chart-evolution"></canvas>
+            
+                            <!-- Gráfico 3: Evolução 6 Meses -->
+                            <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-evo" onclick="toggleAccordion('dash-evo')">
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_evolution">Evolução (Últimos 6 Meses)</h2>
+                                    <i id="acc-icon-dash-evo" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                                </button>
+                                <div id="acc-content-dash-evo" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                                    <div class="overflow-hidden">
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                                            <div class="min-w-[240px] h-64 relative">
+                                                <canvas id="chart-evolution"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gráfico 4: Gastos por Conta/Cartão -->
-                <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
-                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-acc" onclick="toggleAccordion('dash-acc')">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_accounts">Gastos por Conta / Cartão</h2>
-                        <i id="acc-icon-dash-acc" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
-                    </button>
-                    <div id="acc-content-dash-acc" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
-                        <div class="overflow-hidden">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                                <div class="min-w-[240px] h-64 relative">
-                                    <canvas id="chart-accounts"></canvas>
+            
+                            <!-- Gráfico 4: Gastos por Conta/Cartão -->
+                            <div class="flex flex-col break-inside-avoid mb-6 transition-all duration-500">
+                                <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="dash-acc" onclick="toggleAccordion('dash-acc')">
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3" data-i18n="chart_accounts">Gastos por Conta / Cartão</h2>
+                                    <i id="acc-icon-dash-acc" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                                </button>
+                                <div id="acc-content-dash-acc" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                                    <div class="overflow-hidden">
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors relative w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                                            <div class="min-w-[240px] h-64 relative">
+                                                <canvas id="chart-accounts"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 <!-- ================= BLOCO 7: ABA CONFIGURAÇÕES ================= -->
         <div id="content-backup" class="tab-content hidden max-w-4xl mx-auto flex flex-col min-h-[calc(100vh-160px)]">
@@ -1422,6 +1433,14 @@
                         <span data-i18n="lbl_wipe_limits">Orçamentos e Limites</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-goals" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_goals">Metas de Economia</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input type="checkbox" id="wipe-accounts" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                        <span data-i18n="lbl_wipe_accounts">Contas e Saldos</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" id="wipe-history" onchange="checkWipeAllStatus()" class="rounded-sm border-slate-300 text-rose-600 focus:ring-rose-500 w-4 h-4">
                         <span data-i18n="lbl_wipe_history">Histórico de Deletados</span>
                     </label>
@@ -1503,8 +1522,8 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" data-i18n="lbl_account_name">Nome da Conta</label>
                     <div class="flex gap-1">
-                        <input type="text" id="account-name" autocomplete="off" data-i18n-placeholder="ph_account_name" placeholder="Ex: Nubank, Carteira..." class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-blue-500 dark:text-white">
-                        <button type="button" onclick="openGlobalEdit('paymentMethod')" class="text-slate-400 hover:text-indigo-500 p-2 bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm transition shrink-0" data-i18n-title="tt_manage_acc"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <input type="text" id="account-name" autocomplete="off" list="methods-list" data-i18n-placeholder="ph_account_name" placeholder="Ex: Nubank, Carteira..." class="flex-1 min-w-0 p-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm bg-white/50 dark:bg-slate-900/50 outline-none focus:border-blue-500 dark:text-white">
+                        <button type="button" onclick="openGlobalEdit('paymentMethod', 'account-name')" class="text-slate-400 hover:text-indigo-500 p-2 bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm transition shrink-0" data-i18n-title="tt_manage_acc"><i class="fa-solid fa-pen-to-square"></i></button>
                     </div>
                     <p class="text-[10px] text-slate-400 mt-1" data-i18n="hint_account_name">Use exatamente o mesmo nome usado no campo "Conta" das movimentações.</p>
                 </div>
@@ -1649,7 +1668,8 @@
                 empty_state: "Nenhuma movimentação encontrada.", invoice_empty: "Nenhuma compra no crédito para este cartão neste mês.", res_people: "Pessoas (Rateios)",
                 dash_wip_title: "Em construção", dash_wip_desc: "Esta seção estará disponível em breve.",
                 cfg_title: "Dados e Segurança", cfg_export_title: "Exportar Planilha", btn_export: "Exportar",
-                cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Dados Salvos", btn_delete: "Apagar Dados", modal_wipe_title: "Apagar Dados", lbl_wipe_all: "Marcar todos", lbl_wipe_trx: "Movimentações", lbl_wipe_custom: "Dados Personalizados", lbl_wipe_limits: "Orçamentos e Limites", btn_confirm_wipe: "Apagar Selecionados", msg_wipe_empty: "Selecione algo para apagar!",
+                cfg_imp_title: "Importar Backup", btn_import: "Restaurar", cfg_del_title: "Apagar Dados Salvos", btn_delete: "Apagar Dados", modal_wipe_title: "Apagar Dados",
+                lbl_wipe_all: "Marcar todos", lbl_wipe_trx: "Movimentações", lbl_wipe_custom: "Dados Personalizados", lbl_wipe_limits: "Orçamentos e Limites", lbl_wipe_accounts: "Contas e Saldos", lbl_wipe_goals: "Metas de Economia", btn_confirm_wipe: "Apagar Selecionados", msg_wipe_empty: "Selecione algo para apagar!",
                 cfg_acc_title: "Conta e Nuvem", cfg_acc_user: "Usuário Desconectado", cfg_acc_sync: "Última sincronização:", cfg_acc_btn: "Integração Google em breve",
                 cfg_lang_curr: "Idioma e Moeda", cfg_currency: "Moeda Padrão:", cfg_appearance_title: "Aparência", cfg_alerts_title: "Alertas e Histórico", cfg_theme: "Tema do Aplicativo:", 
                 cfg_theme_light: "Claro", cfg_theme_dark: "Escuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Preto",
@@ -1699,7 +1719,8 @@
                 placeholder_search: "Search...", flt_all_types: "All Types", flt_income: "Income", flt_expense: "Expenses", flt_all_status: "All Status", flt_paid: "Paid/Received", flt_pending: "Pending",
                 flt_all_splits: "All", flt_only_splits: "Only Splits", th_date: "Date", th_date_purchase: "Purchase Date", th_desc: "Description & Cat.", th_method: "Account/Card", th_orig: "Orig. Value", th_cost: "Your Cost", th_status: "Status", th_actions: "Actions",
                 empty_state: "No transactions found.", invoice_empty: "No credit purchases for this card this month.", res_people: "People (Splits)", dash_wip_title: "Under construction", dash_wip_desc: "This section will be available soon.",
-                cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Saved Data", btn_delete: "Wipe Data", modal_wipe_title: "Wipe Data", lbl_wipe_all: "Select All", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Custom Data", lbl_wipe_limits: "Budgets & Limits", btn_confirm_wipe: "Wipe Selected", msg_wipe_empty: "Select something to wipe!",
+                cfg_title: "Data & Security", cfg_export_title: "Export Spreadsheet", btn_export: "Export", cfg_imp_title: "Import Backup", btn_import: "Restore", cfg_del_title: "Wipe Saved Data", btn_delete: "Wipe Data", modal_wipe_title: "Wipe Data", 
+                lbl_wipe_all: "Select All", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Custom Data", lbl_wipe_limits: "Budgets & Limits", lbl_wipe_accounts: "Accounts & Balances", lbl_wipe_goals: "Saving Goals", btn_confirm_wipe: "Wipe Selected", msg_wipe_empty: "Select something to wipe!",
                 cfg_acc_title: "Account & Cloud", cfg_acc_user: "Logged Out", cfg_acc_sync: "Last sync:", cfg_acc_btn: "Google Integration soon",
                 cfg_lang_curr: "Language & Currency", cfg_currency: "Default Currency:", cfg_appearance_title: "Appearance", cfg_alerts_title: "Alerts & History", cfg_theme: "App Theme:", cfg_theme_light: "Light", cfg_theme_dark: "Dark", cfg_theme_sys: "System", cfg_theme_oled: "Black",
                 cfg_rem_pre: "Warn before", cfg_rem_overdue: "Warn after", cfg_rem_pos: "day(s)", cfg_credits: "Made by Mateus Bitarães", cfg_version: "Version",
@@ -1740,7 +1761,8 @@
                 placeholder_search: "Buscar...", flt_all_types: "Todos los Tipos", flt_income: "Ingresos", flt_expense: "Gastos", flt_all_status: "Todos los Estados", flt_paid: "Pagados/Recibidos", flt_pending: "Pendientes",
                 flt_all_splits: "Todas", flt_only_splits: "Solo Divisiones", th_date: "Fecha", th_date_purchase: "Fecha de Compra", th_desc: "Descripción y Cat.", th_method: "Cuenta/Tarjeta", th_orig: "Valor Orig.", th_cost: "Tu Costo", th_status: "Estado", th_actions: "Acciones",
                 empty_state: "No se encontraron transacciones.", invoice_empty: "No hay compras de crédito para esta tarjeta este mes.", res_people: "Personas (División)", dash_wip_title: "En construcción", dash_wip_desc: "Esta sección estará disponible pronto.",
-                cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Datos Guardados", btn_delete: "Borrar Datos", modal_wipe_title: "Borrar Datos", lbl_wipe_all: "Seleccionar todo", lbl_wipe_trx: "Transacciones", lbl_wipe_custom: "Datos Personalizados", lbl_wipe_limits: "Presupuestos y Límites", btn_confirm_wipe: "Borrar Selección", msg_wipe_empty: "¡Selecciona algo para borrar!",
+                cfg_title: "Datos y Seguridad", cfg_export_title: "Exportar Planilla", btn_export: "Exportar", cfg_imp_title: "Importar Respaldo", btn_import: "Restaurar", cfg_del_title: "Borrar Datos Guardados", btn_delete: "Borrar Datos", modal_wipe_title: "Borrar Datos", 
+                lbl_wipe_all: "Seleccionar todo", lbl_wipe_trx: "Transacciones", lbl_wipe_custom: "Datos Personalizados", lbl_wipe_limits: "Presupuestos y Límites", lbl_wipe_accounts: "Cuentas y Saldos", lbl_wipe_goals: "Metas de Ahorro", btn_confirm_wipe: "Borrar Selección", msg_wipe_empty: "¡Selecciona algo para borrar!",
                 cfg_acc_title: "Cuenta y Nube", cfg_acc_user: "Usuario Desconectado", cfg_acc_sync: "Última sincro:", cfg_acc_btn: "Integración Google pronto",
                 cfg_lang_curr: "Idioma y Moneda", cfg_currency: "Moneda Padrón:", cfg_appearance_title: "Apariencia", cfg_alerts_title: "Alertas y Historial", cfg_theme: "Tema de la App:", cfg_theme_light: "Claro", cfg_theme_dark: "Oscuro", cfg_theme_sys: "Sistema", cfg_theme_oled: "Negro",
                 cfg_rem_pre: "Avisar antes", cfg_rem_overdue: "Avisar después", cfg_rem_pos: "día(s)", cfg_credits: "Hecho por Mateus Bitarães", cfg_version: "Versión",
@@ -1780,7 +1802,8 @@
                 placeholder_search: "Rechercher...", flt_all_types: "Tous les types", flt_income: "Revenus", flt_expense: "Dépenses", flt_all_status: "Tous les statuts", flt_paid: "Payés/Reçus", flt_pending: "En attente",
                 flt_all_splits: "Toutes", flt_only_splits: "Partages uniquement", th_date: "Date", th_date_purchase: "Date d'achat", th_desc: "Description & Cat.", th_method: "Compte/Carte", th_orig: "Valeur Orig.", th_cost: "Votre coût", th_status: "Statut", th_actions: "Actions",
                 empty_state: "Aucune transaction trouvée.", invoice_empty: "Aucun achat à crédit pour cette carte ce mois-ci.", res_people: "Personnes (Partages)", dash_wip_title: "En construction", dash_wip_desc: "Cette section sera bientôt disponible.",
-                cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer les données enregistrées", btn_delete: "Effacer Données", modal_wipe_title: "Effacer les données", lbl_wipe_all: "Tout sélectionner", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Données Personnalisées", lbl_wipe_limits: "Budgets et Limites", btn_confirm_wipe: "Effacer la sélection", msg_wipe_empty: "Sélectionnez un élément à effacer !",
+                cfg_title: "Données et Sécurité", cfg_export_title: "Exporter la feuille de calcul", btn_export: "Exporter", cfg_imp_title: "Importer une sauvegarde", btn_import: "Restaurer", cfg_del_title: "Effacer les données enregistrées", btn_delete: "Effacer Données", modal_wipe_title: "Effacer les données", 
+                lbl_wipe_all: "Tout sélectionner", lbl_wipe_trx: "Transactions", lbl_wipe_custom: "Données Personnalisées", lbl_wipe_limits: "Budgets et Limites", lbl_wipe_accounts: "Comptes et Soldes", lbl_wipe_goals: "Objectifs d'Épargne", btn_confirm_wipe: "Effacer la sélection", msg_wipe_empty: "Sélectionnez un élément à effacer !",
                 cfg_acc_title: "Compte et Cloud", cfg_acc_user: "Utilisateur déconnecté", cfg_acc_sync: "Dernière synchro :", cfg_acc_btn: "Intégration Google bientôt",
                 cfg_lang_curr: "Langue et Devise", cfg_currency: "Devise par défaut :", cfg_appearance_title: "Apparence", cfg_alerts_title: "Alertes et Historique", cfg_theme: "Thème de l'application :", cfg_theme_light: "Clair", cfg_theme_dark: "Sombre", cfg_theme_sys: "Système", cfg_theme_oled: "Noir",
                 cfg_rem_pre: "Avertir avant", cfg_rem_overdue: "Avertir après", cfg_rem_pos: "jour(s)", cfg_credits: "Créé par Mateus Bitarães", cfg_version: "Version",
@@ -1955,7 +1978,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-3.9.6';
+        const FLOWME_VERSION = 'beta-3.9.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {} } };
         let userConfig = { 
@@ -2699,7 +2722,7 @@
             const container = document.getElementById('split-rows'); const rowId = 'split-' + Date.now() + Math.floor(Math.random() * 1000);
             const div = document.createElement('div'); div.id = rowId; div.className = "flex items-center gap-2 bg-white dark:bg-slate-800 p-1.5 rounded border border-slate-200 dark:border-slate-600 shadow-sm transition-colors";
             div.innerHTML = `
-                <input type="text" autocomplete="off" placeholder="${t('placeholder_name')}" value="${person}" class="split-person w-2/5 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
+                <input type="text" autocomplete="off" list="people-list" placeholder="${t('placeholder_name')}" value="${person}" class="split-person w-2/5 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0">
                 <input type="text" inputmode="numeric" placeholder="0,00" value="${value ? formatMaskedValue(value) : ''}" oninput="maskCurrencyField(this); checkLimitsInRealTime()" class="split-value w-1/4 p-1 text-[11px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 rounded outline-none focus:border-amber-400 min-w-0 text-right">
                 <select class="split-status w-1/4 p-1 text-[10px] border border-slate-200 dark:border-slate-600 rounded bg-slate-50 dark:bg-slate-900 outline-none">
                     <option value="pendente" ${status === 'pendente' ? 'selected' : ''}>${t('str_split_pen')}</option>
@@ -3030,7 +3053,10 @@
             document.getElementById('global-edit-new').value = '';
         }
         
-        function openGlobalEdit(field) {
+        let globalEditTargetInput = null;
+
+        function openGlobalEdit(field, targetInputId = null) {
+            globalEditTargetInput = targetInputId;
             const m = document.getElementById('modal-global-edit'); const c = document.getElementById('global-edit-content');
             document.getElementById('global-edit-field').value = field;
             document.getElementById('global-edit-search').value = '';
@@ -3066,6 +3092,11 @@
         }
 
         function selectGlobalItem(val) {
+            if (globalEditTargetInput) {
+                document.getElementById(globalEditTargetInput).value = val;
+                checkLimitsInRealTime(); closeModal('modal-global-edit');
+                return;
+            }
             const field = document.getElementById('global-edit-field').value;
             if (field === 'description') document.getElementById('description').value = val;
             else if (field === 'category') document.getElementById('category').value = val;
@@ -3405,6 +3436,8 @@
             document.getElementById('wipe-trx').checked = false;
             document.getElementById('wipe-custom').checked = false;
             document.getElementById('wipe-limits').checked = false;
+            document.getElementById('wipe-goals').checked = false;
+            document.getElementById('wipe-accounts').checked = false;
             openModal('modal-wipe-data');
         }
 
@@ -3413,6 +3446,8 @@
             document.getElementById('wipe-custom').checked = checked;
             document.getElementById('wipe-limits').checked = checked;
             document.getElementById('wipe-history').checked = checked;
+            document.getElementById('wipe-goals').checked = checked;
+            document.getElementById('wipe-accounts').checked = checked;            
         }
 
         function checkWipeAllStatus() {
@@ -3420,7 +3455,9 @@
             const custom = document.getElementById('wipe-custom').checked;
             const limits = document.getElementById('wipe-limits').checked;
             const history = document.getElementById('wipe-history').checked;
-            document.getElementById('wipe-all').checked = (trx && custom && limits && history);
+            const goals = document.getElementById('wipe-goals').checked;
+            const accounts = document.getElementById('wipe-accounts').checked;
+            document.getElementById('wipe-all').checked = (trx && custom && limits && history && goals && accounts);
         }
 
         function executeWipeData() {
@@ -3428,9 +3465,11 @@
             const custom = document.getElementById('wipe-custom').checked;
             const limits = document.getElementById('wipe-limits').checked;
             const history = document.getElementById('wipe-history').checked;
-            document.getElementById('wipe-all').checked = (trx && custom && limits && history);
+            const goals = document.getElementById('wipe-goals').checked;
+            const accounts = document.getElementById('wipe-accounts').checked;
+            document.getElementById('wipe-all').checked = (trx && custom && limits && history && goals && accounts);
 
-            if (!trx && !custom && !limits && !history) {
+            if (!trx && !custom && !limits && !history && !goals && !accounts) {
                 alert(t('msg_wipe_empty'));
                 return;
             }
@@ -3454,6 +3493,15 @@
 
                 if (history) {
                     state.deletedHistory = [];
+                }
+
+                // 4. Limpar Metas e Contas
+                if (goals) {
+                    state.goals = [];
+                }
+
+                if (accounts) {
+                    state.accounts = [];
                 }
                 
                 // Salva tudo localmente e recarrega os visuais corretos
@@ -3480,6 +3528,7 @@
             const cats = [...new Set([...state.transactions.map(trx => trx.category), ...(state.customData.category || [])])].filter(Boolean);
             const methods = [...new Set([...state.transactions.map(trx => trx.paymentMethod), ...(state.customData.paymentMethod || [])])].filter(Boolean);
             const people = [...new Set([...state.transactions.flatMap(trx => trx.splits ? trx.splits.map(s => s.person) : []), ...(state.customData.person || [])])].filter(Boolean);
+            const descriptions = [...new Set([...state.transactions.map(trx => trx.description.replace(/\s*\(\d+\/\d+\)$/, '')), ...(state.customData.description || [])])].filter(Boolean);
             
             // Criar datalist de categorias se não existir
             let dlCategories = document.getElementById('categories-list');
@@ -3507,6 +3556,14 @@
                 document.body.appendChild(dlPeople);
             }
             dlPeople.innerHTML = people.map(p => `<option value="${p}">`).join('');
+
+            let dlDescriptions = document.getElementById('descriptions-list');
+            if (!dlDescriptions) {
+                dlDescriptions = document.createElement('datalist');
+                dlDescriptions.id = 'descriptions-list';
+                document.body.appendChild(dlDescriptions);
+            }
+            dlDescriptions.innerHTML = descriptions.map(d => `<option value="${d}">`).join('');
         }
 
         // ================= MOBILE FORM CONTROLS =================
@@ -3645,6 +3702,7 @@
                 cancelEdit();
             } else {
                 const isInstallment = document.getElementById('is-installment').checked;
+                const isRecurring = document.getElementById('is-recurring').checked;
                 if (isRecurring) {
                     const ruleId = 'ruleR-' + Date.now();
                     if (!state.recurringRules) state.recurringRules = [];
@@ -4969,6 +5027,7 @@
                 setTimeout(() => {
                     if (toast.parentNode) toast.remove();
                     delete pendingGoalDeletions[goal.id];
+                    addToDeletedHistory('goal', goal);
                 }, 520);
             }, 6000);
         }
@@ -5194,8 +5253,14 @@
                 state.transactions.push(entry.data);
             } else if (entry.kind === 'limit') {
                 state.limits.push(entry.data);
+            } else if (entry.kind === 'goal') {
+                if (!state.goals) state.goals = [];
+                state.goals.push(entry.data);
+            } else if (entry.kind === 'account') {
+                if (!state.accounts) state.accounts = [];
+                state.accounts.push(entry.data);
             }
-        
+                    
             state.deletedHistory.splice(idx, 1);
         
             saveState(); render();
@@ -5787,7 +5852,7 @@
         
             items.forEach(entry => {
                 const isTrx = entry.kind === 'transaction';
-                const label = isTrx ? entry.data.description : entry.data.target;
+                let label = entry.data.description || entry.data.target || entry.data.name || '';
                 const icon = isTrx
                     ? (entry.data.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>')
                     : '<i class="fa-solid fa-bullseye text-pink-500"></i>';
@@ -6144,7 +6209,10 @@
                         invoiceSettings: parsed.invoiceSettings || {defaults:{}, exceptions:{}},
                         limits: parsed.limits || [],
                         customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] },
-                        deletedHistory: parsed.deletedHistory || []
+                        deletedHistory: parsed.deletedHistory || [],
+                        recurringRules: parsed.recurringRules || [],
+                        accounts: parsed.accounts || [],
+                        goals: parsed.goals || []
                     };
                 }
 

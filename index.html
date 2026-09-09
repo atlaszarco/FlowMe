@@ -4512,7 +4512,7 @@
                         </td>
                         <td class="p-3 whitespace-nowrap text-right space-x-1">
                             <button onclick="editTransaction('${trx.id}')" title="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteTransaction('${trx.id}')" title="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="${trx.invoicePaymentRef ? `undoInvoicePaymentByRef('${trx.invoicePaymentRef}')` : `deleteTransaction('${trx.id}')`}" title="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     `;
                     tbody.appendChild(tr);

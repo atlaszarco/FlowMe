@@ -117,6 +117,11 @@
         
         /* Ajuste de Rolagem Global para conteúdo passar por baixo do Header Squircles */
         html { scroll-padding-top: 130px; }
+
+        /* Reserva espaço da barra de rolagem para evitar "pulo" de layout no formulário mobile */
+        #form-scroll-inner {
+            scrollbar-gutter: stable;
+        }
         
         /* ================= MITOSE DO CABEÇALHO (LOGO + NOME) ================= */
         #island-name {
@@ -2041,7 +2046,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.0.1';
+        const FLOWME_VERSION = 'beta-4.0.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
         let userConfig = { 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowme-vbeta-3.4.2';
+const CACHE_NAME = 'flowme-vbeta-4.0.7';
 const urlsToCache = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',];
 
 // Instala e guarda a versão inicial

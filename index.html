@@ -376,6 +376,14 @@
             border: 1px solid rgba(0, 0, 0, 0.12);
             color: #0f172a;
         }
+
+        /* Aproxima a barra de rolagem da borda dos modais */
+        .modal-inner *::-webkit-scrollbar {
+            width: 4px;
+        }
+        .modal-inner .overflow-y-auto {
+            padding-right: 0.25rem !important;
+        }
         
     </style>
 </head>
@@ -2046,7 +2054,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.0.2';
+        const FLOWME_VERSION = 'beta-4.0.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
         let userConfig = { 
@@ -3851,7 +3859,10 @@
                     state.transactions.push(newTrx);
                 }
             }
+            
             saveState(); render(); updateAutocompleteLists();
+            if (expType === 'credito') populateInvoiceCards(paymentMethod);
+            
             document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = '';
             toggleInstallmentOptions(false);
             document.querySelector('input[name="type"][value="receita"]').checked = true; toggleTypeFields('receita'); addSplitRow(); document.getElementById('date').value = dateStr;
@@ -5961,11 +5972,15 @@
         }
         
         // ================= FATURAS ABA =================
-        function populateInvoiceCards() {
+        function populateInvoiceCards(preferredCard = null) {
             const cards = [...new Set(state.transactions.filter(trx => trx.type === 'despesa' && trx.expenseType === 'credito').map(trx => trx.paymentMethod))].filter(Boolean);
             const sel = document.getElementById('invoice-card-select'); const cur = sel.value; sel.innerHTML = '';
             if(cards.length === 0) sel.innerHTML = '<option value="">Nenhum cartão encontrado</option>';
-            else { cards.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`); if(cards.includes(cur)) sel.value = cur; }
+            else {
+                cards.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+                if (preferredCard && cards.includes(preferredCard)) sel.value = preferredCard;
+                else if (cards.includes(cur)) sel.value = cur;
+            }
             renderFaturas();
         }
 

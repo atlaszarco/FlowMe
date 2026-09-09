@@ -447,7 +447,7 @@
             <div id="filter-closed-catcher" class="absolute inset-0 z-10 cursor-pointer" onclick="openFilter()"></div>
 
             <!-- Botão do Ícone Fixo (Esquerda) -->
-            <button id="btn-filter-icon" onclick="isFilterExpanded ? toggleFilterMode(event) : openFilter()" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-auto">
+            <button id="btn-filter-icon" data-i18n-aria="aria_toggle_filter" onclick="isFilterExpanded ? toggleFilterMode(event) : openFilter()" class="h-full w-12 sm:w-14 flex items-center justify-center shrink-0 z-20 relative transition-colors cursor-pointer pointer-events-auto">
                 <i id="filter-icon-display" class="fa-regular fa-calendar fa-fw text-lg sm:text-xl transition-transform duration-300"></i>
             </button>
 
@@ -464,12 +464,12 @@
                     
                     <!-- Módulo MÊS -->
                     <div id="mode-month" class="absolute inset-0 flex items-center justify-between h-full whitespace-nowrap transition-all duration-500 opacity-100 scale-100 z-10 w-full pr-1">
-                        <button onclick="event.stopPropagation(); changeMonthOffset(-1)" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button onclick="event.stopPropagation(); changeMonthOffset(-1)" data-i18n-aria="aria_prev_month" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
                         <div class="relative flex items-center justify-center h-full cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition flex-1 min-w-0" onclick="event.stopPropagation()">
                             <span id="month-display" class="text-[11px] sm:text-sm font-bold uppercase tracking-wider pointer-events-none text-center truncate px-1"></span>
                             <input type="month" id="global-month" onchange="changeGlobalMonth(this.value)" onclick="this.showPicker && this.showPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                         </div>
-                        <button onclick="event.stopPropagation(); changeMonthOffset(1)" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
+                        <button onclick="event.stopPropagation(); changeMonthOffset(1)" data-i18n-aria="aria_next_month" class="relative z-20 px-2 sm:px-3 h-full hover:bg-black/20 dark:hover:bg-white/20 transition flex items-center justify-center shrink-0 rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                     
                     <!-- Módulo PERÍODO -->
@@ -496,7 +496,7 @@
 
     <!-- 3. BOTÃO SALVAR (NUVEM) -->
     <div id="global-toolbar-save" class="shrink-0 flex items-center justify-end h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-right">
-        <button id="btn-manual-save" onclick="manualSave()" class="shrink-0 pill-action-btn dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 min-[700px]:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
+        <button id="btn-manual-save" data-i18n-aria="btn_save_data" onclick="manualSave()" class="shrink-0 pill-action-btn dark:bg-slate-800 dark:text-white theme-oled:bg-[#111] theme-oled:text-white hover:!bg-emerald-600 dark:hover:!bg-emerald-600 theme-oled:hover:!bg-emerald-600 hover:!text-white px-5 min-[700px]:px-8 h-full rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-bold shadow-md">
             <i id="save-icon" class="fa-solid fa-cloud-arrow-up text-lg min-[700px]:text-xl transition-transform duration-300"></i>
             <span id="save-btn-text" data-i18n="btn_save_data" class="hidden min-[700px]:inline text-sm min-[700px]:text-base">Sincronizar Nuvem</span>
         </button>
@@ -590,7 +590,7 @@
                                         <i id="mobile-form-icon" class="fa-solid fa-plus-circle text-emerald-500"></i> <span id="mobile-form-title" data-i18n="form_title_new">Nova Movimentação</span>
                                     </h2>
                                 </div>
-                                <button id="btn-close-modal" onclick="toggleMobileForm(false)" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl px-2"><i class="fa-solid fa-xmark"></i></button>
+                                <button id="btn-close-modal" data-i18n-aria="btn_close" onclick="toggleMobileForm(false)" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl px-2"><i class="fa-solid fa-xmark"></i></button>
                             </div>
                             
                             <!-- Botão cancelar edição geral -->
@@ -780,6 +780,9 @@
                                             <option value="todos" data-i18n="flt_all_splits">Todas</option>
                                             <option value="rateio" data-i18n="flt_only_splits">Apenas Rateios</option>
                                         </select>
+                                        <button onclick="openFilterPresetsModal()" data-i18n-title="tt_filter_presets" data-i18n-aria="tt_filter_presets" class="shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 text-slate-500 hover:text-indigo-500 transition">
+                                            <i class="fa-solid fa-bookmark"></i>
+                                        </button>
                                     </div>
                                 </div>
             
@@ -839,6 +842,11 @@
                     </button>
                     <div id="acc-content-pessoas" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
+                            <div class="flex justify-end mt-2">
+                                <button onclick="shareRateioSummary()" data-i18n-title="tt_share_rateio" data-i18n-aria="tt_share_rateio" class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-all duration-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-solid fa-share-nodes"></i> <span data-i18n="btn_share">Compartilhar</span>
+                                </button>
+                            </div>
                             <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
                                 <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700"></div>
                             </div>
@@ -850,11 +858,11 @@
         </div>
             
         <!-- Botão Flutuante (FAB) - NOVA TRANSAÇÃO -->
-        <button id="fab-form" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 sm:bottom-[136px] right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
+        <button id="fab-form" data-i18n-aria="form_title_new" onclick="toggleMobileForm(true)" class="hidden lg:hidden fixed bottom-28 sm:bottom-[136px] right-6 w-14 h-14 bg-emerald-500 text-white rounded-full shadow-[0_8px_30px_rgba(16,185,129,0.4)] items-center justify-center text-2xl z-[60] hover:bg-emerald-600 transition-transform active:scale-90 flex">
             <i class="fa-solid fa-plus"></i>
         </button>
         <!-- Botão Flutuante (FAB) - MODO MERCADO -->
-        <button id="fab-market" onclick="openMarketMode(true)" class="lg:hidden fixed bottom-48 sm:bottom-[216px] right-6 w-14 h-14 bg-indigo-500 text-white rounded-full shadow-[0_8px_30px_rgba(99,102,241,0.4)] items-center justify-center text-2xl z-[60] hover:bg-indigo-600 transition-transform active:scale-90 flex">
+        <button id="fab-market" data-i18n-aria="market_title" onclick="openMarketMode(true)" class="lg:hidden fixed bottom-48 sm:bottom-[216px] right-6 w-14 h-14 bg-indigo-500 text-white rounded-full shadow-[0_8px_30px_rgba(99,102,241,0.4)] items-center justify-center text-2xl z-[60] hover:bg-indigo-600 transition-transform active:scale-90 flex">
             <i class="fa-solid fa-cart-shopping"></i>
         </button>
 
@@ -1352,6 +1360,23 @@
         </div>
     </div>
 
+    <!-- MODAL: PRESETS DE FILTRO -->
+    <div id="modal-filter-presets" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm"><i class="fa-solid fa-bookmark text-indigo-500 mr-2"></i> <span data-i18n="tt_filter_presets">Filtros Salvos</span></h3>
+                <button onclick="closeModal('modal-filter-presets')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto max-h-[60vh] flex flex-col gap-3">
+                <div class="flex gap-2">
+                    <input type="text" id="preset-name-input" autocomplete="off" data-i18n-placeholder="ph_preset_name" placeholder="Nome do filtro..." class="flex-1 p-2 text-xs border-2 !border-transparent hover:!border-slate-200 dark:hover:!border-slate-700 focus:!border-indigo-500 dark:focus:!border-indigo-500 rounded-xl bg-white/50 dark:bg-slate-900/50 outline-none dark:text-white transition">
+                    <button onclick="saveCurrentFilterAsPreset()" class="px-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition" data-i18n="btn_save">Salvar</button>
+                </div>
+                <div id="filter-presets-list" class="space-y-1.5"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL: VENCIMENTO FATURA -->
     <div id="modal-invoice-due" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden flex flex-col transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
@@ -1640,9 +1665,9 @@
                         <div class="w-28 shrink-0">
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1" data-i18n="market_qty_label">Qtd.</label>
                             <div class="flex items-center border border-slate-300 dark:border-slate-600 rounded-xl overflow-hidden bg-white/60 dark:bg-slate-900/60">
-                                <button type="button" onclick="changeMarketQty(-1)" class="w-8 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">-</button>
+                                <button type="button" onclick="changeMarketQty(-1)" data-i18n-aria="aria_qty_decrease" class="w-8 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">-</button>
                                 <input type="text" id="market-qty" value="1" readonly class="w-full text-center text-sm font-bold bg-transparent outline-none dark:text-white">
-                                <button type="button" onclick="changeMarketQty(1)" class="w-8 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">+</button>
+                                <button type="button" onclick="changeMarketQty(1)" data-i18n-aria="aria_qty_increase" class="w-8 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">+</button>
                             </div>
                         </div>
                     </div>
@@ -1760,7 +1785,10 @@
                 dash_accounts: "Contas e Saldos", dash_accounts_count_one: "{N} conta cadastrada", dash_accounts_count_other: "{N} contas cadastradas", modal_account_title: "Cadastrar Conta", modal_account_edit: "Editar Conta", lbl_account_name: "Nome da Conta", ph_account_name: "Ex: Nubank, Carteira...", hint_account_name: "Use exatamente o mesmo nome usado no campo \"Conta\" das movimentações.", lbl_account_initial_balance: "Saldo Inicial", lbl_account_initial_date: "Data do Saldo Inicial", btn_save_account: "Salvar Conta", account_empty: "Nenhuma conta cadastrada ainda.", err_account_fields: "Preencha o nome e a data inicial!", err_account_dup: "Já existe uma conta com esse nome!", btn_view_extract: "Ver Extrato", modal_extract_title: "Extrato da Conta", lbl_initial_balance: "Saldo Inicial", lbl_current_balance: "Saldo Atual", extract_empty: "Nenhuma movimentação paga registrada nesta conta ainda.",
                 graphics_title: "Gráficos", str_goal_prefix: "Meta:", modal_recurring_edit_title: "Editar Assinatura", hint_recurring_edit: "A alteração vale a partir deste mês, apenas para as parcelas ainda não pagas.", lbl_recurring_cancelled_short: "cancelada", lbl_wipe_recurring: "Assinaturas e Recorrências", err_invoice_no_account: "Vincule uma conta a este cartão antes de marcar a fatura como paga.", msg_invoice_already_paid: "Não há valores pendentes nesta fatura.", lbl_invoice_payment_prefix: "Pagamento fatura", cat_invoice_payment: "Pagamento de Fatura", btn_pay_invoice: "Marcar Fatura como Paga", lbl_invoice_account: "Conta para Pagamento (opcional)",
                 late_one: "Passou {N} dia", late_other: "Passaram {N} dias", left_one: "Falta {N} dia", left_other: "Faltam {N} dias", lbl_deleted_full: "excluído", lbl_deleted_short: "excl.", btn_view_invoice: "Ver Fatura", btn_undo_pay_invoice: "Desfazer Pagamento de Fatura", confirm_undo_invoice_payment: "Desfazer o pagamento desta fatura? A movimentação de pagamento será removida e as compras voltarão a ficar pendentes.", msg_invoice_paid_toast: "Fatura {CARD} paga com {ACCOUNT}",
-                err_invoice_locked: "Esta ação só é possível se desfizer o pagamento da fatura.", lbl_invoice_items_link: "compras nesta fatura"
+                err_invoice_locked: "Esta ação só é possível se desfizer o pagamento da fatura.", lbl_invoice_items_link: "compras nesta fatura",
+                btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
+                tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
+                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1805,7 +1833,10 @@
                 dash_accounts: "Accounts & Balances", dash_accounts_count_one: "{N} account set up", dash_accounts_count_other: "{N} accounts set up", modal_account_title: "Create Account", modal_account_edit: "Edit Account", lbl_account_name: "Account Name", ph_account_name: "Ex: Bank, Wallet...", hint_account_name: "Use the exact same name used in the \"Account\" field of transactions.", lbl_account_initial_balance: "Initial Balance", lbl_account_initial_date: "Initial Balance Date", btn_save_account: "Save Account", account_empty: "No accounts created yet.", err_account_fields: "Fill in the name and initial date!", err_account_dup: "An account with this name already exists!", btn_view_extract: "View Statement", modal_extract_title: "Account Statement", lbl_initial_balance: "Initial Balance", lbl_current_balance: "Current Balance", extract_empty: "No paid transactions registered for this account yet.",
                 graphics_title: "Charts", str_goal_prefix: "Goal:", modal_recurring_edit_title: "Edit Subscription", hint_recurring_edit: "This change applies from this month onward, only to installments not yet paid.", lbl_recurring_cancelled_short: "cancelled", lbl_wipe_recurring: "Subscriptions & Recurrences", err_invoice_no_account: "Link an account to this card before marking the invoice as paid.", msg_invoice_already_paid: "There are no pending amounts on this invoice.", lbl_invoice_payment_prefix: "Invoice payment", cat_invoice_payment: "Invoice Payment", btn_pay_invoice: "Mark Invoice as Paid", lbl_invoice_account: "Payment Account (optional)",
                 late_one: "{N} day late", late_other: "{N} days late", left_one: "{N} day left", left_other: "{N} days left", lbl_deleted_full: "deleted", lbl_deleted_short: "del.", btn_view_invoice: "View Invoice", btn_undo_pay_invoice: "Undo Invoice Payment", confirm_undo_invoice_payment: "Undo the payment for this invoice? The payment transaction will be removed and the purchases will become pending again.", msg_invoice_paid_toast: "{CARD} invoice paid with {ACCOUNT}",
-                err_invoice_locked: "This action is only possible if you undo the invoice payment.", lbl_invoice_items_link: "purchases in this invoice"
+                err_invoice_locked: "This action is only possible if you undo the invoice payment.", lbl_invoice_items_link: "purchases in this invoice",
+                btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
+                tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
+                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1849,7 +1880,10 @@
                 dash_accounts: "Cuentas y Saldos", dash_accounts_count_one: "{N} cuenta creada", dash_accounts_count_other: "{N} cuentas creadas", modal_account_title: "Crear Cuenta", modal_account_edit: "Editar Cuenta", lbl_account_name: "Nombre de la Cuenta", ph_account_name: "Ej: Banco, Billetera...", hint_account_name: "Usa exactamente el mismo nombre usado en el campo \"Cuenta\" de las transacciones.", lbl_account_initial_balance: "Saldo Inicial", lbl_account_initial_date: "Fecha del Saldo Inicial", btn_save_account: "Guardar Cuenta", account_empty: "Ninguna cuenta creada todavía.", err_account_fields: "¡Rellena el nombre y la fecha inicial!", err_account_dup: "¡Ya existe una cuenta con ese nombre!", btn_view_extract: "Ver Extracto", modal_extract_title: "Extracto de la Cuenta", lbl_initial_balance: "Saldo Inicial", lbl_current_balance: "Saldo Actual", extract_empty: "Ninguna transacción pagada registrada en esta cuenta todavía.",
                 graphics_title: "Gráficos", str_goal_prefix: "Meta:", modal_recurring_edit_title: "Editar Suscripción", hint_recurring_edit: "El cambio se aplica desde este mes, solo a las cuotas aún no pagadas.", lbl_recurring_cancelled_short: "cancelada", lbl_wipe_recurring: "Suscripciones y Recurrencias", err_invoice_no_account: "Vincula una cuenta a esta tarjeta antes de marcar la factura como pagada.", msg_invoice_already_paid: "No hay montos pendientes en esta factura.", lbl_invoice_payment_prefix: "Pago de factura", cat_invoice_payment: "Pago de Factura", btn_pay_invoice: "Marcar Factura como Pagada", lbl_invoice_account: "Cuenta de Pago (opcional)",
                 late_one: "Pasó {N} día", late_other: "Pasaron {N} días", left_one: "Falta {N} día", left_other: "Faltan {N} días", lbl_deleted_full: "eliminado", lbl_deleted_short: "elim.", btn_view_invoice: "Ver Factura", btn_undo_pay_invoice: "Deshacer Pago de Factura", confirm_undo_invoice_payment: "¿Deshacer el pago de esta factura? La transacción de pago se eliminará y las compras volverán a estar pendientes.", msg_invoice_paid_toast: "Factura {CARD} pagada con {ACCOUNT}",
-                err_invoice_locked: "Esta acción solo es posible si deshaces el pago de la factura.", lbl_invoice_items_link: "compras en esta factura"
+                err_invoice_locked: "Esta acción solo es posible si deshaces el pago de la factura.", lbl_invoice_items_link: "compras en esta factura",
+                btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
+                tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
+                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1894,7 +1928,10 @@
                 goal_deadline_left: "{N} jour(s) restant(s)", dash_accounts: "Comptes et Soldes", dash_accounts_count_one: "{N} compte créé", dash_accounts_count_other: "{N} comptes créés", modal_account_title: "Créer un Compte", modal_account_edit: "Modifier le Compte", lbl_account_name: "Nom du Compte", ph_account_name: "Ex : Banque, Portefeuille...", hint_account_name: "Utilisez exactement le même nom que celui utilisé dans le champ \"Compte\" des transactions.", lbl_account_initial_balance: "Solde Initial", lbl_account_initial_date: "Date du Solde Initial", btn_save_account: "Enregistrer le Compte", account_empty: "Aucun compte créé pour l'instant.", err_account_fields: "Remplissez le nom et la date initiale !", err_account_dup: "Un compte avec ce nom existe déjà !", btn_view_extract: "Voir le Relevé", modal_extract_title: "Relevé du Compte", lbl_initial_balance: "Solde Initial", lbl_current_balance: "Solde Actuel", extract_empty: "Aucune transaction payée enregistrée sur ce compte pour l'instant.",
                 graphics_title: "Graphiques", str_goal_prefix: "Objectif :", modal_recurring_edit_title: "Modifier l'Abonnement", hint_recurring_edit: "Le changement s'applique à partir de ce mois, uniquement aux échéances non encore payées.", lbl_recurring_cancelled_short: "annulée", lbl_wipe_recurring: "Abonnements et Récurrences", err_invoice_no_account: "Associez un compte à cette carte avant de marquer la facture comme payée.", msg_invoice_already_paid: "Il n'y a aucun montant en attente sur cette facture.", lbl_invoice_payment_prefix: "Paiement facture", cat_invoice_payment: "Paiement de Facture", btn_pay_invoice: "Marquer la Facture comme Payée", lbl_invoice_account: "Compte de Paiement (optionnel)",
                 late_one: "{N} jour de retard", late_other: "{N} jours de retard", left_one: "Il reste {N} jour", left_other: "Il reste {N} jours", lbl_deleted_full: "supprimé", lbl_deleted_short: "suppr.", btn_view_invoice: "Voir la Facture", btn_undo_pay_invoice: "Annuler le Paiement de la Facture", confirm_undo_invoice_payment: "Annuler le paiement de cette facture ? La transaction de paiement sera supprimée et les achats redeviendront en attente.", msg_invoice_paid_toast: "Facture {CARD} payée avec {ACCOUNT}",
-                err_invoice_locked: "Cette action n'est possible que si vous annulez le paiement de la facture.", lbl_invoice_items_link: "achats sur cette facture"
+                err_invoice_locked: "Cette action n'est possible que si vous annulez le paiement de la facture.", lbl_invoice_items_link: "achats sur cette facture",
+                btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
+                tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
+                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
             }
         };
 
@@ -1909,7 +1946,14 @@
             });
             document.querySelectorAll('[data-i18n-title]').forEach(el => { 
                 const key = el.getAttribute('data-i18n-title'); 
-                if (translations[activeLang][key]) el.title = translations[activeLang][key]; 
+                if (translations[activeLang][key]) { el.title = translations[activeLang][key]; el.setAttribute('aria-label', translations[activeLang][key]); }
+            });
+            document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+                const key = el.getAttribute('data-i18n-aria');
+                if (translations[activeLang][key]) el.setAttribute('aria-label', translations[activeLang][key]);
+            });
+            document.querySelectorAll('button[onclick^="closeModal("]').forEach(btn => {
+                btn.setAttribute('aria-label', t('btn_close'));
             });
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { 
                 const key = el.getAttribute('data-i18n-placeholder'); 
@@ -2044,9 +2088,13 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.0.7';
+        const FLOWME_VERSION = 'beta-4.0.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
+
+        let appUIReady = false;
+        let pendingSplashHide = false;
+        
         let userConfig = { 
             lang: localStorage.getItem('flowme_lang') || 'pt', 
             currency: localStorage.getItem('flowme_currency') || 'BRL', 
@@ -2124,6 +2172,8 @@
                 setLanguage(userConfig.lang);
                 render();
                 autoSizeAllFilterSelects();
+                appUIReady = true;
+                if (pendingSplashHide) { pendingSplashHide = false; hideSplashScreen(); }
             }, 150);
 
             setTimeout(() => {
@@ -2321,6 +2371,19 @@
             }
         }
 
+        function handleShortcutAction() {
+            const params = new URLSearchParams(window.location.search);
+            const action = params.get('action');
+            if (!action) return;
+            if (action === 'market') {
+                openMarketMode();
+            } else if (action === 'new') {
+                if (window.innerWidth < 1024) toggleMobileForm(true);
+                else document.getElementById('form-wrapper')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            history.replaceState(null, '', window.location.pathname); // evita reabrir ao recarregar
+        }
+        
         function goToInvoiceFor(card, month) {
             switchTab('faturas');
             setTimeout(() => {
@@ -2760,6 +2823,69 @@
             
             if (typeof render === 'function') render();
         }
+
+        function openFilterPresetsModal() {
+            renderFilterPresetsList();
+            openModal('modal-filter-presets');
+        }
+        
+        function renderFilterPresetsList() {
+            const c = document.getElementById('filter-presets-list');
+            if (!c) return;
+            const presets = state.filterPresets || [];
+            if (presets.length === 0) {
+                c.innerHTML = `<p class="text-xs text-slate-400 text-center py-3">${t('preset_empty')}</p>`;
+                return;
+            }
+            c.innerHTML = presets.map(p => `
+                <div class="flex items-center justify-between gap-2 p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
+                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${p.name}</span>
+                    <div class="flex gap-1.5 shrink-0">
+                        <button onclick="applyFilterPreset('${p.id}')" class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-lg border border-indigo-200 dark:border-indigo-800">${t('btn_use')}</button>
+                        <button onclick="deleteFilterPreset('${p.id}')" aria-label="${t('btn_delete_action')}" class="text-[10px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/30 px-2 py-1 rounded-lg border border-rose-200 dark:border-rose-800"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+        
+        function saveCurrentFilterAsPreset() {
+            const nameInput = document.getElementById('preset-name-input');
+            const name = nameInput.value.trim();
+            if (!name) return;
+            if (!state.filterPresets) state.filterPresets = [];
+            state.filterPresets.push({
+                id: 'preset-' + Date.now(),
+                name,
+                search: document.getElementById('search-input').value,
+                type: document.getElementById('filter-type').value,
+                status: document.getElementById('filter-status').value,
+                split: document.getElementById('filter-split').value
+            });
+            nameInput.value = '';
+            saveState();
+            renderFilterPresetsList();
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
+        
+        function applyFilterPreset(id) {
+            const preset = (state.filterPresets || []).find(p => p.id === id);
+            if (!preset) return;
+            document.getElementById('search-input').value = preset.search || '';
+            document.getElementById('filter-type').value = preset.type || 'todos';
+            document.getElementById('filter-status').value = preset.status || 'todos';
+            document.getElementById('filter-split').value = preset.split || 'todos';
+            autoSizeSelect(document.getElementById('filter-type'));
+            autoSizeSelect(document.getElementById('filter-status'));
+            autoSizeSelect(document.getElementById('filter-split'));
+            render();
+            closeModal('modal-filter-presets');
+        }
+        
+        function deleteFilterPreset(id) {
+            state.filterPresets = (state.filterPresets || []).filter(p => p.id !== id);
+            saveState();
+            renderFilterPresetsList();
+            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+        }
         
         function changeMonthOffset(offset) {
             const current = document.getElementById('global-month').value; if(!current) return;
@@ -2838,7 +2964,7 @@
                     <option value="pendente" ${status === 'pendente' ? 'selected' : ''}>${t('str_split_pen')}</option>
                     <option value="pago" ${status === 'pago' ? 'selected' : ''}>${t('str_split_paid')}</option>
                 </select>
-                <button type="button" onclick="document.getElementById('${rowId}').remove(); checkLimitsInRealTime()" class="text-rose-400 hover:text-rose-600 w-6 shrink-0 flex justify-center"><i class="fa-solid fa-xmark"></i></button>`;
+                <button type="button" onclick="document.getElementById('${rowId}').remove(); checkLimitsInRealTime()" aria-label="${t('aria_remove_split_row')}" class="text-rose-400 hover:text-rose-600 w-6 shrink-0 flex justify-center"><i class="fa-solid fa-xmark"></i></button>`;
             container.appendChild(div);
         }
 
@@ -2997,8 +3123,8 @@
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
                             <span class="text-sm font-bold text-slate-800 dark:text-white">${formatCurrency(subtotal)}</span>
-                            <button onclick="editMarketItem('${item.id}')" class="text-slate-400 hover:text-blue-500 p-1"><i class="fa-solid fa-pen text-xs"></i></button>
-                            <button onclick="removeMarketItem('${item.id}')" class="text-rose-400 hover:text-rose-600 p-1"><i class="fa-solid fa-xmark"></i></button>
+                            <button onclick="editMarketItem('${item.id}')" aria-label="${t('btn_edit')}" class="text-slate-400 hover:text-blue-500 p-1"><i class="fa-solid fa-pen text-xs"></i></button>
+                            <button onclick="removeMarketItem('${item.id}')" aria-label="${t('btn_delete_action')}" class="text-rose-400 hover:text-rose-600 p-1"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     `;
                     listEl.appendChild(row);
@@ -3177,8 +3303,8 @@
                     div.innerHTML = `
                         <input type="text" id="${rowId}" value="${it}" class="flex-1 p-1 px-2 text-xs border-2 !border-transparent hover:!border-slate-200 dark:hover:!border-slate-600 focus:!border-indigo-400 dark:focus:!border-indigo-400 bg-transparent outline-none dark:text-slate-200 transition min-w-0 text-ellipsis rounded-lg">
                         <div class="flex gap-1.5 shrink-0 w-[88px] justify-end">
-                            <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" class="w-10 h-8 flex items-center justify-center bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/60 dark:hover:bg-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-bold transition active:scale-95 border border-indigo-200 dark:border-indigo-800"><i class="fa-solid fa-floppy-disk"></i></button>
-                            <button onclick="selectGlobalItem('${it.replace(/'/g, "\\'")}')" class="w-10 h-8 flex items-center justify-center bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/60 dark:hover:bg-emerald-700 dark:text-emerald-300 rounded-lg text-sm font-bold transition active:scale-95 border border-emerald-200 dark:border-emerald-800"><i class="fa-solid fa-check"></i></button>
+                            <button onclick="saveGlobalEdit('${it.replace(/'/g, "\\'")}', document.getElementById('${rowId}').value, '${field}')" aria-label="${t('btn_save')}" class="w-10 h-8 flex items-center justify-center bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/60 dark:hover:bg-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-bold transition active:scale-95 border border-indigo-200 dark:border-indigo-800"><i class="fa-solid fa-floppy-disk"></i></button>
+                            <button onclick="selectGlobalItem('${it.replace(/'/g, "\\'")}')" aria-label="${t('btn_use')}" class="w-10 h-8 flex items-center justify-center bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/60 dark:hover:bg-emerald-700 dark:text-emerald-300 rounded-lg text-sm font-bold transition active:scale-95 border border-emerald-200 dark:border-emerald-800"><i class="fa-solid fa-check"></i></button>
                         </div>
                     `;
                     c.appendChild(div);
@@ -3219,6 +3345,7 @@
 
         // ================= GERENCIADOR RESPONSIVO (BARRA GLOBAL) =================
         let responsiveProfile = null;
+        let currentPeopleMap = {};
         let currentAlertGroups = { incomeLate: [], expenseLate: [], incomeSoon: [], expenseSoon: [], limits: [] };
 
         function getResponsiveProfile() {
@@ -3353,53 +3480,12 @@
         
             renderToolbarAlerts();
         
-            const newBtn = document.getElementById('btn-alerts-bell');
-        
-            if (newBtn) {
-                newBtn.classList.add('is-opening');
-        
-                const icon = newBtn.querySelector('i');
-        
-                if (icon) {
-                    icon.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                }
-        
-                setToolbarFocus('global-toolbar-alerts', () => {
-                    setTimeout(() => {
-                        if (icon) {
-                            // 1. Cresce a partir do centro
-                            icon.style.transform = 'scale(1.8)';
-        
-                            // 2. Espera terminar o crescimento e então balança
-                            setTimeout(() => {
-                                icon.classList.add('bell-opening-shake');
-        
-                                // 3. Depois do balanço, volta ao tamanho normal
-                                setTimeout(() => {
-                                    icon.classList.remove('bell-opening-shake');
-                                    icon.style.transform = 'scale(1)';
-        
-                                    // 4. Abre o pop-up
-                                    setTimeout(() => {
-                                        if (newBtn) {
-                                            newBtn.classList.remove('is-opening');
-                                        }
-        
-                                        isBellOpening = false;
-                                        openAlertsModal();
-                                    }, 400);
-        
-                                }, 900); // duração do balanço
-        
-                            }, 400); // espera o crescimento terminar
-                        }
-                    }, 300); // espera a pílula centralizar
-                });
-        
-            } else {
-                isBellOpening = false;
-                openAlertsModal();
-            }
+            setToolbarFocus('global-toolbar-alerts', () => {
+                setTimeout(() => {
+                    isBellOpening = false;
+                    openAlertsModal();
+                }, 350);
+            });
         }
 
         function revertBellState() {
@@ -3508,6 +3594,7 @@
                             limits: parsed.limits || [],
                             customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] },
                             deletedHistory: parsed.deletedHistory || [],
+                            filterPresets: parsed.filterPresets || [],
                             recurringRules: parsed.recurringRules || [],
                             accounts: parsed.accounts || [],
                             goals: parsed.goals || []
@@ -4460,6 +4547,7 @@
             });
 
             let tInc = 0, pInc = 0, tExp = 0, pExp = 0, pOwed = 0, pRec = 0; let peopleMap = {};
+            currentPeopleMap = peopleMap;
 
             filtered.forEach(trx => {
                 if (trx.invoicePaymentRef) return; // pagamento de fatura não é um gasto novo, já foi contado na compra original
@@ -4552,8 +4640,8 @@
                             `}
                         </td>
                         <td class="p-3 whitespace-nowrap text-right space-x-1">
-                            <button onclick="editTransaction('${trx.id}')" title="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="${trx.invoicePaymentRef ? `undoInvoicePaymentByRef('${trx.invoicePaymentRef}')` : `deleteTransaction('${trx.id}')`}" title="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="editTransaction('${trx.id}')" title="${t('btn_edit')}" aria-label="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="${trx.invoicePaymentRef ? `undoInvoicePaymentByRef('${trx.invoicePaymentRef}')` : `deleteTransaction('${trx.id}')`}" title="${t('btn_delete_action')}" aria-label="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     `;
                     tbody.appendChild(tr);
@@ -4742,7 +4830,7 @@
             showImportSuccessToast(count, batchId); // Dispara a barra preta
         }
         
-// ================= DASHBOARD & CHARTS =================
+        // ================= DASHBOARD & CHARTS =================
         let chartCashflow, chartCategories, chartEvolution, chartAccounts;
         // ================= SISTEMA DE CONTAS E SALDOS =================
         function getAccountTransactions(accountName) {
@@ -6007,6 +6095,30 @@
                 }
             });
         }
+
+        // ================= COMPARTILHAR RESUMO DE RATEIOS =================
+        async function shareRateioSummary() {
+            const names = Object.keys(currentPeopleMap);
+            if (names.length === 0) { alert(t('msg_share_empty')); return; }
+        
+            let lines = [`${t('share_rateio_title')} — ${state.currentMonth}`, ''];
+            names.forEach(p => {
+                const info = currentPeopleMap[p];
+                lines.push(`${p}: ${formatCurrency(info.pen)} (${t('str_pending')}) | ${formatCurrency(info.rec)} (${t('str_received')})`);
+            });
+            const text = lines.join('\n');
+        
+            if (navigator.share) {
+                try { await navigator.share({ text }); } catch (e) { /* usuário cancelou, sem problema */ }
+            } else {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    alert(t('msg_copied_clipboard'));
+                } catch (e) {
+                    alert(t('err_share_unsupported'));
+                }
+            }
+        }
         
         // ================= FATURAS ABA =================
         function populateInvoiceCards(preferredCard = null) {
@@ -6084,8 +6196,8 @@
                             <td class="p-3 whitespace-nowrap text-xs font-semibold text-slate-400 line-through decoration-slate-300">${(trx.splits && trx.splits.length > 0) ? formatCurrency(trx.value) : ''}</td>
                             <td class="p-3 whitespace-nowrap font-bold text-sm text-slate-800 dark:text-slate-100">${formatCurrency(myPart)}</td>
                             <td class="p-3 whitespace-nowrap text-right space-x-1">
-                                <button onclick="editTransactionFromInvoice('${trx.id}')" title="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteTransaction('${trx.id}'); renderFaturas();" title="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
+                                <button onclick="editTransactionFromInvoice('${trx.id}')" title="${t('btn_edit')}" aria-label="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteTransaction('${trx.id}'); renderFaturas();" title="${t('btn_delete_action')}" aria-label="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-rose-50 dark:hover:bg-rose-900/40 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>`;
                     });
@@ -6570,11 +6682,13 @@
         }
 
         function hideSplashScreen() {
+            if (!appUIReady) { pendingSplashHide = true; return; }
             const splash = document.getElementById('splash-screen');
             if(!splash) return;
             splash.classList.add('opacity-0');
             setTimeout(() => splash.classList.add('hidden'), 500);
             runHeaderIntroAnimation();
+            handleShortcutAction();
         }
 
         async function fetchUserInfo() {
@@ -6751,6 +6865,7 @@
                         limits: parsed.limits || [],
                         customData: parsed.customData || { category: [], paymentMethod: [], description: [], person: [] },
                         deletedHistory: parsed.deletedHistory || [],
+                        filterPresets: parsed.filterPresets || [],
                         recurringRules: parsed.recurringRules || [],
                         accounts: parsed.accounts || [],
                         goals: parsed.goals || []

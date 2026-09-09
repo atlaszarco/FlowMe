@@ -22,7 +22,8 @@
             background-color: #f8fafc;
             transition: background-color 0.3s, color 0.3s;
         }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 0px; height: 6px; }
+        html { scrollbar-width: none; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -375,14 +376,6 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(0, 0, 0, 0.12);
             color: #0f172a;
-        }
-
-        /* Aproxima a barra de rolagem da borda dos modais */
-        .modal-inner *::-webkit-scrollbar {
-            width: 1px;
-        }
-        .modal-inner .overflow-y-auto {
-            padding-right: 0.2rem !important;
         }
         
     </style>
@@ -2054,7 +2047,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.0.3';
+        const FLOWME_VERSION = 'beta-4.0.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
         let userConfig = { 
@@ -4522,9 +4515,17 @@
                             ${trx.type === 'receita' ? '+' : '-'} ${formatCurrency(myPart)}
                         </td>
                         <td class="p-3 whitespace-nowrap text-center">
-                            <button onclick="toggleStatus('${trx.id}')" class="px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wide transition border ${trx.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400'}">
-                                ${trx.status === 'pago' ? (trx.type === 'receita' ? t('status_rec') : t('status_pag')) : (t('status_pen_rec') || '').split(' ')[0]}
-                            </button>
+                            ${trx.invoicePaymentRef ? `
+                                <span class="px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wide border bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400">${t('status_pag')}</span>
+                            ` : trx.expenseType === 'credito' ? `
+                                <button onclick="goToInvoiceFor('${trx.paymentMethod}', '${trx.invoiceMonth}')" class="px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wide transition border bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-400">
+                                    ${t('btn_view_invoice')}
+                                </button>
+                            ` : `
+                                <button onclick="toggleStatus('${trx.id}')" class="px-2 py-1 text-[10px] font-bold rounded uppercase tracking-wide transition border ${trx.status === 'pago' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400'}">
+                                    ${trx.status === 'pago' ? (trx.type === 'receita' ? t('status_rec') : t('status_pag')) : (t('status_pen_rec') || '').split(' ')[0]}
+                                </button>
+                            `}
                         </td>
                         <td class="p-3 whitespace-nowrap text-right space-x-1">
                             <button onclick="editTransaction('${trx.id}')" title="${t('btn_edit')}" class="text-slate-400 hover:text-blue-600 p-1.5 bg-white dark:bg-slate-700 hover:bg-blue-50 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 transition"><i class="fa-solid fa-pen"></i></button>
@@ -6008,7 +6009,6 @@
             filtered = filtered.filter(trx => {
                 const matchSearch = (trx.description||'').toLowerCase().includes(search) || (trx.category||'').toLowerCase().includes(search) || (trx.splits && trx.splits.some(s => (s.person||'').toLowerCase().includes(search)));
                 const matchType = (fType === 'todos' || trx.type === fType); // Na Fatura sempre será despesa, mas a lógica opera com segurança
-                const matchStatus = (fStatus === 'todos' || trx.status === fStatus);
                 const matchSplit = (fSplit === 'todos' || (fSplit === 'rateio' && trx.splits && trx.splits.length > 0));
                 return matchSearch && matchType && matchSplit;
             });

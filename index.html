@@ -842,11 +842,6 @@
                     </button>
                     <div id="acc-content-pessoas" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
                         <div class="overflow-hidden">
-                            <div class="flex justify-end mt-2">
-                                <button onclick="shareRateioSummary()" data-i18n-title="tt_share_rateio" data-i18n-aria="tt_share_rateio" class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-sm hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-all duration-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1 cursor-pointer">
-                                    <i class="fa-solid fa-share-nodes"></i> <span data-i18n="btn_share">Compartilhar</span>
-                                </button>
-                            </div>
                             <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors">
                                 <div id="people-summary-list" class="space-y-2 text-xs divide-y divide-slate-50 dark:divide-slate-700"></div>
                             </div>
@@ -1676,7 +1671,7 @@
                         <button type="button" id="market-add-btn" onclick="addMarketItem()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-plus"></i> <span data-i18n="market_add_item">Adicionar Item</span>
                         </button>
-                        <button type="button" id="market-cancel-edit-btn" onclick="cancelMarketEdit()" class="hidden px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl text-sm transition">
+                        <button type="button" id="market-cancel-edit-btn" onclick="cancelMarketEdit()" data-i18n-aria="btn_cancel" class="hidden px-4 py-2.5 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl text-sm transition">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -1707,6 +1702,7 @@
             </div>
         </div>
     </div>
+    
     <!-- MODAL: VER ITENS DA COMPRA -->
     <div id="modal-market-view" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
         <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[80vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
@@ -1721,6 +1717,38 @@
             <div class="p-4 border-t border-white/40 dark:border-slate-700/50 flex justify-between items-center">
                 <p class="text-[10px] text-slate-500 uppercase font-semibold">Total</p>
                 <h2 id="market-view-total" class="text-xl font-bold text-slate-800 dark:text-slate-100">0,00</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: RATEIO POR PESSOA -->
+    <div id="modal-person-rateio" class="modal-wrapper hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div class="modal-inner bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[85vh] transform transition-all duration-500 scale-95 translate-y-4 opacity-0">
+            <div class="p-4 border-b border-white/40 dark:border-slate-700/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm truncate pr-2 flex items-center gap-2 min-w-0">
+                    <i class="fa-solid fa-users text-amber-500 shrink-0"></i> <span id="person-rateio-title" class="truncate"></span>
+                </h3>
+                <button onclick="closeModal('modal-person-rateio')" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 grid grid-cols-3 gap-2 border-b border-white/40 dark:border-slate-700/50 shrink-0">
+                <div class="text-center">
+                    <p class="text-[9px] text-slate-500 uppercase font-semibold" data-i18n="lbl_total">Total</p>
+                    <p id="person-rateio-total" class="text-sm font-bold text-slate-800 dark:text-slate-100">0,00</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] text-slate-500 uppercase font-semibold">Pendente</p>
+                    <p id="person-rateio-pending" class="text-sm font-bold text-amber-600 dark:text-amber-400">0,00</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[9px] text-slate-500 uppercase font-semibold">Recebido</p>
+                    <p id="person-rateio-received" class="text-sm font-bold text-emerald-600 dark:text-emerald-400">0,00</p>
+                </div>
+            </div>
+            <div id="person-rateio-list" class="p-4 overflow-y-auto flex-1"></div>
+            <div class="p-4 border-t border-white/40 dark:border-slate-700/50 shrink-0">
+                <button id="btn-share-person-rateio" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-share-nodes"></i> <span data-i18n="btn_share">Compartilhar</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1788,7 +1816,7 @@
                 err_invoice_locked: "Esta ação só é possível se desfizer o pagamento da fatura.", lbl_invoice_items_link: "compras nesta fatura",
                 btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
                 tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
-                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
+                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title_person: "Resumo de Rateios com {PERSON}", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Itens pendentes:", lbl_paid_items: "Itens pagos:", lbl_total: "Total", modal_person_rateio_title: "Rateio com"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1834,9 +1862,9 @@
                 graphics_title: "Charts", str_goal_prefix: "Goal:", modal_recurring_edit_title: "Edit Subscription", hint_recurring_edit: "This change applies from this month onward, only to installments not yet paid.", lbl_recurring_cancelled_short: "cancelled", lbl_wipe_recurring: "Subscriptions & Recurrences", err_invoice_no_account: "Link an account to this card before marking the invoice as paid.", msg_invoice_already_paid: "There are no pending amounts on this invoice.", lbl_invoice_payment_prefix: "Invoice payment", cat_invoice_payment: "Invoice Payment", btn_pay_invoice: "Mark Invoice as Paid", lbl_invoice_account: "Payment Account (optional)",
                 late_one: "{N} day late", late_other: "{N} days late", left_one: "{N} day left", left_other: "{N} days left", lbl_deleted_full: "deleted", lbl_deleted_short: "del.", btn_view_invoice: "View Invoice", btn_undo_pay_invoice: "Undo Invoice Payment", confirm_undo_invoice_payment: "Undo the payment for this invoice? The payment transaction will be removed and the purchases will become pending again.", msg_invoice_paid_toast: "{CARD} invoice paid with {ACCOUNT}",
                 err_invoice_locked: "This action is only possible if you undo the invoice payment.", lbl_invoice_items_link: "purchases in this invoice",
-                btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
-                tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
-                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
+                btn_close: "Close", aria_prev_month: "Previous month", aria_next_month: "Next month", aria_toggle_filter: "Toggle period filter", aria_qty_decrease: "Decrease quantity", aria_qty_increase: "Increase quantity", aria_remove_split_row: "Remove person from split",
+                tt_filter_presets: "Saved Filters", ph_preset_name: "Filter name...", preset_empty: "No saved filters yet.",
+                btn_share: "Share", tt_share_rateio: "Share split summary", share_rateio_title_person: "Split Summary with {PERSON}", msg_share_empty: "No splits to share.", msg_copied_clipboard: "Summary copied to clipboard!", err_share_unsupported: "Sharing isn't supported on this device.", btn_view_purchases: "View Purchases", lbl_pending_items: "Pending items:", lbl_paid_items: "Paid items:", lbl_total: "Total", modal_person_rateio_title: "Split with"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1881,9 +1909,9 @@
                 graphics_title: "Gráficos", str_goal_prefix: "Meta:", modal_recurring_edit_title: "Editar Suscripción", hint_recurring_edit: "El cambio se aplica desde este mes, solo a las cuotas aún no pagadas.", lbl_recurring_cancelled_short: "cancelada", lbl_wipe_recurring: "Suscripciones y Recurrencias", err_invoice_no_account: "Vincula una cuenta a esta tarjeta antes de marcar la factura como pagada.", msg_invoice_already_paid: "No hay montos pendientes en esta factura.", lbl_invoice_payment_prefix: "Pago de factura", cat_invoice_payment: "Pago de Factura", btn_pay_invoice: "Marcar Factura como Pagada", lbl_invoice_account: "Cuenta de Pago (opcional)",
                 late_one: "Pasó {N} día", late_other: "Pasaron {N} días", left_one: "Falta {N} día", left_other: "Faltan {N} días", lbl_deleted_full: "eliminado", lbl_deleted_short: "elim.", btn_view_invoice: "Ver Factura", btn_undo_pay_invoice: "Deshacer Pago de Factura", confirm_undo_invoice_payment: "¿Deshacer el pago de esta factura? La transacción de pago se eliminará y las compras volverán a estar pendientes.", msg_invoice_paid_toast: "Factura {CARD} pagada con {ACCOUNT}",
                 err_invoice_locked: "Esta acción solo es posible si deshaces el pago de la factura.", lbl_invoice_items_link: "compras en esta factura",
-                btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
-                tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
-                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
+                btn_close: "Cerrar", aria_prev_month: "Mes anterior", aria_next_month: "Mes siguiente", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Disminuir cantidad", aria_qty_increase: "Aumentar cantidad", aria_remove_split_row: "Eliminar persona del reparto",
+                tt_filter_presets: "Filtros Guardados", ph_preset_name: "Nombre del filtro...", preset_empty: "Ningún filtro guardado todavía.",
+                btn_share: "Compartir", tt_share_rateio: "Compartir resumen de reparto", share_rateio_title_person: "Resumen de Repartos con {PERSON}", msg_share_empty: "Ningún reparto para compartir.", msg_copied_clipboard: "¡Resumen copiado al portapapeles!", err_share_unsupported: "No se pudo compartir en este dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Artículos pendientes:", lbl_paid_items: "Artículos pagados:", lbl_total: "Total", modal_person_rateio_title: "Reparto con"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1929,9 +1957,9 @@
                 graphics_title: "Graphiques", str_goal_prefix: "Objectif :", modal_recurring_edit_title: "Modifier l'Abonnement", hint_recurring_edit: "Le changement s'applique à partir de ce mois, uniquement aux échéances non encore payées.", lbl_recurring_cancelled_short: "annulée", lbl_wipe_recurring: "Abonnements et Récurrences", err_invoice_no_account: "Associez un compte à cette carte avant de marquer la facture comme payée.", msg_invoice_already_paid: "Il n'y a aucun montant en attente sur cette facture.", lbl_invoice_payment_prefix: "Paiement facture", cat_invoice_payment: "Paiement de Facture", btn_pay_invoice: "Marquer la Facture comme Payée", lbl_invoice_account: "Compte de Paiement (optionnel)",
                 late_one: "{N} jour de retard", late_other: "{N} jours de retard", left_one: "Il reste {N} jour", left_other: "Il reste {N} jours", lbl_deleted_full: "supprimé", lbl_deleted_short: "suppr.", btn_view_invoice: "Voir la Facture", btn_undo_pay_invoice: "Annuler le Paiement de la Facture", confirm_undo_invoice_payment: "Annuler le paiement de cette facture ? La transaction de paiement sera supprimée et les achats redeviendront en attente.", msg_invoice_paid_toast: "Facture {CARD} payée avec {ACCOUNT}",
                 err_invoice_locked: "Cette action n'est possible que si vous annulez le paiement de la facture.", lbl_invoice_items_link: "achats sur cette facture",
-                btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
-                tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
-                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title: "Resumo de Rateios", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo."
+                btn_close: "Fermer", aria_prev_month: "Mois précédent", aria_next_month: "Mois suivant", aria_toggle_filter: "Basculer le filtre de période", aria_qty_decrease: "Diminuer la quantité", aria_qty_increase: "Augmenter la quantité", aria_remove_split_row: "Supprimer la personne du partage",
+                tt_filter_presets: "Filtres Enregistrés", ph_preset_name: "Nom du filtre...", preset_empty: "Aucun filtre enregistré pour l'instant.",
+                btn_share: "Partager", tt_share_rateio: "Partager le résumé du partage", share_rateio_title_person: "Résumé des Partages avec {PERSON}", msg_share_empty: "Aucun partage à partager.", msg_copied_clipboard: "Résumé copié dans le presse-papiers !", err_share_unsupported: "Le partage n'est pas possible sur cet appareil.", btn_view_purchases: "Voir les Achats", lbl_pending_items: "Articles en attente :", lbl_paid_items: "Articles payés :", lbl_total: "Total", modal_person_rateio_title: "Partage avec"
             }
         };
 
@@ -2088,7 +2116,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.0.8';
+        const FLOWME_VERSION = 'beta-4.0.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -3346,6 +3374,7 @@
         // ================= GERENCIADOR RESPONSIVO (BARRA GLOBAL) =================
         let responsiveProfile = null;
         let currentPeopleMap = {};
+        let currentPeopleDetails = {};
         let currentAlertGroups = { incomeLate: [], expenseLate: [], incomeSoon: [], expenseSoon: [], limits: [] };
 
         function getResponsiveProfile() {
@@ -3455,7 +3484,7 @@
 
             if (!isClicked && isMobile && totalAlerts === 0) {
                 contentHtml = `
-                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
+                    <button id="btn-alerts-bell" type="button" onclick="handleBellClick()" aria-label="${modalTitle}" class="group shrink-0 flex items-center justify-center px-4 sm:px-6 w-14 sm:w-16 h-full rounded-2xl font-bold text-sm sm:text-base ${baseClass}">
                         <i class="${iconType} text-base sm:text-lg transition-colors duration-200"></i>
                         <span id="bell-text-span" class="hidden overflow-hidden transition-all duration-300"></span>
                     </button>
@@ -4546,14 +4575,26 @@
                 return matchSearch && matchType && matchStatus && matchSplit;
             });
 
-            let tInc = 0, pInc = 0, tExp = 0, pExp = 0, pOwed = 0, pRec = 0; let peopleMap = {};
+            let tInc = 0, pInc = 0, tExp = 0, pExp = 0, pOwed = 0, pRec = 0; let peopleMap = {}; let peopleDetails = {};
             currentPeopleMap = peopleMap;
-
+            currentPeopleDetails = peopleDetails;
+            
             filtered.forEach(trx => {
-                if (trx.invoicePaymentRef) return; // pagamento de fatura não é um gasto novo, já foi contado na compra original
+                if (trx.invoicePaymentRef) return;
                 let rowSplit = 0;
                 if (trx.splits && trx.type === 'despesa') {
-                    trx.splits.forEach(s => { rowSplit += s.value; if (!peopleMap[s.person]) peopleMap[s.person] = { rec: 0, pen: 0 }; s.status === 'pago' ? (peopleMap[s.person].rec += s.value, pRec += s.value) : (peopleMap[s.person].pen += s.value, pOwed += s.value); });
+                    trx.splits.forEach(s => {
+                        rowSplit += s.value;
+                        if (!peopleMap[s.person]) peopleMap[s.person] = { rec: 0, pen: 0 };
+                        if (!peopleDetails[s.person]) peopleDetails[s.person] = { pending: [], paid: [] };
+                        if (s.status === 'pago') {
+                            peopleMap[s.person].rec += s.value; pRec += s.value;
+                            peopleDetails[s.person].paid.push({ description: trx.description, value: s.value });
+                        } else {
+                            peopleMap[s.person].pen += s.value; pOwed += s.value;
+                            peopleDetails[s.person].pending.push({ description: trx.description, value: s.value });
+                        }
+                    });
                 }
                 let cost = trx.value - rowSplit;
                 if (trx.type === 'receita') { tInc += trx.value; if (trx.status === 'pago') pInc += trx.value; } else { tExp += cost; if (trx.status === 'pago') pExp += cost; }
@@ -4656,7 +4697,19 @@
                 pplC.innerHTML = `<p class="text-xs text-slate-400 text-center py-3" data-i18n="people_empty">${t('people_empty')}</p>`;
             } else {
                 peopleNames.forEach(p => {
-                    pplC.innerHTML += `<div class="py-2 flex justify-between items-center"><div class="font-semibold dark:text-slate-200">${p}<div class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</div></div><div class="text-right font-bold text-amber-600 dark:text-amber-400">${formatCurrency(peopleMap[p].pen)}</div></div>`;
+                    const safeP = p.replace(/'/g, "\\'");
+                    pplC.innerHTML += `
+                        <div class="py-2 flex flex-wrap justify-between items-center gap-2">
+                            <div class="min-w-0">
+                                <p class="font-semibold dark:text-slate-200 truncate">${p}</p>
+                                <p class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</p>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <span class="font-bold text-amber-600 dark:text-amber-400 text-sm">${formatCurrency(peopleMap[p].pen)}</span>
+                                <button onclick="openPersonRateioModal('${safeP}')" class="text-[10px] font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-lg border border-indigo-200 dark:border-indigo-800 whitespace-nowrap">${t('btn_view_purchases')}</button>
+                                <button onclick="sharePersonRateio('${safeP}')" title="${t('tt_share_rateio')}" aria-label="${t('tt_share_rateio')}" class="text-emerald-600 dark:text-emerald-400 hover:opacity-70 p-1.5 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border border-emerald-200 dark:border-emerald-800 transition"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                        </div>`;
                 });
             }
 
@@ -5818,8 +5871,8 @@
                                 <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${lim.target}</span>
                                 <div class="flex items-center gap-3 shrink-0">
                                     <span class="text-[10px] font-bold ${remaining < 0 ? 'text-rose-500' : 'text-slate-500'}">${formatCurrency(spent)} / ${formatCurrency(lim.max)}</span>
-                                    <button onclick="openLimitModal('${lim.id}')" class="text-slate-400 hover:text-blue-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-pen text-sm"></i></button>
-                                    <button onclick="deleteLimit('${lim.id}')" class="text-slate-400 hover:text-rose-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-trash text-sm"></i></button>
+                                    <button onclick="openLimitModal('${lim.id}')" aria-label="${t('btn_edit')}" class="text-slate-400 hover:text-blue-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-pen text-sm"></i></button>
+                                    <button onclick="deleteLimit('${lim.id}')" aria-label="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-trash text-sm"></i></button>
                                 </div>
                             </div>
                             <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-1.5 overflow-hidden">
@@ -5870,8 +5923,8 @@
                                 <div class="flex justify-between items-center mb-2 gap-3">
                                     <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${isDone ? '🎉 ' : ''}${goal.name}</span>
                                     <div class="flex items-center gap-2 shrink-0">
-                                        <button onclick="openGoalModal('${goal.id}')" class="text-slate-400 hover:text-blue-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-pen text-sm"></i></button>
-                                        <button onclick="deleteGoal('${goal.id}')" class="text-slate-400 hover:text-rose-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-trash text-sm"></i></button>
+                                        <button onclick="openGoalModal('${goal.id}')" aria-label="${t('btn_edit')}" class="text-slate-400 hover:text-blue-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-pen text-sm"></i></button>
+                                        <button onclick="deleteGoal('${goal.id}')" aria-label="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-trash text-sm"></i></button>
                                     </div>
                                 </div>
                                 <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-1.5 overflow-hidden">
@@ -5913,8 +5966,8 @@
                                 <div class="flex justify-between items-center mb-2 gap-3">
                                     <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${acc.name}</span>
                                     <div class="flex items-center gap-2 shrink-0">
-                                        <button onclick="openAccountModal('${acc.id}')" class="text-slate-400 hover:text-blue-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-pen text-sm"></i></button>
-                                        <button onclick="deleteAccount('${acc.id}')" class="text-slate-400 hover:text-rose-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-trash text-sm"></i></button>
+                                        <button onclick="openAccountModal('${acc.id}')" aria-label="${t('btn_edit')}" class="text-slate-400 hover:text-blue-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-pen text-sm"></i></button>
+                                        <button onclick="deleteAccount('${acc.id}')" aria-label="${t('btn_delete_action')}" class="text-slate-400 hover:text-rose-500 transition p-1.5 -m-1.5"><i class="fa-solid fa-trash text-sm"></i></button>
                                     </div>
                                 </div>
                                 <p class="text-lg font-bold ${bal >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatCurrency(bal)}</p>
@@ -6097,29 +6150,86 @@
         }
 
         // ================= COMPARTILHAR RESUMO DE RATEIOS =================
-        async function shareRateioSummary() {
-            const names = Object.keys(currentPeopleMap);
-            if (names.length === 0) { alert(t('msg_share_empty')); return; }
+        function getMonthDisplayName(monthStr) {
+            const [year, month] = monthStr.split('-');
+            const date = new Date(parseInt(year), parseInt(month) - 1, 10);
+            let mName = date.toLocaleString(getActiveLang(), { month: 'long' }).replace('.', '');
+            mName = mName.charAt(0).toUpperCase() + mName.slice(1);
+            return (getActiveLang() === 'pt' || getActiveLang() === 'es') ? `${mName} de ${year}` : `${mName} ${year}`;
+        }
         
-            let lines = [`${t('share_rateio_title')} — ${state.currentMonth}`, ''];
-            names.forEach(p => {
-                const info = currentPeopleMap[p];
-                lines.push(`${p}: ${formatCurrency(info.pen)} (${t('str_pending')}) | ${formatCurrency(info.rec)} (${t('str_received')})`);
-            });
+        function openPersonRateioModal(person) {
+            const info = currentPeopleMap[person];
+            if (!info) return;
+            const details = currentPeopleDetails[person] || { pending: [], paid: [] };
+            const total = info.rec + info.pen;
+        
+            document.getElementById('person-rateio-title').textContent = `${t('modal_person_rateio_title')} ${person}`;
+            document.getElementById('person-rateio-total').textContent = formatCurrency(total);
+            document.getElementById('person-rateio-pending').textContent = formatCurrency(info.pen);
+            document.getElementById('person-rateio-received').textContent = formatCurrency(info.rec);
+        
+            const listEl = document.getElementById('person-rateio-list');
+            listEl.innerHTML = '';
+        
+            if (details.pending.length > 0) {
+                listEl.innerHTML += `<p class="text-[10px] font-bold text-amber-600 uppercase tracking-wide mt-2 mb-1">${t('lbl_pending_items')}</p>`;
+                details.pending.forEach(item => {
+                    listEl.innerHTML += `<div class="flex justify-between items-center py-1.5 border-b border-slate-100 dark:border-slate-700/50"><span class="text-xs text-slate-700 dark:text-slate-300 truncate pr-2">${item.description}</span><span class="text-xs font-bold text-amber-600 dark:text-amber-400 shrink-0">${formatCurrency(item.value)}</span></div>`;
+                });
+            }
+            if (details.paid.length > 0) {
+                listEl.innerHTML += `<p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wide mt-3 mb-1">${t('lbl_paid_items')}</p>`;
+                details.paid.forEach(item => {
+                    listEl.innerHTML += `<div class="flex justify-between items-center py-1.5 border-b border-slate-100 dark:border-slate-700/50"><span class="text-xs text-slate-700 dark:text-slate-300 truncate pr-2">${item.description}</span><span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 shrink-0">${formatCurrency(item.value)}</span></div>`;
+                });
+            }
+            if (details.pending.length === 0 && details.paid.length === 0) {
+                listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">${t('people_empty')}</p>`;
+            }
+        
+            document.getElementById('btn-share-person-rateio').onclick = () => sharePersonRateio(person);
+            openModal('modal-person-rateio');
+        }
+        
+        function sharePersonRateio(person) {
+            const info = currentPeopleMap[person];
+            if (!info) { alert(t('msg_share_empty')); return; }
+            const details = currentPeopleDetails[person] || { pending: [], paid: [] };
+            const divider = '____________________________________________________';
+            const monthLabel = getMonthDisplayName(state.currentMonth);
+        
+            let lines = [];
+            lines.push(divider);
+            lines.push(`${t('share_rateio_title_person').replace('{PERSON}', person)} — ${monthLabel}`);
+            lines.push(`${t('str_pending')} ${formatCurrency(info.pen)} | ${t('str_received')} ${formatCurrency(info.rec)}`);
+            lines.push(divider);
+        
+            if (details.pending.length > 0) {
+                lines.push(t('lbl_pending_items'));
+                lines.push('');
+                details.pending.forEach(item => lines.push(`* ${item.description}: ${formatCurrency(item.value)}`));
+                lines.push('');
+                lines.push(divider);
+            }
+        
+            if (details.paid.length > 0) {
+                lines.push(t('lbl_paid_items'));
+                lines.push('');
+                details.paid.forEach(item => lines.push(`* ${item.description}: ${formatCurrency(item.value)}`));
+                lines.push('');
+                lines.push(divider);
+            }
+        
             const text = lines.join('\n');
         
             if (navigator.share) {
-                try { await navigator.share({ text }); } catch (e) { /* usuário cancelou, sem problema */ }
+                navigator.share({ text }).catch(() => {});
             } else {
-                try {
-                    await navigator.clipboard.writeText(text);
-                    alert(t('msg_copied_clipboard'));
-                } catch (e) {
-                    alert(t('err_share_unsupported'));
-                }
+                navigator.clipboard.writeText(text).then(() => alert(t('msg_copied_clipboard'))).catch(() => alert(t('err_share_unsupported')));
             }
         }
-        
+                
         // ================= FATURAS ABA =================
         function populateInvoiceCards(preferredCard = null) {
             const cards = [...new Set(state.transactions.filter(trx => trx.type === 'despesa' && trx.expenseType === 'credito').map(trx => trx.paymentMethod))].filter(Boolean);

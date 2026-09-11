@@ -4726,16 +4726,17 @@
                     const safeP = p.replace(/'/g, "\\'");
                     pplC.innerHTML += `
                         <!-- CONTAINER PRINCIPAL -->
-                        <div class="py-4 flex flex-col w-full gap-3 min-[381px]:flex-row min-[381px]:flex-wrap min-[381px]:items-center min-[381px]:gap-y-2 md:flex-nowrap md:gap-0">
+                        <div class="py-4 flex flex-col w-full gap-3 min-[381px]:flex-row min-[381px]:flex-wrap min-[381px]:gap-y-3 min-[550px]:flex-nowrap min-[550px]:items-center min-[550px]:gap-y-0">
                             
                             <!-- BLOCO 1: NOME -->
-                            <p class="font-bold text-base text-center w-full min-[381px]:text-left md:text-left md:w-auto md:flex-1 md:mb-0 md:truncate md:min-w-0 dark:text-slate-200 break-words">
+                            <!-- <380 e 381-549: centralizado, ocupando linha inteira. >=550: à esquerda, flex-1 com truncate -->
+                            <p class="font-bold text-base text-center w-full min-[550px]:text-left min-[550px]:w-auto min-[550px]:flex-1 min-[550px]:truncate min-[550px]:min-w-0 dark:text-slate-200 break-words">
                                 ${p}
                             </p>
                             
                             <!-- BLOCO 2: VALORES -->
-                            <!-- No desktop (md:mr-16), aumenta a distância entre os valores e os botões -->
-                            <div class="flex justify-center items-center gap-6 w-full min-[381px]:w-auto min-[381px]:flex-1 min-[381px]:justify-start md:w-auto md:flex-none md:mr-16">
+                            <!-- <380: centralizado, linha inteira. 381-549: à esquerda, divide espaço. >=550: à esquerda, com margem fixa pros botões -->
+                            <div class="flex justify-center items-center gap-6 w-full min-[381px]:w-auto min-[381px]:flex-1 min-[381px]:justify-start min-[550px]:flex-none min-[550px]:mr-16">
                                 <div class="text-center min-w-[80px]">
                                     <p class="text-[9px] text-slate-400 uppercase font-semibold tracking-wide mb-0.5">${t('str_pending').replace(':','')}</p>
                                     <p class="font-bold text-amber-600 dark:text-amber-400 text-sm">${formatCurrency(peopleMap[p].pen)}</p>
@@ -4747,7 +4748,8 @@
                             </div>
                             
                             <!-- BLOCO 3: BOTÕES -->
-                            <div class="flex justify-center items-center gap-6 w-full min-[381px]:w-auto min-[381px]:justify-end md:w-auto md:justify-end md:ml-auto">
+                            <!-- <380: centralizado, linha inteira. 381-549: à direita, dividindo linha com valores. >=550: à direita, alinhado à borda -->
+                            <div class="flex justify-center items-center gap-4 w-full min-[381px]:w-auto min-[381px]:justify-end min-[550px]:ml-auto">
                                 <button onclick="openPersonRateioModal('${safeP}')" class="h-10 flex items-center justify-center text-[10px] font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 rounded-lg border border-indigo-200 dark:border-indigo-800 whitespace-nowrap transition hover:bg-indigo-100 dark:hover:bg-indigo-900/50">${t('btn_view_purchases')}</button>
                                 <button onclick="sharePersonRateio('${safeP}')" title="${t('tt_share_rateio')}" aria-label="${t('tt_share_rateio')}" class="h-10 w-10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:opacity-80 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border border-emerald-200 dark:border-emerald-800 transition shrink-0"><i class="fa-solid fa-share-nodes text-sm"></i></button>
                             </div>

@@ -2116,7 +2116,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.0.9';
+        const FLOWME_VERSION = 'beta-4.1.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4699,15 +4699,19 @@
                 peopleNames.forEach(p => {
                     const safeP = p.replace(/'/g, "\\'");
                     pplC.innerHTML += `
-                        <div class="py-2 flex flex-wrap justify-between items-center gap-2">
-                            <div class="min-w-0">
-                                <p class="font-semibold dark:text-slate-200 truncate">${p}</p>
-                                <p class="text-[10px] text-slate-400">${t('str_received')} ${formatCurrency(peopleMap[p].rec)}</p>
-                            </div>
-                            <div class="flex items-center gap-2 shrink-0">
-                                <span class="font-bold text-amber-600 dark:text-amber-400 text-sm">${formatCurrency(peopleMap[p].pen)}</span>
-                                <button onclick="openPersonRateioModal('${safeP}')" class="text-[10px] font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded-lg border border-indigo-200 dark:border-indigo-800 whitespace-nowrap">${t('btn_view_purchases')}</button>
-                                <button onclick="sharePersonRateio('${safeP}')" title="${t('tt_share_rateio')}" aria-label="${t('tt_share_rateio')}" class="text-emerald-600 dark:text-emerald-400 hover:opacity-70 p-1.5 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border border-emerald-200 dark:border-emerald-800 transition"><i class="fa-solid fa-share-nodes"></i></button>
+                        <div class="py-3 flex flex-wrap items-center justify-between gap-y-3 gap-x-4">
+                            <p class="font-bold text-base dark:text-slate-200 truncate flex-1 min-w-[80px]">${p}</p>
+                            <div class="flex items-center gap-4 shrink-0 flex-wrap justify-end">
+                                <div class="text-center">
+                                    <p class="text-[9px] text-slate-400 uppercase font-semibold tracking-wide">${t('str_pending').replace(':','')}</p>
+                                    <p class="font-bold text-amber-600 dark:text-amber-400 text-sm">${formatCurrency(peopleMap[p].pen)}</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-[9px] text-slate-400 uppercase font-semibold tracking-wide">${t('str_received').replace(':','')}</p>
+                                    <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">${formatCurrency(peopleMap[p].rec)}</p>
+                                </div>
+                                <button onclick="openPersonRateioModal('${safeP}')" class="text-[10px] font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2.5 py-1.5 rounded-lg border border-indigo-200 dark:border-indigo-800 whitespace-nowrap">${t('btn_view_purchases')}</button>
+                                <button onclick="sharePersonRateio('${safeP}')" title="${t('tt_share_rateio')}" aria-label="${t('tt_share_rateio')}" class="text-emerald-600 dark:text-emerald-400 hover:opacity-70 p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border border-emerald-200 dark:border-emerald-800 transition shrink-0"><i class="fa-solid fa-share-nodes"></i></button>
                             </div>
                         </div>`;
                 });
@@ -6196,29 +6200,22 @@
             const info = currentPeopleMap[person];
             if (!info) { alert(t('msg_share_empty')); return; }
             const details = currentPeopleDetails[person] || { pending: [], paid: [] };
-            const divider = '____________________________________________________';
             const monthLabel = getMonthDisplayName(state.currentMonth);
         
             let lines = [];
-            lines.push(divider);
             lines.push(`${t('share_rateio_title_person').replace('{PERSON}', person)} — ${monthLabel}`);
             lines.push(`${t('str_pending')} ${formatCurrency(info.pen)} | ${t('str_received')} ${formatCurrency(info.rec)}`);
-            lines.push(divider);
         
             if (details.pending.length > 0) {
+                lines.push('');
                 lines.push(t('lbl_pending_items'));
-                lines.push('');
                 details.pending.forEach(item => lines.push(`* ${item.description}: ${formatCurrency(item.value)}`));
-                lines.push('');
-                lines.push(divider);
             }
         
             if (details.paid.length > 0) {
+                lines.push('');
                 lines.push(t('lbl_paid_items'));
-                lines.push('');
                 details.paid.forEach(item => lines.push(`* ${item.description}: ${formatCurrency(item.value)}`));
-                lines.push('');
-                lines.push(divider);
             }
         
             const text = lines.join('\n');

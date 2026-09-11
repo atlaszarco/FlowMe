@@ -3445,44 +3445,6 @@
         let isAlertsModalOpen = false;
         let activeNotifTab = 'alerts';
         let isBellOpening = false;
-        let bellHoverInterval;
-
-        // 1. Animação de Hover (1s de balanço, 1s de pausa)
-        function startBellHover() {
-            const icon = document.querySelector('#btn-alerts-bell i');
-            if (!icon || isAlertsModalOpen) return;
-            icon.classList.add('fa-shake');
-            bellHoverInterval = setInterval(() => {
-                if (icon) {
-                    if(icon.classList.contains('fa-shake')) {
-                        icon.classList.remove('fa-shake'); // Pausa
-                    } else {
-                        icon.classList.add('fa-shake'); // Balança
-                    }
-                }
-            }, 1000);
-        }
-
-        function stopBellHover() {
-            clearInterval(bellHoverInterval);
-            const icon = document.querySelector('#btn-alerts-bell i');
-            if (icon) icon.classList.remove('fa-shake');
-        }
-
-        // 2. Animação Automática (A cada 25s se houver alerta)
-        if (!window.bellIdleInterval) {
-            window.bellIdleInterval = setInterval(() => {
-                const icon = document.querySelector('#btn-alerts-bell i');
-                if (icon && !isAlertsModalOpen) {
-                    const groups = currentAlertGroups || {};
-                    const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0) + (groups.goals?.length||0);
-                    if (totalAlerts > 0) {
-                        icon.classList.add('fa-shake');
-                        setTimeout(() => icon.classList.remove('fa-shake'), 1000);
-                    }
-                }
-            }, 25000);
-        }
 
         function renderToolbarAlerts() {
             const alertsContainer = document.getElementById('global-toolbar-alerts-inner');
@@ -3553,7 +3515,6 @@
         
             isAlertsModalOpen = true;
             isBellOpening = true;
-            stopBellHover();
         
             renderToolbarAlerts();
         

@@ -220,10 +220,6 @@
             transform-origin: top center;
         }
         
-        #btn-alerts-bell.is-opening i {
-            transform-origin: center center !important;
-        }
-        
         @keyframes ring-and-wait {
             0%   { transform: rotate(0deg); }
             4%   { transform: rotate(20deg); }
@@ -232,21 +228,6 @@
             16%  { transform: rotate(-10deg); }
             20%  { transform: rotate(0deg); }
             100% { transform: rotate(0deg); }
-        }
-
-        @keyframes bell-opening-shake {
-            0% {transform: scale(1.8) rotate(0deg); }
-            15% {transform: scale(1.8) rotate(20deg); }
-            30% {transform: scale(1.8) rotate(-20deg); }
-            45% {transform: scale(1.8) rotate(15deg); }
-            60% {transform: scale(1.8) rotate(-10deg); }
-            75% {transform: scale(1.8) rotate(0deg); }
-            100% {transform: scale(1.8) rotate(0deg); }
-        }
-        
-        #btn-alerts-bell.is-opening .bell-opening-shake {
-            animation: bell-opening-shake 0.9s ease-in-out both;
-            transform-origin: center center !important;
         }
         
         /* Salvar */
@@ -2144,7 +2125,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.1.6';
+        const FLOWME_VERSION = 'beta-4.1.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4783,13 +4764,17 @@
                 peopleNames.forEach(p => {
                     const safeP = p.replace(/'/g, "\\'");
                     pplC.innerHTML += `
-                        <div class="py-4 flex flex-col md:flex-row md:items-center w-full gap-3 md:gap-0">
+                        <!-- CONTAINER PRINCIPAL -->
+                        <div class="py-4 flex flex-col w-full gap-3 min-[381px]:flex-row min-[381px]:flex-wrap min-[381px]:items-center min-[381px]:gap-y-2 md:flex-nowrap md:gap-0">
                             
-                            <!-- LINHA 1: NOME -->
-                            <p class="font-bold text-base text-center md:text-left dark:text-slate-200 break-words md:truncate md:flex-1 md:min-w-0 md:mr-6">${p}</p>
+                            <!-- BLOCO 1: NOME -->
+                            <p class="font-bold text-base text-center w-full min-[381px]:text-left md:text-left md:w-auto md:flex-1 md:mb-0 md:truncate md:min-w-0 dark:text-slate-200 break-words">
+                                ${p}
+                            </p>
                             
-                            <!-- LINHA 2: VALORES -->
-                            <div class="flex justify-center md:justify-start items-center gap-6 md:gap-8 shrink-0">
+                            <!-- BLOCO 2: VALORES -->
+                            <!-- No desktop (md:mr-16), aumenta a distância entre os valores e os botões -->
+                            <div class="flex justify-center items-center gap-6 w-full min-[381px]:w-auto min-[381px]:flex-1 min-[381px]:justify-start md:w-auto md:flex-none md:mr-16">
                                 <div class="text-center min-w-[80px]">
                                     <p class="text-[9px] text-slate-400 uppercase font-semibold tracking-wide mb-0.5">${t('str_pending').replace(':','')}</p>
                                     <p class="font-bold text-amber-600 dark:text-amber-400 text-sm">${formatCurrency(peopleMap[p].pen)}</p>
@@ -4800,8 +4785,8 @@
                                 </div>
                             </div>
                             
-                            <!-- LINHA 3: BOTÕES -->
-                            <div class="flex justify-center md:justify-end items-center gap-2 shrink-0 md:ml-auto">
+                            <!-- BLOCO 3: BOTÕES -->
+                            <div class="flex justify-center items-center gap-2 w-full min-[381px]:w-auto min-[381px]:justify-end md:w-auto md:justify-end md:ml-auto">
                                 <button onclick="openPersonRateioModal('${safeP}')" class="text-[10px] font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 whitespace-nowrap transition hover:bg-indigo-100 dark:hover:bg-indigo-900/50">${t('btn_view_purchases')}</button>
                                 <button onclick="sharePersonRateio('${safeP}')" title="${t('tt_share_rateio')}" aria-label="${t('tt_share_rateio')}" class="text-emerald-600 dark:text-emerald-400 hover:opacity-80 p-2.5 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border border-emerald-200 dark:border-emerald-800 transition shrink-0 flex items-center justify-center"><i class="fa-solid fa-share-nodes text-sm"></i></button>
                             </div>

@@ -1284,17 +1284,45 @@
                                         <i class="fa-solid fa-trash"></i> <span data-i18n="btn_delete">Apagar Dados</span>
                                     </button>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- 6. Atualização e Créditos -->
+                <div id="cfg-wrap-update" class="flex flex-col break-inside-avoid transition-all duration-500">
+                    <button class="accordion-header w-full flex justify-between items-center bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50" data-acc-id="cfg-update" onclick="toggleAccordion('cfg-update')">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-3 min-w-0"><i class="fa-solid fa-rocket text-indigo-500"></i> <span data-i18n="cfg_update_title">Atualização e Créditos</span></h2>
+                        <i id="acc-icon-cfg-update" class="acc-icon fa-solid fa-chevron-down text-slate-400 transition-transform duration-500"></i>
+                    </button>
+                    <div id="acc-content-cfg-update" class="acc-content grid transition-all duration-500 ease-in-out [grid-template-rows:1fr]">
+                        <div class="overflow-hidden">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mt-2 transition-colors space-y-4">
 
-            </div>
-
-            <div class="mt-auto pt-12 text-center text-xs text-slate-400 pb-4">
-                <p class="font-medium text-slate-500 mb-1" data-i18n="cfg_credits">Feito por Mateus Bitarães</p>
-                <p>FlowMe - <span data-i18n="cfg_version">Versão</span> <span id="app-version-display"></span></p>
+                                <div class="p-3 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-lg border border-indigo-100 dark:border-indigo-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-2 transition-colors">
+                                    <div>
+                                        <h3 class="text-[11px] font-bold text-indigo-900 dark:text-indigo-400" data-i18n="lbl_current_version">Versão atual:</h3>
+                                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300">v<span id="app-version-display"></span></p>
+                                    </div>
+                                    <button id="btn-check-update" onclick="handleUpdateButtonClick()" class="w-full sm:w-auto justify-center px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow-sm whitespace-nowrap transition flex items-center gap-1.5">
+                                        <i id="check-update-icon" class="fa-solid fa-arrows-rotate"></i> <span id="check-update-text" data-i18n="btn_check_update">Verificar Atualizações</span>
+                                    </button>
+                                </div>
+                                <div class="p-3 bg-slate-50 dark:bg-slate-900/40 rounded-lg border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-2 transition-colors">
+                                    <div>
+                                        <h3 class="text-[11px] font-bold text-slate-500 dark:text-slate-400" data-i18n="lbl_credits_prefix">Créditos:</h3>
+                                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300">Mateus Bitarães</p>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <a href="https://github.com/SEU_USUARIO" target="_blank" rel="noopener" aria-label="GitHub" class="w-9 h-9 flex items-center justify-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition"><i class="fa-brands fa-github"></i></a>
+                                        <a href="https://instagram.com/SEU_USUARIO" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:text-pink-500 transition"><i class="fa-brands fa-instagram"></i></a>
+                                        <a href="mailto:seuemail@exemplo.com" aria-label="Email" class="w-9 h-9 flex items-center justify-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:text-emerald-500 transition"><i class="fa-solid fa-envelope"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -1825,7 +1853,8 @@
                 err_invoice_locked: "Esta ação só é possível se desfizer o pagamento da fatura.", lbl_invoice_items_link: "compras nesta fatura",
                 btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
                 tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
-                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title_person: "Resumo de Rateios com {PERSON}", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Itens pendentes:", lbl_paid_items: "Itens pagos:", lbl_total: "Total", modal_person_rateio_title: "Rateio com"
+                btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title_person: "Resumo de Rateios com {PERSON}", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Itens pendentes:", lbl_paid_items: "Itens pagos:", lbl_total: "Total", modal_person_rateio_title: "Rateio com",
+                cfg_update_title: "Atualização e Créditos", lbl_current_version: "Versão atual:", btn_check_update: "Verificar Atualizações", btn_checking_update: "Procurando...", btn_update_available: "Atualize para a versão {V}", msg_already_updated: "FlowMe já está atualizado na última versão", msg_update_found: "Nova versão encontrada", btn_do_update: "Atualizar", confirm_save_before_update: "Salvar os dados para atualizar o FlowMe?", err_check_update: "Não foi possível verificar atualizações.", lbl_credits_prefix: "Créditos:", msg_new_version_notification: "Nova versão do FlowMe disponível: {V}", lbl_update_alert: "Nova atualização disponível", msg_app_updated: "FlowMe atualizado: v{V}"
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -1873,7 +1902,8 @@
                 err_invoice_locked: "This action is only possible if you undo the invoice payment.", lbl_invoice_items_link: "purchases in this invoice",
                 btn_close: "Close", aria_prev_month: "Previous month", aria_next_month: "Next month", aria_toggle_filter: "Toggle period filter", aria_qty_decrease: "Decrease quantity", aria_qty_increase: "Increase quantity", aria_remove_split_row: "Remove person from split",
                 tt_filter_presets: "Saved Filters", ph_preset_name: "Filter name...", preset_empty: "No saved filters yet.",
-                btn_share: "Share", tt_share_rateio: "Share split summary", share_rateio_title_person: "Split Summary with {PERSON}", msg_share_empty: "No splits to share.", msg_copied_clipboard: "Summary copied to clipboard!", err_share_unsupported: "Sharing isn't supported on this device.", btn_view_purchases: "View Purchases", lbl_pending_items: "Pending items:", lbl_paid_items: "Paid items:", lbl_total: "Total", modal_person_rateio_title: "Split with"
+                btn_share: "Share", tt_share_rateio: "Share split summary", share_rateio_title_person: "Split Summary with {PERSON}", msg_share_empty: "No splits to share.", msg_copied_clipboard: "Summary copied to clipboard!", err_share_unsupported: "Sharing isn't supported on this device.", btn_view_purchases: "View Purchases", lbl_pending_items: "Pending items:", lbl_paid_items: "Paid items:", lbl_total: "Total", modal_person_rateio_title: "Split with",
+                cfg_update_title: "Update & Credits", lbl_current_version: "Current version:", btn_check_update: "Check for Updates", btn_checking_update: "Checking...", btn_update_available: "Update to version {V}", msg_already_updated: "FlowMe is already up to date", msg_update_found: "New version found", btn_do_update: "Update", confirm_save_before_update: "Save your data before updating FlowMe?", err_check_update: "Could not check for updates.", lbl_credits_prefix: "Credits:", msg_new_version_notification: "New FlowMe version available: {V}", lbl_update_alert: "New update available", msg_app_updated: "FlowMe updated: v{V}"
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -1920,7 +1950,8 @@
                 err_invoice_locked: "Esta acción solo es posible si deshaces el pago de la factura.", lbl_invoice_items_link: "compras en esta factura",
                 btn_close: "Cerrar", aria_prev_month: "Mes anterior", aria_next_month: "Mes siguiente", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Disminuir cantidad", aria_qty_increase: "Aumentar cantidad", aria_remove_split_row: "Eliminar persona del reparto",
                 tt_filter_presets: "Filtros Guardados", ph_preset_name: "Nombre del filtro...", preset_empty: "Ningún filtro guardado todavía.",
-                btn_share: "Compartir", tt_share_rateio: "Compartir resumen de reparto", share_rateio_title_person: "Resumen de Repartos con {PERSON}", msg_share_empty: "Ningún reparto para compartir.", msg_copied_clipboard: "¡Resumen copiado al portapapeles!", err_share_unsupported: "No se pudo compartir en este dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Artículos pendientes:", lbl_paid_items: "Artículos pagados:", lbl_total: "Total", modal_person_rateio_title: "Reparto con"
+                btn_share: "Compartir", tt_share_rateio: "Compartir resumen de reparto", share_rateio_title_person: "Resumen de Repartos con {PERSON}", msg_share_empty: "Ningún reparto para compartir.", msg_copied_clipboard: "¡Resumen copiado al portapapeles!", err_share_unsupported: "No se pudo compartir en este dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Artículos pendientes:", lbl_paid_items: "Artículos pagados:", lbl_total: "Total", modal_person_rateio_title: "Reparto con",
+                cfg_update_title: "Actualización y Créditos", lbl_current_version: "Versión actual:", btn_check_update: "Buscar Actualizaciones", btn_checking_update: "Buscando...", btn_update_available: "Actualizar a la versión {V}", msg_already_updated: "FlowMe ya está en la última versión", msg_update_found: "Nueva versión encontrada", btn_do_update: "Actualizar", confirm_save_before_update: "¿Guardar los datos antes de actualizar FlowMe?", err_check_update: "No se pudo verificar actualizaciones.", lbl_credits_prefix: "Créditos:", msg_new_version_notification: "Nueva versión de FlowMe disponible: {V}", lbl_update_alert: "Nueva actualización disponible", msg_app_updated: "FlowMe actualizado: v{V}"
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -1968,7 +1999,8 @@
                 err_invoice_locked: "Cette action n'est possible que si vous annulez le paiement de la facture.", lbl_invoice_items_link: "achats sur cette facture",
                 btn_close: "Fermer", aria_prev_month: "Mois précédent", aria_next_month: "Mois suivant", aria_toggle_filter: "Basculer le filtre de période", aria_qty_decrease: "Diminuer la quantité", aria_qty_increase: "Augmenter la quantité", aria_remove_split_row: "Supprimer la personne du partage",
                 tt_filter_presets: "Filtres Enregistrés", ph_preset_name: "Nom du filtre...", preset_empty: "Aucun filtre enregistré pour l'instant.",
-                btn_share: "Partager", tt_share_rateio: "Partager le résumé du partage", share_rateio_title_person: "Résumé des Partages avec {PERSON}", msg_share_empty: "Aucun partage à partager.", msg_copied_clipboard: "Résumé copié dans le presse-papiers !", err_share_unsupported: "Le partage n'est pas possible sur cet appareil.", btn_view_purchases: "Voir les Achats", lbl_pending_items: "Articles en attente :", lbl_paid_items: "Articles payés :", lbl_total: "Total", modal_person_rateio_title: "Partage avec"
+                btn_share: "Partager", tt_share_rateio: "Partager le résumé du partage", share_rateio_title_person: "Résumé des Partages avec {PERSON}", msg_share_empty: "Aucun partage à partager.", msg_copied_clipboard: "Résumé copié dans le presse-papiers !", err_share_unsupported: "Le partage n'est pas possible sur cet appareil.", btn_view_purchases: "Voir les Achats", lbl_pending_items: "Articles en attente :", lbl_paid_items: "Articles payés :", lbl_total: "Total", modal_person_rateio_title: "Partage avec",
+                cfg_update_title: "Mise à jour et Crédits", lbl_current_version: "Version actuelle :", btn_check_update: "Vérifier les mises à jour", btn_checking_update: "Recherche...", btn_update_available: "Mettre à jour vers la version {V}", msg_already_updated: "FlowMe est déjà à jour", msg_update_found: "Nouvelle version trouvée", btn_do_update: "Mettre à jour", confirm_save_before_update: "Enregistrer les données avant de mettre à jour FlowMe ?", err_check_update: "Impossible de vérifier les mises à jour.", lbl_credits_prefix: "Crédits :", msg_new_version_notification: "Nouvelle version de FlowMe disponible : {V}", lbl_update_alert: "Nouvelle mise à jour disponible", msg_app_updated: "FlowMe mis à jour : v{V}"
             }
         };
 
@@ -2125,7 +2157,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.2.0';
+        const FLOWME_VERSION = 'beta-4.2.1';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -2220,6 +2252,13 @@
                     updateCloudUI(false);
                 }
             }, 4000);
+
+            setTimeout(() => {
+                updateCheckButtonUI();
+                const lastCheck = parseInt(localStorage.getItem('flowme_last_update_check') || '0');
+                const daysSince = (Date.now() - lastCheck) / (1000 * 60 * 60 * 24);
+                if (daysSince >= 3) checkForUpdates(false);
+            }, 6000);
         });
 
         let lastScrollY = window.scrollY;
@@ -2250,16 +2289,7 @@
         }, { passive: true });
 
         function showUpdateSuccess(version) {
-            const toast = document.createElement('div');
-            toast.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-4 py-3 w-[90%] max-w-sm rounded-2xl shadow-xl z-[100] flex items-center justify-center text-center gap-2 text-sm font-bold transition-all duration-500 opacity-0 -translate-y-10';
-            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>FlowMe atualizado: v${version}</span>`;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => toast.classList.remove('opacity-0', '-translate-y-10'), 100);
-            setTimeout(() => {
-                toast.classList.add('opacity-0', '-translate-y-10');
-                setTimeout(() => toast.remove(), 500);
-            }, 4000);
+            showGlassToast(t('msg_app_updated').replace('{V}', version), 'fa-solid fa-circle-check', 'text-emerald-500');
         }
         
         // ================= CONFIG & THEME =================
@@ -2700,6 +2730,7 @@
             state.currentMonth = value;
             
             if (typeof updateFilterUI === 'function') updateFilterUI();
+            if (typeof updateCheckButtonUI === 'function') updateCheckButtonUI();
 
             if (currentFilterMode === 'month') { 
                 if (typeof render === 'function') render(); 
@@ -3452,7 +3483,8 @@
             if (!alertsContainer || !alertsWrapper) return;
 
             const groups = currentAlertGroups || {};
-            const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0) + (groups.goals?.length||0);
+            const hasUpdatePending = !!localStorage.getItem('flowme_pending_update');
+            const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0) + (groups.goals?.length||0) + (hasUpdatePending ? 1 : 0);
             
             alertsWrapper.classList.remove('hidden');
 
@@ -4289,6 +4321,153 @@
                     if (pending && pending.onExpire) pending.onExpire();
                 }, 520);
             }, 6000);
+        }
+
+        function showGlassToast(message, iconClass = 'fa-solid fa-circle-info', iconColor = 'text-indigo-500', actionLabel = null, actionCallback = null, duration = 3000) {
+            const toast = document.createElement('div');
+            const toolbar = document.getElementById('global-toolbar');
+            const useMitosis = toolbar && !toolbar.classList.contains('hidden');
+            const glassClasses = 'bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-3 text-sm justify-between overflow-hidden';
+            const actionHtml = actionLabel ? `<button class="glass-toast-action shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${actionLabel}</button>` : '';
+        
+            toast.innerHTML = `
+                <div class="flex items-center gap-2 min-w-0">
+                    <i class="${iconClass} ${iconColor} shrink-0"></i>
+                    <span class="font-bold truncate">${message}</span>
+                </div>
+                ${actionHtml}
+            `;
+        
+            const finish = () => {
+                if (useMitosis) {
+                    toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react');
+                    const pillRect = toolbar.getBoundingClientRect();
+                    toast.style.transition = 'left 0.5s ease-in, top 0.5s ease-in, width 0.5s ease-in, height 0.5s ease-in, border-radius 0.5s ease-in, opacity 0.5s ease-in';
+                    toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';
+                    toast.style.width = pillRect.width + 'px'; toast.style.height = pillRect.height + 'px';
+                    toast.style.borderRadius = '9999px'; toast.style.opacity = '0';
+                } else {
+                    toast.style.transform = 'translate(-50%, 10px) scale(0.9)'; toast.style.opacity = '0';
+                }
+                setTimeout(() => { if (toast.parentNode) toast.remove(); }, 520);
+            };
+        
+            if (useMitosis) {
+                toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react');
+                const pillRect = toolbar.getBoundingClientRect();
+                toast.className = glassClasses;
+                toast.style.position = 'fixed';
+                toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';
+                toast.style.width = pillRect.width + 'px'; toast.style.height = pillRect.height + 'px';
+                toast.style.borderRadius = '9999px'; toast.style.opacity = '1';
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => {
+                    const finalWidth = Math.min(window.innerWidth * 0.9, 384);
+                    const finalHeight = 56;
+                    const finalLeft = (window.innerWidth - finalWidth) / 2;
+                    const finalTop = pillRect.top - finalHeight - 16;
+                    toast.style.transition = 'left 0.55s cubic-bezier(0.34,1.56,0.64,1), top 0.55s cubic-bezier(0.34,1.56,0.64,1), width 0.55s cubic-bezier(0.34,1.56,0.64,1), height 0.55s cubic-bezier(0.34,1.56,0.64,1), border-radius 0.55s ease';
+                    toast.style.left = finalLeft + 'px'; toast.style.top = finalTop + 'px';
+                    toast.style.width = finalWidth + 'px'; toast.style.height = finalHeight + 'px';
+                    toast.style.borderRadius = '16px';
+                });
+            } else {
+                toast.className = glassClasses + ' rounded-2xl w-[90%] max-w-sm';
+                toast.style.position = 'fixed'; toast.style.left = '50%'; toast.style.bottom = '24px';
+                toast.style.transform = 'translate(-50%, 10px) scale(0.9)'; toast.style.opacity = '0';
+                toast.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => {
+                    toast.style.transform = 'translate(-50%, 0) scale(1)'; toast.style.opacity = '1';
+                });
+            }
+        
+            if (actionLabel && actionCallback) {
+                toast.querySelector('.glass-toast-action').addEventListener('click', () => {
+                    clearTimeout(toast.dataset.timeout);
+                    finish();
+                    actionCallback();
+                });
+            }
+        
+            toast.dataset.timeout = setTimeout(finish, duration);
+        }
+        
+        // ================= SISTEMA DE ATUALIZAÇÃO DO APP =================
+        function updateCheckButtonUI() {
+            const btnText = document.getElementById('check-update-text');
+            const icon = document.getElementById('check-update-icon');
+            if (!btnText) return;
+            const pending = localStorage.getItem('flowme_pending_update');
+            if (pending) {
+                btnText.textContent = t('btn_update_available').replace('{V}', pending);
+                if (icon) icon.className = 'fa-solid fa-rocket';
+            } else {
+                btnText.textContent = t('btn_check_update');
+                if (icon) icon.className = 'fa-solid fa-arrows-rotate';
+            }
+        }
+        
+        function handleUpdateButtonClick() {
+            const pending = localStorage.getItem('flowme_pending_update');
+            if (pending) confirmAndApplyUpdate(pending);
+            else checkForUpdates(true);
+        }
+        
+        function showUpdateFoundToast(version) {
+            showGlassToast(t('msg_update_found'), 'fa-solid fa-rocket', 'text-indigo-500', t('btn_do_update'), () => confirmAndApplyUpdate(version), 3000);
+        }
+        
+        function confirmAndApplyUpdate(version) {
+            if (confirm(t('confirm_save_before_update'))) {
+                localStorage.removeItem('flowme_pending_update');
+                if (typeof accessToken !== 'undefined' && accessToken) {
+                    saveToCloud(true).finally(() => location.reload());
+                } else {
+                    saveState();
+                    location.reload();
+                }
+            }
+        }
+        
+        async function checkForUpdates(manual = false) {
+            const btn = document.getElementById('btn-check-update');
+            const icon = document.getElementById('check-update-icon');
+            const btnText = document.getElementById('check-update-text');
+            if (manual && btn) { btn.disabled = true; if (icon) icon.classList.add('fa-spin'); if (btnText) btnText.textContent = t('btn_checking_update'); }
+        
+            try {
+                const resp = await fetch('./version.json?t=' + Date.now(), { cache: 'no-store' });
+                const data = await resp.json();
+                const remoteVersion = data.version;
+                localStorage.setItem('flowme_last_update_check', Date.now());
+        
+                if (remoteVersion && remoteVersion !== FLOWME_VERSION) {
+                    const alreadyKnown = localStorage.getItem('flowme_pending_update') === remoteVersion;
+                    localStorage.setItem('flowme_pending_update', remoteVersion);
+                    if (manual) showUpdateFoundToast(remoteVersion);
+                    else if (!alreadyKnown) sendOSUpdateNotification(remoteVersion);
+                } else {
+                    localStorage.removeItem('flowme_pending_update');
+                    if (manual) showGlassToast(t('msg_already_updated'), 'fa-solid fa-circle-check', 'text-emerald-500');
+                }
+            } catch (e) {
+                console.error('Erro ao checar atualização:', e);
+                if (manual) showGlassToast(t('err_check_update'), 'fa-solid fa-triangle-exclamation', 'text-rose-500');
+            } finally {
+                if (manual && btn) { btn.disabled = false; if (icon) icon.classList.remove('fa-spin'); }
+                updateCheckButtonUI();
+            }
+        }
+        
+        function sendOSUpdateNotification(version) {
+            if (!('Notification' in window)) return;
+            const body = t('msg_new_version_notification').replace('{V}', version);
+            if (Notification.permission === 'granted') {
+                new Notification('FlowMe', { body, icon: './icon-192.png' });
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(p => { if (p === 'granted') new Notification('FlowMe', { body, icon: './icon-192.png' }); });
+            }
         }
 
         function pulseAlert(toast, times = 2, holdMs = 220, gapMs = 160) {
@@ -5929,6 +6108,7 @@
         // ================= ALERTS MODAL =================
         function renderAlertsTabContent() {
             const c = document.getElementById('alerts-modal-content'); c.innerHTML = '';
+            const pendingUpdateVersion = localStorage.getItem('flowme_pending_update');
             const todayStr = new Date().toISOString().split('T')[0];
             
             let list = [];
@@ -5976,7 +6156,21 @@
                 });
             }
 
-            if(list.length === 0 && modalLimits.length === 0 && modalGoals.length === 0) { 
+            if (pendingUpdateVersion) {
+                c.innerHTML += `
+                    <div class="flex items-center justify-between p-2 rounded-lg border bg-indigo-50 border-indigo-200 dark:bg-indigo-900/20 dark:border-indigo-800 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="text-lg"><i class="fa-solid fa-rocket text-indigo-500"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${t('lbl_update_alert')}</p>
+                                <p class="text-[10px] font-medium text-indigo-600">v${pendingUpdateVersion}</p>
+                            </div>
+                        </div>
+                        <button onclick="closeModal('modal-alerts'); confirmAndApplyUpdate('${pendingUpdateVersion}')" class="text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition">${t('btn_do_update')}</button>
+                    </div>`;
+            }
+            
+            if(list.length === 0 && modalLimits.length === 0 && modalGoals.length === 0 && !pendingUpdateVersion) { 
                 c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">' + t('msg_all_control') + '</p>'; 
             } else {
                 // Preenche primeiro os alertas de Orçamento

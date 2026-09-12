@@ -2125,7 +2125,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.1.8';
+        const FLOWME_VERSION = 'beta-4.1.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4194,6 +4194,8 @@
         }
 
         // ================= SISTEMA DE EXCLUSÃO COM DESFAZER =================
+        let pendingDeletions = {}
+        
         function showDeletionToast({ id, icon, iconColor, name, fullWord, shortWord, onUndo, onExpire }) {
             const toastId = 'toast-del-' + id;
             const existing = document.getElementById(toastId);

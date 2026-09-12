@@ -2157,7 +2157,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.2.1';
+        const FLOWME_VERSION = 'beta-4.2.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4327,13 +4327,13 @@
             const toast = document.createElement('div');
             const toolbar = document.getElementById('global-toolbar');
             const useMitosis = toolbar && !toolbar.classList.contains('hidden');
-            const glassClasses = 'bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center gap-3 text-sm justify-between overflow-hidden';
+            const glassClasses = 'bg-white/30 dark:bg-slate-900/40 theme-oled:bg-[#000000]/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 text-slate-800 dark:text-slate-100 px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.25)] z-[100] flex items-center justify-center gap-3 text-sm overflow-hidden whitespace-nowrap';
             const actionHtml = actionLabel ? `<button class="glass-toast-action shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${actionLabel}</button>` : '';
         
             toast.innerHTML = `
-                <div class="flex items-center gap-2 min-w-0">
+                <div class="flex items-center gap-2 shrink-0">
                     <i class="${iconClass} ${iconColor} shrink-0"></i>
-                    <span class="font-bold truncate">${message}</span>
+                    <span class="font-bold whitespace-nowrap">${message}</span>
                 </div>
                 ${actionHtml}
             `;
@@ -4352,31 +4352,40 @@
                 setTimeout(() => { if (toast.parentNode) toast.remove(); }, 520);
             };
         
+            // Mede o tamanho natural do conteúdo antes de animar (invisível, fora da tela)
+            toast.className = glassClasses + ' rounded-2xl';
+            toast.style.position = 'fixed';
+            toast.style.left = '-9999px';
+            toast.style.top = '-9999px';
+            toast.style.visibility = 'hidden';
+            toast.style.width = 'auto';
+            toast.style.height = 'auto';
+            document.body.appendChild(toast);
+        
+            const maxWidth = window.innerWidth * 0.9;
+            const naturalWidth = Math.min(toast.offsetWidth, maxWidth);
+            const naturalHeight = toast.offsetHeight;
+        
+            toast.style.visibility = '';
+        
             if (useMitosis) {
-                toolbar.classList.remove('animate-pilula-react'); void toolbar.offsetWidth; toolbar.classList.add('animate-pilula-react');
                 const pillRect = toolbar.getBoundingClientRect();
-                toast.className = glassClasses;
-                toast.style.position = 'fixed';
-                toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';
                 toast.style.width = pillRect.width + 'px'; toast.style.height = pillRect.height + 'px';
+                toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';
                 toast.style.borderRadius = '9999px'; toast.style.opacity = '1';
-                document.body.appendChild(toast);
                 requestAnimationFrame(() => {
-                    const finalWidth = Math.min(window.innerWidth * 0.9, 384);
-                    const finalHeight = 56;
-                    const finalLeft = (window.innerWidth - finalWidth) / 2;
-                    const finalTop = pillRect.top - finalHeight - 16;
+                    const finalLeft = (window.innerWidth - naturalWidth) / 2;
+                    const finalTop = pillRect.top - naturalHeight - 16;
                     toast.style.transition = 'left 0.55s cubic-bezier(0.34,1.56,0.64,1), top 0.55s cubic-bezier(0.34,1.56,0.64,1), width 0.55s cubic-bezier(0.34,1.56,0.64,1), height 0.55s cubic-bezier(0.34,1.56,0.64,1), border-radius 0.55s ease';
                     toast.style.left = finalLeft + 'px'; toast.style.top = finalTop + 'px';
-                    toast.style.width = finalWidth + 'px'; toast.style.height = finalHeight + 'px';
+                    toast.style.width = naturalWidth + 'px'; toast.style.height = naturalHeight + 'px';
                     toast.style.borderRadius = '16px';
                 });
             } else {
-                toast.className = glassClasses + ' rounded-2xl w-[90%] max-w-sm';
-                toast.style.position = 'fixed'; toast.style.left = '50%'; toast.style.bottom = '24px';
+                toast.style.left = '50%'; toast.style.top = 'auto'; toast.style.bottom = '24px';
+                toast.style.width = naturalWidth + 'px'; toast.style.height = naturalHeight + 'px';
                 toast.style.transform = 'translate(-50%, 10px) scale(0.9)'; toast.style.opacity = '0';
                 toast.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
-                document.body.appendChild(toast);
                 requestAnimationFrame(() => {
                     toast.style.transform = 'translate(-50%, 0) scale(1)'; toast.style.opacity = '1';
                 });

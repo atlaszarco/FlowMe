@@ -2125,7 +2125,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.1.9';
+        const FLOWME_VERSION = 'beta-4.2.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4121,7 +4121,7 @@
                     saveState(); render(); renderRecurringList();
                     if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
                 },
-                onExpire: () => removed.forEach(trx => addToDeletedHistory('transaction', trx))
+                onExpire: () => addToDeletedHistory('recurring', { id: rule.id, rule: rule, removed: removed })
             });
         }
 
@@ -5311,6 +5311,20 @@
             } else if (entry.kind === 'account') {
                 if (!state.accounts) state.accounts = [];
                 state.accounts.push(entry.data);
+            } else if (entry.kind === 'recurring') {
+                const { rule, removed } = entry.data;
+                if (!state.recurringRules) state.recurringRules = [];
+                const existing = state.recurringRules.find(r => r.id === rule.id);
+                if (existing) {
+                    Object.assign(existing, rule, { active: true });
+                } else {
+                    rule.active = true;
+                    state.recurringRules.push(rule);
+                }
+                (removed || []).forEach(trx => {
+                    if (!state.transactions.find(t => t.id === trx.id)) state.transactions.push(trx);
+                });
+                ensureRecurringInstancesUpToDate();
             }
                     
             state.deletedHistory.splice(idx, 1);
@@ -6115,8 +6129,12 @@
                     label = entry.data.name;
                     icon = '<i class="fa-solid fa-building-columns text-blue-500"></i>';
                     valueStr = formatCurrency(entry.data.initialBalance);
+                } else if (entry.kind === 'recurring') {
+                    label = entry.data.rule.description;
+                    icon = '<i class="fa-solid fa-rotate text-indigo-500"></i>';
+                    valueStr = `${formatCurrency(entry.data.rule.value)}${t('recurring_per_month')}`;
                 }
-            
+                            
                 const dt = new Date(entry.deletedAt);
                 const dtStr = dt.toLocaleDateString(getActiveLang() === 'en' ? 'en-US' : 'pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
         

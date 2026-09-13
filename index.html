@@ -60,6 +60,44 @@
         html.theme-oled .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]), html.theme-oled .dark\:divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: #3f3f46 !important; }
 
         /* ================= PADRÃO GLASSMORPHISM GLOBAL ================= */
+        /* ================= CLASSES DE VIDRO PRÓPRIAS ================= */
+        .glass-panel {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-width: 1px;
+            isolation: isolate;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-color: rgba(0, 0, 0, 0.18);
+        }
+        .dark .glass-panel {
+            background-color: rgba(30, 41, 59, 0.4);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        html.theme-oled .glass-panel {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .glass-floating {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-width: 1px;
+            isolation: isolate;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-color: rgba(0, 0, 0, 0.18);
+        }
+        .dark .glass-floating {
+            background-color: rgba(15, 23, 42, 0.4);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        html.theme-oled .glass-floating {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
         /* 1. Painéis Comuns (Cartões, Gavetas, Faturas, Gráficos) */
         .bg-white, .dark\:bg-slate-800 {
             backdrop-filter: blur(10px) !important;
@@ -2157,7 +2195,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.2.4';
+        const FLOWME_VERSION = 'beta-4.2.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 

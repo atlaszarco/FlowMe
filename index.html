@@ -2157,7 +2157,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.2.3';
+        const FLOWME_VERSION = 'beta-4.2.4';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4411,22 +4411,30 @@
             toolbar.classList.add('animate-pilula-react');
         }
         
-        // Posição de "descanso" do toast (já totalmente visível), calculada NA HORA
-        function getToastRestRect(width, height) {
-            if (isToolbarActive()) {
-                const pillRect = document.getElementById('global-toolbar').getBoundingClientRect();
-                return { top: pillRect.top - height - 16, left: (window.innerWidth - width) / 2 };
-            }
-            return { top: window.innerHeight - height - 24, left: (window.innerWidth - width) / 2 };
+        // Retorna a posição da pílula mesmo que ela esteja escondida (ex: Configurações, Splash)
+        function getPillRect() {
+            const toolbar = document.getElementById('global-toolbar');
+            if (!toolbar) return { top: window.innerHeight - 80, left: window.innerWidth / 2 - 40, width: 80, height: 64 };
+            const wasHidden = toolbar.classList.contains('hidden');
+            if (wasHidden) toolbar.classList.remove('hidden');
+            const rect = toolbar.getBoundingClientRect();
+            if (wasHidden) toolbar.classList.add('hidden');
+            return rect;
         }
         
-        // ENTRADA: nasce da pílula se ela estiver visível agora, ou sobe de baixo se não estiver
+        // Posição de "descanso" do toast — SEMPRE a mesma altura de onde a pílula fica, com ou sem ela visível
+        function getToastRestRect(width, height) {
+            const pillRect = getPillRect();
+            return { top: pillRect.top - height - 16, left: (window.innerWidth - width) / 2 };
+        }
+        
+        // ENTRADA: nasce da pílula se ela estiver visível agora, ou sobe de baixo (até a mesma altura) se não estiver
         function animateToastEntrance(toast, width, height, onDone) {
             const rest = getToastRestRect(width, height);
         
             if (isToolbarActive()) {
                 pulseToolbar();
-                const pillRect = document.getElementById('global-toolbar').getBoundingClientRect();
+                const pillRect = getPillRect();
                 toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';
                 toast.style.width = pillRect.width + 'px'; toast.style.height = pillRect.height + 'px';
                 toast.style.borderRadius = '9999px'; toast.style.opacity = '1';
@@ -4451,7 +4459,7 @@
             }
         }
         
-        // SAÍDA: recolhe na pílula se ela estiver visível AGORA, ou desce para baixo se não estiver
+        // SAÍDA: recolhe na pílula se ela estiver visível AGORA, ou desce para baixo (da mesma altura) se não estiver
         function animateToastExit(toast, onDone) {
             const rect = toast.getBoundingClientRect();
             toast.style.left = rect.left + 'px'; toast.style.top = rect.top + 'px';
@@ -4459,7 +4467,7 @@
         
             if (isToolbarActive()) {
                 pulseToolbar();
-                const pillRect = document.getElementById('global-toolbar').getBoundingClientRect();
+                const pillRect = getPillRect();
                 requestAnimationFrame(() => {
                     toast.style.transition = 'left 0.5s ease-in, top 0.5s ease-in, width 0.5s ease-in, height 0.5s ease-in, border-radius 0.5s ease-in, opacity 0.5s ease-in';
                     toast.style.left = pillRect.left + 'px'; toast.style.top = pillRect.top + 'px';

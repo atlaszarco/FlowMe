@@ -101,7 +101,7 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
-        /* 3. CHIPS: botões internos do toolbar (sem backdrop-filter para não aninhar vidro) */
+        /* 3. CHIPS: botões internos do toolbar */
         .toolbar-chip {
             background-color: rgba(255, 255, 255, 0.5);
             border: 1px solid rgba(0, 0, 0, 0.08);
@@ -117,6 +117,15 @@
             background-color: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.15);
             color: #f8fafc;
+        }
+
+        /* Ajuste de cor na animação */
+        #filter-wrapper {
+            transition:
+                width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.15s ease,
+                color 0.15s ease,
+                border-color 0.15s ease;
         }
 
         /* 4. CHIPS DE AÇÃO: botões pequenos de tabela (editar/excluir) */
@@ -532,7 +541,7 @@
     
     <!-- 1. FILTRO EXPANSÍVEL (CENTRALIZADO QUANDO ABERTO) -->
     <div id="global-toolbar-filter" class="flex items-center shrink-0 h-full transition-all duration-500 cubic-bezier(0.22, 1, 0.36, 1) overflow-hidden origin-center">
-        <div id="filter-wrapper" onmouseenter="startCalendarHover()" onmouseleave="stopCalendarHover()" class="group flex items-center justify-start toolbar-chip h-full rounded-2xl transition-all duration-500 relative overflow-hidden shrink-0" style="width: 130px;">
+        <div id="filter-wrapper" onmouseenter="startCalendarHover()" onmouseleave="stopCalendarHover()" class="group flex items-center justify-start toolbar-chip h-full rounded-2xl relative overflow-hidden shrink-0" style="width: 130px;">
             
             <!-- CAMADA INVISÍVEL (Captura o clique quando fechado e protege os inputs) -->
             <div id="filter-closed-catcher" class="absolute inset-0 z-10 cursor-pointer" onclick="openFilter()"></div>
@@ -2253,7 +2262,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.3.1';
+        const FLOWME_VERSION = 'beta-4.3.2';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -2804,7 +2813,6 @@
 
                 setTimeout(() => {
                     if (icon) icon.classList.remove('fa-bounce');
-                    wrapper.classList.remove('!bg-indigo-600', '!text-white', 'dark:!bg-indigo-500', 'theme-oled:!bg-indigo-500');
                     isFilterExpanded = true;
                     isCalendarOpening = false;
                     updateFilterUI();
@@ -2942,8 +2950,8 @@
                 content.classList.remove('opacity-0', 'pointer-events-none');
                 content.classList.add('opacity-100', 'pointer-events-auto');
 
-                wrapper.classList.remove('toolbar-chip');
-                wrapper.classList.add('glass-floating');
+                wrapper.classList.remove('toolbar-chip', 'glass-floating');
+                wrapper.classList.add('!bg-indigo-600', '!text-white', 'dark:!bg-indigo-500', 'theme-oled:!bg-indigo-500');
                 
                 if (currentFilterMode === 'month') {
                     let wMonth;
@@ -2986,7 +2994,7 @@
                 iconBtn.classList.remove('bg-black/10', 'dark:bg-white/10');
                 iconBtn.classList.add('pointer-events-none');
                 wrapper.classList.remove('is-expanded');
-                wrapper.classList.remove('bg-indigo-600', 'text-white', 'hover:bg-indigo-500', 'glass-floating');
+                wrapper.classList.remove('bg-indigo-600', 'text-white', 'hover:bg-indigo-500', 'glass-floating', '!bg-indigo-600', '!text-white', 'dark:!bg-indigo-500', 'theme-oled:!bg-indigo-500');
                 wrapper.classList.add('toolbar-chip');
                 
                 let wCollapsed;

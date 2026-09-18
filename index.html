@@ -2262,7 +2262,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = 'beta-4.3.2';
+        const FLOWME_VERSION = 'beta-4.3.3';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -2270,7 +2270,7 @@
         let pendingSplashHide = false;
         
         let userConfig = { 
-            lang: localStorage.getItem('flowme_lang') || 'pt', 
+            lang: localStorage.getItem('flowme_lang') || 'system', 
             currency: localStorage.getItem('flowme_currency') || 'BRL', 
             theme: localStorage.getItem('flowme_theme') || 'system',
             tabStyle: localStorage.getItem('flowme_tab_style') || 'both',

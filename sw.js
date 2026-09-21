@@ -3,7 +3,7 @@ const urlsToCache = ['./', './index.html', './manifest.json', './icon-192.png', 
 
 // Instala e guarda a versão inicial
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Força o novo SW a assumir o controle imediatamente
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
   );

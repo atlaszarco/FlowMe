@@ -2278,7 +2278,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '4.3.5';
+        const FLOWME_VERSION = '4.3.6';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4409,7 +4409,7 @@
 
         function showGlassToast(message, iconClass = 'fa-solid fa-circle-info', iconColor = 'text-indigo-500', actionLabel = null, actionCallback = null, duration = 3000) {
             const toast = document.createElement('div');
-            toast.className = 'fixed glass-floating text-slate-800 dark:text-slate-100 px-4 py-3 z-[100] flex items-center justify-between gap-3 text-sm';
+            toast.className = 'fixed glass-floating text-slate-800 dark:text-slate-100 px-4 py-3 z-[100] flex items-center justify-between gap-3 text-sm whitespace-nowrap';
         
             const actionHtml = actionLabel
                 ? `<button class="glass-toast-action shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${actionLabel}</button>`
@@ -4423,8 +4423,8 @@
                 ${actionHtml}
             `;
         
-            // === MEDIÇÃO EM DUAS ETAPAS ===
-            // 1ª: mede o tamanho natural (sem quebra), fora da tela
+            // === MEDIÇÃO ===
+            // 1ª: mede a largura NATURAL, com nowrap (tudo numa linha só)
             toast.style.position = 'fixed';
             toast.style.left = '-9999px';
             toast.style.top = '-9999px';
@@ -4438,11 +4438,14 @@
         
             let width, height;
             if (naturalWidth > maxWidth) {
-                // 2ª: conteúdo é maior que o permitido → fixa a largura e re-mede a altura (texto vai quebrar)
+                // 2ª: não coube na tela → libera a quebra e re-mede a altura
+                toast.classList.remove('whitespace-nowrap');
+                toast.classList.add('whitespace-normal');
                 toast.style.width = maxWidth + 'px';
                 width = maxWidth;
                 height = toast.offsetHeight;
             } else {
+                // Coube naturalmente → mantém em uma linha
                 width = naturalWidth;
                 height = toast.offsetHeight;
             }

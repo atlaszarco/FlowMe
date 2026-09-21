@@ -485,13 +485,24 @@
             </div>
             <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">FlowMe</h1>
             <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="subtitle">Seu controle pessoal de fluxo financeiro</p>
-            <p class="text-[9px] text-slate-400 mt-2 font-bold tracking-widest uppercase mb-10">VERSÃO <span id="splash-version-display"></span></p>
-            
-            <div id="splash-interactive" class="h-12 flex items-center justify-center">
-                <i id="splash-spinner" class="fa-solid fa-circle-notch fa-spin text-3xl text-emerald-500"></i>
-                <button id="splash-login-btn" onclick="handleAuthClick()" class="hidden py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl border border-blue-700 shadow-md transition-colors flex items-center justify-center gap-3">
-                    <i class="fa-brands fa-google text-xl"></i> <span data-i18n="btn_cloud_connect">Conectar com Google</span>
+            <p class="text-[9px] text-slate-400 mt-2 font-bold tracking-widest uppercase mb-10">
+              <span data-i18n="splash_version">VERSÃO</span>
+              <span id="splash-version-display"></span>
+            </p>
+            <div id="splash-interactive" class="h-auto flex items-center justify-center">
+              <i id="splash-spinner" class="fa-solid fa-circle-notch fa-spin text-3xl text-emerald-500"></i>
+              <div id="splash-buttons" class="hidden flex-col gap-3 w-full max-w-xs">
+                <button id="splash-login-btn" onclick="handleAuthClick()"
+                  class="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl border border-blue-700 shadow-md transition-colors flex items-center justify-center gap-3">
+                  <i class="fa-brands fa-google text-xl"></i>
+                  <span data-i18n="btn_cloud_connect">Conectar com Google Drive</span>
                 </button>
+                <button id="splash-local-btn" onclick="useLocally()"
+                  class="py-3 px-6 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-medium text-sm rounded-xl border border-slate-300 dark:border-slate-600 shadow-md transition-colors flex items-center justify-center gap-3">
+                  <i class="fa-solid fa-hard-drive text-xl"></i>
+                  <span data-i18n="btn_use_local">Usar localmente</span>
+                </button>
+              </div>
             </div>
         </div>
     </div>
@@ -1959,7 +1970,8 @@
                 btn_close: "Fechar", aria_prev_month: "Mês anterior", aria_next_month: "Próximo mês", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Diminuir quantidade", aria_qty_increase: "Aumentar quantidade", aria_remove_split_row: "Remover pessoa do rateio",
                 tt_filter_presets: "Filtros Salvos", ph_preset_name: "Nome do filtro...", preset_empty: "Nenhum filtro salvo ainda.",
                 btn_share: "Compartilhar", tt_share_rateio: "Compartilhar resumo de rateio", share_rateio_title_person: "Resumo de Rateios com {PERSON}", msg_share_empty: "Nenhum rateio para compartilhar.", msg_copied_clipboard: "Resumo copiado para a área de transferência!", err_share_unsupported: "Não foi possível compartilhar neste dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Itens pendentes:", lbl_paid_items: "Itens pagos:", lbl_total: "Total", modal_person_rateio_title: "Rateio com",
-                cfg_update_title: "Atualização e Créditos", lbl_current_version: "Versão atual:", btn_check_update: "Verificar Atualizações", btn_checking_update: "Procurando...", btn_update_available: "Atualize para a versão {V}", msg_already_updated: "FlowMe já está atualizado na última versão", msg_update_found: "Nova versão encontrada", btn_do_update: "Atualizar", confirm_save_before_update: "Salvar os dados para atualizar o FlowMe?", err_check_update: "Não foi possível verificar atualizações.", lbl_credits_prefix: "Créditos:", msg_new_version_notification: "Nova versão do FlowMe disponível: {V}", lbl_update_alert: "Nova atualização disponível", msg_app_updated: "FlowMe atualizado: v{V}"
+                cfg_update_title: "Atualização e Créditos", lbl_current_version: "Versão atual:", btn_check_update: "Verificar Atualizações", btn_checking_update: "Procurando...", btn_update_available: "Atualize para a versão {V}", msg_already_updated: "FlowMe já está atualizado na última versão", msg_update_found: "Nova versão encontrada", btn_do_update: "Atualizar", confirm_save_before_update: "Salvar os dados para atualizar o FlowMe?", err_check_update: "Não foi possível verificar atualizações.", lbl_credits_prefix: "Créditos:", msg_new_version_notification: "Nova versão do FlowMe disponível: {V}", lbl_update_alert: "Nova atualização disponível", msg_app_updated: "FlowMe atualizado: v{V}",
+                splash_version: "Versão", btn_use_local: "Usar localmente", toast_keep_saved: "Mantenha seus dados salvos.", msg_backup_restored: "Backup recuperado!", alert_not_connected: "Dados não sincronizados", alert_not_connected_desc: "Conecte ao Google Drive para manter seus dados seguros."
             },
             en: {
                 subtitle: "Your personal financial flow control", tab_transactions: "Transactions", tab_invoices: "Invoices", tab_dashboard: "Panel", tab_settings: "Settings",
@@ -2008,7 +2020,8 @@
                 btn_close: "Close", aria_prev_month: "Previous month", aria_next_month: "Next month", aria_toggle_filter: "Toggle period filter", aria_qty_decrease: "Decrease quantity", aria_qty_increase: "Increase quantity", aria_remove_split_row: "Remove person from split",
                 tt_filter_presets: "Saved Filters", ph_preset_name: "Filter name...", preset_empty: "No saved filters yet.",
                 btn_share: "Share", tt_share_rateio: "Share split summary", share_rateio_title_person: "Split Summary with {PERSON}", msg_share_empty: "No splits to share.", msg_copied_clipboard: "Summary copied to clipboard!", err_share_unsupported: "Sharing isn't supported on this device.", btn_view_purchases: "View Purchases", lbl_pending_items: "Pending items:", lbl_paid_items: "Paid items:", lbl_total: "Total", modal_person_rateio_title: "Split with",
-                cfg_update_title: "Update & Credits", lbl_current_version: "Current version:", btn_check_update: "Check for Updates", btn_checking_update: "Checking...", btn_update_available: "Update to version {V}", msg_already_updated: "FlowMe is already up to date", msg_update_found: "New version found", btn_do_update: "Update", confirm_save_before_update: "Save your data before updating FlowMe?", err_check_update: "Could not check for updates.", lbl_credits_prefix: "Credits:", msg_new_version_notification: "New FlowMe version available: {V}", lbl_update_alert: "New update available", msg_app_updated: "FlowMe updated: v{V}"
+                cfg_update_title: "Update & Credits", lbl_current_version: "Current version:", btn_check_update: "Check for Updates", btn_checking_update: "Checking...", btn_update_available: "Update to version {V}", msg_already_updated: "FlowMe is already up to date", msg_update_found: "New version found", btn_do_update: "Update", confirm_save_before_update: "Save your data before updating FlowMe?", err_check_update: "Could not check for updates.", lbl_credits_prefix: "Credits:", msg_new_version_notification: "New FlowMe version available: {V}", lbl_update_alert: "New update available", msg_app_updated: "FlowMe updated: v{V}",
+                splash_version: "Version", btn_use_local: "Use locally", toast_keep_saved: "Keep your data safe.", msg_backup_restored: "Backup restored!", alert_not_connected: "Data not synced", alert_not_connected_desc: "Connect to Google Drive to keep your data safe."
             },
             es: {
                 subtitle: "Tu control personal de flujo financiero", tab_transactions: "Transacciones", tab_invoices: "Facturas", tab_dashboard: "Panel", tab_settings: "Ajustes",
@@ -2056,7 +2069,8 @@
                 btn_close: "Cerrar", aria_prev_month: "Mes anterior", aria_next_month: "Mes siguiente", aria_toggle_filter: "Alternar filtro de período", aria_qty_decrease: "Disminuir cantidad", aria_qty_increase: "Aumentar cantidad", aria_remove_split_row: "Eliminar persona del reparto",
                 tt_filter_presets: "Filtros Guardados", ph_preset_name: "Nombre del filtro...", preset_empty: "Ningún filtro guardado todavía.",
                 btn_share: "Compartir", tt_share_rateio: "Compartir resumen de reparto", share_rateio_title_person: "Resumen de Repartos con {PERSON}", msg_share_empty: "Ningún reparto para compartir.", msg_copied_clipboard: "¡Resumen copiado al portapapeles!", err_share_unsupported: "No se pudo compartir en este dispositivo.", btn_view_purchases: "Ver Compras", lbl_pending_items: "Artículos pendientes:", lbl_paid_items: "Artículos pagados:", lbl_total: "Total", modal_person_rateio_title: "Reparto con",
-                cfg_update_title: "Actualización y Créditos", lbl_current_version: "Versión actual:", btn_check_update: "Buscar Actualizaciones", btn_checking_update: "Buscando...", btn_update_available: "Actualizar a la versión {V}", msg_already_updated: "FlowMe ya está en la última versión", msg_update_found: "Nueva versión encontrada", btn_do_update: "Actualizar", confirm_save_before_update: "¿Guardar los datos antes de actualizar FlowMe?", err_check_update: "No se pudo verificar actualizaciones.", lbl_credits_prefix: "Créditos:", msg_new_version_notification: "Nueva versión de FlowMe disponible: {V}", lbl_update_alert: "Nueva actualización disponible", msg_app_updated: "FlowMe actualizado: v{V}"
+                cfg_update_title: "Actualización y Créditos", lbl_current_version: "Versión actual:", btn_check_update: "Buscar Actualizaciones", btn_checking_update: "Buscando...", btn_update_available: "Actualizar a la versión {V}", msg_already_updated: "FlowMe ya está en la última versión", msg_update_found: "Nueva versión encontrada", btn_do_update: "Actualizar", confirm_save_before_update: "¿Guardar los datos antes de actualizar FlowMe?", err_check_update: "No se pudo verificar actualizaciones.", lbl_credits_prefix: "Créditos:", msg_new_version_notification: "Nueva versión de FlowMe disponible: {V}", lbl_update_alert: "Nueva actualización disponible", msg_app_updated: "FlowMe actualizado: v{V}",
+                splash_version: "Versión", btn_use_local: "Usar localmente", toast_keep_saved: "Mantén tus datos seguros.", msg_backup_restored: "¡Copia de seguridad recuperada!", alert_not_connected: "Datos no sincronizados", alert_not_connected_desc: "Conecta con Google Drive para mantener tus datos seguros."
             },
             fr: {
                 subtitle: "Votre contrôle personnel des flux financiers", tab_transactions: "Transactions", tab_invoices: "Factures", tab_dashboard: "Tableau de bord", tab_settings: "Paramètres",
@@ -2105,7 +2119,8 @@
                 btn_close: "Fermer", aria_prev_month: "Mois précédent", aria_next_month: "Mois suivant", aria_toggle_filter: "Basculer le filtre de période", aria_qty_decrease: "Diminuer la quantité", aria_qty_increase: "Augmenter la quantité", aria_remove_split_row: "Supprimer la personne du partage",
                 tt_filter_presets: "Filtres Enregistrés", ph_preset_name: "Nom du filtre...", preset_empty: "Aucun filtre enregistré pour l'instant.",
                 btn_share: "Partager", tt_share_rateio: "Partager le résumé du partage", share_rateio_title_person: "Résumé des Partages avec {PERSON}", msg_share_empty: "Aucun partage à partager.", msg_copied_clipboard: "Résumé copié dans le presse-papiers !", err_share_unsupported: "Le partage n'est pas possible sur cet appareil.", btn_view_purchases: "Voir les Achats", lbl_pending_items: "Articles en attente :", lbl_paid_items: "Articles payés :", lbl_total: "Total", modal_person_rateio_title: "Partage avec",
-                cfg_update_title: "Mise à jour et Crédits", lbl_current_version: "Version actuelle :", btn_check_update: "Vérifier les mises à jour", btn_checking_update: "Recherche...", btn_update_available: "Mettre à jour vers la version {V}", msg_already_updated: "FlowMe est déjà à jour", msg_update_found: "Nouvelle version trouvée", btn_do_update: "Mettre à jour", confirm_save_before_update: "Enregistrer les données avant de mettre à jour FlowMe ?", err_check_update: "Impossible de vérifier les mises à jour.", lbl_credits_prefix: "Crédits :", msg_new_version_notification: "Nouvelle version de FlowMe disponible : {V}", lbl_update_alert: "Nouvelle mise à jour disponible", msg_app_updated: "FlowMe mis à jour : v{V}"
+                cfg_update_title: "Mise à jour et Crédits", lbl_current_version: "Version actuelle :", btn_check_update: "Vérifier les mises à jour", btn_checking_update: "Recherche...", btn_update_available: "Mettre à jour vers la version {V}", msg_already_updated: "FlowMe est déjà à jour", msg_update_found: "Nouvelle version trouvée", btn_do_update: "Mettre à jour", confirm_save_before_update: "Enregistrer les données avant de mettre à jour FlowMe ?", err_check_update: "Impossible de vérifier les mises à jour.", lbl_credits_prefix: "Crédits :", msg_new_version_notification: "Nouvelle version de FlowMe disponible : {V}", lbl_update_alert: "Nouvelle mise à jour disponible", msg_app_updated: "FlowMe mis à jour : v{V}",
+                splash_version: "Version", btn_use_local: "Utiliser localement", toast_keep_saved: "Gardez vos données en sécurité.", msg_backup_restored: "Sauvegarde restaurée !", alert_not_connected: "Données non synchronisées", alert_not_connected_desc: "Connectez-vous à Google Drive pour sécuriser vos données."
             }
         };
 
@@ -2262,7 +2277,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '4.3.4';
+        const FLOWME_VERSION = '4.3.5';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -2279,7 +2294,8 @@
             overdueDays: parseInt(localStorage.getItem('flowme_overdue_days') || '3'),
             notificationsEnabled: localStorage.getItem('flowme_notif') !== 'false',
             historyRetentionDays: parseInt(localStorage.getItem('flowme_history_retention') || '90'),
-            panelStyle: localStorage.getItem('flowme_panel_style') || 'blocks'
+            panelStyle: localStorage.getItem('flowme_panel_style') || 'blocks',
+            localMode: localStorage.getItem('flowme_local_mode') === 'true'
         };
 
         let resizeTimer;
@@ -3582,8 +3598,8 @@
 
             const groups = currentAlertGroups || {};
             const hasUpdatePending = !!localStorage.getItem('flowme_pending_update');
-            const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0) + (groups.goals?.length||0) + (hasUpdatePending ? 1 : 0);
-            
+            const showDisconnectedAlert = !accessToken && (userConfig.localMode || state.transactions.length > 0);
+            const totalAlerts = (groups.incomeLate?.length||0) + (groups.expenseLate?.length||0) + (groups.incomeSoon?.length||0) + (groups.expenseSoon?.length||0) + (groups.limits?.length||0) + (groups.goals?.length||0) + (hasUpdatePending ? 1 : 0) + (showDisconnectedAlert ? 1 : 0);            
             alertsWrapper.classList.remove('hidden');
 
             const profile = responsiveProfile || getResponsiveProfile();
@@ -6267,6 +6283,23 @@
                 });
             }
 
+            const showDisconnectedAlert = !accessToken && (userConfig.localMode || state.transactions.length > 0);
+            if (showDisconnectedAlert) {
+                c.innerHTML += `
+                    <div class="flex items-center justify-between p-2 rounded-lg border bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="text-lg"><i class="fa-solid fa-cloud-exclamation text-amber-500"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800 dark:text-slate-200">${t('alert_not_connected')}</p>
+                                <p class="text-[10px] font-medium text-amber-600">${t('alert_not_connected_desc')}</p>
+                            </div>
+                        </div>
+                        <button onclick="closeModal('modal-alerts'); handleAuthClick()" class="shrink-0 text-[10px] font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition">
+                            ${t('btn_cloud_connect')}
+                        </button>
+                    </div>`;
+            }
+
             if (pendingUpdateVersion) {
                 c.innerHTML += `
                     <div class="flex items-center justify-between p-2 rounded-lg border bg-indigo-50 border-indigo-200 dark:bg-indigo-900/20 dark:border-indigo-800 shadow-sm">
@@ -6281,7 +6314,7 @@
                     </div>`;
             }
             
-            if(list.length === 0 && modalLimits.length === 0 && modalGoals.length === 0 && !pendingUpdateVersion) { 
+            if(list.length === 0 && modalLimits.length === 0 && modalGoals.length === 0 && !pendingUpdateVersion && !showDisconnectedAlert)) { 
                 c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">' + t('msg_all_control') + '</p>'; 
             } else {
                 // Preenche primeiro os alertas de Orçamento
@@ -6504,24 +6537,36 @@
 
         function gsiLoaded() {
             tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: CLIENT_ID, 
+                client_id: CLIENT_ID,
                 scope: SCOPES,
                 callback: async (tokenResponse) => {
                     if (tokenResponse.error !== undefined) throw (tokenResponse);
                     accessToken = tokenResponse.access_token;
-                    localStorage.setItem('flowme_google_token', JSON.stringify({ token: accessToken, expires: new Date().getTime() + (tokenResponse.expires_in * 1000) }));
-                    
+                    localStorage.setItem('flowme_google_token', JSON.stringify({
+                        token: accessToken,
+                        expires: new Date().getTime() + (tokenResponse.expires_in * 1000)
+                    }));
+        
+                    // Conectou: sai do modo local
+                    userConfig.localMode = false;
+                    localStorage.setItem('flowme_local_mode', 'false');
+        
                     const isValid = await fetchUserInfo();
-                    
-                    if(isValid) {
-                        hideSplashScreen(); // Login via botão feito com sucesso, some com a tela!
-                        
-                        if(isManualLogin) {
-                            let file = await findCloudFile();
-                            if(file) {
-                                if(state.transactions.length === 0 || confirm(t('confirm_cloud_load'))) {
-                                    loadFromCloud(true);
+        
+                    if (isValid) {
+                        hideSplashScreen();
+        
+                        // Se veio de clique manual no botão: baixa o backup automaticamente, sem confirm()
+                        if (isManualLogin) {
+                            try {
+                                const file = await findCloudFile();
+                                if (file) {
+                                    await loadFromCloud(true);
+                                    showGlassToast(t('msg_backup_restored'), 'fa-solid fa-cloud-arrow-down', 'text-emerald-500');
                                 }
+                                // Se não há backup, não faz nada — app continua do jeito que está
+                            } catch (e) {
+                                console.error('Erro ao buscar backup:', e);
                             }
                             isManualLogin = false;
                         }
@@ -6530,20 +6575,32 @@
             });
             checkExistingToken();
         }
+        
+        function handleSignoutClick() {
+            handleDisconnection();
+        }
 
         async function checkExistingToken() {
             const spinner = document.getElementById('splash-spinner');
-            const loginBtn = document.getElementById('splash-login-btn');
+            const buttonsWrap = document.getElementById('splash-buttons');
+        
+            // Caso 1: usuário já escolheu modo local anteriormente → entra direto
+            if (userConfig.localMode && !localStorage.getItem('flowme_google_token')) {
+                hideSplashScreen();
+                updateCloudUI(false);
+                showKeepSavedToast();
+                render();
+                return;
+            }
         
             try {
                 const tokenData = localStorage.getItem('flowme_google_token');
         
                 if (!tokenData) {
-                    handleSignoutClick();
                     if (spinner) spinner.classList.add('hidden');
-                    if (loginBtn) {
-                        loginBtn.classList.remove('hidden');
-                        loginBtn.classList.add('flex');
+                    if (buttonsWrap) {
+                        buttonsWrap.classList.remove('hidden');
+                        buttonsWrap.classList.add('flex');
                     }
                     render();
                     return;
@@ -6553,59 +6610,54 @@
         
                 if (parsed.expires <= new Date().getTime()) {
                     localStorage.removeItem('flowme_google_token');
-                    handleSignoutClick();
                     if (spinner) spinner.classList.add('hidden');
-                    if (loginBtn) {
-                        loginBtn.classList.remove('hidden');
-                        loginBtn.classList.add('flex');
+                    if (buttonsWrap) {
+                        buttonsWrap.classList.remove('hidden');
+                        buttonsWrap.classList.add('flex');
                     }
                     render();
                     return;
                 }
         
                 accessToken = parsed.token;
-        
                 const userValid = await fetchUserInfo();
                 if (!userValid) {
+                    // fetchUserInfo já tratou 401 -> handleTokenExpired
                     if (spinner) spinner.classList.add('hidden');
-                    if (loginBtn) {
-                        loginBtn.classList.remove('hidden');
-                        loginBtn.classList.add('flex');
+                    if (buttonsWrap) {
+                        buttonsWrap.classList.remove('hidden');
+                        buttonsWrap.classList.add('flex');
                     }
                     render();
                     return;
                 }
         
+                // Token válido → carrega backup silenciosamente
                 hideSplashScreen();
                 updateCloudUI(true);
         
                 (async () => {
-            try {
-                const file = await findCloudFile();
-                if (file) {
-                    showToast?.(t('toast_sync_start'), 'info', 2000); 
-                    await loadFromCloud(true);
-                    showToast?.(t('toast_sync_success'), 'success', 2000);
-                } else {
-                    render();
-                }
-            } catch (syncError) {
-                console.error('Erro na sincronização inicial:', syncError);
-                showToast?.(t('toast_sync_offline'), 'warning', 3000);
-                render();
+                    try {
+                        const file = await findCloudFile();
+                        if (file) {
+                            await loadFromCloud(true);
+                        } else {
+                            render();
+                        }
+                    } catch (syncError) {
+                        console.error('Erro na sincronização inicial:', syncError);
+                        render();
                     }
                 })();
         
                 return;
-        
             } catch (error) {
                 console.error('Erro inesperado:', error);
                 localStorage.removeItem('flowme_google_token');
-                handleSignoutClick();
                 if (spinner) spinner.classList.add('hidden');
-                if (loginBtn) {
-                    loginBtn.classList.remove('hidden');
-                    loginBtn.classList.add('flex');
+                if (buttonsWrap) {
+                    buttonsWrap.classList.remove('hidden');
+                    buttonsWrap.classList.add('flex');
                 }
                 render();
             }
@@ -6614,7 +6666,7 @@
         function hideSplashScreen() {
             if (!appUIReady) { pendingSplashHide = true; return; }
             const splash = document.getElementById('splash-screen');
-            if(!splash) return;
+            if (!splash) return;
             splash.classList.add('opacity-0');
             setTimeout(() => splash.classList.add('hidden'), 500);
             runHeaderIntroAnimation();
@@ -6628,7 +6680,10 @@
                     headers: { 'Authorization': 'Bearer ' + accessToken }
                 });
                 if (!resp.ok) {
-                    if (resp.status === 401) throw new Error('UNAUTHORIZED');
+                    if (resp.status === 401) {   // <-- AQUI
+                        handleTokenExpired();
+                        return false;
+                    }
                     throw new Error('Erro na requisição');
                 }
                 const data = await resp.json();
@@ -6646,26 +6701,55 @@
         }
 
         function handleAuthClick() { isManualLogin = true; tokenClient.requestAccessToken(); }
-        
-        function handleSignoutClick() {
-            if (accessToken) { google.accounts.oauth2.revoke(accessToken); }
-            accessToken = null;
-            localStorage.removeItem('flowme_google_token'); 
+
+        // Usuário escolheu "Usar localmente" na splash
+        function useLocally() {
+            userConfig.localMode = true;
+            localStorage.setItem('flowme_local_mode', 'true');
+            hideSplashScreen();
             updateCloudUI(false);
-            
-            const splash = document.getElementById('splash-screen');
-            const spinner = document.getElementById('splash-spinner');
-            const loginBtn = document.getElementById('splash-login-btn');
-            
-            if(splash) {
-                splash.classList.remove('hidden');
-                setTimeout(() => splash.classList.remove('opacity-0'), 10); 
+            showKeepSavedToast();
+            render();
+        }
+        
+        // Toast reutilizável "Mantenha seus dados salvos" + botão Conectar
+        function showKeepSavedToast() {
+            showGlassToast(
+                t('toast_keep_saved'),
+                'fa-solid fa-cloud-exclamation',
+                'text-amber-500',
+                t('btn_cloud_connect'),
+                () => handleAuthClick(),
+                8000
+            );
+        }
+        
+        // Desconexão unificada (manual ou por expiração de token)
+        function handleDisconnection() {
+            if (accessToken) {
+                try { google.accounts.oauth2.revoke(accessToken); } catch (e) {}
             }
-            if(spinner) spinner.classList.add('hidden');
-            if(loginBtn) {
-                loginBtn.classList.remove('hidden');
-                loginBtn.classList.add('flex');
+            accessToken = null;
+            localStorage.removeItem('flowme_google_token');
+            userConfig.localMode = true;
+            localStorage.setItem('flowme_local_mode', 'true');
+        
+            updateCloudUI(false);
+            showKeepSavedToast();
+            render();
+        
+            // Se a central de notificações estiver aberta, re-renderiza
+            if (document.getElementById('modal-alerts') && !document.getElementById('modal-alerts').classList.contains('hidden')) {
+                renderAlertsTabContent();
+                renderToolbarAlerts();
             }
+        }
+        
+        // Detecta token expirado (401) — dispara a desconexão
+        function handleTokenExpired() {
+            if (!accessToken) return;
+            console.warn('Token Google expirado — alternando para modo local.');
+            handleDisconnection();
         }
 
         function updateCloudUI(isLoggedIn) {
@@ -6687,19 +6771,28 @@
         async function findOrCreateAppFolder() {
             const folderName = "FlowMe App";
             try {
-                // 1. Procura a pasta
-                const resp = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false&spaces=drive&fields=files(id)&pageSize=1`, {
-                    headers: { 'Authorization': 'Bearer ' + accessToken }
-                });
+                const resp = await fetch(
+                    `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false&spaces=drive&fields=files(id)&pageSize=1`,
+                    { headers: { 'Authorization': 'Bearer ' + accessToken } }
+                );
+        
+                if (resp.status === 401) {
+                    handleTokenExpired();
+                    return null;
+                }
                 const data = await resp.json();
                 if (data.files && data.files.length > 0) return data.files[0].id;
-
-                // 2. Se não achar, cria a pasta
+        
                 const createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
                     method: 'POST',
                     headers: { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name: folderName, mimeType: 'application/vnd.google-apps.folder' })
                 });
+        
+                if (createResp.status === 401) {
+                    handleTokenExpired();
+                    return null;
+                }
                 const createData = await createResp.json();
                 return createData.id;
             } catch (err) {
@@ -6711,81 +6804,111 @@
         async function findCloudFile() {
             try {
                 const cacheBuster = '&t=' + Date.now();
-                const resp = await fetch("https://www.googleapis.com/drive/v3/files?q=name='flowme_backup.json' and trashed=false&spaces=drive&fields=files(id,name,modifiedTime)&pageSize=1" + cacheBuster, {
-                    headers: { 'Authorization': 'Bearer ' + accessToken },
-                    cache: 'no-store' 
-                });
-                if(!resp.ok) throw new Error('Falha ao buscar arquivo');
+                const resp = await fetch(
+                    "https://www.googleapis.com/drive/v3/files?q=name='flowme_backup.json' and trashed=false&spaces=drive&fields=files(id,name,modifiedTime)&pageSize=1" + cacheBuster,
+                    {
+                        headers: { 'Authorization': 'Bearer ' + accessToken },
+                        cache: 'no-store'
+                    }
+                );
+        
+                if (resp.status === 401) {
+                    handleTokenExpired();
+                    return null;
+                }
+                if (!resp.ok) throw new Error('Falha ao buscar arquivo');
+        
                 const data = await resp.json();
                 return (data.files && data.files.length > 0) ? data.files[0] : null;
             } catch (err) {
-                console.error(err); return null;
+                console.error(err);
+                return null;
             }
         }
 
         async function saveToCloud(silent = false, forceManual = false) {
             if(!accessToken) return;
-
             if(silent && !forceManual) return;
             
             const btn = document.querySelector('button[onclick="saveToCloud()"]'); let origHTML;
             if(!silent && btn) { origHTML = btn.innerHTML; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>${t('msg_sync_saving')}</span>`; }
-
+        
             try {
                 const fileContent = JSON.stringify(state);
                 let existingFile = await findCloudFile();
+        
+                if (!accessToken) return;   // handleTokenExpired() pode ter sido chamado dentro do findCloudFile
                 
                 if (existingFile) {
-                    await fetch('https://www.googleapis.com/upload/drive/v3/files/' + existingFile.id + '?uploadType=media', {
-                        method: 'PATCH', headers: new Headers({ 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' }), body: fileContent
+                    const patchResp = await fetch('https://www.googleapis.com/upload/drive/v3/files/' + existingFile.id + '?uploadType=media', {
+                        method: 'PATCH',
+                        headers: new Headers({ 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' }),
+                        body: fileContent
                     });
+                    if (patchResp.status === 401) { handleTokenExpired(); return; }
                 } else {
                     const folderId = await findOrCreateAppFolder();
+                    if (!accessToken) return;   // idem: a criação de pasta também pode ter caído
                     const metadata = { name: 'flowme_backup.json', mimeType: 'application/json' };
-                    if (folderId) metadata.parents = [folderId]; 
-
+                    if (folderId) metadata.parents = [folderId];
+                
                     const boundary = '-------314159265358979323846';
-                    const delimiter = "\r\n--" + boundary + "\r\n"; const close_delim = "\r\n--" + boundary + "--";
+                    const delimiter = "\r\n--" + boundary + "\r\n";
+                    const close_delim = "\r\n--" + boundary + "--";
                     const multipartRequestBody = delimiter + 'Content-Type: application/json\r\n\r\n' + JSON.stringify(metadata) + delimiter + 'Content-Type: application/json\r\n\r\n' + fileContent + close_delim;
-
-                    await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-                        method: 'POST', headers: new Headers({ 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'multipart/related; boundary=' + boundary }), body: multipartRequestBody
+                
+                    const createResp = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                        method: 'POST',
+                        headers: new Headers({ 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'multipart/related; boundary=' + boundary }),
+                        body: multipartRequestBody
                     });
+                    if (createResp.status === 401) { handleTokenExpired(); return; }
                 }
-
+        
                 const now = new Date(); const timeStr = now.toLocaleTimeString(getActiveLang() === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
                 document.getElementById('cloud-last-sync').textContent = timeStr + ' ' + t('lbl_sync_saved');
                 if(!silent && btn) { btn.innerHTML = `<i class="fa-solid fa-check text-lg"></i><span>${t('msg_sync_success')}</span>`; setTimeout(() => btn.innerHTML = origHTML, 2000); }
             } catch(e) {
-                console.error(e); if(!silent && btn) { alert(t('err_cloud')); btn.innerHTML = origHTML; }
+                console.error(e);
+                if(!silent && btn) { alert(t('err_cloud')); btn.innerHTML = origHTML; }
             }
         }
 
         async function loadFromCloud(silent = false) {
             if(!accessToken) { alert("Você precisa se conectar primeiro!"); return; }
             if(!silent && !confirm(t('confirm_overwrite'))) return;
-
+        
             const btn = document.querySelector('button[onclick="loadFromCloud()"]'); 
             const origHTML = btn ? btn.innerHTML : '';
             if(!silent && btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-lg"></i><span>${t('msg_sync_loading')}</span>`;
-
+        
             try {
                 let existingFile = await findCloudFile();
+        
+                if (!accessToken) {                 // <-- morreu no findCloudFile
+                    if (!silent && btn) btn.innerHTML = origHTML;
+                    return;
+                }
                 if(!existingFile) { 
                     if(!silent) alert(t('msg_cloud_empty')); 
                     if(!silent && btn) btn.innerHTML = origHTML; 
                     return; 
                 }
-
-                // Aplicando o mesmo truque duplo anti-cache na hora de baixar os dados reais
+        
                 const response = await fetch('https://www.googleapis.com/drive/v3/files/' + existingFile.id + '?alt=media&t=' + Date.now(), {
                     headers: { 'Authorization': 'Bearer ' + accessToken },
                     cache: 'no-store'
                 });
+        
+                if (response.status === 401) {
+                    handleTokenExpired();
+                    if (!silent && btn) btn.innerHTML = origHTML;   // <-- restaura botão
+                    return;
+                }
                 if(!response.ok) throw new Error('Falha ao puxar arquivo');
                 
                 let parsed = await response.json();
-
+        
                 if(Array.isArray(parsed)) { state.transactions = parsed; state.invoiceSettings = {defaults:{}, exceptions:{}}; }
                 else if (parsed.transactions) {
                     state = {
@@ -6801,7 +6924,7 @@
                         goals: parsed.goals || []
                     };
                 }
-
+        
                 saveState(); render(); updateAutocompleteLists(); switchTab('transacoes');
                 
                 const now = new Date(); const timeStr = now.toLocaleTimeString(getActiveLang() === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});

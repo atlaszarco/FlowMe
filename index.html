@@ -489,7 +489,7 @@
               <span data-i18n="splash_version">VERSÃO</span>
               <span id="splash-version-display"></span>
             </p>
-            <div id="splash-interactive" class="h-auto flex items-center justify-center">
+            <div id="splash-interactive" class="h-auto flex flex-col items-center justify-center">
               <i id="splash-spinner" class="fa-solid fa-circle-notch fa-spin text-3xl text-emerald-500"></i>
               <div id="splash-buttons" class="hidden flex-col gap-3 w-full max-w-xs">
                 <button id="splash-login-btn" onclick="handleAuthClick()"
@@ -875,7 +875,7 @@
                                 <div class="glass-panel p-4 rounded-xl flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
                                     <div class="relative flex-1">
                                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
-                                        <input type="text" id="search-input" autocomplete="off" oninput="render()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
+                                        <input type="text" id="search-input" autocomplete="off" oninput="debouncedRender()" class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-colors">
                                     </div>
                                     <div class="flex items-center gap-2 overflow-x-auto">
                                         <select id="filter-type" onchange="autoSizeSelect(this); render()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-emerald-500 dark:text-slate-100 transition-all duration-300">                                            <option value="todos" data-i18n="flt_all_types">Todos os Tipos</option>
@@ -1000,7 +1000,7 @@
             <div class="glass-panel p-4 rounded-xl flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 transition-colors">
                 <div class="relative flex-1">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-sm"></i>
-                    <input type="text" id="invoice-search-input" autocomplete="off" oninput="renderFaturas()" data-i18n="placeholder_search" placeholder="Buscar..." class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
+                    <input type="text" id="invoice-search-input" autocomplete="off" oninput="debouncedRenderFaturas()" data-i18n="placeholder_search" placeholder="Buscar..." class="w-full pl-9 pr-4 py-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-colors">
                 </div>
                 <div class="flex items-center gap-2 overflow-x-auto">
                     <select id="invoice-filter-type" onchange="autoSizeSelect(this); renderFaturas()" class="w-max shrink-0 p-1.5 border border-slate-300 dark:border-slate-600 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 outline-none focus:border-indigo-500 dark:text-slate-100 transition-all duration-300">
@@ -2278,7 +2278,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '4.3.6';
+        const FLOWME_VERSION = '4.3.7';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4937,20 +4937,13 @@
             if (peopleNames.length === 0) {
                 pplC.innerHTML = `<p class="text-xs text-slate-400 text-center py-3" data-i18n="people_empty">${t('people_empty')}</p>`;
             } else {
-                peopleNames.forEach(p => {
+                pplC.innerHTML = peopleNames.map(p => {
                     const safeP = p.replace(/'/g, "\\'");
-                    pplC.innerHTML += `
-                        <!-- CONTAINER PRINCIPAL -->
+                    return `
                         <div class="py-4 flex flex-col w-full gap-3 min-[428px]:flex-row min-[428px]:flex-wrap min-[428px]:gap-y-3 min-[550px]:flex-nowrap min-[550px]:items-center min-[550px]:gap-y-0">
-                            
-                            <!-- BLOCO 1: NOME -->
-                            <!-- <380 e 381-549: centralizado, ocupando linha inteira. >=550: à esquerda, flex-1 com truncate -->
                             <p class="font-bold text-base text-center w-full min-[550px]:text-left min-[550px]:w-auto min-[550px]:flex-1 min-[550px]:truncate min-[550px]:min-w-0 dark:text-slate-200 break-words">
                                 ${p}
                             </p>
-                            
-                            <!-- BLOCO 2: VALORES -->
-                            <!-- <380: centralizado, linha inteira. 381-549: à esquerda, divide espaço. >=550: à esquerda, com margem fixa pros botões -->
                             <div class="flex justify-center items-center gap-6 w-full min-[428px]:w-auto min-[428px]:flex-1 min-[428px]:justify-start min-[550px]:flex-none min-[550px]:mr-8">
                                 <div class="text-center min-w-[80px]">
                                     <p class="text-[9px] text-slate-400 uppercase font-semibold tracking-wide mb-0.5">${t('str_pending').replace(':','')}</p>
@@ -4961,15 +4954,13 @@
                                     <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">${formatCurrency(peopleMap[p].rec)}</p>
                                 </div>
                             </div>
-                            
-                            <!-- BLOCO 3: BOTÕES -->
-                            <!-- <380: centralizado, linha inteira. 381-549: à direita, dividindo linha com valores. >=550: à direita, alinhado à borda -->
                             <div class="flex justify-center items-center gap-4 w-full min-[428px]:w-auto min-[428px]:justify-end min-[550px]:ml-auto">
                                 <button onclick="openPersonRateioModal('${safeP}')" class="h-10 flex items-center justify-center text-[10px] font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 rounded-lg border border-indigo-200 dark:border-indigo-800 whitespace-nowrap transition hover:bg-indigo-100 dark:hover:bg-indigo-900/50">${t('btn_view_purchases')}</button>
                                 <button onclick="sharePersonRateio('${safeP}')" title="${t('tt_share_rateio')}" aria-label="${t('tt_share_rateio')}" class="h-10 w-10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:opacity-80 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border border-emerald-200 dark:border-emerald-800 transition shrink-0"><i class="fa-solid fa-share-nodes text-sm"></i></button>
                             </div>
-                        </div>`;
-                });
+                        </div>
+                    `;
+                }).join('');
             }
 
             // ALERTS E ORÇAMENTOS (SINO SUPERIOR)
@@ -5685,50 +5676,51 @@
         }
         
         function renderDashboard(filtered) {
-        // PROCESSA AS BARRAS DE LIMITES
-            if(!state.limits) state.limits = [];
+            const dash = document.getElementById('content-dashboard');
+            if (dash.classList.contains('hidden')) return;
+        
+            // ===================== LIMITES =====================
+            if (!state.limits) state.limits = [];
             const limitsContainer = document.getElementById('dashboard-limits-container');
-            limitsContainer.innerHTML = '';
-
-           const dashLimitsCountEl = document.getElementById('dash-limits-count');
+        
+            const dashLimitsCountEl = document.getElementById('dash-limits-count');
             if (dashLimitsCountEl) {
                 const limCount = state.limits.length;
                 const limKey = limCount === 1 ? 'dash_limits_count_one' : 'dash_limits_count_other';
                 dashLimitsCountEl.textContent = t(limKey).replace('{N}', limCount);
             }
         
-            if(state.limits.length === 0) {
+            if (state.limits.length === 0) {
                 limitsContainer.innerHTML = `<p class="text-xs text-slate-400 col-span-full" data-i18n="lim_empty">${t('lim_empty')}</p>`;
             } else {
-                // Separa só as compras do mês atual
                 const currentMonthTx = state.transactions.filter(trx => {
-                    const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
+                    const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0, 7) : null);
                     return cDate === state.currentMonth;
                 });
-        
-                state.limits.forEach(lim => {
+            
+                limitsContainer.innerHTML = state.limits.map(lim => {
                     let spent = 0;
                     currentMonthTx.forEach(trx => {
-                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                        if (lim.type === 'person' && trx.splits && trx.type === 'despesa') {
                             const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
-                            if(s) spent += s.value;
-                        } else if(lim.type === 'category' && trx.category.toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            if (s) spent += s.value;
+                        } else if (lim.type === 'category' && trx.category.toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
                             let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
                             spent += (trx.value - rSplit);
-                        } else if(lim.type === 'method' && trx.paymentMethod.toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                        } else if (lim.type === 'method' && trx.paymentMethod.toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
                             let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
                             spent += (trx.value - rSplit);
                         }
                     });
-        
+            
                     const pct = Math.min(100, (spent / lim.max) * 100);
                     let color = 'bg-emerald-500';
-                    if(pct >= 90) color = 'bg-rose-500';
-                    else if(pct >= 70) color = 'bg-amber-400';
-        
+                    if (pct >= 90) color = 'bg-rose-500';
+                    else if (pct >= 70) color = 'bg-amber-400';
+            
                     const remaining = lim.max - spent;
-        
-                    limitsContainer.innerHTML += `
+            
+                    return `
                         <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-xl shadow-sm">
                             <div class="flex justify-between items-center mb-2 gap-3">
                                 <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${lim.target}</span>
@@ -5744,44 +5736,43 @@
                             <p class="text-[9px] font-semibold text-slate-400 text-right">${remaining >= 0 ? t('lim_free') + ' ' + formatCurrency(remaining) : t('lim_busted') + ' ' + formatCurrency(Math.abs(remaining))}</p>
                         </div>
                     `;
-                });
+                }).join('');
             }
-
-            // PROCESSA AS METAS DE ECONOMIA
+        
+            // ===================== METAS DE ECONOMIA =====================
             if (!state.goals) state.goals = [];
             const goalsContainer = document.getElementById('dashboard-goals-container');
             const dashGoalsCountEl = document.getElementById('dash-goals-count');
-    
+        
             if (dashGoalsCountEl) {
                 const goalCount = state.goals.length;
                 const goalKey = goalCount === 1 ? 'dash_goals_count_one' : 'dash_goals_count_other';
                 dashGoalsCountEl.textContent = t(goalKey).replace('{N}', goalCount);
             }
-    
+        
             if (goalsContainer) {
                 if (state.goals.length === 0) {
                     goalsContainer.innerHTML = `<p class="text-xs text-slate-400 col-span-full">${t('goal_empty')}</p>`;
                 } else {
-                    goalsContainer.innerHTML = '';
                     const todayStr = new Date().toISOString().split('T')[0];
-    
-                    state.goals.forEach(goal => {
+            
+                    goalsContainer.innerHTML = state.goals.map(goal => {
                         const saved = goal.contributions.reduce((acc, c) => acc + c.value, 0);
                         const pct = Math.min(100, (saved / goal.target) * 100);
                         const isDone = saved >= goal.target;
-    
+            
                         let color = 'bg-emerald-500';
                         if (!isDone && pct < 40) color = 'bg-rose-500';
                         else if (!isDone && pct < 75) color = 'bg-amber-400';
-    
+            
                         let deadlineInfo = '';
                         if (goal.deadline) {
                             const diffDays = Math.ceil((new Date(goal.deadline + 'T12:00:00') - new Date(todayStr + 'T12:00:00')) / (1000 * 60 * 60 * 24));
                             if (!isDone && diffDays < 0) deadlineInfo = `<p class="text-[9px] font-bold text-rose-500 mt-1"><i class="fa-solid fa-triangle-exclamation"></i> ${formatDaysPhrase('late', diffDays)}</p>`;
                             else if (!isDone) deadlineInfo = `<p class="text-[9px] font-semibold text-slate-400 mt-1">${formatDaysPhrase('left', diffDays)}</p>`;
                         }
-    
-                        goalsContainer.innerHTML += `
+            
+                        return `
                             <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-xl shadow-sm">
                                 <div class="flex justify-between items-center mb-2 gap-3">
                                     <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${isDone ? '🎉 ' : ''}${goal.name}</span>
@@ -5802,29 +5793,28 @@
                                 ${deadlineInfo}
                             </div>
                         `;
-                    });
+                    }).join('');
                 }
             }
-
-            // PROCESSA AS CONTAS E SALDOS
+        
+            // ===================== CONTAS E SALDOS =====================
             if (!state.accounts) state.accounts = [];
             const accountsContainer = document.getElementById('dashboard-accounts-container');
             const dashAccountsCountEl = document.getElementById('dash-accounts-count');
-    
+        
             if (dashAccountsCountEl) {
                 const accCount = state.accounts.length;
                 const accKey = accCount === 1 ? 'dash_accounts_count_one' : 'dash_accounts_count_other';
                 dashAccountsCountEl.textContent = t(accKey).replace('{N}', accCount);
             }
-    
+        
             if (accountsContainer) {
                 if (state.accounts.length === 0) {
                     accountsContainer.innerHTML = `<p class="text-xs text-slate-400 col-span-full">${t('account_empty')}</p>`;
                 } else {
-                    accountsContainer.innerHTML = '';
-                    state.accounts.forEach(acc => {
+                    accountsContainer.innerHTML = state.accounts.map(acc => {
                         const bal = computeAccountBalance(acc.name);
-                        accountsContainer.innerHTML += `
+                        return `
                             <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 rounded-xl shadow-sm">
                                 <div class="flex justify-between items-center mb-2 gap-3">
                                     <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">${acc.name}</span>
@@ -5839,30 +5829,29 @@
                                 </button>
                             </div>
                         `;
-                    });
+                    }).join('');
                 }
             }
-            
-            const dash = document.getElementById('content-dashboard');
-            if (dash.classList.contains('hidden')) return; 
-
+        
+            // ===================== GRÁFICOS =====================
+            // Só chega aqui se o Painel está visível (graças ao early return do topo).
             const isDark = document.documentElement.classList.contains('dark');
             const textColor = isDark ? '#cbd5e1' : '#64748b';
             const gridColor = isDark ? '#334155' : '#e2e8f0';
-
+        
             Chart.defaults.color = textColor;
             Chart.defaults.font.family = 'Inter, sans-serif';
-
+        
             // 1. Fluxo de Caixa (Barras)
             let tInc = 0, tExp = 0;
             filtered.forEach(trx => {
                 if (trx.invoicePaymentRef) return;
                 let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
                 let cost = trx.type === 'despesa' ? (trx.value - rowSplit) : trx.value;
-                if(trx.type === 'receita') tInc += cost; else tExp += cost;
+                if (trx.type === 'receita') tInc += cost; else tExp += cost;
             });
-
-            if(chartCashflow) chartCashflow.destroy();
+        
+            if (chartCashflow) chartCashflow.destroy();
             chartCashflow = new Chart(document.getElementById('chart-cashflow'), {
                 type: 'bar',
                 data: {
@@ -5880,55 +5869,55 @@
                     scales: { y: { grid: { color: gridColor }, ticks: { callback: (val) => formatCurrency(val) } }, x: { grid: { display: false } } }
                 }
             });
-
+        
             // 2. Despesas por Categoria (Rosca)
             let catMap = {};
             filtered.forEach(trx => {
-                if(trx.type === 'despesa' && !trx.invoicePaymentRef) {
+                if (trx.type === 'despesa' && !trx.invoicePaymentRef) {
                     let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
                     let cost = trx.value - rowSplit;
-                    if(cost > 0) {
+                    if (cost > 0) {
                         const c = trx.category || 'Outros';
                         catMap[c] = (catMap[c] || 0) + cost;
                     }
                 }
             });
-            const catLabels = Object.keys(catMap).sort((a,b) => catMap[b] - catMap[a]);
+            const catLabels = Object.keys(catMap).sort((a, b) => catMap[b] - catMap[a]);
             const catData = catLabels.map(l => catMap[l]);
             const catColors = ['#f43f5e', '#f59e0b', '#3b82f6', '#8b5cf6', '#d946ef', '#ec4899', '#14b8a6', '#64748b', '#0ea5e9', '#f97316'];
-
-            if(chartCategories) chartCategories.destroy();
+        
+            if (chartCategories) chartCategories.destroy();
             chartCategories = new Chart(document.getElementById('chart-categories'), {
                 type: 'doughnut',
                 data: {
                     labels: catLabels.length ? catLabels : ['-'],
                     datasets: [{ data: catData.length ? catData : [1], backgroundColor: catData.length ? catColors : [gridColor], borderWidth: isDark ? 2 : 1, borderColor: isDark ? '#1e293b' : '#ffffff' }]
                 },
-                options: { 
-                    responsive: true, maintainAspectRatio: false, cutout: '65%', 
-                    plugins: { 
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '65%',
+                    plugins: {
                         legend: { position: 'right', labels: { boxWidth: 12, padding: 15 } },
                         tooltip: { callbacks: { label: (ctx) => catData.length ? formatCurrency(ctx.raw) : '0' } }
-                    } 
+                    }
                 }
             });
-
+        
             // 3. Gastos por Conta / Cartão (Barras Horizontais)
             let accMap = {};
             filtered.forEach(trx => {
-                if(trx.type === 'despesa') {
+                if (trx.type === 'despesa') {
                     let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
                     let cost = trx.value - rowSplit;
-                    if(cost > 0) {
+                    if (cost > 0) {
                         const acc = trx.paymentMethod || 'Outros';
                         accMap[acc] = (accMap[acc] || 0) + cost;
                     }
                 }
             });
-            const accLabels = Object.keys(accMap).sort((a,b) => accMap[b] - accMap[a]);
+            const accLabels = Object.keys(accMap).sort((a, b) => accMap[b] - accMap[a]);
             const accData = accLabels.map(l => accMap[l]);
-
-            if(chartAccounts) chartAccounts.destroy();
+        
+            if (chartAccounts) chartAccounts.destroy();
             chartAccounts = new Chart(document.getElementById('chart-accounts'), {
                 type: 'bar',
                 data: {
@@ -5941,20 +5930,18 @@
                     scales: { x: { grid: { color: gridColor }, ticks: { callback: (val) => formatCurrency(val) } }, y: { grid: { display: false } } }
                 }
             });
-
+        
             // 4. Evolução (Dinâmica baseada no Filtro Global)
             const filterMode = currentFilterMode;
             const months = [];
-            
+        
             if (filterMode === 'month') {
-                // Mostra o mês selecionado no topo como o ÚLTIMO, e os 5 anteriores a ele
                 const [selYear, selMonth] = state.currentMonth.split('-').map(Number);
-                for(let i = 5; i >= 0; i--) {
+                for (let i = 5; i >= 0; i--) {
                     const d = new Date(selYear, selMonth - 1 - i, 1);
                     months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
                 }
             } else {
-                // Mostra exatamente os meses contidos no período selecionado
                 const dStart = document.getElementById('date-start').value;
                 const dEnd = document.getElementById('date-end').value;
                 if (dStart && dEnd) {
@@ -5962,8 +5949,8 @@
                     const end = new Date(dEnd + 'T12:00:00');
                     let curr = new Date(start.getFullYear(), start.getMonth(), 1);
                     const endLimit = new Date(end.getFullYear(), end.getMonth(), 1);
-                    
-                    while (curr <= endLimit && months.length < 60) { // Limite de segurança de 5 anos
+        
+                    while (curr <= endLimit && months.length < 60) {
                         months.push(`${curr.getFullYear()}-${String(curr.getMonth() + 1).padStart(2, '0')}`);
                         curr.setMonth(curr.getMonth() + 1);
                     }
@@ -5971,29 +5958,25 @@
                     months.push(state.currentMonth);
                 }
             }
-            
-            // Preenche os arrays de valores com zeros, do exato tamanho dos meses gerados
+        
             let evInc = new Array(months.length).fill(0);
             let evExp = new Array(months.length).fill(0);
-
-            // Verifica as transações e as encaixa no mês correspondente
+        
             state.transactions.forEach(trx => {
-                const compDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
-                if(!compDate) return;
-                
+                const compDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0, 7) : null);
+                if (!compDate) return;
+        
                 const idx = months.indexOf(compDate);
-                if(idx !== -1) {
+                if (idx !== -1) {
                     let rowSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
                     let cost = trx.type === 'despesa' ? (trx.value - rowSplit) : trx.value;
-                    if(trx.type === 'receita') evInc[idx] += cost; else evExp[idx] += cost;
+                    if (trx.type === 'receita') evInc[idx] += cost; else evExp[idx] += cost;
                 }
             });
-
-            // Formata os rótulos para exibição (Ex: 08/26)
+        
             const evLabels = months.map(m => { const pts = m.split('-'); return `${pts[1]}/${pts[0].substring(2)}`; });
-
-            // Desenha o gráfico
-            if(chartEvolution) chartEvolution.destroy();
+        
+            if (chartEvolution) chartEvolution.destroy();
             chartEvolution = new Chart(document.getElementById('chart-evolution'), {
                 type: 'line',
                 data: {
@@ -6192,7 +6175,18 @@
                 }
             }
         }
-
+        
+        function makeDebounce(fn, delay = 250) {
+            let timer;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+        
+        const debouncedRender = makeDebounce(render, 250);
+        const debouncedRenderFaturas = makeDebounce(renderFaturas, 250);
+        
         let pendingInvoiceLinkCard = null;
 
         function openInvoiceDueModal() {
@@ -6273,43 +6267,45 @@
 
         // ================= ALERTS MODAL =================
         function renderAlertsTabContent() {
-            const c = document.getElementById('alerts-modal-content'); c.innerHTML = '';
+            const c = document.getElementById('alerts-modal-content');
             const pendingUpdateVersion = localStorage.getItem('flowme_pending_update');
             const todayStr = new Date().toISOString().split('T')[0];
-            
+        
             let list = [];
             state.transactions.forEach(trx => {
-                if(trx.status !== 'pendente') return; const dueDate = getDueDate(trx); if(!dueDate) return;
-                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00'); const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                if(diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) list.push({t: trx, d: diffDays, late: true});
-                else if (diffDays > 0 && diffDays <= userConfig.reminderDays) list.push({t: trx, d: diffDays, late: false});
+                if (trx.status !== 'pendente') return;
+                const dueDate = getDueDate(trx); if (!dueDate) return;
+                const diffTime = new Date(dueDate + 'T12:00:00') - new Date(todayStr + 'T12:00:00');
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays < 0 && Math.abs(diffDays) <= userConfig.overdueDays) list.push({ t: trx, d: diffDays, late: true });
+                else if (diffDays > 0 && diffDays <= userConfig.reminderDays) list.push({ t: trx, d: diffDays, late: false });
             });
-
+        
             let modalLimits = [];
             if (state.limits && state.limits.length > 0) {
                 const currentMonthTx = state.transactions.filter(trx => {
-                    const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0,7) : null);
+                    const cDate = (trx.type === 'despesa' && trx.expenseType === 'credito') ? trx.invoiceMonth : (trx.date ? trx.date.substring(0, 7) : null);
                     return cDate === state.currentMonth;
                 });
                 state.limits.forEach(lim => {
                     let spent = 0;
                     currentMonthTx.forEach(trx => {
-                        if(lim.type === 'person' && trx.splits && trx.type === 'despesa') {
+                        if (lim.type === 'person' && trx.splits && trx.type === 'despesa') {
                             const s = trx.splits.find(sp => sp.person.toLowerCase() === lim.target.toLowerCase());
-                            if(s) spent += s.value;
-                        } else if(lim.type === 'category' && (trx.category||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                            if (s) spent += s.value;
+                        } else if (lim.type === 'category' && (trx.category || '').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
                             let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
                             spent += (trx.value - rSplit);
-                        } else if(lim.type === 'method' && (trx.paymentMethod||'').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
+                        } else if (lim.type === 'method' && (trx.paymentMethod || '').toLowerCase() === lim.target.toLowerCase() && trx.type === 'despesa') {
                             let rSplit = trx.splits ? trx.splits.reduce((acc, sp) => acc + sp.value, 0) : 0;
                             spent += (trx.value - rSplit);
                         }
                     });
                     const pct = (spent / lim.max) * 100;
-                    if(pct >= 90) modalLimits.push({ lim, pct, spent });
+                    if (pct >= 90) modalLimits.push({ lim, pct, spent });
                 });
             }
-
+        
             let modalGoals = [];
             if (state.goals && state.goals.length > 0) {
                 state.goals.forEach(goal => {
@@ -6321,10 +6317,12 @@
                     else if (diffDays >= 0 && diffDays <= userConfig.reminderDays) modalGoals.push({ goal, d: diffDays, late: false });
                 });
             }
-
+        
             const showDisconnectedAlert = !accessToken && (userConfig.localMode || state.transactions.length > 0);
+            const blocks = [];
+        
             if (showDisconnectedAlert) {
-                c.innerHTML += `
+                blocks.push(`
                     <div class="flex items-center justify-between p-2 rounded-lg border bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800 shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="text-lg"><i class="fa-solid fa-cloud-exclamation text-amber-500"></i></div>
@@ -6336,11 +6334,12 @@
                         <button onclick="closeModal('modal-alerts'); handleAuthClick()" class="shrink-0 text-[10px] font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition">
                             ${t('btn_cloud_connect')}
                         </button>
-                    </div>`;
+                    </div>
+                `);
             }
-
+        
             if (pendingUpdateVersion) {
-                c.innerHTML += `
+                blocks.push(`
                     <div class="flex items-center justify-between p-2 rounded-lg border bg-indigo-50 border-indigo-200 dark:bg-indigo-900/20 dark:border-indigo-800 shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="text-lg"><i class="fa-solid fa-rocket text-indigo-500"></i></div>
@@ -6350,20 +6349,20 @@
                             </div>
                         </div>
                         <button onclick="closeModal('modal-alerts'); confirmAndApplyUpdate('${pendingUpdateVersion}')" class="text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition">${t('btn_do_update')}</button>
-                    </div>`;
+                    </div>
+                `);
             }
-            
-            if(list.length === 0 && modalLimits.length === 0 && modalGoals.length === 0 && !pendingUpdateVersion && !showDisconnectedAlert) { 
-                c.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">' + t('msg_all_control') + '</p>'; 
+        
+            if (list.length === 0 && modalLimits.length === 0 && modalGoals.length === 0 && !pendingUpdateVersion && !showDisconnectedAlert) {
+                blocks.push(`<p class="text-sm text-slate-500 text-center py-4">${t('msg_all_control')}</p>`);
             } else {
-                // Preenche primeiro os alertas de Orçamento
-                modalLimits.sort((a,b) => b.pct - a.pct).forEach(item => {
+                modalLimits.sort((a, b) => b.pct - a.pct).forEach(item => {
                     const isBusted = item.pct > 100;
                     const bg = isBusted ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-pink-50 border-pink-200 dark:bg-pink-900/20 dark:border-pink-800';
                     const icon = isBusted ? '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>' : '<i class="fa-solid fa-bullseye text-pink-500"></i>';
                     const rem = item.lim.max - item.spent;
-                    
-                    c.innerHTML += `
+        
+                    blocks.push(`
                         <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
                             <div class="flex items-center gap-3">
                                 <div class="text-lg">${icon}</div>
@@ -6375,16 +6374,17 @@
                             <div class="text-right">
                                 <button onclick="closeModal('modal-alerts'); switchTab('dashboard');" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_dash')}</button>
                             </div>
-                        </div>`;
+                        </div>
+                    `);
                 });
-
-                modalGoals.sort((a,b) => a.d - b.d).forEach(item => {
+        
+                modalGoals.sort((a, b) => a.d - b.d).forEach(item => {
                     const g = item.goal;
                     const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-emerald-50 border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-800';
                     const dtPts = g.deadline.split('-'); const dtF = `${dtPts[2]}/${dtPts[1]}`;
                     const timeMsg = item.late ? formatDaysPhrase('late', item.d) : formatDaysPhrase('left', item.d);
-                
-                    c.innerHTML += `
+        
+                    blocks.push(`
                         <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
                             <div class="flex items-center gap-3">
                                 <div class="text-lg"><i class="fa-solid fa-piggy-bank text-emerald-500"></i></div>
@@ -6396,20 +6396,18 @@
                             <div class="text-right">
                                 <button onclick="closeModal('modal-alerts'); switchTab('dashboard');" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_dash')}</button>
                             </div>
-                        </div>`;
+                        </div>
+                    `);
                 });
-
-                // Preenche os alertas de Contas Pendentes logo abaixo
-                list.sort((a,b) => a.d - b.d).forEach(item => {
+        
+                list.sort((a, b) => a.d - b.d).forEach(item => {
                     const trx = item.t;
                     const bg = item.late ? 'bg-rose-50 border-rose-200 dark:bg-rose-900/20 dark:border-rose-800' : 'bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800';
                     const icon = trx.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
-                    const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length>=3 ? `${dtPts[2]}/${dtPts[1]}` : '';
-                    
-                    // Monta a string dinâmica de tempo
+                    const dtPts = (getDueDate(trx) || '').split('-'); const dtF = dtPts.length >= 3 ? `${dtPts[2]}/${dtPts[1]}` : '';
                     const timeMsg = item.late ? formatDaysPhrase('late', item.d) : formatDaysPhrase('left', item.d);
-                    
-                    c.innerHTML += `
+        
+                    blocks.push(`
                         <div class="flex items-center justify-between p-2 rounded-lg border ${bg} shadow-sm">
                             <div class="flex items-center gap-3">
                                 <div class="text-lg">${icon}</div>
@@ -6422,9 +6420,12 @@
                                 <p class="text-sm font-bold text-slate-900 dark:text-white">${formatCurrency(trx.value)}</p>
                                 <button onclick="closeModal('modal-alerts'); switchTab('transacoes'); editTransaction('${trx.id}')" class="text-[9px] font-bold text-indigo-500 hover:underline">${t('btn_view_trx')}</button>
                             </div>
-                        </div>`;
+                        </div>
+                    `);
                 });
             }
+        
+            c.innerHTML = blocks.join('');
         }
 
         // Abre o modal de Notificações (chamada pelo sino) e decide qual aba mostrar
@@ -6478,7 +6479,6 @@
         function renderDeletedHistoryList() {
             const c = document.getElementById('deleted-history-content');
             if (!c) return;
-            c.innerHTML = '';
         
             const items = state.deletedHistory || [];
         
@@ -6487,9 +6487,9 @@
                 return;
             }
         
-            items.forEach(entry => {
+            c.innerHTML = items.map(entry => {
                 let label = '', icon = '', valueStr = '';
-            
+        
                 if (entry.kind === 'transaction') {
                     label = entry.data.description;
                     icon = entry.data.type === 'receita' ? '<i class="fa-solid fa-arrow-up text-emerald-500"></i>' : '<i class="fa-solid fa-arrow-down text-rose-500"></i>';
@@ -6511,11 +6511,11 @@
                     icon = '<i class="fa-solid fa-rotate text-indigo-500"></i>';
                     valueStr = `${formatCurrency(entry.data.rule.value)}${t('recurring_per_month')}`;
                 }
-                            
+        
                 const dt = new Date(entry.deletedAt);
                 const dtStr = dt.toLocaleDateString(getActiveLang() === 'en' ? 'en-US' : 'pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
         
-                c.innerHTML += `
+                return `
                     <div class="flex items-center justify-between p-2 rounded-lg border bg-slate-50 border-slate-200 dark:bg-slate-800/60 dark:border-slate-700 shadow-sm">
                         <div class="flex items-center gap-3 min-w-0">
                             <div class="text-lg shrink-0">${icon}</div>
@@ -6525,8 +6525,9 @@
                             </div>
                         </div>
                         <button onclick="restoreFromHistory('${entry.id}')" class="shrink-0 text-indigo-600 dark:text-indigo-400 font-bold hover:opacity-70 uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 transition border border-white/40 dark:border-slate-700/50 shadow-sm">${t('btn_restore')}</button>
-                    </div>`;
-            });
+                    </div>
+                `;
+            }).join('');
         }
 
         // ================= CSV EXPORT / IMPORT =================

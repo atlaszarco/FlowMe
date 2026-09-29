@@ -6154,7 +6154,7 @@
                                 <button onclick="editTransactionFromInvoice('${trx.id}')" title="${t('btn_edit')}" aria-label="${t('btn_edit')}" class="chip-action p-1.5 rounded"><i class="fa-solid fa-pen"></i></button>
                                 <button onclick="deleteTransaction('${trx.id}'); renderFaturas();" title="${t('btn_delete_action')}" aria-label="${t('btn_delete_action')}" class="chip-action chip-action-danger p-1.5 rounded"><i class="fa-solid fa-trash"></i></button>
                             </td>
-                        </tr>`;
+                        </tr>`);
                     });
                 tbody.innerHTML = rows.join('');
                 document.getElementById('invoice-total-value').textContent = formatCurrency(total);

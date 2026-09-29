@@ -127,6 +127,9 @@
                 color 0.15s ease,
                 border-color 0.15s ease;
         }
+        #filter-wrapper * {
+            transition-property: opacity, transform, background-color;
+        }
 
         /* 4. CHIPS DE AÇÃO: botões pequenos de tabela (editar/excluir) */
         .chip-action {
@@ -2278,7 +2281,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '4.3.9';
+        const FLOWME_VERSION = '4.4.0';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 

@@ -2278,7 +2278,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '4.3.8';
+        const FLOWME_VERSION = '4.3.9';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -4857,14 +4857,18 @@
             const tbody = document.getElementById('transactions-body'); tbody.innerHTML = '';
             const todayStr = new Date().toISOString().split('T')[0];
 
-            if (filtered.length === 0) document.getElementById('empty-state').classList.remove('hidden');
-            else {
+            if (filtered.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+            } else {
                 document.getElementById('empty-state').classList.add('hidden');
                 filtered.sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
-                
-                filtered.forEach(trx => {
-                    const rSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0; const myPart = trx.type === 'despesa' ? (trx.value - rSplit) : trx.value;
-                    
+            
+                const frag = document.createDocumentFragment();   // ← 1 fragment, ANTES do loop
+            
+                filtered.forEach(trx => {                          // ← 1 único loop
+                    const rSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0;
+                    const myPart = trx.type === 'despesa' ? (trx.value - rSplit) : trx.value;
+            
                     const dueDate = getDueDate(trx);
                     let isStrictlyLate = false, isApproaching = false;
                     if(trx.status === 'pendente' && dueDate) {
@@ -4874,7 +4878,7 @@
                         else if (diffDays >= 0 && diffDays <= userConfig.reminderDays) isApproaching = true;
                     }
                     const isCloseOrLate = isStrictlyLate || isApproaching;
-                    
+            
                     let badges = '';
                     if (trx.splits && trx.splits.length > 0 && trx.type === 'despesa') {
                         badges += `<div class="flex flex-wrap gap-1 mt-1">`;
@@ -4885,10 +4889,12 @@
                         });
                         badges += `</div>`;
                     }
-
-                    const dtPts = (trx.date || '').split('-'); const dateFormatted = dtPts.length >= 3 ? `${dtPts[2]}/${dtPts[1]}` : '--/--';
-                    
-                    const tr = document.createElement('tr'); tr.className = `hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${isStrictlyLate ? 'bg-rose-50/50 dark:bg-rose-900/20' : ''}`;
+            
+                    const dtPts = (trx.date || '').split('-');
+                    const dateFormatted = dtPts.length >= 3 ? `${dtPts[2]}/${dtPts[1]}` : '--/--';
+            
+                    const tr = document.createElement('tr');
+                    tr.className = `hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${isStrictlyLate ? 'bg-rose-50/50 dark:bg-rose-900/20' : ''}`;
                     tr.innerHTML = `
                         <td class="p-3 whitespace-nowrap text-xs ${isCloseOrLate ? 'text-rose-600 font-bold' : 'text-slate-600 font-medium'}">
                             ${isCloseOrLate ? '<i class="fa-solid fa-triangle-exclamation mr-1"></i>' : ''}${dateFormatted}
@@ -4932,8 +4938,11 @@
                             <button onclick="${trx.invoicePaymentRef ? `undoInvoicePaymentByRef('${trx.invoicePaymentRef}')` : `deleteTransaction('${trx.id}')`}" title="${t('btn_delete_action')}" aria-label="${t('btn_delete_action')}" class="chip-action chip-action-danger p-1.5 rounded"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     `;
-                    tbody.appendChild(tr);
+                    frag.appendChild(tr);
                 });
+            
+                tbody.innerHTML = '';
+                tbody.appendChild(frag);
             }
 
             renderRecurringList();
@@ -6114,6 +6123,7 @@
             } else {
                 document.getElementById('invoice-empty-state').classList.add('hidden');
                 let total = 0; 
+                const rows = [];
                 filtered.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(trx => { 
                     total += trx.value;
                     const rSplit = trx.splits ? trx.splits.reduce((acc, s) => acc + s.value, 0) : 0; 
@@ -6132,7 +6142,7 @@
                         badges += `</div>`;
                     }
 
-                    tbody.innerHTML += `
+                    rows.push(`
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                             <td class="p-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">${dateFormatted}</td>
                             <td class="p-3">
@@ -6148,6 +6158,7 @@
                             </td>
                         </tr>`;
                     });
+                tbody.innerHTML = rows.join('');
                 document.getElementById('invoice-total-value').textContent = formatCurrency(total);
             }
 

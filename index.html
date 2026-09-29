@@ -3905,8 +3905,6 @@
                     state.recurringRules = [];
                 }
                 
-                // Salva tudo localmente e recarrega os visuais corretos
-                // Depois
                 commitState({ autocomplete: true });
                 
                 if (trx) {
@@ -5563,7 +5561,7 @@
             }
         
             commitState();
-            closeModal('modal-goal-form');;
+            closeModal('modal-goal-form');
         }
         
         function addGoalContribution(goalId) {

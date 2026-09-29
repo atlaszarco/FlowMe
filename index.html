@@ -2278,7 +2278,7 @@
             applyPanelStyle();
         }
         
-        const FLOWME_VERSION = '4.3.7';
+        const FLOWME_VERSION = '4.3.8';
 
         let state = { transactions: [], currentMonth: '', invoiceSettings: { defaults: {}, exceptions: {}, paymentAccounts: {} } };
 
@@ -3561,7 +3561,8 @@
                 else if (field === 'person') { if(trx.splits) trx.splits.forEach(s => { if(s.person === oldVal) s.person = newVal; }); } 
                 else if(trx[field] === oldVal) trx[field] = newVal;
             });
-            saveState(); updateAutocompleteLists(); render(); openGlobalEdit(field);
+            commitState({ autocomplete: true });
+            openGlobalEdit(field);
             if(field !== 'person' && document.getElementById(field).value === oldVal) document.getElementById(field).value = newVal;
         }
 
@@ -3681,6 +3682,19 @@
         function updateSaveTimestamp() {
             const saveTime = document.getElementById('last-save-time');
             if (saveTime) saveTime.classList.add('hidden');
+        }
+        
+        function commitState({
+            autocomplete = false,
+            cloud = true,
+            reRender = true,
+            invoices = false
+        } = {}) {
+            saveState();
+            if (reRender) render();
+            if (invoices) renderFaturas();
+            if (autocomplete) updateAutocompleteLists();
+            if (cloud && typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
         
         function saveState() { localStorage.setItem('flowme_state', JSON.stringify(state)); updateSaveTimestamp(); }
@@ -3892,9 +3906,8 @@
                 }
                 
                 // Salva tudo localmente e recarrega os visuais corretos
-                saveState();
-                render();
-                updateAutocompleteLists();
+                // Depois
+                commitState({ autocomplete: true });
                 
                 if (trx) {
                     populateInvoiceCards();
@@ -3903,9 +3916,7 @@
                         renderFaturas();
                     }
                 }
-
-                if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
-
+                
                 closeModal('modal-wipe-data');
                 switchTab('transacoes');
             }
@@ -4135,14 +4146,12 @@
                 }
             }
             
-            saveState(); render(); updateAutocompleteLists();
+            commitState({ autocomplete: true });
             if (expType === 'credito') populateInvoiceCards(paymentMethod);
             
             document.getElementById('transaction-form').reset(); document.getElementById('split-rows').innerHTML = '';
             toggleInstallmentOptions(false);
             document.querySelector('input[name="type"][value="receita"]').checked = true; toggleTypeFields('receita'); addSplitRow(); document.getElementById('date').value = dateStr;
-            
-            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
             
             if (marketPendingSave) {
                 marketList = [];
@@ -4238,8 +4247,8 @@
                 }
             });
         
-            saveState(); render(); closeModal('modal-recurring-edit');
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
+            closeModal('modal-recurring-edit');
         }
         
         function ensureRecurringInstancesUpToDate() {
@@ -4266,8 +4275,8 @@
         
             rule.active = false;
         
-            saveState(); render(); renderRecurringList();
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
+            renderRecurringList();    
         
             showDeletionToast({
                 id: 'rec-' + rule.id,
@@ -4656,10 +4665,10 @@
             
             state.transactions.splice(trxIndex, 1);
             
-            saveState(); render(); 
-            if(!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas();
-            updateAutocompleteLists(); 
-            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true); 
+           commitState({ 
+                autocomplete: true,
+                invoices: !document.getElementById('content-faturas').classList.contains('hidden')
+            }); 
             
             showDeletionToast({
                 id: 'trx-' + deletedTrx.id,
@@ -4720,16 +4729,15 @@
             }
 
             state.transactions = state.transactions.filter(trx => trx.groupId !== batchId);
-            saveState(); populateInvoiceCards(); renderFaturas(); render(); updateAutocompleteLists();
-            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            populateInvoiceCards();
+            commitState({ autocomplete: true, invoices: true });
         }
         
         function toggleStatus(id) {
             const index = state.transactions.findIndex(trx => trx.id === id);
             if(index !== -1) {
                 state.transactions[index].status = state.transactions[index].status === 'pago' ? 'pendente' : 'pago';
-                saveState(); render();
-                if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+                commitState();
             }
         }
         
@@ -4738,9 +4746,7 @@
             if(tIndex !== -1) {
                 const s = state.transactions[tIndex].splits[splitIndex];
                 s.status = s.status === 'pago' ? 'pendente' : 'pago';
-                saveState();
-                render();
-                if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+                commitState();
             }
         }
 
@@ -5124,13 +5130,12 @@
                 count++;
             }
             
-            saveState(); 
-            populateInvoiceCards(); // Atualiza a lista caso você tenha criado um banco novo
-            document.getElementById('invoice-card-select').value = card; // Força a tela a olhar para o banco importado
-            renderFaturas(); render(); updateAutocompleteLists();
+            populateInvoiceCards();
+            document.getElementById('invoice-card-select').value = card;
+            commitState({ autocomplete: true, invoices: true });
             closeModal('modal-smart-importer');
             
-            showImportSuccessToast(count, batchId); // Dispara a barra preta
+            showImportSuccessToast(count, batchId);
         }
         
         // ================= DASHBOARD & CHARTS =================
@@ -5198,8 +5203,8 @@
                 state.accounts.push({ id: 'acc-' + Date.now(), name, initialBalance, initialDate });
             }
         
-            saveState(); render(); closeModal('modal-account-form');
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
+            closeModal('modal-account-form');
             
             if (pendingInvoiceLinkCard) {
                 const cardToLink = pendingInvoiceLinkCard;
@@ -5327,10 +5332,8 @@
                 state.limits.push({ id: 'lim-' + Date.now(), type, target, max: value });
             }
             
-            saveState();
-            render(); 
+            commitState();
             closeModal('modal-limit-form');
-            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
         }
 
         function checkLimitsInRealTime() {
@@ -5486,8 +5489,7 @@
                 }
             });
         
-            saveState(); render(); renderFaturas();
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState({ invoices: true });
         }
         
         function undoInvoicePaymentByRef(ref) {
@@ -5502,8 +5504,7 @@
             const deletedLim = state.limits[limIndex];
             
             state.limits.splice(limIndex, 1);
-            saveState(); render();
-            if(typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
             
             showDeletionToast({
                 id: 'lim-' + deletedLim.id,
@@ -5552,8 +5553,8 @@
                 state.goals.push({ id: 'goal-' + Date.now(), name, target, deadline, contributions: [] });
             }
         
-            saveState(); render(); closeModal('modal-goal-form');
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
+            closeModal('modal-goal-form');;
         }
         
         function addGoalContribution(goalId) {
@@ -5566,8 +5567,7 @@
             if (!goal) return;
             goal.contributions.push({ value: val, date: new Date().toISOString().split('T')[0] });
         
-            saveState(); render();
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
         }
         
         // ================= EXCLUSÃO DE METAS =================        
@@ -5577,8 +5577,7 @@
             const deletedGoal = state.goals[idx];
             state.goals.splice(idx, 1);
         
-            saveState(); render();
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
         
             showDeletionToast({
                 id: 'goal-' + deletedGoal.id,
@@ -5596,8 +5595,7 @@
             const deletedAccount = state.accounts[idx];
             state.accounts.splice(idx, 1);
         
-            saveState(); render();
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState();
         
             showDeletionToast({
                 id: 'acc-' + deletedAccount.id,
@@ -5665,10 +5663,10 @@
                     
             state.deletedHistory.splice(idx, 1);
         
-            saveState(); render();
-            if (!document.getElementById('content-faturas').classList.contains('hidden')) renderFaturas();
-            updateAutocompleteLists();
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState({ 
+                autocomplete: true,
+                invoices: !document.getElementById('content-faturas').classList.contains('hidden')
+            });
         
             if (document.getElementById('modal-alerts') && !document.getElementById('modal-alerts').classList.contains('hidden') && activeNotifTab === 'deleted') {
             renderDeletedHistoryList();
@@ -6226,7 +6224,8 @@
             if (linkedAccount) state.invoiceSettings.paymentAccounts[card] = linkedAccount;
             else delete state.invoiceSettings.paymentAccounts[card];
             
-            saveState(); renderFaturas(); render(); closeModal('modal-invoice-due');
+            commitState({ invoices: true });
+            closeModal('modal-invoice-due');
         }
 
         function payInvoice() {
@@ -6260,8 +6259,7 @@
                 invoicePaymentRef: `${card}|${month}`
             });
             
-            saveState(); render(); renderFaturas();
-            if (typeof accessToken !== 'undefined' && accessToken) saveToCloud(true);
+            commitState({ invoices: true });
             showInvoicePaidToast(card, linkedAccount);
         }
 
@@ -6980,7 +6978,8 @@
                     };
                 }
         
-                saveState(); render(); updateAutocompleteLists(); switchTab('transacoes');
+                commitState({ autocomplete: true, cloud: false });
+                switchTab('transacoes');
                 
                 const now = new Date(); const timeStr = now.toLocaleTimeString(getActiveLang() === 'en' ? 'en-US' : 'pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
                 document.getElementById('cloud-last-sync').textContent = timeStr + ' ' + t('lbl_sync_loaded');
